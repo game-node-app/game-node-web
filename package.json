@@ -1,0 +1,59 @@
+{
+  "name": "game-node-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:all": "npm-run-all --parallel dev typesafe-i18n",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typesafe-i18n": "typesafe-i18n"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "11.10.0",
+    "@hookform/resolvers": "^3.1.1",
+    "@mantine/carousel": "^6.0.16",
+    "@mantine/core": "^6.0.16",
+    "@mantine/dropzone": "^6.0.16",
+    "@mantine/hooks": "^6.0.16",
+    "@mantine/modals": "^6.0.16",
+    "@mantine/next": "6.0.6",
+    "@mantine/notifications": "^6.0.16",
+    "@mantine/nprogress": "^6.0.16",
+    "@mantine/tiptap": "^6.0.16",
+    "@tabler/icons-react": "^2.23.0",
+    "@tiptap/extension-link": "^2.0.3",
+    "@tiptap/react": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "axios": "^1.4.0",
+    "embla-carousel-react": "^8.0.0-rc07",
+    "next": "13.3.0",
+    "nextjs-cors": "^2.1.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.1",
+    "react-query": "^3.39.3",
+    "supertokens-auth-react": "^0.33.1",
+    "supertokens-node": "^14.1.2",
+    "supertokens-web-js": "^0.6.0",
+    "supertokens-website": "^17.0.1",
+    "typesafe-i18n": "^5.24.3",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.33",
+    "@types/react-dom": "18.0.11",
+    "postcss": "8.4.21",
+    "tailwindcss": "3.3.1",
+    "typescript": "5.0.4"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "singleQuote": false
+  }
+}
