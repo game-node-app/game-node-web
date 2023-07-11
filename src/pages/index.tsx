@@ -22,13 +22,13 @@ export default function Home() {
     const cardGridRef = useRef<HTMLDivElement>(null);
     const session = useSessionContext();
     const router = useRouter();
-    // useEffect(() => {
-    //     if (!session.loading) {
-    //         if (session.doesSessionExist) {
-    //             router.push("/search");
-    //         }
-    //     }
-    // }, [session, router]);
+    useEffect(() => {
+        if (!session.loading) {
+            if (session.doesSessionExist) {
+                router.push("/search");
+            }
+        }
+    }, [session, router]);
     return (
         <Container
             fluid

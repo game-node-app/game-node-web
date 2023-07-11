@@ -2,13 +2,8 @@ import {
     createStyles,
     Navbar,
     TextInput,
-    Code,
     UnstyledButton,
-    Badge,
     Text,
-    Group,
-    ActionIcon,
-    Tooltip,
     rem,
     Transition,
     Center,
@@ -23,7 +18,7 @@ import {
     IconPlus,
     IconSelector,
 } from "@tabler/icons-react";
-import UserButton from "@/components/general/UserButton";
+import UserButton from "@/components/general/input/UserButton";
 import Link from "next/link";
 import { serverUrl } from "@/util/constants";
 import useUserInfo from "@/hooks/useUserInfo";

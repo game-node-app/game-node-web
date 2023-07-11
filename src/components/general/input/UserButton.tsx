@@ -51,7 +51,7 @@ export default function UserButton({
                     </Text>
 
                     <Text color="dimmed" size="xs">
-                        {description}
+                        Seeker of Souls
                     </Text>
                 </div>
 

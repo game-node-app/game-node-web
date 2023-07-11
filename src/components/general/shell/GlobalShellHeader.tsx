@@ -100,7 +100,7 @@ export default function GlobalShellHeader({
                 {!session.loading && !session.doesSessionExist && (
                     <Box className="ms-auto">
                         <Link href={"/auth"}>
-                            <Button variant="outline">Entrar</Button>
+                            <Button variant="outline">Join in</Button>
                         </Link>
                     </Box>
                 )}
