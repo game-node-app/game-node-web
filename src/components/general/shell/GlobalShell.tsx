@@ -1,44 +1,50 @@
 import React, { useState } from "react";
-import {
-    AppShell,
-    Aside,
-    Footer,
-    MediaQuery,
-    Navbar,
-    useMantineTheme,
-    Text,
-    Burger,
-    Header,
-    Container,
-    ScrollArea,
-} from "@mantine/core";
-import GlobalShellHeader from "@/components/general/shell/GlobalShellHeader";
-import { useDisclosure } from "@mantine/hooks";
+import { AppShell, useMantineTheme } from "@mantine/core";
+import GlobalShellHeader from "@/components/general/shell/GlobalShellHeader/GlobalShellHeader";
+import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import GlobalShellFooter from "@/components/general/shell/GlobalShellFooter";
-import GlobalShellNavbar from "@/components/general/shell/navbar/GlobalShellNavbar";
+import GlobalShellNavbar from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbar";
 
+/**
+ * https://mantine.dev/core/app-shell/
+ * @param children - The main content of the page
+ * @constructor
+ */
 const GlobalShell = ({ children }: { children: React.ReactNode }) => {
-    const theme = useMantineTheme();
     const [sidebarOpened, { toggle }] = useDisclosure(false);
     return (
         <AppShell
-            padding={0}
-            navbar={<GlobalShellNavbar sidebarOpened={sidebarOpened} />}
-            footer={<GlobalShellFooter />}
-            header={
+            padding="xs"
+            header={{
+                height: { base: 80, md: 70 },
+            }}
+            footer={{ height: 60, offset: false }}
+            navbar={{
+                width: 300,
+                breakpoint: "sm",
+                collapsed: {
+                    mobile: !sidebarOpened,
+                    desktop: !sidebarOpened,
+                },
+            }}
+            classNames={{
+                main: "bg-mobile lg:bg-desktop bg-cover bg-center bg-fixed",
+            }}
+        >
+            <AppShell.Header>
                 <GlobalShellHeader
                     sidebarOpened={sidebarOpened}
                     toggleSidebar={toggle}
                 />
-            }
-            styles={{
-                // Because footer is manually set to static, we need to set the main paddingBottom to 0
-                main: {
-                    paddingBottom: 0,
-                },
-            }}
-        >
-            {children}
+            </AppShell.Header>
+            <AppShell.Navbar>
+                <GlobalShellNavbar sidebarOpened={sidebarOpened} />
+            </AppShell.Navbar>
+
+            <AppShell.Main>{children}</AppShell.Main>
+            <AppShell.Footer pos={"static"}>
+                <GlobalShellFooter />
+            </AppShell.Footer>
         </AppShell>
     );
 };

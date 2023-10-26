@@ -12,7 +12,9 @@ const SimpleCard = ({ text }: ISimpleCardProps) => {
         flex flex-col items-center justify-center"
         >
             <Center>
-                <Text className="!text-lg break-words p-md">{text}</Text>
+                <Text ta="center" className="!text-lg break-words p-md">
+                    {text}
+                </Text>
             </Center>
         </Box>
     );

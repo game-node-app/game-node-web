@@ -7,9 +7,17 @@ import { IProfile } from "@/util/types/profile";
 
 interface IUserInfoContext {
     userProfile: IProfile | undefined;
+    /**
+     * Invalidates the cache for the user's profile.
+     * Use this to force a refetch of the user's profile.
+     */
     invalidateUserProfileCache: () => void;
     // The library for the current logged in user
     userLibrary: ILibrary | undefined;
+    /**
+     * Invalidates the cache for the user's library.
+     * Use this to force a refetch of the user's library.
+     */
     invalidateUserLibraryCache: () => void;
 }
 
@@ -34,7 +42,7 @@ const UserInfoProvider = ({ children }: IUserInfoProviderProps) => {
         !session.loading && session.doesSessionExist && session.userId !== "";
 
     const profileQuery = useQueryWithParameters<IProfile>({
-        url: "/profile",
+        url: "/v1/profile",
         method: "GET",
         options: {
             enabled: queryEnabled,
@@ -42,7 +50,7 @@ const UserInfoProvider = ({ children }: IUserInfoProviderProps) => {
     });
 
     const libraryQuery = useQueryWithParameters<ILibrary>({
-        url: "/libraries",
+        url: "/v1/libraries",
         method: "GET",
         options: {
             enabled: queryEnabled,

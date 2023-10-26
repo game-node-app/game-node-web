@@ -11,6 +11,7 @@ export interface ICollection {
     library: ILibrary;
 
     entries: ICollectionEntry[];
+    isFavoritesCollection: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

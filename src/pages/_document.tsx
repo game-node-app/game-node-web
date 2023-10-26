@@ -1,25 +1,17 @@
-import { emotionCache } from '@/theme/emotion-cache';
-import { preflightStyles } from '@/theme/tailwind-preflight';
-import { ServerStyles, createStylesServer } from '@mantine/next';
-import Document, { DocumentContext } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
+import { ColorSchemeScript } from "@mantine/core";
+import React from "react";
 
-const stylesServer = createStylesServer(emotionCache);
-
-export default class _Document extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx);
-
-    return {
-      ...initialProps,
-      styles: [
-        initialProps.styles,
-        <style key="tailwind-preflight">{preflightStyles}</style>,
-        <ServerStyles
-          html={initialProps.html}
-          server={stylesServer}
-          key="styles"
-        />,
-      ],
-    };
-  }
+export default function Document() {
+    return (
+        <Html lang="en">
+            <Head>
+                <ColorSchemeScript defaultColorScheme="dark" />
+            </Head>
+            <body>
+                <Main />
+                <NextScript />
+            </body>
+        </Html>
+    );
 }

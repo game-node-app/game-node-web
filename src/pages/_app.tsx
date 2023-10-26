@@ -1,7 +1,4 @@
-import "@/styles/globals.css";
-
-import { emotionCache } from "@/theme/emotion-cache";
-import { MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import { AppProps } from "next/app";
 import TypesafeI18NProvider from "@/components/general/TypesafeI18nProvider";
 import SuperTokensProvider from "@/components/auth/SuperTokensProvider";
@@ -11,42 +8,49 @@ import { RouterTransition } from "@/components/general/RouterTransition";
 import { Inter } from "next/font/google";
 import UserInfoProvider from "@/components/auth/UserInfoProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ModalsProvider } from "@mantine/modals";
 import Head from "next/head";
+import { Notifications } from "@mantine/notifications";
+import { OpenAPI } from "@/wrapper";
+
+/**
+ * Should always be imported BEFORE tailwind.
+ */
+import "@mantine/core/styles.css";
+import "@/globals.css";
 
 const inter = Inter({
     subsets: ["latin"],
     variable: "--font-inter",
 });
 
+const theme = createTheme({
+    fontFamily: inter.style.fontFamily,
+    colors: {
+        brand: [
+            "#ffede5",
+            "#ffd9cf",
+            "#fbb3a0",
+            "#f7896d",
+            "#f36742",
+            "#f15126",
+            "#f14517",
+            "#d6360b",
+            "#c02d06",
+            "#a82301",
+        ],
+    },
+    primaryColor: "brand",
+});
+
 const client = new QueryClient();
 
+OpenAPI.BASE = process.env.NEXT_PUBLIC_SERVER_URL!;
+OpenAPI.WITH_CREDENTIALS = true;
+
 export default function App({ Component, pageProps }: AppProps) {
+    // @ts-ignore
     return (
-        <MantineProvider
-            emotionCache={emotionCache}
-            withGlobalStyles
-            withCSSVariables
-            theme={{
-                fontFamily: inter.style.fontFamily,
-                colorScheme: "dark",
-                colors: {
-                    brand: [
-                        "#F8F5F4",
-                        "#E9DBD7",
-                        "#DEC1B9",
-                        "#D9A799",
-                        "#D98C77",
-                        "#E16F51",
-                        "#F15025",
-                        "#D54A25",
-                        "#B04C31",
-                        "#934B38",
-                    ],
-                },
-                primaryColor: "brand",
-            }}
-        >
+        <MantineProvider theme={theme} forceColorScheme={"dark"}>
             <Head>
                 <title>GameNode</title>
                 <meta
@@ -54,20 +58,19 @@ export default function App({ Component, pageProps }: AppProps) {
                     content="width=device-width, initial-scale=1"
                 />
             </Head>
-            <SuperTokensProvider>
-                <QueryClientProvider client={client}>
-                    <UserInfoProvider>
-                        <TypesafeI18NProvider>
-                            <ModalsProvider>
-                                <RouterTransition />
-                                <GlobalShell>
-                                    <Component {...pageProps} />
-                                </GlobalShell>
-                            </ModalsProvider>
-                        </TypesafeI18NProvider>
-                    </UserInfoProvider>
-                </QueryClientProvider>
-            </SuperTokensProvider>
+            <TypesafeI18NProvider>
+                <SuperTokensProvider>
+                    <QueryClientProvider client={client}>
+                        <UserInfoProvider>
+                            <Notifications />
+                            <RouterTransition />
+                            <GlobalShell>
+                                <Component {...pageProps} />
+                            </GlobalShell>
+                        </UserInfoProvider>
+                    </QueryClientProvider>
+                </SuperTokensProvider>
+            </TypesafeI18NProvider>
         </MantineProvider>
     );
 }

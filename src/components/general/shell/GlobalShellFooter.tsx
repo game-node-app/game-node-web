@@ -2,8 +2,8 @@ import React from "react";
 import {
     ActionIcon,
     Anchor,
+    AppShell,
     Container,
-    Footer,
     Group,
     Text,
 } from "@mantine/core";
@@ -26,21 +26,21 @@ const GlobalShellFooter = () => {
     const items = links.map((link) => {
         return (
             <Link key={link.label} href={link.href}>
-                <Text color="dimmed">{link.label}</Text>
+                <Text c="dimmed">{link.label}</Text>
             </Link>
         );
     });
     return (
-        <Footer height={60} p="md" pos="static">
+        <footer className={"w-full p-2 px-4 h-full"}>
             <Container
                 fluid
                 p={0}
                 className="flex justify-between gap-8 w-full h-full items-center"
             >
-                <Group className="" noWrap>
+                <Group className="" wrap={"nowrap"}>
                     {items}
                 </Group>
-                <Group spacing="xs" position="right" noWrap>
+                <Group gap="xs" justify="right" wrap={"nowrap"}>
                     <ActionIcon size="lg" variant="default" radius="xl">
                         <IconBrandGithub size="1.05rem" stroke={1.5} />
                     </ActionIcon>
@@ -52,7 +52,7 @@ const GlobalShellFooter = () => {
                     </ActionIcon>
                 </Group>
             </Container>
-        </Footer>
+        </footer>
     );
 };
 

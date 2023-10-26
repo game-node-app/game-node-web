@@ -30,12 +30,8 @@ export default function Home() {
         }
     }, [session, router]);
     return (
-        <Container
-            fluid
-            h={"100%"}
-            className="bg-mobile lg:bg-desktop bg-cover bg-center bg-fixed"
-        >
-            <Stack className="h-[80vh]  mb-32">
+        <Container fluid h={"100%"}>
+            <Stack className="h-[80vh] mb-32">
                 <Box className="mt-32 lg:mt-40">
                     <Title className="">
                         Catalog all your games in a single place
@@ -48,7 +44,7 @@ export default function Home() {
                     </Button>
                 </Group>
                 <Stack
-                    spacing={0}
+                    gap={0}
                     align="center"
                     justify="flex-start"
                     className="mt-auto mb-xl"
@@ -73,16 +69,40 @@ export default function Home() {
                 w={"100%"}
                 justify="center"
             >
-                <Grid.Col xs={6} lg={3} className="flex justify-center">
+                <Grid.Col
+                    span={{
+                        xs: 6,
+                        lg: 3,
+                    }}
+                    className="flex justify-center"
+                >
                     <SimpleCard text={"Organize your game library"} />
                 </Grid.Col>
-                <Grid.Col xs={6} lg={3} className="flex justify-center">
+                <Grid.Col
+                    span={{
+                        xs: 6,
+                        lg: 3,
+                    }}
+                    className="flex justify-center"
+                >
                     <SimpleCard text={"Connect your platforms"} />
                 </Grid.Col>
-                <Grid.Col xs={6} lg={3} className="flex justify-center">
+                <Grid.Col
+                    span={{
+                        xs: 6,
+                        lg: 3,
+                    }}
+                    className="flex justify-center"
+                >
                     <SimpleCard text={"Know where to play each game"} />
                 </Grid.Col>
-                <Grid.Col xs={6} lg={3} className="flex justify-center">
+                <Grid.Col
+                    span={{
+                        xs: 6,
+                        lg: 3,
+                    }}
+                    className="flex justify-center"
+                >
                     <SimpleCard text={"Share your reviews"} />
                 </Grid.Col>
             </Grid>

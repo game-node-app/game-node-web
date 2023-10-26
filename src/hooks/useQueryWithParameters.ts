@@ -1,11 +1,12 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { useContext } from "react";
 import { UseQueryOptions } from "react-query/types/react/types";
-import getAxiosInstance from "@/util/getAxiosInstance";
+import buildAxiosInstance from "@/util/buildAxiosInstance";
+import { IBaseFindDto } from "@/util/types/baseDto";
 
-interface IUseQueryWithParameters {
+interface IUseQueryWithParametersProps {
     url: string;
-    parameters?: object;
+    parameters?: IBaseFindDto;
     method: string;
     options?: UseQueryOptions<any, any, any, any> | undefined;
 }
@@ -34,13 +35,13 @@ export default function useQueryWithParameters<T>({
     parameters,
     method,
     options,
-}: IUseQueryWithParameters): TUseQueryWithParametersResult<T> {
+}: IUseQueryWithParametersProps): TUseQueryWithParametersResult<T> {
     const queryKey = [url, method, parameters];
     return {
-        ...useQuery(
-            queryKey,
-            async (ctx) => {
-                const axiosClient = getAxiosInstance();
+        ...useQuery({
+            queryKey: queryKey,
+            queryFn: async (ctx) => {
+                const axiosClient = buildAxiosInstance();
                 const response = await axiosClient.request<T>({
                     url: ctx.queryKey[0] as string,
                     method: ctx.queryKey[1] as string,
@@ -48,10 +49,8 @@ export default function useQueryWithParameters<T>({
                 });
                 return response.data;
             },
-            {
-                ...options,
-            },
-        ),
+            ...options,
+        }),
         queryKey: queryKey,
     };
 }

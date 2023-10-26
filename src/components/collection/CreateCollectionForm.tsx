@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Stack, TextInput, Text, Switch } from "@mantine/core";
-import getAxiosInstance from "@/util/getAxiosInstance";
+import buildAxiosInstance from "@/util/buildAxiosInstance";
 import useUserInfo from "@/hooks/useUserInfo";
 import { useRouter } from "next/router";
 
 const CreateCollectionFormSchema = z.object({
-    name: z.string().nonempty().min(3).max(50),
-    description: z.string().optional(),
-    isPublic: z.boolean(),
+    name: z.string().min(3).max(50),
+    description: z.string().min(3).max(300),
+    isPublic: z.boolean().default(true),
     isFavoritesCollection: z.boolean(),
 });
 
@@ -29,7 +29,7 @@ const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
     const router = useRouter();
 
     const onSubmit = async (data: CreateCollectionFormValues) => {
-        const axios = getAxiosInstance();
+        const axios = buildAxiosInstance();
         try {
             setRequestError(undefined);
             await axios.post("/collections", data);
@@ -59,9 +59,16 @@ const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
             }
         }
     };
+
+    useEffect(() => {
+        if (userInfo.userLibrary == undefined) {
+            router.push("/auth");
+        }
+    });
+
     return (
         <form className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing="lg">
+            <Stack gap="lg">
                 <TextInput
                     withAsterisk
                     label={"Collection name"}

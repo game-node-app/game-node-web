@@ -2,7 +2,7 @@
 module.exports = {
     content: ["./src/**/*.{js,ts,jsx,tsx}"],
     corePlugins: {
-        preflight: false,
+        preflight: true,
     },
 
     theme: {
@@ -42,16 +42,16 @@ module.exports = {
             },
             colors: {
                 brand: [
-                    "#F8F5F4",
-                    "#E9DBD7",
-                    "#DEC1B9",
-                    "#D9A799",
-                    "#D98C77",
-                    "#E16F51",
-                    "#F15025",
-                    "#D54A25",
-                    "#B04C31",
-                    "#934B38",
+                    "#ffede5",
+                    "#ffd9cf",
+                    "#fbb3a0",
+                    "#f7896d",
+                    "#f36742",
+                    "#f15126",
+                    "#f14517",
+                    "#d6360b",
+                    "#c02d06",
+                    "#a82301",
                 ],
             },
         },

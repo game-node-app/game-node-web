@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - /app/node_modules
+      - /app/.next
+
+    environment:
+      - NODE_ENV=production
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.app.rule=Host(`${GAME_NODE_WEB_DOMAIN}`)
+      - traefik.http.routers.app.entrypoints=web
+      - traefik.http.routers.app.tls.certresolver=letsencrypt
+
+  traefik:
+    image: traefik:latest
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+        - ./acme.json:/acme.json
+
+

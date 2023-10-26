@@ -1,59 +1,26 @@
-# next-mantine-tailwind-example
+# game-node-web
+The repository for the web client of Game Node.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/nerkarso/next-mantine-tailwind-example)
+## Installation
+1. Install [Node.js](https://nodejs.org/en/download/)
+2. Install [Yarn](https://yarnpkg.com/en/docs/install)
+3. Run `yarn` in the root directory of the repository
+4. Run `yarn dev:all` to start the development server (and the typesafe-i18n server!)
+5. Check your instance at `http://localhost:3000`
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Start working ;)
 
-> The trick to make this work is to disable Mantine normalize styles and Tailwind preflight styles. Then implement a [custom preflight](src/theme/tailwind-preflight.ts) internal style in the [Next.js document](src/pages/_document.tsx).
+### Production
+We provide a `Dockerfile` and `docker-compose.yml` for procution usage. Just set the $GAME_NODE_WEB_DOMAIN and you are
+good to go.
 
-## Dependencies
+It may be worth it to consider deploying GameNode to a service such as Cloudflare Pages or Netlify!
 
-- Next.js `v13.3`
-- Mantine `v6.0`
-- Tailwind CSS `v3.3`
+## Important
+You need to have a GameNode server instance running on your machine to actually use the app.
+After setting it up, set your `.env.local` file. You can find an example in the `.env.local.example` file.  
+You can also set the environment variables in your system.
 
-## Setup
 
-1. Create a new Next.js app:
-
-```sh
-pnpm create next-app
-```
-
-Make sure you choose the following options:
-
-```sh
-❯ pnpm create next-app
-✔ Would you like to use TypeScript with this project? … Yes
-✔ Would you like to use Tailwind CSS with this project? … Yes
-✔ What import alias would you like configured? … @/*
-```
-
-2. Install Mantine dependencies:
-
-```sh
-pnpm add @mantine/core @mantine/hooks @mantine/next @emotion/server @emotion/react
-```
-
-3. Copy and paste the following files and folders into your project:
-
-```sh
-pages/
-  _app.tsx
-  _document.tsx
-theme/
-  emotion-cache.ts
-  tailwind-preflight.ts
-```
-
-4. You're all set!
-
-## Getting Started
-
-Run the development server:
-
-```sh
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
+We are always looking for contributors! If you want to contribute, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
