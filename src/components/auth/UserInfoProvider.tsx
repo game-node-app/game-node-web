@@ -1,19 +1,18 @@
-import { ILibrary } from "@/util/types/library";
 import React, { createContext, useState } from "react";
 import useQueryWithParameters from "@/hooks/useQueryWithParameters";
-import { useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
-import { IProfile } from "@/util/types/profile";
+import { LibrariesService, Library, Profile, ProfileService } from "@/wrapper";
 
 interface IUserInfoContext {
-    userProfile: IProfile | undefined;
+    userProfile: Profile | undefined;
     /**
      * Invalidates the cache for the user's profile.
      * Use this to force a refetch of the user's profile.
      */
     invalidateUserProfileCache: () => void;
     // The library for the current logged in user
-    userLibrary: ILibrary | undefined;
+    userLibrary: Library | undefined;
     /**
      * Invalidates the cache for the user's library.
      * Use this to force a refetch of the user's library.
@@ -41,23 +40,25 @@ const UserInfoProvider = ({ children }: IUserInfoProviderProps) => {
     const queryEnabled =
         !session.loading && session.doesSessionExist && session.userId !== "";
 
-    const profileQuery = useQueryWithParameters<IProfile>({
-        url: "/v1/profile",
-        method: "GET",
-        options: {
-            enabled: queryEnabled,
+    const profileQuery = useQuery({
+        queryKey: ["profile"],
+        queryFn: async () => {
+            return await ProfileService.profileControllerFindOwn();
         },
     });
 
-    const libraryQuery = useQueryWithParameters<ILibrary>({
-        url: "/v1/libraries",
-        method: "GET",
-        options: {
-            enabled: queryEnabled,
+    const libraryQuery = useQuery<Library>({
+        queryKey: ["library"],
+        queryFn: async () => {
+            return await LibrariesService.librariesControllerFindOwn({
+                relations: {
+                    collections: true,
+                },
+            });
         },
     });
 
-    const invalidateQueryKey = (key: any) => {
+    const invalidateQueryKey = (key: "library" | "profile") => {
         queryClient.invalidateQueries(key).then();
     };
 
@@ -66,11 +67,11 @@ const UserInfoProvider = ({ children }: IUserInfoProviderProps) => {
             value={{
                 userProfile: profileQuery.data,
                 invalidateUserProfileCache: () => {
-                    invalidateQueryKey(profileQuery.queryKey);
+                    invalidateQueryKey("profile");
                 },
                 userLibrary: libraryQuery.data,
                 invalidateUserLibraryCache: () => {
-                    invalidateQueryKey(libraryQuery.queryKey);
+                    invalidateQueryKey("library");
                 },
             }}
         >

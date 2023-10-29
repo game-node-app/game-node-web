@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
+import "@mantine/nprogress/styles.css";
 
 export function RouterTransition() {
     const router = useRouter();
@@ -22,5 +23,5 @@ export function RouterTransition() {
         };
     }, [router]);
 
-    return <NavigationProgress autoReset={true} />;
+    return <NavigationProgress />;
 }

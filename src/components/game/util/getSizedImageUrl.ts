@@ -1,4 +1,4 @@
-export enum CoverSize {
+export enum ImageSize {
     COVER_SMALL = "cover_small",
     COVER_BIG = "cover_big",
     SCREENSHOT_MED = "screenshot_med",
@@ -27,7 +27,7 @@ function replaceSize(url: string, newSize: string): string {
 
 export function getSizedImageUrl(
     imageUrl: string | undefined,
-    size: CoverSize,
+    size: ImageSize,
 ) {
     if (imageUrl) {
         return replaceSize(imageUrl, size);

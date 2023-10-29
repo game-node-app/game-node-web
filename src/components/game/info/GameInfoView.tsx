@@ -1,57 +1,131 @@
-import React from "react";
-import { Container, Flex, Grid, Paper, Title } from "@mantine/core";
+import React, { useEffect, useMemo } from "react";
+import { Flex, Grid, Paper, Skeleton, Stack, Title } from "@mantine/core";
 import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
 import GameInfoDetails from "@/components/game/info/GameInfoDetails";
 import useOnMobile from "@/hooks/useOnMobile";
 import GameInfoActions from "@/components/game/info/GameInfoActions";
-import { Game } from "@/wrapper";
-import { CoverSize } from "@/components/game/util/getSizedImageUrl";
+import { Game, GameRepositoryRequestDto } from "@/wrapper";
+import { ImageSize } from "@/components/game/util/getSizedImageUrl";
+import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
+import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
+import { shuffleArray } from "@/util/shuffleArray";
+import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
+import Break from "@/components/general/Break";
+import { useQuery } from "react-query";
+import { getGameInfo } from "@/components/game/util/getGameInfo";
 
 interface IGameInfoViewProps {
-    game: Game;
+    id: string | undefined;
 }
 
-const GameInfoView = ({ game }: IGameInfoViewProps) => {
+const getCombinedImages = (game: Game) => {
+    const screenshotsUrls = game.screenshots
+        ?.filter((screenshot) => screenshot.url != undefined)
+        .map((screenshot) => screenshot.url!);
+
+    const artworksUrls = game.artworks
+        ?.filter((screenshot) => screenshot.url != undefined)
+        .map((screenshot) => screenshot.url!);
+
+    const combinedImages = [
+        ...(screenshotsUrls ?? []),
+        ...(artworksUrls ?? []),
+    ];
+
+    return shuffleArray(combinedImages);
+};
+
+const GameInfoView = ({ id }: IGameInfoViewProps) => {
+    const gameQuery = useQuery({
+        queryKey: ["game", id],
+        queryFn: async (context) => {
+            const dto: GameRepositoryRequestDto = {
+                relations: {
+                    cover: true,
+                    genres: true,
+                    platforms: true,
+                    screenshots: true,
+                    artworks: true,
+                },
+            };
+            if (id == undefined) {
+                return undefined;
+            }
+            const game = await getGameInfo(+id!, dto);
+            if (game) {
+                document.title = `${game.name} | GameNode`;
+            } else {
+                document.title = `GameNode`;
+            }
+            return game;
+        },
+    });
+    const game = gameQuery.data;
+
     const onMobile = useOnMobile();
+    const combinedImages = useMemo(() => {
+        if (game != undefined) {
+            return getCombinedImages(game);
+        }
+    }, [game]);
+
     return (
-        <Container fluid px={{ base: 0, lg: "md" }}>
-            <Paper w={"100%"} h={"100%"}>
+        <Paper w={"100%"} h={"100%"}>
+            <Stack>
                 <Grid
                     columns={12}
-                    className="justify-center lg:justify-start ps-3"
+                    className="justify-center lg:justify-start p-3 lg:ps-3 w-full"
                 >
-                    <Grid.Col span={{ xs: 12, lg: 3 }} className="">
-                        <GameFigureImage
-                            game={game}
-                            size={CoverSize.COVER_BIG}
-                        />
-                        <Title
-                            ta={"center"}
-                            size={"h3"}
-                            className="px-5 lg: px-1"
+                    <Grid.Col span={{ xs: 12, lg: 3 }}>
+                        <Flex
+                            wrap={"wrap"}
+                            justify={"center"}
+                            align={"start"}
+                            w={"inherit"}
+                            h={"inherit"}
                         >
-                            {game.name}
-                        </Title>
-                    </Grid.Col>
-                    <Grid.Col span={{ xs: 12, lg: 3 }} className="mt-4">
-                        <GameInfoDetails game={game} />
-                    </Grid.Col>
-                    <Grid.Col
-                        span={{ xs: 12, lg: 6 }}
-                        className="my-8 flex justify-center lg:justify-normal items-start"
-                    >
-                        <Flex w={"100%"} justify={"end"} align={"start"}>
+                            <GameFigureImage
+                                game={game}
+                                isLoading={gameQuery.isLoading}
+                                size={ImageSize.COVER_BIG}
+                            />
+                            <Break />
+                            <Title
+                                ta={"center"}
+                                size={"h3"}
+                                className="mx-5 lg:mx-1 mt-4 lg:mt-8"
+                            >
+                                {game ? game.name : <Skeleton />}
+                            </Title>
+                            <Break />
                             <GameInfoActions
                                 game={game}
-                                wrapperProps={{
-                                    className: "me-10",
-                                }}
+                                wrapperProps={{ className: "mt-4" }}
                             />
                         </Flex>
                     </Grid.Col>
+
+                    <Grid.Col span={{ xs: 12, lg: 9 }} className="mt-4">
+                        <GameInfoDetails game={game} />
+                    </Grid.Col>
                 </Grid>
-            </Paper>
-        </Container>
+                <Flex className={"w-full"} wrap={"wrap"}>
+                    <GameInfoDetailsBox
+                        title={"Images"}
+                        content={
+                            <GameInfoImageCarousel
+                                urls={combinedImages}
+                                imageSize={ImageSize.SCREENSHOT_BIG}
+                                carouselProps={{
+                                    withIndicators: !onMobile,
+                                    withControls: !onMobile,
+                                }}
+                            />
+                        }
+                    />
+                </Flex>
+            </Stack>
+        </Paper>
     );
 };
 

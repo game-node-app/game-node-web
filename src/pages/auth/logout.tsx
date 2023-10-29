@@ -8,7 +8,7 @@ const Logout = () => {
         signOut().then(() => {
             router.push("/");
         });
-    }, []);
+    }, [router]);
     return <div></div>;
 };
 

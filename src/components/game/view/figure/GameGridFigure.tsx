@@ -7,7 +7,7 @@ interface IGameGridFigureProps extends IGameFigureProps {}
 
 const GameGridFigure = ({ game, ...others }: IGameGridFigureProps) => {
     return (
-        <GameFigureImage {...others} game={game} href={`/game/${game.id}`} />
+        <GameFigureImage {...others} game={game} href={`/game/${game?.id}`} />
     );
 };
 

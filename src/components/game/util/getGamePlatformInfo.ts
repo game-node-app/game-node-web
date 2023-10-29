@@ -1,5 +1,8 @@
 import { TGameOrSearchGame } from "@/components/game/util/types";
-import { isGameSearchObject } from "@/components/game/util/isGameObject";
+import {
+    isGameObject,
+    isGameSearchObject,
+} from "@/components/game/util/isGameObject";
 
 interface IGamePlatformInfo {
     platformsNames: string[] | undefined;
@@ -22,7 +25,15 @@ export function getGamePlatformInfo(
             platformInfo.platformsAbbreviations =
                 game.platformsAbbreviations.split(", ");
         }
-    } else if (!isGameSearchObject(game)) {
+    } else if (isGameObject(game)) {
+        if (game.platforms) {
+            platformInfo.platformsNames = game.platforms.map(
+                (platform) => platform.name,
+            );
+            platformInfo.platformsAbbreviations = game.platforms.map(
+                (platform) => platform.abbreviation,
+            );
+        }
     }
 
     return platformInfo;

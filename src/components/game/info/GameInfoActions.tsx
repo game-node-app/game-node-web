@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
 import { IconHeartFilled, IconHeartPlus, IconX } from "@tabler/icons-react";
 import useQueryWithParameters from "@/hooks/useQueryWithParameters";
 import useUserInfo from "@/hooks/useUserInfo";
-import { findEntryInFavorites, findEntryInLibrary } from "@/util/findInLibrary";
-import GameAddModal from "@/components/game/form/modal/GameAddModal";
+import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-entry/form/modal/CollectionEntryAddOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
-import { Game } from "@/wrapper";
+import { CollectionEntry, CollectionsEntriesService, Game } from "@/wrapper";
+import { getCollectionEntryByGameId } from "@/components/collection/collection-entry/util/getCollectionEntryByGameId";
+import { useMutation, useQuery } from "react-query";
+import { useCollectionEntries } from "@/components/collection/collection-entry/hooks/useCollectionEntries";
+import CollectionEntryRemoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntryRemoveModal";
 
 interface IGameViewActionsProps {
     wrapperProps?: React.ComponentPropsWithoutRef<typeof Group>;
-    game: Game;
+    game: Game | undefined;
 }
 
 /**
@@ -19,37 +22,77 @@ interface IGameViewActionsProps {
  * @constructor
  */
 const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
-    const [modalOpened, { close, open }] = useDisclosure();
+    const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
+    const [removeModalOpened, removeModalUtils] = useDisclosure();
     const userInfo = useUserInfo();
-    const entryInLibrary = findEntryInLibrary(userInfo.userLibrary, game.id);
-    const entryInFavorites = findEntryInFavorites(
-        userInfo.userLibrary,
-        game.id,
-    );
+
+    const collectionEntriesQuery = useCollectionEntries(game?.id ?? -1);
+    const collectionEntryFavoriteMutation = useMutation({
+        mutationFn: (gameId: number) => {
+            return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
+                gameId,
+                {
+                    isFavorite: !gameInFavorites,
+                },
+            );
+        },
+        onSuccess: () => {
+            collectionEntriesQuery.refetch();
+        },
+    });
+
+    const gameInLibrary =
+        collectionEntriesQuery.data != undefined &&
+        collectionEntriesQuery.data.length > 0;
+
+    const gameInFavorites =
+        gameInLibrary &&
+        collectionEntriesQuery.data!.some((entry) => entry.isFavorite);
+
+    if (game == undefined) {
+        return null;
+    }
+
     return (
         <Group gap={"0.725rem"} {...wrapperProps}>
-            <GameAddModal
-                opened={modalOpened}
-                onClose={close}
-                metadata={game}
+            <CollectionEntryAddOrUpdateModal
+                opened={addUpdateModalOpened}
+                onClose={addUpdateModalUtils.close}
+                id={game.id}
             />
-            <Button disabled={entryInLibrary != undefined} onClick={open}>
-                {entryInLibrary != undefined
-                    ? "On your library"
-                    : "Add to library"}
+            <CollectionEntryRemoveModal
+                opened={removeModalOpened}
+                onClose={removeModalUtils.close}
+                id={game.id}
+            />
+            <Button onClick={addUpdateModalUtils.open}>
+                {gameInLibrary ? "Update" : "Add to library"}
             </Button>
+
             <Tooltip label={"Add to your favorites"}>
-                <ActionIcon size="lg" variant="default">
-                    {entryInFavorites != undefined ? (
+                <ActionIcon
+                    size="lg"
+                    variant="default"
+                    disabled={!gameInLibrary}
+                    onClick={() => {
+                        collectionEntryFavoriteMutation.mutate(game.id);
+                    }}
+                >
+                    {gameInFavorites ? (
                         <IconHeartFilled size={"1.05rem"} />
                     ) : (
                         <IconHeartPlus size={"1.05rem"} />
                     )}
                 </ActionIcon>
             </Tooltip>
-            {entryInLibrary != undefined && (
+
+            {gameInLibrary && (
                 <Tooltip label={"Remove from your library"}>
-                    <ActionIcon variant="default" size="lg">
+                    <ActionIcon
+                        variant="default"
+                        size="lg"
+                        onClick={removeModalUtils.open}
+                    >
                         <IconX color="red" />
                     </ActionIcon>
                 </Tooltip>

@@ -24,6 +24,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import GlobalShellNavbarCollectionsHeader from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollectionsHeader";
 import classes from "./global-shell-navbar.module.css";
+import { Collection } from "@/wrapper";
 
 const links = [
     { icon: IconBulb, label: "Activity", href: "/activity" },
@@ -71,10 +72,10 @@ export default function GlobalShellNavbar({
             );
         }
 
-        return userLibrary.collections.map((collection) => (
+        return userLibrary.collections.map((collection: Collection) => (
             <Link
                 key={collection.id}
-                href={`/profile/collections/${collection.id}`}
+                href={`/library/${userLibrary.userId}/collections/${collection.id}`}
                 className={classes.collectionLink}
             >
                 <span>{collection.name}</span>

@@ -4,7 +4,7 @@ import { GameViewContext } from "@/components/game/view/GameView";
 import GameGridFigure from "@/components/game/view/figure/GameGridFigure";
 import GameListFigure from "@/components/game/view/figure/GameListFigure";
 import { TGameOrSearchGame } from "@/components/game/util/types";
-import { CoverSize } from "@/components/game/util/getSizedImageUrl";
+import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 
 interface IMetadataGridContentProps {
     items: TGameOrSearchGame[];
@@ -22,7 +22,7 @@ const GameViewContent = ({ items }: IMetadataGridContentProps) => {
                 return (
                     <Grid.Col key={item.id} span={12} h={"100%"}>
                         <GameListFigure
-                            size={CoverSize.COVER_BIG}
+                            size={ImageSize.COVER_BIG}
                             game={item}
                         />
                         <Divider mt={"xs"} variant={"dashed"} />
@@ -32,7 +32,7 @@ const GameViewContent = ({ items }: IMetadataGridContentProps) => {
 
             return (
                 <Grid.Col key={item.id} span={{ xs: 6, lg: 2 }}>
-                    <GameGridFigure size={CoverSize.COVER_BIG} game={item} />
+                    <GameGridFigure size={ImageSize.COVER_BIG} game={item} />
                 </Grid.Col>
             );
         });

@@ -10,14 +10,15 @@ import type { Review } from './Review';
 
 export type CollectionEntry = {
     id: string;
-    review: Review;
-    reviewId: string;
+    review?: Review | null;
+    reviewId: string | null;
     collection: Collection;
     game: Game;
     /**
      * The platforms on which the user owns the game.
      */
     ownedPlatforms: Array<GamePlatform>;
+    isFavorite: boolean;
     createdAt: string;
     updatedAt: string;
 };

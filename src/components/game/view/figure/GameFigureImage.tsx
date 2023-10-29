@@ -8,12 +8,13 @@ import { AspectRatio, Box, Skeleton, Image, ImageProps } from "@mantine/core";
 import Link from "next/link";
 import { getSizedImageUrl } from "@/components/game/util/getSizedImageUrl";
 import { TGameOrSearchGame } from "@/components/game/util/types";
-import { CoverSize } from "@/components/game/util/getSizedImageUrl";
+import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { getCoverUrl } from "@/components/game/util/getCoverUrl";
 
 export interface IGameFigureProps extends PropsWithChildren<ImageProps> {
-    game: TGameOrSearchGame;
-    size: CoverSize;
+    game: TGameOrSearchGame | undefined;
+    isLoading?: boolean;
+    size: ImageSize;
     href?: string;
 }
 
@@ -29,36 +30,35 @@ export interface IGameFigureProps extends PropsWithChildren<ImageProps> {
 const GameFigureImage = ({
     game,
     children,
+    isLoading,
     href,
     size,
     ...others
 }: IGameFigureProps) => {
     const coverUrl = getCoverUrl(game);
     const sizedCoverUrl = getSizedImageUrl(coverUrl, size);
-    const [showSkeleton, setShowSkeleton] = useState(coverUrl != undefined);
-    const defaultHref = `/game/${game.id}`;
+    const [showSkeleton, setShowSkeleton] = useState(isLoading);
+    const defaultHref = `/game/${game?.id}`;
     return (
-        <Link href={defaultHref}>
-            <Box pos="relative" className="w-full h-fit">
-                {showSkeleton && (
-                    <Skeleton
-                        className="w-full h-full min-h-[10rem] lg:min-h-[18rem]"
-                        animate={true}
-                        visible={showSkeleton}
-                    />
-                )}
-                <AspectRatio ratio={264 / 354} pos="relative">
-                    <Image
-                        {...others}
-                        src={sizedCoverUrl!}
-                        alt={game.name}
-                        onLoad={() => setShowSkeleton(false)}
-                        onError={() => setShowSkeleton(false)}
-                        className="w-full h-full object-cover"
-                    />
-                    {children}
-                </AspectRatio>
-            </Box>
+        <Link href={defaultHref} className="w-full h-fit h-fit max-w-[22rem]">
+            {showSkeleton && (
+                <Skeleton
+                    className="w-full h-full min-h-[10rem] lg:min-h-[18rem]"
+                    animate={true}
+                    visible={showSkeleton}
+                />
+            )}
+            <AspectRatio ratio={264 / 354} pos="relative">
+                <Image
+                    src={sizedCoverUrl!}
+                    alt={game?.name ?? "Game cover"}
+                    onLoad={() => setShowSkeleton(false)}
+                    onError={() => setShowSkeleton(false)}
+                    className="w-full h-full object-cover"
+                    {...others}
+                />
+                {children}
+            </AspectRatio>
         </Link>
     );
 };

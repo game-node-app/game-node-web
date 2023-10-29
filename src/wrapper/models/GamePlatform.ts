@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CollectionEntry } from './CollectionEntry';
 import type { Game } from './Game';
 
 export type GamePlatform = {
@@ -16,6 +17,7 @@ export type GamePlatform = {
     createdAt: string;
     updatedAt: string;
     games: Array<Game>;
+    collectionEntries: Array<CollectionEntry>;
 };
 
 export namespace GamePlatform {

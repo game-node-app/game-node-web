@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Profile } from '../models/Profile';
 import type { UpdateProfileDto } from '../models/UpdateProfileDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -28,10 +29,10 @@ export class ProfileService {
 
     /**
      * Used to access own profile
-     * @returns any
+     * @returns Profile
      * @throws ApiError
      */
-    public static profileControllerFindOwnById(): CancelablePromise<Record<string, any>> {
+    public static profileControllerFindOwn(): CancelablePromise<Profile> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/profile',

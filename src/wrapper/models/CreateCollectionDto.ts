@@ -7,6 +7,5 @@ export type CreateCollectionDto = {
     name: string;
     description: string;
     isPublic?: Record<string, any>;
-    isFavoritesCollection?: Record<string, any>;
 };
 

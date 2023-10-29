@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { GetCollectionEntryDto } from '../models/GetCollectionEntryDto';
+import type { GetLibraryDto } from '../models/GetLibraryDto';
 import type { Library } from '../models/Library';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -11,30 +13,39 @@ import { request as __request } from '../core/request';
 export class LibrariesService {
 
     /**
-     * @returns any
+     * @param requestBody
+     * @returns Library
      * @throws ApiError
      */
-    public static librariesControllerFindByUserId(): CancelablePromise<Record<string, any>> {
+    public static librariesControllerFindOwn(
+        requestBody: GetLibraryDto,
+    ): CancelablePromise<Library> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/v1/libraries',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 
     /**
      * @param id
+     * @param requestBody
      * @returns Library
      * @throws ApiError
      */
-    public static librariesControllerFindById(
+    public static librariesControllerFindOneByIdWithPermissions(
         id: string,
+        requestBody: GetCollectionEntryDto,
     ): CancelablePromise<Library> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/v1/libraries/{id}',
             path: {
                 'id': id,
             },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 

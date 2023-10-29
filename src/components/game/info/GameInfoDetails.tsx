@@ -1,53 +1,56 @@
 import React from "react";
-import { Box, Stack, Text, Title } from "@mantine/core";
-import { Game } from "../../../wrapper";
-
-const GameInfoViewDetailsTextBox = ({
-    title,
-    content,
-}: {
-    title: string;
-    content?: string;
-}) => {
-    return (
-        <Stack
-            w={"100%"}
-            gap={4}
-            className="flex justify-start border-2 border-[#1F1F1F] rounded p-2 lg:p-0"
-        >
-            <Box className={"w-full px-4 py-2"}>
-                <Text c={"dimmed"} className="text-sm">
-                    {title}
-                </Text>
-                <Text>{content ?? "Unknown"}</Text>
-            </Box>
-        </Stack>
-    );
-};
+import { SimpleGrid, Stack } from "@mantine/core";
+import { Game } from "@/wrapper";
+import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
+import { getGameGenres } from "@/components/game/util/getGameGenres";
+import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
+import { ImageSize } from "@/components/game/util/getSizedImageUrl";
+import useOnMobile from "@/hooks/useOnMobile";
+import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
+import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 
 interface IGameInfoDetailsProps {
-    game: Game;
+    game: Game | undefined;
 }
 
 const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
+    const onMobile = useOnMobile();
+    if (!game) {
+        return null;
+    }
+    const genres = getGameGenres(game);
+    const genresNames = genres?.join(", ");
+
     return (
         <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
-            <GameInfoViewDetailsTextBox
-                title={"Launch date"}
-                content={"PLACEHOLDER"}
-            />
-            <GameInfoViewDetailsTextBox
-                title={"Developer(s)"}
-                content={undefined}
-            />
-            <GameInfoViewDetailsTextBox
-                title={"Publisher(s)"}
-                content={undefined}
-            />
-            <GameInfoViewDetailsTextBox
-                title={"Genres"}
-                content={"PLACEHOLDER"}
-            />
+            <SimpleGrid cols={{ base: 1, lg: 2 }}>
+                <GameInfoDetailsBox
+                    title={"Launch date"}
+                    content={getLocalizedFirstReleaseDate(
+                        game.firstReleaseDate,
+                        "pt-BR",
+                    )}
+                />
+                <GameInfoDetailsBox
+                    title={"Developer(s)"}
+                    content={undefined}
+                />
+                <GameInfoDetailsBox
+                    title={"Publisher(s)"}
+                    content={undefined}
+                />
+                <GameInfoDetailsBox title={"Genres"} content={genresNames} />
+                <GameInfoDetailsBox title={"Summary"} content={game.summary} />
+                <GameInfoDetailsBox
+                    title={"Platforms"}
+                    content={
+                        <GameInfoPlatforms
+                            className={"my-4 gap-2"}
+                            game={game}
+                        />
+                    }
+                />
+            </SimpleGrid>
         </Stack>
     );
 };

@@ -16,6 +16,7 @@ import { OpenAPI } from "@/wrapper";
  * Should always be imported BEFORE tailwind.
  */
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "@/globals.css";
 
 const inter = Inter({

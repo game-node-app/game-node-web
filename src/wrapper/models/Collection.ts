@@ -13,7 +13,6 @@ export type Collection = {
     isPublic: boolean;
     library: Library;
     entries: Array<CollectionEntry>;
-    isFavoritesCollection: boolean;
     createdAt: string;
     updatedAt: string;
 };
