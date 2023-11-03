@@ -4,38 +4,54 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Stack, TextInput, Text, Switch } from "@mantine/core";
 import buildAxiosInstance from "@/util/buildAxiosInstance";
-import useUserInfo from "@/hooks/useUserInfo";
 import { useRouter } from "next/router";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
+import { BaseModalChildrenProps } from "@/util/types/modal-props";
+import { CollectionsService } from "@/wrapper";
 
-const CreateCollectionFormSchema = z.object({
-    name: z.string().min(3).max(50),
-    description: z.string().min(3).max(300),
-    isPublic: z.boolean().default(true),
-    isFavoritesCollection: z.boolean(),
-});
+const CreateCollectionFormSchema = z
+    .object({
+        name: z.string().min(3).max(50),
+        description: z.string().optional(),
+        isPublic: z.boolean().default(true),
+        isFeatured: z.boolean().default(false),
+    })
+    .refine(
+        (data) => {
+            return !(data.isFeatured && !data.isPublic);
+        },
+        {
+            message: "Featured collections must be public",
+            path: ["isFeatured"],
+        },
+    );
 
 type CreateCollectionFormValues = z.infer<typeof CreateCollectionFormSchema>;
 
-const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
+const CreateCollectionForm = ({ onClose }: BaseModalChildrenProps) => {
     const [requestError, setRequestError] = useState<string | undefined>(
         undefined,
     );
-    const userInfo = useUserInfo();
+    const session = useSessionContext();
+    const userId = session.loading ? undefined : session.userId;
+    const userLibraryQuery = useUserLibrary(userId);
     const { handleSubmit, register, formState } =
         useForm<CreateCollectionFormValues>({
             resolver: zodResolver(CreateCollectionFormSchema),
-            mode: "onBlur",
+            mode: "onChange",
         });
+
     const router = useRouter();
 
     const onSubmit = async (data: CreateCollectionFormValues) => {
         const axios = buildAxiosInstance();
         try {
             setRequestError(undefined);
-            await axios.post("/collections", data);
-            userInfo.invalidateUserLibraryCache();
-            if (postSubmit) {
-                postSubmit(data);
+            await CollectionsService.collectionsControllerCreate(data as any);
+            userLibraryQuery.invalidate();
+            if (onClose) {
+                onClose();
             }
         } catch (e: any) {
             console.error(e);
@@ -50,21 +66,10 @@ const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
                         );
                         router.push("/auth");
                         break;
-                    case 409:
-                        setRequestError(
-                            "You already have a favorites collection set.",
-                        );
-                        break;
                 }
             }
         }
     };
-
-    useEffect(() => {
-        if (userInfo.userLibrary == undefined) {
-            router.push("/auth");
-        }
-    });
 
     return (
         <form className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
@@ -83,6 +88,7 @@ const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
                     error={formState.errors.description?.message}
                 />
                 <Switch
+                    error={formState.errors.isPublic?.message}
                     label={"Public collection"}
                     description={
                         "If this collections is visible to other users"
@@ -91,16 +97,17 @@ const CreateCollectionForm = ({ postSubmit }: IBaseFormProps) => {
                     {...register("isPublic")}
                 />
                 <Switch
-                    label={"Favorites collection"}
+                    error={formState.errors.isFeatured?.message}
+                    label={"Featured collection"}
                     description={
-                        "Your favorite games collection show up at the start of your profile page."
+                        "If this collections is featured in your profile and library"
                     }
                     defaultChecked={false}
-                    {...register("isFavoritesCollection")}
+                    {...register("isFeatured")}
                 />
                 <Button type="submit">Create</Button>
                 {requestError && (
-                    <Text color="red" mt="md">
+                    <Text c="red" mt="md">
                         {requestError}
                     </Text>
                 )}

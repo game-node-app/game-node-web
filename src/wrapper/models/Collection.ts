@@ -13,6 +13,7 @@ export type Collection = {
     isPublic: boolean;
     library: Library;
     entries: Array<CollectionEntry>;
+    isFeatured: boolean;
     createdAt: string;
     updatedAt: string;
 };

@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
-import useUserInfo from "@/hooks/useUserInfo";
 import { useRouter } from "next/router";
+import CenteredLoading from "@/components/general/CenteredLoading";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 const Index = () => {
-    const userInfo = useUserInfo();
+    const session = useSessionContext();
     const router = useRouter();
     useEffect(() => {
-        if (userInfo != undefined) {
-            const userId = userInfo.userLibrary?.userId;
-            if (router.isReady) router.push(`/library/${userId}`);
+        if (!session.loading && !session.doesSessionExist) {
+            router.push("/auth");
+        } else if (!session.loading && session.doesSessionExist) {
+            router.push("/library/" + session.userId);
         }
-    }, [router, userInfo]);
-    return <div></div>;
+    }, [router, session]);
+    return <CenteredLoading />;
 };
 
 export default Index;

@@ -8,6 +8,7 @@
     "build": "yarn run wrapper:generate && next build",
     "start": "next start",
     "wrapper:generate": "openapi --input ./swagger.json --output src/wrapper --client axios",
+    "wrapper:generate:quick": "cp ../game-node-server/swagger.json ./swagger.json && yarn run wrapper:generate",
     "lint": "next lint",
     "typesafe-i18n": "typesafe-i18n"
   },

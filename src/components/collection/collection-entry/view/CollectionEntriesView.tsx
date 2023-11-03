@@ -1,34 +1,34 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { CollectionEntry } from "@/wrapper";
+import { Container, Stack } from "@mantine/core";
 import GameView from "@/components/game/view/GameView";
-import { Box, Container, Space, Stack } from "@mantine/core";
 import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { Box, Space } from "@mantine/core";
 import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
-import { SearchGame } from "@/wrapper";
 import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
 
-interface ISearchResultScreenProps extends IGameViewPaginationProps {
-    enabled: boolean;
+interface ICollectionEntriesViewProps extends IGameViewPaginationProps {
     isLoading: boolean;
     isError: boolean;
     isFetching: boolean;
-    results: SearchGame[] | undefined;
+    entries: CollectionEntry[] | undefined;
 }
 
-const GameSearchResultScreen = ({
-    enabled,
+const CollectionEntriesView = ({
+    entries,
     isError,
     isLoading,
-    results,
+    isFetching,
     paginationInfo,
     onPaginationChange,
-}: ISearchResultScreenProps) => {
+}: ICollectionEntriesViewProps) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
+    const entriesGames = useMemo(() => {
+        return entries?.map((entry) => entry.game);
+    }, [entries]);
 
     const render = () => {
-        if (!enabled) {
-            return null;
-        }
         if (isError) {
             return (
                 <GameSearchResultErrorMessage
@@ -37,7 +37,11 @@ const GameSearchResultScreen = ({
             );
         } else if (isLoading) {
             return <CenteredLoading />;
-        } else if (results == undefined || results.length === 0) {
+        } else if (
+            entries == undefined ||
+            entriesGames == undefined ||
+            entriesGames.length === 0
+        ) {
             return (
                 <GameSearchResultErrorMessage
                     message={"No results found. Please try again."}
@@ -45,26 +49,28 @@ const GameSearchResultScreen = ({
             );
         } else {
             return (
-                <Container
+                <Stack
                     w={"100%"}
-                    maw={{
-                        base: "100%",
-                        lg: "90%",
-                    }}
-                    className=""
+                    justify={"space-between"}
+                    h={"100%"}
+                    mt={"md"}
                 >
                     <Box className="w-full flex justify-end mb-8 ">
                         <Box className={"!me-4"}>
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
-                    <GameView.Content items={results} />
+                    <GameView.Content
+                        items={entriesGames}
+                        justify={"flex-start"}
+                        px={"sm"}
+                    />
                     <Space h={"2rem"} />
                     <GameView.Pagination
                         paginationInfo={paginationInfo}
                         onPaginationChange={onPaginationChange}
                     />
-                </Container>
+                </Stack>
             );
         }
     };
@@ -72,4 +78,4 @@ const GameSearchResultScreen = ({
     return <GameView layout={layout}>{render()}</GameView>;
 };
 
-export default GameSearchResultScreen;
+export default CollectionEntriesView;

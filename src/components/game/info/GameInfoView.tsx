@@ -13,6 +13,17 @@ import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import Break from "@/components/general/Break";
 import { useQuery } from "react-query";
 import { getGameInfo } from "@/components/game/util/getGameInfo";
+import { useGame } from "@/components/game/hooks/useGame";
+
+export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryRequestDto = {
+    relations: {
+        cover: true,
+        genres: true,
+        platforms: true,
+        screenshots: true,
+        artworks: true,
+    },
+};
 
 interface IGameInfoViewProps {
     id: string | undefined;
@@ -36,30 +47,8 @@ const getCombinedImages = (game: Game) => {
 };
 
 const GameInfoView = ({ id }: IGameInfoViewProps) => {
-    const gameQuery = useQuery({
-        queryKey: ["game", id],
-        queryFn: async (context) => {
-            const dto: GameRepositoryRequestDto = {
-                relations: {
-                    cover: true,
-                    genres: true,
-                    platforms: true,
-                    screenshots: true,
-                    artworks: true,
-                },
-            };
-            if (id == undefined) {
-                return undefined;
-            }
-            const game = await getGameInfo(+id!, dto);
-            if (game) {
-                document.title = `${game.name} | GameNode`;
-            } else {
-                document.title = `GameNode`;
-            }
-            return game;
-        },
-    });
+    const idAsNumber = parseInt(id as string, 10);
+    const gameQuery = useGame(idAsNumber, DEFAULT_GAME_INFO_VIEW_DTO);
     const game = gameQuery.data;
 
     const onMobile = useOnMobile();

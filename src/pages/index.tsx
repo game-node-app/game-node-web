@@ -23,10 +23,8 @@ export default function Home() {
     const session = useSessionContext();
     const router = useRouter();
     useEffect(() => {
-        if (!session.loading) {
-            if (session.doesSessionExist) {
-                router.push("/search");
-            }
+        if (!session.loading && session.doesSessionExist) {
+            router.push("/search");
         }
     }, [session, router]);
     return (
@@ -39,8 +37,8 @@ export default function Home() {
                 </Box>
 
                 <Group className="justify-start">
-                    <Button component={"a"} href={"/auth"}>
-                        Join in
+                    <Button component={"a"} href={"/search"}>
+                        Start searching
                     </Button>
                 </Group>
                 <Stack

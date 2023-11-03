@@ -1,22 +1,32 @@
 import React from "react";
-import { TPaginationInfo } from "@/util/types/pagination";
 import { Center, Pagination, PaginationProps } from "@mantine/core";
+import { PaginationInfoDto } from "@/wrapper";
 
-interface IGameViewPaginationProps extends Omit<PaginationProps, "total"> {
-    pagination?: TPaginationInfo;
+export interface IGameViewPaginationProps {
+    paginationInfo: PaginationInfoDto | undefined;
+    onPaginationChange: (page: number) => void;
 }
 
 const GameViewPagination = ({
-    pagination,
-    onChange,
-    ...others
+    paginationInfo,
+    onPaginationChange,
 }: IGameViewPaginationProps) => {
+    const [page, setPage] = React.useState(1);
+
+    /**
+     * @param page
+     */
+    const handlePagination = (page: number) => {
+        onPaginationChange(page);
+        setPage(page);
+    };
+
     return (
         <Center w={"100%"}>
             <Pagination
-                {...others}
-                total={pagination?.totalPages || 1}
-                onChange={onChange}
+                value={page}
+                total={paginationInfo?.totalPages || 1}
+                onChange={handlePagination}
             />
         </Center>
     );

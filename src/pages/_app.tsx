@@ -3,11 +3,15 @@ import { AppProps } from "next/app";
 import TypesafeI18NProvider from "@/components/general/TypesafeI18nProvider";
 import SuperTokensProvider from "@/components/auth/SuperTokensProvider";
 import GlobalShell from "@/components/general/shell/GlobalShell";
-import React from "react";
+import React, { useState } from "react";
 import { RouterTransition } from "@/components/general/RouterTransition";
 import { Inter } from "next/font/google";
-import UserInfoProvider from "@/components/auth/UserInfoProvider";
-import { QueryClient, QueryClientProvider } from "react-query";
+import {
+    DehydratedState,
+    Hydrate,
+    QueryClient,
+    QueryClientProvider,
+} from "react-query";
 import Head from "next/head";
 import { Notifications } from "@mantine/notifications";
 import { OpenAPI } from "@/wrapper";
@@ -17,6 +21,9 @@ import { OpenAPI } from "@/wrapper";
  */
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+/**
+ * Includes tailwind styles
+ */
 import "@/globals.css";
 
 const inter = Inter({
@@ -43,13 +50,14 @@ const theme = createTheme({
     primaryColor: "brand",
 });
 
-const client = new QueryClient();
-
 OpenAPI.BASE = process.env.NEXT_PUBLIC_SERVER_URL!;
 OpenAPI.WITH_CREDENTIALS = true;
 
-export default function App({ Component, pageProps }: AppProps) {
-    // @ts-ignore
+export default function App({
+    Component,
+    pageProps,
+}: AppProps<{ dehydratedState: DehydratedState }>) {
+    const [queryClient, _] = useState(() => new QueryClient());
     return (
         <MantineProvider theme={theme} forceColorScheme={"dark"}>
             <Head>
@@ -61,14 +69,14 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
             <TypesafeI18NProvider>
                 <SuperTokensProvider>
-                    <QueryClientProvider client={client}>
-                        <UserInfoProvider>
-                            <Notifications />
-                            <RouterTransition />
-                            <GlobalShell>
+                    <QueryClientProvider client={queryClient}>
+                        <Notifications />
+                        <RouterTransition />
+                        <GlobalShell>
+                            <Hydrate state={pageProps.dehydratedState}>
                                 <Component {...pageProps} />
-                            </GlobalShell>
-                        </UserInfoProvider>
+                            </Hydrate>
+                        </GlobalShell>
                     </QueryClientProvider>
                 </SuperTokensProvider>
             </TypesafeI18NProvider>

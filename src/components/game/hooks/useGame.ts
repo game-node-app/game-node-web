@@ -23,5 +23,6 @@ export function useGame(
 
             return game;
         },
+        staleTime: 5 * 60 * 1000, // 5 minutes
     });
 }

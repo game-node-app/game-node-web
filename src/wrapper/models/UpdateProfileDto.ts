@@ -4,7 +4,7 @@
 /* eslint-disable */
 
 export type UpdateProfileDto = {
-    avatar?: Blob;
     username?: string;
+    avatar?: Record<string, any>;
 };
 

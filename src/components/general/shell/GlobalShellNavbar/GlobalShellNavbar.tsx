@@ -1,30 +1,18 @@
-import {
-    TextInput,
-    UnstyledButton,
-    Text,
-    rem,
-    Transition,
-    Center,
-    Stack,
-    ScrollArea,
-    AppShell,
-} from "@mantine/core";
+import { TextInput, UnstyledButton } from "@mantine/core";
 import {
     IconBulb,
     IconUser,
     IconCheckbox,
     IconSearch,
-    IconPlus,
-    IconSelector,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
 import { serverUrl } from "@/util/constants";
-import useUserInfo from "@/hooks/useUserInfo";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import GlobalShellNavbarCollectionsHeader from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollectionsHeader";
 import classes from "./global-shell-navbar.module.css";
-import { Collection } from "@/wrapper";
+import useUserProfile from "@/components/profile/hooks/useUserProfile";
+import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 
 const links = [
     { icon: IconBulb, label: "Activity", href: "/activity" },
@@ -39,9 +27,13 @@ interface IGlobalShellNavbarProps {
 export default function GlobalShellNavbar({
     sidebarOpened,
 }: IGlobalShellNavbarProps) {
-    const { userProfile, userLibrary } = useUserInfo();
     const session = useSessionContext();
     const isLoggedIn = !session.loading && session.doesSessionExist;
+
+    const userProfileQuery = useUserProfile(
+        session.loading ? undefined : session.userId,
+    );
+    const userProfile = userProfileQuery.data;
 
     const mainLinks = links.map((link) => (
         <UnstyledButton key={link.label} className={classes.mainLink}>
@@ -55,33 +47,6 @@ export default function GlobalShellNavbar({
             </Link>
         </UnstyledButton>
     ));
-
-    const buildCollectionsLinks = () => {
-        if (
-            !isLoggedIn ||
-            !userLibrary ||
-            userLibrary.collections == null ||
-            userLibrary.collections.length === 0
-        ) {
-            return (
-                <Center>
-                    <Text c="dimmed" size="sm" mt="md">
-                        Your collections will show here 😉
-                    </Text>
-                </Center>
-            );
-        }
-
-        return userLibrary.collections.map((collection: Collection) => (
-            <Link
-                key={collection.id}
-                href={`/library/${userLibrary.userId}/collections/${collection.id}`}
-                className={classes.collectionLink}
-            >
-                <span>{collection.name}</span>
-            </Link>
-        ));
-    };
 
     const placeholderUserButtonImage = "https://i.imgur.com/fGxgcDF.png";
 
@@ -114,15 +79,7 @@ export default function GlobalShellNavbar({
             <div className={classes.section}>
                 <div className={classes.mainLinks}>{mainLinks}</div>
             </div>
-
-            <div className={classes.section}>
-                <GlobalShellNavbarCollectionsHeader />
-                <ScrollArea>
-                    <Stack className={classes.collections} gap="xs">
-                        {buildCollectionsLinks()}
-                    </Stack>
-                </ScrollArea>
-            </div>
+            <GlobalShellNavbarCollections />
         </nav>
     );
 }

@@ -5,7 +5,8 @@
 
 export type CreateCollectionDto = {
     name: string;
-    description: string;
-    isPublic?: Record<string, any>;
+    description?: string;
+    isPublic: boolean;
+    isFeatured: boolean;
 };
 

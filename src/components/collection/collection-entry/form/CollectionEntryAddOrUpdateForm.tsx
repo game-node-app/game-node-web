@@ -13,14 +13,15 @@ import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import useUserInfo from "@/hooks/useUserInfo";
 import { notifications } from "@mantine/notifications";
 import { Collection, CollectionsEntriesService, GamePlatform } from "@/wrapper";
 import { useGame } from "@/components/game/hooks/useGame";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { useMutation, useQueryClient } from "react-query";
-import { BaseCollectionEntryChildrenProps } from "@/components/collection/collection-entry/form/types";
-import { useCollectionEntries } from "@/components/collection/collection-entry/hooks/useCollectionEntries";
+import { BaseModalChildrenProps } from "@/util/types/modal-props";
+import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -31,7 +32,7 @@ const GameAddOrUpdateSchema = z.object({
 
 type TGameAddOrUpdateValues = z.infer<typeof GameAddOrUpdateSchema>;
 
-interface IGameAddFormProps extends BaseCollectionEntryChildrenProps {
+interface IGameAddFormProps extends BaseModalChildrenProps {
     gameId: number;
 }
 
@@ -81,7 +82,7 @@ const CollectionEntryAddOrUpdateForm = ({
         resolver: zodResolver(GameAddOrUpdateSchema),
     });
 
-    const collectionEntryQuery = useCollectionEntries(gameId);
+    const collectionEntryQuery = useCollectionEntriesForGameId(gameId);
 
     const gameQuery = useGame(gameId, {
         relations: {
@@ -91,11 +92,14 @@ const CollectionEntryAddOrUpdateForm = ({
     });
 
     const game = gameQuery.data;
+    const session = useSessionContext();
 
-    const userInfo = useUserInfo();
+    const userLibraryQuery = useUserLibrary(
+        session.loading ? undefined : session.userId,
+    );
 
     const collectionOptions = buildCollectionOptions(
-        userInfo.userLibrary?.collections,
+        userLibraryQuery?.data?.collections,
     );
 
     const isUpdateAction =

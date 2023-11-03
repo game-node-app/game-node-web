@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GetCollectionEntryDto } from '../models/GetCollectionEntryDto';
 import type { GetLibraryDto } from '../models/GetLibraryDto';
 import type { Library } from '../models/Library';
 
@@ -36,7 +35,7 @@ export class LibrariesService {
      */
     public static librariesControllerFindOneByIdWithPermissions(
         id: string,
-        requestBody: GetCollectionEntryDto,
+        requestBody: GetLibraryDto,
     ): CancelablePromise<Library> {
         return __request(OpenAPI, {
             method: 'POST',

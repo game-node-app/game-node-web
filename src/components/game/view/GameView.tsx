@@ -4,33 +4,20 @@ import GameViewContent from "@/components/game/view/GameViewContent";
 import GameViewPagination from "@/components/game/view/GameViewPagination";
 import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
 
-interface IMetadatadaViewProps
-    extends PropsWithChildren<React.ComponentProps<typeof Stack>> {
+interface IMetadatadaViewProps extends PropsWithChildren {
     layout: "grid" | "list";
 }
 
-interface IMetadataViewContext extends Omit<IMetadatadaViewProps, "children"> {}
+interface IMetadataViewContext extends Pick<IMetadatadaViewProps, "layout"> {}
 
 export const GameViewContext = createContext<IMetadataViewContext>({
     layout: "grid",
 });
 
-const GameView = ({
-    children,
-    layout = "grid",
-    ...others
-}: IMetadatadaViewProps) => {
+const GameView = ({ children, layout = "grid" }: IMetadatadaViewProps) => {
     return (
         <GameViewContext.Provider value={{ layout: layout }}>
-            <Stack
-                w={"100%"}
-                align="center"
-                justify="start"
-                h={"100%"}
-                {...others}
-            >
-                {children}
-            </Stack>
+            {children}
         </GameViewContext.Provider>
     );
 };

@@ -1,20 +1,17 @@
-import React, { useState } from "react";
-import { Box, Container, Space, Stack } from "@mantine/core";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Box, Container, Stack } from "@mantine/core";
 import SearchBar from "@/components/game/search/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery, useQueryClient } from "react-query";
-import useQueryWithParameters from "@/hooks/useQueryWithParameters";
+import { useQuery } from "react-query";
 import GameSearchResultScreen from "@/components/game/search/result/GameSearchResultScreen";
-import { TPaginationResponse } from "@/util/types/pagination";
-import { IBaseFindDto } from "@/util/types/baseDto";
-import useInfiniteQueryWithParameters from "@/hooks/useInfiniteQueryWithParameters";
 import {
     GameSearchRequestDto,
     GameSearchResponseDto,
     GameSearchResponseHits,
     GameSearchService,
+    PaginationInfoDto,
     SearchGame,
 } from "@/wrapper";
 
@@ -22,7 +19,7 @@ const SearchFormSchema = z.object({
     search: z.string().min(3),
 });
 
-type TSearchFormSchema = z.infer<typeof SearchFormSchema>;
+type TSearchFormValues = z.infer<typeof SearchFormSchema>;
 
 const ITEMS_PER_PAGE = 20;
 
@@ -47,6 +44,23 @@ const getSearchResults = (
     return undefined;
 };
 
+const buildPaginationInfo = (
+    response: GameSearchResponseDto | undefined,
+): PaginationInfoDto => {
+    const totalItems = (response && response.hits?.total) || 0;
+    const currentItems = (response && response.hits?.hits?.length) || 0;
+    const hasNextPage = currentItems < totalItems;
+    const totalPages =
+        totalItems > 0 && currentItems > 0
+            ? Math.ceil(totalItems / ITEMS_PER_PAGE)
+            : 1;
+    return {
+        total: totalItems,
+        hasNextPage,
+        totalPages,
+    };
+};
+
 const Index = () => {
     const {
         handleSubmit,
@@ -54,7 +68,7 @@ const Index = () => {
         setValue,
         watch,
         formState: { errors },
-    } = useForm<TSearchFormSchema>({
+    } = useForm<TSearchFormValues>({
         resolver: zodResolver(SearchFormSchema),
         mode: "onBlur",
     });
@@ -62,7 +76,7 @@ const Index = () => {
     const [searchParameters, setSearchParameters] =
         useState<GameSearchRequestDto>(DEFAULT_SEARCH_PARAMETERS);
 
-    const queryEnabled =
+    const isQueryEnabled =
         searchParameters.query != undefined &&
         searchParameters.query["query_string"] != undefined &&
         searchParameters.query["query_string"].length > 2;
@@ -70,14 +84,25 @@ const Index = () => {
     const searchQuery = useQuery<GameSearchResponseDto>({
         queryKey: ["search", ...Object.values(searchParameters)],
         queryFn: async (ctx) => {
-            return await GameSearchService.gameSearchControllerSearch(
+            return GameSearchService.gameSearchControllerSearch(
                 searchParameters,
             );
         },
-        enabled: queryEnabled,
+        keepPreviousData: true,
+        enabled: isQueryEnabled,
     });
 
-    const handleSearch = (data: TSearchFormSchema) => {
+    const searchResults = useMemo(
+        () => getSearchResults(searchQuery.data?.hits),
+        [searchQuery.data],
+    );
+
+    const paginationInfo = useMemo(
+        () => buildPaginationInfo(searchQuery.data),
+        [searchQuery.data],
+    );
+
+    const handleSearch = (data: TSearchFormValues) => {
         setSearchParameters({
             ...DEFAULT_SEARCH_PARAMETERS,
             /**
@@ -129,11 +154,18 @@ const Index = () => {
             </Stack>
             <Container fluid my={"3rem"}>
                 <GameSearchResultScreen
-                    enabled={queryEnabled}
+                    enabled={isQueryEnabled}
                     isError={searchQuery.isError}
                     isLoading={searchQuery.isLoading}
                     isFetching={searchQuery.isFetching}
-                    items={getSearchResults(searchQuery.data?.hits)}
+                    results={searchResults}
+                    paginationInfo={paginationInfo}
+                    onPaginationChange={(page) => {
+                        setSearchParameters({
+                            ...searchParameters,
+                            offset: (page - 1) * ITEMS_PER_PAGE,
+                        });
+                    }}
                 />
             </Container>
         </Container>

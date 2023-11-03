@@ -23,13 +23,11 @@ export function UserButton({
 }: UserButtonProps) {
     return (
         <UnstyledButton className={classes.user} {...others}>
-            <Group wrap={"nowrap"} p={"md"}>
+            <Group wrap={"nowrap"} p={"md"} w={"100%"}>
                 <Avatar src={image} radius="xl" />
 
                 <div style={{ flex: 1 }}>
-                    <Text size="sm" w={500}>
-                        {username}
-                    </Text>
+                    <Text size="sm">{username}</Text>
 
                     <Text c="dimmed" size="xs">
                         Seeker of Souls

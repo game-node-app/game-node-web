@@ -3,24 +3,14 @@ import { ActionIcon, Group, Modal, Text, Tooltip } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import CreateCollectionForm from "@/components/collection/form/CreateCollectionForm";
 import { useDisclosure } from "@mantine/hooks";
+import CreateCollectionModal from "@/components/collection/form/modal/CreateCollectionModal";
 
 const GlobalShellNavbarCollectionsHeader = () => {
     const [open, { toggle, close }] = useDisclosure(false);
 
     return (
         <Group className="px-md pb-md" justify={"apart"} wrap={"nowrap"}>
-            <Modal
-                title={"Create collection"}
-                withCloseButton
-                opened={open}
-                onClose={() => close()}
-            >
-                <CreateCollectionForm
-                    postSubmit={() => {
-                        close();
-                    }}
-                />
-            </Modal>
+            <CreateCollectionModal opened={open} onClose={close} />
             <Text size="xs" w={500} c="dimmed" className="">
                 Your collections
             </Text>

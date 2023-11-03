@@ -1,10 +1,5 @@
-export type TPaginationInfo = {
-    totalItems: number;
-    totalPages: number;
-    hasNextPage: boolean;
-};
+import { PaginationResponseDto } from "@/wrapper";
 
 export type TPaginationResponse<T> = {
     data: T[];
-    pagination: TPaginationInfo;
-};
+} & PaginationResponseDto;

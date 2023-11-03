@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
 import { IconHeartFilled, IconHeartPlus, IconX } from "@tabler/icons-react";
-import useQueryWithParameters from "@/hooks/useQueryWithParameters";
-import useUserInfo from "@/hooks/useUserInfo";
 import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-entry/form/modal/CollectionEntryAddOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
-import { CollectionEntry, CollectionsEntriesService, Game } from "@/wrapper";
-import { getCollectionEntryByGameId } from "@/components/collection/collection-entry/util/getCollectionEntryByGameId";
+import { CollectionsEntriesService, Game } from "@/wrapper";
 import { useMutation, useQuery } from "react-query";
-import { useCollectionEntries } from "@/components/collection/collection-entry/hooks/useCollectionEntries";
+import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
 import CollectionEntryRemoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntryRemoveModal";
 
 interface IGameViewActionsProps {
@@ -24,9 +21,10 @@ interface IGameViewActionsProps {
 const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
     const [removeModalOpened, removeModalUtils] = useDisclosure();
-    const userInfo = useUserInfo();
 
-    const collectionEntriesQuery = useCollectionEntries(game?.id ?? -1);
+    const collectionEntriesQuery = useCollectionEntriesForGameId(
+        game?.id ?? -1,
+    );
     const collectionEntryFavoriteMutation = useMutation({
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(

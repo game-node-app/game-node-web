@@ -42,12 +42,12 @@ export class ProfileService {
     /**
      * Used to access other users' profiles
      * @param id
-     * @returns any
+     * @returns Profile
      * @throws ApiError
      */
     public static profileControllerFindOneById(
         id: string,
-    ): CancelablePromise<Record<string, any>> {
+    ): CancelablePromise<Profile> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/v1/profile/{id}',

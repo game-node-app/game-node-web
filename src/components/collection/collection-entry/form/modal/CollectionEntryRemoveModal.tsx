@@ -1,11 +1,12 @@
 import React from "react";
-import { BaseCollectionEntryModalProps } from "@/components/collection/collection-entry/form/types";
+import { BaseModalProps } from "@/util/types/modal-props";
 import { Button, Center, Group, Modal, Stack, Text } from "@mantine/core";
 import { useMutation, useQueryClient } from "react-query";
 import { CollectionsEntriesService } from "@/wrapper";
 
-interface ICollectionEntryRemoveModalProps
-    extends BaseCollectionEntryModalProps {}
+interface ICollectionEntryRemoveModalProps extends BaseModalProps {
+    id: number;
+}
 
 const CollectionEntryRemoveModal = ({
     id,

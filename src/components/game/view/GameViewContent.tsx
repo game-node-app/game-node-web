@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { Divider, Grid } from "@mantine/core";
+import { Divider, Grid, GridProps } from "@mantine/core";
 import { GameViewContext } from "@/components/game/view/GameView";
 import GameGridFigure from "@/components/game/view/figure/GameGridFigure";
 import GameListFigure from "@/components/game/view/figure/GameListFigure";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 
-interface IMetadataGridContentProps {
+interface IMetadataGridContentProps extends GridProps {
     items: TGameOrSearchGame[];
 }
 
-const GameViewContent = ({ items }: IMetadataGridContentProps) => {
+const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
     const { layout } = useContext(GameViewContext);
     const buildColumns = () => {
         if (items == null || items.length === 0) {
@@ -38,7 +38,15 @@ const GameViewContent = ({ items }: IMetadataGridContentProps) => {
         });
     };
     return (
-        <Grid columns={12} align="start" justify="center" w={"100%"} h={"100%"}>
+        <Grid
+            id={"game-view-content"}
+            columns={12}
+            align="start"
+            justify="center"
+            w={"100%"}
+            h={"100%"}
+            {...others}
+        >
             {buildColumns()}
         </Grid>
     );

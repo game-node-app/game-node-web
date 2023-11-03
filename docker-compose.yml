@@ -16,20 +16,14 @@ services:
     environment:
       - NODE_ENV=production
 
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.app.rule=Host(`${GAME_NODE_WEB_DOMAIN}`)
-      - traefik.http.routers.app.entrypoints=web
-      - traefik.http.routers.app.tls.certresolver=letsencrypt
+    networks:
+      - game_node_app
 
-  traefik:
-    image: traefik:latest
 
-    ports:
-      - "80:80"
-      - "443:443"
+networks:
+  game_node_app:
+    external: true
 
-    volumes:
-        - ./acme.json:/acme.json
+
 
 
