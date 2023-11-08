@@ -10,12 +10,6 @@ The repository for the web client of Game Node.
 
 Start working ;)
 
-### Production
-We provide a `Dockerfile` and `docker-compose.yml` for procution usage. Just set the $GAME_NODE_WEB_DOMAIN and you are
-good to go.
-
-It may be worth it to consider deploying GameNode to a service such as Cloudflare Pages or Netlify!
-
 ## Important
 You need to have a GameNode server instance running on your machine to actually use the app.
 After setting it up, set your `.env.local` file. You can find an example in the `.env.local.example` file.  
