@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { CollectionEntry, GetCollectionEntriesDto } from "@/wrapper";
+import { CollectionEntry, GetCollectionEntriesDto } from "@/wrapper/server";
 import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
 import { TPaginationResponse } from "@/util/types/pagination";

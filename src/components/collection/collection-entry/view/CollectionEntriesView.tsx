@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { CollectionEntry } from "@/wrapper";
+import { CollectionEntry } from "@/wrapper/server";
 import { Container, Stack } from "@mantine/core";
 import GameView from "@/components/game/view/GameView";
 import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
@@ -19,7 +19,6 @@ const CollectionEntriesView = ({
     entries,
     isError,
     isLoading,
-    isFetching,
     paginationInfo,
     onPaginationChange,
 }: ICollectionEntriesViewProps) => {

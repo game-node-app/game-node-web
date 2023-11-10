@@ -14,7 +14,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { notifications } from "@mantine/notifications";
-import { Collection, CollectionsEntriesService, GamePlatform } from "@/wrapper";
+import {
+    Collection,
+    CollectionsEntriesService,
+    GamePlatform,
+} from "@/wrapper/server";
 import { useGame } from "@/components/game/hooks/useGame";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { useMutation, useQueryClient } from "react-query";
@@ -22,6 +26,7 @@ import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
+import entry from "next/dist/server/typescript/rules/entry";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -157,17 +162,21 @@ const CollectionEntryAddOrUpdateForm = ({
             collectionEntryQuery.data != undefined &&
             collectionEntryQuery.data.length > 0
         ) {
-            const collectionIds = collectionEntryQuery.data.map((entry) => {
-                return entry.collection.id;
-            });
-            const platformIds = [];
-            for (const entry of collectionEntryQuery.data) {
-                for (const platform of entry.ownedPlatforms) {
-                    platformIds.push(platform.id);
-                }
-            }
+            const collectionIds = collectionEntryQuery.data
+                .filter((entry) => entry.collection != undefined)
+                .map((entry) => entry.collection.id);
+
+            const platformIds = collectionEntryQuery.data.flatMap((entry) =>
+                entry.ownedPlatforms.map((platform) => platform.id),
+            );
+            /**
+             * This is useful not only to avoid showing duplicates to the user, but also to
+             * ensure consistency between collection entries.
+             * See collections-entries.service.ts in game-node-server for more info.
+             */
+            const uniquePlatformIds = Array.from(new Set(platformIds));
             setValue("collectionIds", collectionIds);
-            setValue("platformsIds", platformIds);
+            setValue("platformsIds", uniquePlatformIds);
         }
     }, [collectionEntryQuery.data, setValue]);
 

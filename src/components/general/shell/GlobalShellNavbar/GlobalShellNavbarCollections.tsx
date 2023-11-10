@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./global-shell-navbar.module.css";
 import GlobalShellNavbarCollectionsHeader from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollectionsHeader";
 import { Center, ScrollArea, Stack, Text } from "@mantine/core";
-import { Collection } from "@/wrapper";
+import { Collection } from "@/wrapper/server";
 import Link from "next/link";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";

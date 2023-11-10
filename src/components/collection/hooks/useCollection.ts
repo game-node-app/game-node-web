@@ -1,9 +1,9 @@
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
-import { Collection, CollectionsService } from "@/wrapper";
+import { Collection, CollectionsService } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "react-query";
 
 export function useCollection(
-    collectionId: string,
+    collectionId: string | undefined,
 ): ExtendedUseQueryResult<Collection> {
     const queryClient = useQueryClient();
     const queryKey = ["collection", collectionId];

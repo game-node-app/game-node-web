@@ -1,5 +1,5 @@
 import React from "react";
-import { Game, GamePlatform } from "@/wrapper";
+import { Game, GamePlatform } from "@/wrapper/server";
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 import { Group, GroupProps } from "@mantine/core";
 import {

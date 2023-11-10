@@ -1,4 +1,4 @@
-import { GameGenre } from "@/wrapper";
+import { GameGenre } from "@/wrapper/server";
 import { isGameSearchObject } from "@/components/game/util/isGameObject";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 

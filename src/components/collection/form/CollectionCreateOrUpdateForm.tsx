@@ -8,7 +8,9 @@ import { useRouter } from "next/router";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { CollectionsService } from "@/wrapper";
+import { ApiError, CollectionsService } from "@/wrapper/server";
+import { useCollection } from "@/components/collection/hooks/useCollection";
+import { useMutation } from "react-query";
 
 const CreateCollectionFormSchema = z
     .object({
@@ -29,14 +31,25 @@ const CreateCollectionFormSchema = z
 
 type CreateCollectionFormValues = z.infer<typeof CreateCollectionFormSchema>;
 
-const CreateCollectionForm = ({ onClose }: BaseModalChildrenProps) => {
+interface ICollectionCreateOrUpdateFormProps extends BaseModalChildrenProps {
+    existingCollectionId?: string;
+}
+
+const CollectionCreateOrUpdateForm = ({
+    onClose,
+    existingCollectionId,
+}: ICollectionCreateOrUpdateFormProps) => {
     const [requestError, setRequestError] = useState<string | undefined>(
         undefined,
     );
     const session = useSessionContext();
     const userId = session.loading ? undefined : session.userId;
     const userLibraryQuery = useUserLibrary(userId);
-    const { handleSubmit, register, formState } =
+
+    const collectionQuery = useCollection(existingCollectionId);
+    const existingCollection = collectionQuery.data;
+
+    const { setValue, watch, handleSubmit, register, formState } =
         useForm<CreateCollectionFormValues>({
             resolver: zodResolver(CreateCollectionFormSchema),
             mode: "onChange",
@@ -44,35 +57,48 @@ const CreateCollectionForm = ({ onClose }: BaseModalChildrenProps) => {
 
     const router = useRouter();
 
-    const onSubmit = async (data: CreateCollectionFormValues) => {
-        const axios = buildAxiosInstance();
-        try {
-            setRequestError(undefined);
-            await CollectionsService.collectionsControllerCreate(data as any);
+    useEffect(() => {
+        const possibleKeys = Object.keys(
+            CreateCollectionFormSchema.innerType().shape,
+        );
+        if (existingCollection != undefined) {
+            for (const [key, value] of Object.entries(existingCollection)) {
+                if (possibleKeys.includes(key)) {
+                    setValue(key as any, value);
+                }
+            }
+        }
+    }, [existingCollection, setValue]);
+
+    const collectionMutation = useMutation({
+        mutationFn: async (data: CreateCollectionFormValues) => {
+            if (existingCollection != undefined) {
+                await CollectionsService.collectionsControllerUpdate(
+                    existingCollection.id,
+                    data,
+                );
+                return;
+            }
+            await CollectionsService.collectionsControllerCreate(data);
+        },
+        onSuccess: () => {
             userLibraryQuery.invalidate();
             if (onClose) {
                 onClose();
             }
-        } catch (e: any) {
-            console.error(e);
-            if (e.response) {
-                switch (e.response.status) {
-                    case 400:
-                        setRequestError(e.response.data.message);
-                        break;
-                    case 401:
-                        setRequestError(
-                            "You need to be logged in to create a collection.",
-                        );
-                        router.push("/auth");
-                        break;
-                }
+        },
+        onError: (error: ApiError) => {
+            if (error.status === 401) {
+                router.push("/auth");
             }
-        }
-    };
+        },
+    });
 
     return (
-        <form className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            className="w-full h-full"
+            onSubmit={handleSubmit((data) => collectionMutation.mutate(data))}
+        >
             <Stack gap="lg">
                 <TextInput
                     withAsterisk
@@ -105,10 +131,12 @@ const CreateCollectionForm = ({ onClose }: BaseModalChildrenProps) => {
                     defaultChecked={false}
                     {...register("isFeatured")}
                 />
-                <Button type="submit">Create</Button>
-                {requestError && (
+                <Button type="submit">
+                    {existingCollection ? "Update" : "Create"}
+                </Button>
+                {collectionMutation.isError && (
                     <Text c="red" mt="md">
-                        {requestError}
+                        {collectionMutation.error.message}
                     </Text>
                 )}
             </Stack>
@@ -116,4 +144,4 @@ const CreateCollectionForm = ({ onClose }: BaseModalChildrenProps) => {
     );
 };
 
-export default CreateCollectionForm;
+export default CollectionCreateOrUpdateForm;

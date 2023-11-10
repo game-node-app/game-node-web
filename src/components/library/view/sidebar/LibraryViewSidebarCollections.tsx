@@ -1,5 +1,5 @@
 import React from "react";
-import { Library } from "@/wrapper";
+import { Library } from "@/wrapper/server";
 import {
     Accordion,
     AccordionControlProps,
@@ -12,7 +12,7 @@ import { IconPlus } from "@tabler/icons-react";
 import classes from "@/components/library/view/library-view-navbar.module.css";
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import CreateCollectionModal from "@/components/collection/form/modal/CreateCollectionModal";
+import CollectionCreateOrUpdateModal from "@/components/collection/form/modal/CollectionCreateOrUpdateModal";
 
 interface ILibraryViewSidebarCollectionsProps {
     library: Library | undefined;
@@ -25,7 +25,7 @@ function CollectionsAccordionControl({
     const [opened, { open, close }] = useDisclosure();
     return (
         <Center>
-            <CreateCollectionModal opened={opened} onClose={close} />
+            <CollectionCreateOrUpdateModal opened={opened} onClose={close} />
             <Accordion.Control {...others} pr={0}>
                 {children}
             </Accordion.Control>

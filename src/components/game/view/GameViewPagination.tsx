@@ -1,6 +1,6 @@
 import React from "react";
 import { Center, Pagination, PaginationProps } from "@mantine/core";
-import { PaginationInfoDto } from "@/wrapper";
+import { PaginationInfoDto } from "@/wrapper/server";
 
 export interface IGameViewPaginationProps {
     paginationInfo: PaginationInfoDto | undefined;

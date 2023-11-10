@@ -1,6 +1,6 @@
 export function getLocalizedFirstReleaseDate(
     date: string | undefined,
-    locale: string = "en-US",
+    locale?: string,
 ) {
     if (!date) {
         return null;

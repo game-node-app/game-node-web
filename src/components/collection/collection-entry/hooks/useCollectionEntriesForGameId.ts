@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { CollectionEntry } from "@/wrapper";
+import { CollectionEntry } from "@/wrapper/server";
 import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 
 /**

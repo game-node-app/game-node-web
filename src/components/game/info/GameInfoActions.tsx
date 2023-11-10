@@ -3,7 +3,7 @@ import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
 import { IconHeartFilled, IconHeartPlus, IconX } from "@tabler/icons-react";
 import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-entry/form/modal/CollectionEntryAddOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
-import { CollectionsEntriesService, Game } from "@/wrapper";
+import { CollectionsEntriesService, Game } from "@/wrapper/server";
 import { useMutation, useQuery } from "react-query";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
 import CollectionEntryRemoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntryRemoveModal";

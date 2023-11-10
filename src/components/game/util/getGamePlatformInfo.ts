@@ -4,7 +4,7 @@ import {
     isGameSearchObject,
 } from "@/components/game/util/isGameObject";
 
-interface IGamePlatformInfo {
+export interface IGamePlatformInfo {
     platformsNames: string[] | undefined;
     platformsAbbreviations: string[] | undefined;
 }

@@ -1,5 +1,5 @@
 import { UseQueryResult } from "react-query";
-import { ApiError } from "@/wrapper";
+import { ApiError } from "@/wrapper/server";
 
 export type ExtendedUseQueryResult<TData, TError = ApiError> = {
     queryKey: any[];

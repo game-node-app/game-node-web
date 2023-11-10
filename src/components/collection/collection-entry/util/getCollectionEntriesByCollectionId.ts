@@ -2,7 +2,7 @@ import {
     CollectionEntry,
     CollectionsEntriesService,
     GetCollectionEntriesDto,
-} from "@/wrapper";
+} from "@/wrapper/server";
 import { TPaginationResponse } from "@/util/types/pagination";
 
 /**

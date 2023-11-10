@@ -2,7 +2,7 @@ import React from "react";
 import { BaseModalProps } from "@/util/types/modal-props";
 import { Button, Center, Group, Modal, Stack, Text } from "@mantine/core";
 import { useMutation, useQueryClient } from "react-query";
-import { CollectionsEntriesService } from "@/wrapper";
+import { CollectionsEntriesService } from "@/wrapper/server";
 
 interface ICollectionEntryRemoveModalProps extends BaseModalProps {
     id: number;

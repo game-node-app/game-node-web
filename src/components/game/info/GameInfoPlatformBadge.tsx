@@ -6,7 +6,7 @@ import {
     StyleProp,
     Title,
 } from "@mantine/core";
-import { GamePlatform } from "@/wrapper";
+import { GamePlatform } from "@/wrapper/server";
 import React from "react";
 import {
     IconBrandWindows,

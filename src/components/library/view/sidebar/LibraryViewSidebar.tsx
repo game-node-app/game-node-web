@@ -4,7 +4,7 @@ import classes from "../library-view-navbar.module.css";
 import { IconSearch } from "@tabler/icons-react";
 import { Box, Group, Space, Text, TextInput } from "@mantine/core";
 import Link from "next/link";
-import { Collection } from "@/wrapper";
+import { Collection } from "@/wrapper/server";
 import LibraryViewSidebarCollections from "@/components/library/view/sidebar/LibraryViewSidebarCollections";
 
 interface ILibraryViewSidebarProps {

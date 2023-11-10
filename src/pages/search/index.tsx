@@ -13,10 +13,11 @@ import {
     GameSearchService,
     PaginationInfoDto,
     SearchGame,
-} from "@/wrapper";
+} from "@/wrapper/server";
 
 const SearchFormSchema = z.object({
     search: z.string().min(3),
+    page: z.number().optional().default(1),
 });
 
 type TSearchFormValues = z.infer<typeof SearchFormSchema>;
@@ -82,7 +83,7 @@ const Index = () => {
         searchParameters.query["query_string"].length > 2;
 
     const searchQuery = useQuery<GameSearchResponseDto>({
-        queryKey: ["search", ...Object.values(searchParameters)],
+        queryKey: ["search", searchParameters],
         queryFn: async (ctx) => {
             return GameSearchService.gameSearchControllerSearch(
                 searchParameters,
@@ -102,7 +103,9 @@ const Index = () => {
         [searchQuery.data],
     );
 
-    const handleSearch = (data: TSearchFormValues) => {
+    const onSubmit = (data: TSearchFormValues) => {
+        const page = data.page || 1;
+        const offset = (page - 1) * ITEMS_PER_PAGE;
         setSearchParameters({
             ...DEFAULT_SEARCH_PARAMETERS,
             /**
@@ -111,6 +114,7 @@ const Index = () => {
             query: {
                 query_string: data.search,
             },
+            offset,
         });
     };
 
@@ -137,7 +141,7 @@ const Index = () => {
                 >
                     <form
                         className="w-full h-full"
-                        onSubmit={handleSubmit(handleSearch)}
+                        onSubmit={handleSubmit(onSubmit)}
                     >
                         <SearchBar
                             withButton
@@ -161,10 +165,8 @@ const Index = () => {
                     results={searchResults}
                     paginationInfo={paginationInfo}
                     onPaginationChange={(page) => {
-                        setSearchParameters({
-                            ...searchParameters,
-                            offset: (page - 1) * ITEMS_PER_PAGE,
-                        });
+                        setValue("page", page);
+                        handleSubmit(onSubmit);
                     }}
                 />
             </Container>

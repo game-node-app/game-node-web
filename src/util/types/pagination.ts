@@ -1,4 +1,4 @@
-import { PaginationResponseDto } from "@/wrapper";
+import { PaginationResponseDto } from "@/wrapper/server";
 
 export type TPaginationResponse<T> = {
     data: T[];

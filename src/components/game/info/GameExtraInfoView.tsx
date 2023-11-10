@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { GameRepositoryRequestDto } from "@/wrapper";
+import { GameRepositoryRequestDto } from "@/wrapper/server";
 import { getGameInfo } from "@/components/game/util/getGameInfo";
 import { Flex, Paper } from "@mantine/core";
 import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";

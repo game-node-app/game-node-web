@@ -7,7 +7,7 @@ export const frontendConfig = () => {
     return {
         appInfo: {
             appName: "GameNode",
-            apiDomain: process.env.NEXT_PUBLIC_DOMAIN_API as string,
+            apiDomain: process.env.NEXT_PUBLIC_DOMAIN_SERVER as string,
             websiteDomain: process.env.NEXT_PUBLIC_DOMAIN_WEBSITE as string,
             apiBasePath: "/v1/auth",
             websiteBasePath: "/auth",

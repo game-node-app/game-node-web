@@ -1,16 +1,16 @@
 import React from "react";
 import { ActionIcon, Group, Modal, Text, Tooltip } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import CreateCollectionForm from "@/components/collection/form/CreateCollectionForm";
+import CollectionCreateOrUpdateForm from "@/components/collection/form/CollectionCreateOrUpdateForm";
 import { useDisclosure } from "@mantine/hooks";
-import CreateCollectionModal from "@/components/collection/form/modal/CreateCollectionModal";
+import CollectionCreateOrUpdateModal from "@/components/collection/form/modal/CollectionCreateOrUpdateModal";
 
 const GlobalShellNavbarCollectionsHeader = () => {
     const [open, { toggle, close }] = useDisclosure(false);
 
     return (
         <Group className="px-md pb-md" justify={"apart"} wrap={"nowrap"}>
-            <CreateCollectionModal opened={open} onClose={close} />
+            <CollectionCreateOrUpdateModal opened={open} onClose={close} />
             <Text size="xs" w={500} c="dimmed" className="">
                 Your collections
             </Text>

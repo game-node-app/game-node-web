@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { Collection } from '../models/Collection';
 import type { CreateCollectionDto } from '../models/CreateCollectionDto';
+import type { UpdateCollectionDto } from '../models/UpdateCollectionDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -28,6 +29,27 @@ export class CollectionsService {
             path: {
                 'id': id,
             },
+        });
+    }
+
+    /**
+     * @param id
+     * @param requestBody
+     * @returns any
+     * @throws ApiError
+     */
+    public static collectionsControllerUpdate(
+        id: string,
+        requestBody: UpdateCollectionDto,
+    ): CancelablePromise<Record<string, any>> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/v1/collections/{id}',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 

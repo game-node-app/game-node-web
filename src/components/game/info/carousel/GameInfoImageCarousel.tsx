@@ -1,7 +1,7 @@
 import "@mantine/carousel/styles.css";
 import React from "react";
 import { Carousel, CarouselProps } from "@mantine/carousel";
-import { Game } from "@/wrapper";
+import { Game } from "@/wrapper/server";
 import { CarouselSlideProps } from "@mantine/carousel/lib/CarouselSlide/CarouselSlide";
 import { Image } from "@mantine/core";
 import {

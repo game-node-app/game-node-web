@@ -4,7 +4,7 @@ import { Box, Container, Space, Stack } from "@mantine/core";
 import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
-import { SearchGame } from "@/wrapper";
+import { SearchGame } from "@/wrapper/server";
 import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {
@@ -45,13 +45,11 @@ const GameSearchResultScreen = ({
             );
         } else {
             return (
-                <Container
+                <Stack
                     w={"100%"}
-                    maw={{
-                        base: "100%",
-                        lg: "90%",
-                    }}
-                    className=""
+                    justify={"space-between"}
+                    h={"100%"}
+                    mt={"md"}
                 >
                     <Box className="w-full flex justify-end mb-8 ">
                         <Box className={"!me-4"}>
@@ -64,7 +62,7 @@ const GameSearchResultScreen = ({
                         paginationInfo={paginationInfo}
                         onPaginationChange={onPaginationChange}
                     />
-                </Container>
+                </Stack>
             );
         }
     };

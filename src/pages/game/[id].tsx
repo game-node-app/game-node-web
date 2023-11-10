@@ -11,7 +11,7 @@ import {
     Game,
     GameRepositoryRequestDto,
     GameRepositoryService,
-} from "@/wrapper";
+} from "@/wrapper/server";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const dto: GameRepositoryRequestDto = DEFAULT_GAME_INFO_VIEW_DTO;

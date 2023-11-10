@@ -14,8 +14,8 @@ import {
 } from "react-query";
 import Head from "next/head";
 import { Notifications } from "@mantine/notifications";
-import { OpenAPI } from "@/wrapper";
-
+import { OpenAPI as ServerOpenAPI } from "@/wrapper/server";
+import { OpenAPI as SearchOpenAPI } from "@/wrapper/search";
 /**
  * Should always be imported BEFORE tailwind.
  */
@@ -24,7 +24,7 @@ import "@mantine/notifications/styles.css";
 /**
  * Includes tailwind styles
  */
-import "@/globals.css";
+import "@/components/globals.css";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -50,8 +50,12 @@ const theme = createTheme({
     primaryColor: "brand",
 });
 
-OpenAPI.BASE = process.env.NEXT_PUBLIC_SERVER_URL!;
-OpenAPI.WITH_CREDENTIALS = true;
+/**
+ * Basic configuration for wrapper services
+ */
+ServerOpenAPI.BASE = process.env.NEXT_PUBLIC_SERVER_URL!;
+ServerOpenAPI.WITH_CREDENTIALS = true;
+SearchOpenAPI.BASE = process.env.NEXT_PUBLIC_SEARCH_URL!;
 
 export default function App({
     Component,

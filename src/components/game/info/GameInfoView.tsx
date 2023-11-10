@@ -4,7 +4,7 @@ import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
 import GameInfoDetails from "@/components/game/info/GameInfoDetails";
 import useOnMobile from "@/hooks/useOnMobile";
 import GameInfoActions from "@/components/game/info/GameInfoActions";
-import { Game, GameRepositoryRequestDto } from "@/wrapper";
+import { Game, GameRepositoryRequestDto } from "@/wrapper/server";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
 import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
@@ -75,7 +75,6 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                         >
                             <GameFigureImage
                                 game={game}
-                                isLoading={gameQuery.isLoading}
                                 size={ImageSize.COVER_BIG}
                             />
                             <Break />

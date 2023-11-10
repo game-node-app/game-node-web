@@ -6,6 +6,7 @@ import { BaseModalProps } from "@/util/types/modal-props";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useRouter } from "next/router";
+import useOnMobile from "@/hooks/useOnMobile";
 
 interface IGameAddModalProps extends BaseModalProps {
     id: number;
@@ -16,6 +17,7 @@ const CollectionEntryAddOrUpdateModal = ({
     onClose,
     id,
 }: IGameAddModalProps) => {
+    const onMobile = useOnMobile();
     const router = useRouter();
     const session = useSessionContext();
     const userLibrary = useUserLibrary(
@@ -29,7 +31,13 @@ const CollectionEntryAddOrUpdateModal = ({
     }, [opened, router, session]);
 
     return (
-        <Modal opened={opened} onClose={onClose} title={"Add to your library"}>
+        <Modal
+            opened={opened}
+            onClose={onClose}
+            title={"Add to your library"}
+            fullScreen={onMobile}
+            transitionProps={{ transition: "fade", duration: 200 }}
+        >
             <Modal.Body>
                 {userLibrary.data ? (
                     <Container fluid h={"100%"} className={""}>

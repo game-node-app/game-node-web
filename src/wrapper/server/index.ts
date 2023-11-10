@@ -45,6 +45,7 @@ export type { ProfileAvatar } from './models/ProfileAvatar';
 export type { Review } from './models/Review';
 export type { ReviewStatistics } from './models/ReviewStatistics';
 export { SearchGame } from './models/SearchGame';
+export type { UpdateCollectionDto } from './models/UpdateCollectionDto';
 export type { UpdateProfileDto } from './models/UpdateProfileDto';
 export type { UserLike } from './models/UserLike';
 export type { UserView } from './models/UserView';

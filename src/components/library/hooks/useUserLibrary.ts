@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient, UseQueryResult } from "react-query";
-import { ApiError, LibrariesService, Library } from "@/wrapper";
+import { ApiError, LibrariesService, Library } from "@/wrapper/server";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export function useUserLibrary(

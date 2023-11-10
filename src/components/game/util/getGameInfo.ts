@@ -2,7 +2,7 @@ import {
     Game,
     GameRepositoryRequestDto,
     GameRepositoryService,
-} from "@/wrapper";
+} from "@/wrapper/server";
 
 export async function getGameInfo(
     id: number,

@@ -13,7 +13,6 @@ import { getCoverUrl } from "@/components/game/util/getCoverUrl";
 
 export interface IGameFigureProps extends PropsWithChildren<ImageProps> {
     game: TGameOrSearchGame | undefined;
-    isLoading?: boolean;
     size: ImageSize;
     href?: string;
 }
@@ -30,22 +29,21 @@ export interface IGameFigureProps extends PropsWithChildren<ImageProps> {
 const GameFigureImage = ({
     game,
     children,
-    isLoading,
     href,
     size,
     ...others
 }: IGameFigureProps) => {
     const coverUrl = getCoverUrl(game);
     const sizedCoverUrl = getSizedImageUrl(coverUrl, size);
-    const [showSkeleton, setShowSkeleton] = useState(isLoading);
+    const [showSkeleton, setShowSkeleton] = useState(true);
     const defaultHref = `/game/${game?.id}`;
     return (
-        <Link href={defaultHref} className="w-full h-fit h-fit max-w-[22rem]">
+        <Link href={defaultHref} className="w-full h-fit max-w-[22rem]">
             {showSkeleton && (
                 <Skeleton
-                    className="w-full h-full min-h-[10rem] lg:min-h-[18rem]"
-                    animate={true}
-                    visible={showSkeleton}
+                    className="w-full h-full min-h-[215px]"
+                    animate={showSkeleton}
+                    visible={true}
                 />
             )}
             <AspectRatio ratio={264 / 354} pos="relative">

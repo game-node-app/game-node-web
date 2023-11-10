@@ -1,4 +1,4 @@
-import { Game, GameSearchResponseHit, SearchGame } from "@/wrapper";
+import { Game, GameSearchResponseHit, SearchGame } from "@/wrapper/server";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 
 export function isGameSearchObject(

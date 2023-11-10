@@ -2,7 +2,7 @@ import {
     CollectionEntry,
     CollectionsEntriesService,
     GetCollectionEntriesDto,
-} from "@/wrapper";
+} from "@/wrapper/server";
 
 /**
  * Returns a list CollectionEntry entity, given any is available in the user's library.

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
-import { Profile, ProfileService } from "@/wrapper";
+import { Profile, ProfileService } from "@/wrapper/server";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export default function useUserProfile(

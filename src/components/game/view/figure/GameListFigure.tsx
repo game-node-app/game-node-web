@@ -9,20 +9,34 @@ import Link from "next/link";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
-import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
+import {
+    getGamePlatformInfo,
+    IGamePlatformInfo,
+} from "@/components/game/util/getGamePlatformInfo";
+import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 
 interface IGameListFigureProps extends IGameFigureProps {
     game: TGameOrSearchGame;
 }
 
-const buildPlatformBadges = (game: TGameOrSearchGame) => {
-    const platforms = getGamePlatformInfo(game);
+const buildPlatformBadges = (platforms: IGamePlatformInfo) => {
     if (
+        platforms &&
         platforms.platformsAbbreviations &&
         platforms.platformsAbbreviations.length > 0
     ) {
-        return;
+        return platforms.platformsAbbreviations.map(
+            (platformAbbreviation, index) => {
+                return (
+                    <GameInfoPlatformBadge
+                        key={index}
+                        platform={platformAbbreviation}
+                    />
+                );
+            },
+        );
     }
+    return null;
 };
 
 const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
@@ -33,6 +47,9 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
             name = name.substring(0, 30) + "...";
         }
     }
+    const platforms = getGamePlatformInfo(game);
+    const platformAbbreviationsNames =
+        platforms.platformsAbbreviations?.join(", ");
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
 
@@ -63,20 +80,23 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
                 align={"start"}
                 justify="start"
             >
-                <Stack>
+                <Stack gap={"xs"}>
                     <Link href={`/game/${game.id}`}>
                         <Title size="h4" className="font-bold">
                             {name}
                         </Title>
                     </Link>
+                    <Text size="sm" className="text-gray-500">
+                        {getLocalizedFirstReleaseDate(
+                            game.firstReleaseDate,
+                            undefined,
+                        )}
+                    </Text>
+                    <Group w={"100%"} justify={"center"} wrap={"nowrap"}>
+                        {buildPlatformBadges(platforms)}
+                    </Group>
                 </Stack>
 
-                <Text size="sm" className="text-gray-500">
-                    {getLocalizedFirstReleaseDate(
-                        game.firstReleaseDate,
-                        "pt-BR",
-                    )}
-                </Text>
                 <Text size="sm" className="text-gray-300">
                     {genreNames}
                 </Text>
