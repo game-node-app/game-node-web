@@ -40,3 +40,7 @@ next-env.d.ts
 
 acme.json
 certs
+
+!src/wrapper/input
+!src/wrapper/generate.js
+src/wrapper
