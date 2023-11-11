@@ -8,8 +8,13 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
+import { BaseModalChildrenProps } from "@/util/types/modal-props";
 
-const GlobalShellNavbarCollections = () => {
+interface IGlobalShellNavbarCollectionsProps extends BaseModalChildrenProps {}
+
+const GlobalShellNavbarCollections = ({
+    onClose,
+}: IGlobalShellNavbarCollectionsProps) => {
     const pathname = usePathname();
 
     const session = useSessionContext();
@@ -42,6 +47,7 @@ const GlobalShellNavbarCollections = () => {
             <Link
                 key={collection.id}
                 href={`/library/${userLibrary.userId}/collection/${collection.id}`}
+                onClick={onClose}
                 className={classes.collectionLink}
             >
                 <span>{collection.name}</span>

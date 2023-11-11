@@ -92,7 +92,7 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
                             undefined,
                         )}
                     </Text>
-                    <Group w={"100%"} justify={"center"} wrap={"nowrap"}>
+                    <Group w={"100%"} justify={"start"} wrap={"wrap"}>
                         {buildPlatformBadges(platforms)}
                     </Group>
                 </Stack>

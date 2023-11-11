@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Box,
     Button,
@@ -18,6 +18,7 @@ import {
     Collection,
     CollectionsEntriesService,
     GamePlatform,
+    GameRepositoryService,
 } from "@/wrapper/server";
 import { useGame } from "@/components/game/hooks/useGame";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
@@ -26,7 +27,6 @@ import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
-import entry from "next/dist/server/typescript/rules/entry";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -57,13 +57,7 @@ function buildCollectionOptions(
     });
 }
 
-function buildPlatformsOptions(
-    platforms: GamePlatform[] | undefined,
-): ComboboxItem[] {
-    if (!platforms) {
-        return [];
-    }
-
+function buildPlatformsOptions(platforms: GamePlatform[]): ComboboxItem[] {
     return platforms.map((platform) => {
         return {
             label: platform.abbreviation ?? platform.name,
@@ -111,7 +105,7 @@ const CollectionEntryAddOrUpdateForm = ({
         collectionEntryQuery.data != undefined &&
         collectionEntryQuery.data.length > 0;
 
-    const platformOptions = buildPlatformsOptions(game?.platforms);
+    const [platformOptions, setPlatformOptions] = useState<ComboboxItem[]>([]);
 
     const queryClient = useQueryClient();
 
@@ -157,6 +151,25 @@ const CollectionEntryAddOrUpdateForm = ({
         await collectionEntryMutation.mutateAsync(data);
     };
 
+    /**
+     * Effect to use defaults when no platform data is available.
+     */
+    useEffect(() => {
+        if (game.platforms == undefined || game.platforms.length === 0) {
+            GameRepositoryService.gameRepositoryControllerGetDefaultPlatforms()
+                .then((platforms) => {
+                    console.log(platforms);
+                    setPlatformOptions(buildPlatformsOptions(platforms));
+                })
+                .catch();
+        } else if (game.platforms?.length > 0) {
+            setPlatformOptions(buildPlatformsOptions(game.platforms));
+        }
+    }, [game?.platforms]);
+
+    /**
+     * Effect to sync with user's collection data.
+     */
     useEffect(() => {
         if (
             collectionEntryQuery.data != undefined &&
@@ -166,19 +179,22 @@ const CollectionEntryAddOrUpdateForm = ({
                 .filter((entry) => entry.collection != undefined)
                 .map((entry) => entry.collection.id);
 
-            const platformIds = collectionEntryQuery.data.flatMap((entry) =>
-                entry.ownedPlatforms.map((platform) => platform.id),
-            );
+            if (platformOptions.length > 0) {
+                const platformIds = collectionEntryQuery.data.flatMap((entry) =>
+                    entry.ownedPlatforms.map((platform) => platform.id),
+                );
+                const uniquePlatformIds = Array.from(new Set(platformIds));
+                setValue("platformsIds", uniquePlatformIds);
+            }
+
             /**
              * This is useful not only to avoid showing duplicates to the user, but also to
              * ensure consistency between collection entries.
              * See collections-entries.service.ts in game-node-server for more info.
              */
-            const uniquePlatformIds = Array.from(new Set(platformIds));
             setValue("collectionIds", collectionIds);
-            setValue("platformsIds", uniquePlatformIds);
         }
-    }, [collectionEntryQuery.data, setValue]);
+    }, [collectionEntryQuery.data, platformOptions.length, setValue]);
 
     if (game == undefined) {
         return null;

@@ -3,7 +3,7 @@ import React from "react";
 import { Carousel, CarouselProps } from "@mantine/carousel";
 import { Game } from "@/wrapper/server";
 import { CarouselSlideProps } from "@mantine/carousel/lib/CarouselSlide/CarouselSlide";
-import { Image } from "@mantine/core";
+import { Flex, Image, Text } from "@mantine/core";
 import {
     getSizedImageUrl,
     ImageSize,
@@ -26,6 +26,14 @@ const GameInfoImageCarousel = ({
     const onMobile = useOnMobile();
     if (!urls) {
         return null;
+    }
+
+    if (urls == undefined || urls.length === 0) {
+        return (
+            <Flex>
+                <Text>No images found.</Text>
+            </Flex>
+        );
     }
 
     const buildSlides = () => {

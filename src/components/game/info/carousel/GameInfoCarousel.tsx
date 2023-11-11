@@ -4,7 +4,7 @@ import { Game } from "@/wrapper/server";
 import GameGridFigure from "@/components/game/view/figure/GameGridFigure";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/hooks/useOnMobile";
-import { Skeleton } from "@mantine/core";
+import { Center, Flex, Skeleton, Text } from "@mantine/core";
 
 interface IGameInfoCarouselProps {
     isLoading: boolean;
@@ -13,9 +13,7 @@ interface IGameInfoCarouselProps {
 }
 
 const buildGamesFigures = (games: Game[] | undefined) => {
-    if (games == undefined || games.length === 0) {
-        return null;
-    }
+    if (games == undefined || games.length === 0) return null;
 
     return games.map((similarGame, index) => {
         if (index < 20) {
@@ -45,6 +43,14 @@ const buildSkeletons = () => {
     return skeletons;
 };
 
+const buildErrorView = () => {
+    return (
+        <Flex>
+            <Text>No entry found.</Text>
+        </Flex>
+    );
+};
+
 const GameInfoCarousel = ({
     games,
     isLoading,
@@ -52,10 +58,11 @@ const GameInfoCarousel = ({
 }: IGameInfoCarouselProps) => {
     const onMobile = useOnMobile();
     if (isError) {
-        /**
-         * TODO: Add error view
-         */
-        return null;
+        return buildErrorView();
+    }
+
+    if ((!isLoading && games == undefined) || games?.length === 0) {
+        return buildErrorView();
     }
 
     return (

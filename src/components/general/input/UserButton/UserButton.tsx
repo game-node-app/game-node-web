@@ -1,13 +1,12 @@
 import {
-    UnstyledButton,
     Group,
-    Avatar,
     Text,
-    rem,
+    UnstyledButton,
     UnstyledButtonProps,
 } from "@mantine/core";
 import { IconSelector } from "@tabler/icons-react";
 import classes from "./UserButton.module.css";
+import { UserAvatar } from "@/components/general/UserAvatar";
 
 interface UserButtonProps extends UnstyledButtonProps {
     image: string;
@@ -24,7 +23,7 @@ export function UserButton({
     return (
         <UnstyledButton className={classes.user} {...others}>
             <Group wrap={"nowrap"} p={"md"} w={"100%"}>
-                <Avatar src={image} radius="xl" />
+                <UserAvatar src={image} />
 
                 <div style={{ flex: 1 }}>
                     <Text size="sm">{username}</Text>

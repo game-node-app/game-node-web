@@ -1,12 +1,7 @@
 import React from "react";
-import { Game, GamePlatform } from "@/wrapper/server";
+import { Game } from "@/wrapper/server";
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 import { Group, GroupProps } from "@mantine/core";
-import {
-    IconBrandWindows,
-    IconBrandXbox,
-    IconPlaystationTriangle,
-} from "@tabler/icons-react";
 
 interface IGameInfoPlatformsProps extends GroupProps {
     game: Game;
@@ -14,7 +9,10 @@ interface IGameInfoPlatformsProps extends GroupProps {
 
 const buildBadges = (game: Game) => {
     const platforms = game.platforms;
-    const badges = platforms?.map((platform, index) => {
+    if (platforms == undefined || platforms.length === 0) {
+        return "Unknown";
+    }
+    return platforms?.map((platform, index) => {
         const platformName = platform.abbreviation;
         return (
             <GameInfoPlatformBadge
@@ -24,12 +22,11 @@ const buildBadges = (game: Game) => {
             />
         );
     });
-    return badges;
 };
 
 const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
     return (
-        <Group {...others} w={"100%"} justify={"center"} wrap={"wrap"}>
+        <Group {...others} w={"100%"} justify={"start"} wrap={"wrap"}>
             {buildBadges(game)}
         </Group>
     );

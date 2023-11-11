@@ -14,7 +14,6 @@ interface IGameInfoDetailsProps {
 }
 
 const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
-    const onMobile = useOnMobile();
     if (!game) {
         return null;
     }
@@ -39,7 +38,12 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     title={"Publisher(s)"}
                     content={undefined}
                 />
-                <GameInfoDetailsBox title={"Genres"} content={genresNames} />
+                <GameInfoDetailsBox
+                    title={"Genres"}
+                    content={
+                        genresNames?.length === 0 ? "Unknown" : genresNames
+                    }
+                />
                 <GameInfoDetailsBox title={"Summary"} content={game.summary} />
                 <GameInfoDetailsBox
                     title={"Platforms"}

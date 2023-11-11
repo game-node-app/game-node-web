@@ -11,7 +11,7 @@ import GlobalShellNavbar from "@/components/general/shell/GlobalShellNavbar/Glob
  * @constructor
  */
 const GlobalShell = ({ children }: { children: React.ReactNode }) => {
-    const [sidebarOpened, { toggle }] = useDisclosure(false);
+    const [sidebarOpened, modalUtils] = useDisclosure(false);
     return (
         <AppShell
             padding="xs"
@@ -34,11 +34,14 @@ const GlobalShell = ({ children }: { children: React.ReactNode }) => {
             <AppShell.Header>
                 <GlobalShellHeader
                     sidebarOpened={sidebarOpened}
-                    toggleSidebar={toggle}
+                    toggleSidebar={modalUtils.toggle}
                 />
             </AppShell.Header>
             <AppShell.Navbar>
-                <GlobalShellNavbar sidebarOpened={sidebarOpened} />
+                <GlobalShellNavbar
+                    sidebarOpened={sidebarOpened}
+                    onClose={modalUtils.close}
+                />
             </AppShell.Navbar>
 
             <AppShell.Main>{children}</AppShell.Main>

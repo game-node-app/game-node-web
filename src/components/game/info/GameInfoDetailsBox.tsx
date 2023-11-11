@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from "@mantine/core";
-import React from "react";
+import React, { useMemo } from "react";
 
 interface IGameInfoDetailsBoxProps {
     title: string;
@@ -12,7 +12,6 @@ export const GameInfoDetailsBox = ({
     description,
     content,
 }: IGameInfoDetailsBoxProps) => {
-    const useText = typeof content === "string" || content == undefined;
     return (
         <Stack
             w={"100%"}
@@ -29,13 +28,7 @@ export const GameInfoDetailsBox = ({
                     </Text>
                 )}
 
-                {useText ? (
-                    <Text fz={"sm"} lh={"md"} className="">
-                        {content ?? "Unknown"}
-                    </Text>
-                ) : (
-                    content
-                )}
+                {content ?? "Unknown"}
             </Box>
         </Stack>
     );

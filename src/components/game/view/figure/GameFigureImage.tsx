@@ -41,7 +41,7 @@ const GameFigureImage = ({
         <Link href={defaultHref} className="w-full h-fit max-w-[22rem]">
             {showSkeleton && (
                 <Skeleton
-                    className="w-full h-full min-h-[215px]"
+                    className="w-full h-full min-h-[215px] max-h-[215px]"
                     animate={showSkeleton}
                     visible={true}
                 />

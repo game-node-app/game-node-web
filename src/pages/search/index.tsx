@@ -9,15 +9,12 @@ import GameSearchResultScreen from "@/components/game/search/result/GameSearchRe
 import {
     GameSearchRequestDto,
     GameSearchResponseDto,
-    GameSearchResponseHits,
-    GameSearchService,
-    PaginationInfoDto,
-    SearchGame,
-} from "@/wrapper/server";
+} from "@/components/game/search/utils/types";
+import { SearchService } from "@/wrapper/search";
 
 const SearchFormSchema = z.object({
-    search: z.string().min(3),
-    page: z.number().optional().default(1),
+    query: z.string().min(3),
+    page: z.number().min(1).optional().default(1),
 });
 
 type TSearchFormValues = z.infer<typeof SearchFormSchema>;
@@ -25,41 +22,9 @@ type TSearchFormValues = z.infer<typeof SearchFormSchema>;
 const ITEMS_PER_PAGE = 20;
 
 const DEFAULT_SEARCH_PARAMETERS: GameSearchRequestDto = {
-    index: GameSearchRequestDto.index.GAMENODE,
-    query: {
-        query_string: undefined,
-    },
-    limit: ITEMS_PER_PAGE,
-    offset: 0,
-    profile: true,
-};
-
-const getSearchResults = (
-    hits: GameSearchResponseHits | undefined,
-): SearchGame[] | undefined => {
-    const hasResults = hits && hits.hits && hits.hits.length > 0;
-    if (hasResults) {
-        return hits?.hits?.map((game) => game._source);
-    }
-
-    return undefined;
-};
-
-const buildPaginationInfo = (
-    response: GameSearchResponseDto | undefined,
-): PaginationInfoDto => {
-    const totalItems = (response && response.hits?.total) || 0;
-    const currentItems = (response && response.hits?.hits?.length) || 0;
-    const hasNextPage = currentItems < totalItems;
-    const totalPages =
-        totalItems > 0 && currentItems > 0
-            ? Math.ceil(totalItems / ITEMS_PER_PAGE)
-            : 1;
-    return {
-        total: totalItems,
-        hasNextPage,
-        totalPages,
-    };
+    query: undefined,
+    page: 1,
+    limit: 20,
 };
 
 const Index = () => {
@@ -79,42 +44,25 @@ const Index = () => {
 
     const isQueryEnabled =
         searchParameters.query != undefined &&
-        searchParameters.query["query_string"] != undefined &&
-        searchParameters.query["query_string"].length > 2;
+        searchParameters.query.length > 2 &&
+        searchParameters.page != undefined &&
+        searchParameters.page > 0;
 
     const searchQuery = useQuery<GameSearchResponseDto>({
         queryKey: ["search", searchParameters],
         queryFn: async (ctx) => {
-            return GameSearchService.gameSearchControllerSearch(
-                searchParameters,
-            );
+            return SearchService.postSearch(searchParameters);
         },
         keepPreviousData: true,
         enabled: isQueryEnabled,
     });
 
-    const searchResults = useMemo(
-        () => getSearchResults(searchQuery.data?.hits),
-        [searchQuery.data],
-    );
-
-    const paginationInfo = useMemo(
-        () => buildPaginationInfo(searchQuery.data),
-        [searchQuery.data],
-    );
-
     const onSubmit = (data: TSearchFormValues) => {
         const page = data.page || 1;
-        const offset = (page - 1) * ITEMS_PER_PAGE;
         setSearchParameters({
             ...DEFAULT_SEARCH_PARAMETERS,
-            /**
-             * TODO: Add a query builder
-             */
-            query: {
-                query_string: data.search,
-            },
-            offset,
+            query: data.query,
+            page: data.page,
         });
     };
 
@@ -146,11 +94,11 @@ const Index = () => {
                         <SearchBar
                             withButton
                             label={"Search for games"}
-                            error={errors.search?.message}
-                            {...register("search")}
-                            value={watch("search")}
+                            error={errors.query?.message}
+                            {...register("query")}
+                            value={watch("query")}
                             onChange={(e) => {
-                                setValue("search", e.target.value);
+                                setValue("query", e.target.value);
                             }}
                         />
                     </form>
@@ -162,8 +110,8 @@ const Index = () => {
                     isError={searchQuery.isError}
                     isLoading={searchQuery.isLoading}
                     isFetching={searchQuery.isFetching}
-                    results={searchResults}
-                    paginationInfo={paginationInfo}
+                    results={searchQuery.data?.data?.items}
+                    paginationInfo={searchQuery.data?.pagination}
                     onPaginationChange={(page) => {
                         setValue("page", page);
                         handleSubmit(onSubmit);

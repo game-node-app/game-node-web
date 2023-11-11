@@ -13,6 +13,7 @@ import GlobalShellNavbarCollectionsHeader from "@/components/general/shell/Globa
 import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
+import { BaseModalChildrenProps } from "@/util/types/modal-props";
 
 const links = [
     { icon: IconBulb, label: "Activity", href: "/activity" },
@@ -20,12 +21,13 @@ const links = [
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
 ];
 
-interface IGlobalShellNavbarProps {
+interface IGlobalShellNavbarProps extends BaseModalChildrenProps {
     sidebarOpened: boolean;
 }
 
 export default function GlobalShellNavbar({
     sidebarOpened,
+    onClose,
 }: IGlobalShellNavbarProps) {
     const session = useSessionContext();
     const isLoggedIn = !session.loading && session.doesSessionExist;
@@ -37,7 +39,11 @@ export default function GlobalShellNavbar({
 
     const mainLinks = links.map((link) => (
         <UnstyledButton key={link.label} className={classes.mainLink}>
-            <Link href={link.href} className={classes.mainLinkInner}>
+            <Link
+                href={link.href}
+                className={classes.mainLinkInner}
+                onClick={onClose}
+            >
                 <link.icon
                     size={20}
                     className={classes.mainLinkIcon}
@@ -79,7 +85,7 @@ export default function GlobalShellNavbar({
             <div className={classes.section}>
                 <div className={classes.mainLinks}>{mainLinks}</div>
             </div>
-            <GlobalShellNavbarCollections />
+            <GlobalShellNavbarCollections onClose={onClose} />
         </nav>
     );
 }

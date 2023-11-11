@@ -24,7 +24,7 @@ export default function Home() {
     const router = useRouter();
     useEffect(() => {
         if (!session.loading && session.doesSessionExist) {
-            router.push("/search");
+            router.replace("/search");
         }
     }, [session, router]);
     return (
