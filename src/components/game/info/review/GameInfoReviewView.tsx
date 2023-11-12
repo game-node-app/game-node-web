@@ -6,8 +6,9 @@ import { Group, Paper, Stack, Title } from "@mantine/core";
 import GameInfoReviewEditor from "@/components/game/info/review/editor/GameInfoReviewEditor";
 import { UserAvatar } from "@/components/general/UserAvatar";
 import Break from "@/components/general/Break";
-import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
+import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoReviewEditorView from "@/components/game/info/review/editor/GameInfoReviewEditorView";
+import ReviewListView from "@/components/review/view/ReviewListView";
 
 interface IGameInfoReviewViewProps {
     gameId: number;
@@ -18,15 +19,14 @@ const GameInfoReviewView = ({ gameId }: IGameInfoReviewViewProps) => {
     return (
         <Paper w={"100%"} h={"100%"} className={"min-h-[300px]"}>
             <Stack w={"100%"} h={"100%"} align={"center"}>
-                <GameInfoDetailsBox
+                <DetailsBox
                     title={"Your review"}
                     content={<GameInfoReviewEditorView gameId={gameId} />}
                 />
-
-                <GameInfoDetailsBox
-                    title={"Reviews from other users"}
+                <DetailsBox
+                    title={"All reviews"}
                     description={"Reader discretion is advised."}
-                    content={<div></div>}
+                    content={<ReviewListView gameId={gameId} />}
                 />
             </Stack>
         </Paper>

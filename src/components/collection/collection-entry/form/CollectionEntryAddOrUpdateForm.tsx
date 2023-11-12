@@ -134,6 +134,11 @@ const CollectionEntryAddOrUpdateForm = ({
                 color: "green",
             });
             queryClient.invalidateQueries(["collectionEntries", game.id]);
+            queryClient.invalidateQueries([
+                "review",
+                userLibraryQuery.data?.userId,
+                gameId,
+            ]);
             if (onClose) {
                 onClose();
             }
@@ -155,15 +160,15 @@ const CollectionEntryAddOrUpdateForm = ({
      * Effect to use defaults when no platform data is available.
      */
     useEffect(() => {
-        if (game.platforms == undefined || game.platforms.length === 0) {
+        if (game?.platforms == undefined || game?.platforms.length === 0) {
             GameRepositoryService.gameRepositoryControllerGetDefaultPlatforms()
                 .then((platforms) => {
                     console.log(platforms);
                     setPlatformOptions(buildPlatformsOptions(platforms));
                 })
                 .catch();
-        } else if (game.platforms?.length > 0) {
-            setPlatformOptions(buildPlatformsOptions(game.platforms));
+        } else if (game?.platforms?.length > 0) {
+            setPlatformOptions(buildPlatformsOptions(game?.platforms));
         }
     }, [game?.platforms]);
 

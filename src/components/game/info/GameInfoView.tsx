@@ -7,7 +7,7 @@ import GameInfoActions from "@/components/game/info/GameInfoActions";
 import { Game, GameRepositoryRequestDto } from "@/wrapper/server";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
-import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
+import { DetailsBox } from "@/components/general/DetailsBox";
 import { shuffleArray } from "@/util/shuffleArray";
 import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import Break from "@/components/general/Break";
@@ -98,7 +98,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                     </Grid.Col>
                 </Grid>
                 <Flex className={"w-full"} wrap={"wrap"}>
-                    <GameInfoDetailsBox
+                    <DetailsBox
                         title={"Images"}
                         content={
                             <GameInfoImageCarousel

@@ -6,7 +6,7 @@ import { getGameGenres } from "@/components/game/util/getGameGenres";
 import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/hooks/useOnMobile";
-import { GameInfoDetailsBox } from "@/components/game/info/GameInfoDetailsBox";
+import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 
 interface IGameInfoDetailsProps {
@@ -23,29 +23,23 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
     return (
         <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
             <SimpleGrid cols={{ base: 1, lg: 2 }}>
-                <GameInfoDetailsBox
+                <DetailsBox
                     title={"Launch date"}
                     content={getLocalizedFirstReleaseDate(
                         game.firstReleaseDate,
                         "pt-BR",
                     )}
                 />
-                <GameInfoDetailsBox
-                    title={"Developer(s)"}
-                    content={undefined}
-                />
-                <GameInfoDetailsBox
-                    title={"Publisher(s)"}
-                    content={undefined}
-                />
-                <GameInfoDetailsBox
+                <DetailsBox title={"Developer(s)"} content={undefined} />
+                <DetailsBox title={"Publisher(s)"} content={undefined} />
+                <DetailsBox
                     title={"Genres"}
                     content={
                         genresNames?.length === 0 ? "Unknown" : genresNames
                     }
                 />
-                <GameInfoDetailsBox title={"Summary"} content={game.summary} />
-                <GameInfoDetailsBox
+                <DetailsBox title={"Summary"} content={game.summary} />
+                <DetailsBox
                     title={"Platforms"}
                     content={
                         <GameInfoPlatforms

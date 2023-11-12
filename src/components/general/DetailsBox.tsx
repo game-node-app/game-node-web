@@ -1,17 +1,19 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, MantineColor, Stack, Text } from "@mantine/core";
 import React, { useMemo } from "react";
 
-interface IGameInfoDetailsBoxProps {
+interface IDetailsBoxProps {
     title: string;
     description?: string | undefined;
+    descriptionColor?: MantineColor;
     content: React.ReactElement | string | undefined | null;
 }
 
-export const GameInfoDetailsBox = ({
+export const DetailsBox = ({
     title,
     description,
+    descriptionColor,
     content,
-}: IGameInfoDetailsBoxProps) => {
+}: IDetailsBoxProps) => {
     return (
         <Stack
             w={"100%"}
@@ -23,7 +25,12 @@ export const GameInfoDetailsBox = ({
                     {title}
                 </Text>
                 {description && (
-                    <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-2">
+                    <Text
+                        fz={"sm"}
+                        lh={"md"}
+                        c={descriptionColor ?? "dimmed"}
+                        className="mb-2"
+                    >
                         {description}
                     </Text>
                 )}

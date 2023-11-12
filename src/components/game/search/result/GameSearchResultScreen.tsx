@@ -4,8 +4,8 @@ import { Box, Container, Space, Stack } from "@mantine/core";
 import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
-import { SearchGame } from "@/wrapper/server";
 import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
+import { SearchGame } from "@/components/game/search/utils/types";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {
     enabled: boolean;

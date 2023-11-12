@@ -3,6 +3,7 @@ import { BaseModalProps } from "@/util/types/modal-props";
 import { Button, Center, Group, Modal, Stack, Text } from "@mantine/core";
 import { useMutation, useQueryClient } from "react-query";
 import { CollectionsEntriesService } from "@/wrapper/server";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface ICollectionEntryRemoveModalProps extends BaseModalProps {
     id: number;
@@ -14,6 +15,7 @@ const CollectionEntryRemoveModal = ({
     opened,
 }: ICollectionEntryRemoveModalProps) => {
     const queryClient = useQueryClient();
+    const userId = useUserId();
     const collectionEntryRemoveMutation = useMutation({
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerDeleteOwnEntryByGameId(
@@ -22,6 +24,7 @@ const CollectionEntryRemoveModal = ({
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["collectionEntries", id]);
+            queryClient.invalidateQueries(["review", userId, id]);
         },
     });
 
