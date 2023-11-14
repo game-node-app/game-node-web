@@ -2,8 +2,8 @@ import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
 import { ActionIcon, Box, Group, Rating, Stack, Text } from "@mantine/core";
-import { UserAvatar } from "@/components/general/UserAvatar";
-import { Review } from "@/wrapper/server";
+import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { Profile, Review } from "@/wrapper/server";
 import useOnMobile from "@/hooks/useOnMobile";
 import { IconDots, IconThumbDown, IconThumbUp } from "@tabler/icons-react";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -15,6 +15,16 @@ interface IReviewListViewProps {
     onEditStart?: () => void;
 }
 
+const UserAvatarGroup = ({ profile }: { profile: Profile }) => {
+    const imageSrc = undefined;
+    return (
+        <Group wrap={"wrap"}>
+            <UserAvatar src={imageSrc} />
+            <Text>{profile.username}</Text>
+        </Group>
+    );
+};
+
 const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
@@ -23,7 +33,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
             if (review.content.length < 280 || isReadMore) {
                 return review.content;
             }
-            return review.content;
+            return review.content.slice(0, 280) + "...";
         }
         return "";
     }, [isReadMore, review]);
@@ -51,11 +61,11 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
             >
                 {onMobile ? (
                     <Group w={"100%"} justify={"space-between"}>
-                        <UserAvatar src={undefined} />
+                        <UserAvatarGroup profile={review.profile} />
                         <Rating value={review.rating} />
                     </Group>
                 ) : (
-                    <UserAvatar src={undefined} />
+                    <UserAvatarGroup profile={review.profile} />
                 )}
                 <EditorContent
                     editor={nonEditableEditor}

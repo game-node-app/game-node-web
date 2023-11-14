@@ -4,8 +4,9 @@ import {
     FloatingLabelInput,
     IFloatingLabelInputProps,
 } from "@/components/general/input/FloatingLabelInput/FloatingLabelInput";
+import { IconSearch } from "@tabler/icons-react";
 
-interface SearchBarProps extends IFloatingLabelInputProps {
+export interface SearchBarProps extends IFloatingLabelInputProps {
     withButton?: boolean;
 }
 
@@ -32,7 +33,7 @@ const SearchBar = ({ withButton, ...props }: SearchBarProps) => {
                     type="submit"
                     className="!rounded-tl-none !rounded-bl-none"
                 >
-                    Search
+                    <IconSearch />
                 </Button>
             )}
         </Group>

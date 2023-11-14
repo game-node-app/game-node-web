@@ -1,5 +1,4 @@
-import { PaginationResponseDto } from "@/wrapper/server";
+import { PaginationInfo } from "@/wrapper/server";
+import { schema_PaginationInfo } from "@/wrapper/search";
 
-export type TPaginationResponse<T> = {
-    data: T[];
-} & PaginationResponseDto;
+export type PaginationInfoDto = PaginationInfo | schema_PaginationInfo;

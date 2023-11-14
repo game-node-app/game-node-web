@@ -10,11 +10,11 @@ import { sleep } from "@/util/sleep";
 import { useGame } from "@/components/game/hooks/useGame";
 
 interface IGameExtraInfoViewProps {
-    id: string | undefined;
+    id: number;
 }
 
 const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
-    const gameQuery = useGame(+id!, {
+    const gameQuery = useGame(id, {
         relations: {
             dlcs: {
                 cover: true,

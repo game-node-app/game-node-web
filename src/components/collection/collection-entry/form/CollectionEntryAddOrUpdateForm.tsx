@@ -25,14 +25,23 @@ import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { useMutation, useQueryClient } from "react-query";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import {
+    SessionAuth,
+    useSessionContext,
+} from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
+import useGamePlatforms from "@/components/game/hooks/useGamePlatforms";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
         .array(z.string())
-        .min(1, "Select at least one collection."),
-    platformsIds: z.array(z.string()).min(1, "Select at least one platform."),
+        .min(1, "Select at least one collection.")
+        .default([]),
+    platformsIds: z
+        .array(z.string())
+        .min(1, "Select at least one platform.")
+        .default([]),
 });
 
 type TGameAddOrUpdateValues = z.infer<typeof GameAddOrUpdateSchema>;
@@ -57,7 +66,10 @@ function buildCollectionOptions(
     });
 }
 
-function buildPlatformsOptions(platforms: GamePlatform[]): ComboboxItem[] {
+function buildPlatformsOptions(
+    platforms: GamePlatform[] | undefined,
+): ComboboxItem[] {
+    if (platforms == undefined) return [];
     return platforms.map((platform) => {
         return {
             label: platform.abbreviation ?? platform.name,
@@ -85,29 +97,27 @@ const CollectionEntryAddOrUpdateForm = ({
 
     const gameQuery = useGame(gameId, {
         relations: {
-            platforms: true,
             cover: true,
         },
     });
+    const gamePlatformsQuery = useGamePlatforms();
 
     const game = gameQuery.data;
-    const session = useSessionContext();
+    const userId = useUserId();
 
-    const userLibraryQuery = useUserLibrary(
-        session.loading ? undefined : session.userId,
-    );
+    const userLibraryQuery = useUserLibrary(userId);
 
-    const collectionOptions = buildCollectionOptions(
-        userLibraryQuery?.data?.collections,
-    );
+    const collectionOptions = useMemo(() => {
+        return buildCollectionOptions(userLibraryQuery?.data?.collections);
+    }, [userLibraryQuery?.data?.collections]);
+
+    const platformOptions = useMemo(() => {
+        return buildPlatformsOptions(gamePlatformsQuery.data) || [];
+    }, [gamePlatformsQuery.data]);
 
     const isUpdateAction =
         collectionEntryQuery.data != undefined &&
         collectionEntryQuery.data.length > 0;
-
-    const [platformOptions, setPlatformOptions] = useState<ComboboxItem[]>([]);
-
-    const queryClient = useQueryClient();
 
     const collectionEntryMutation = useMutation({
         mutationFn: async (data: TGameAddOrUpdateValues) => {
@@ -124,6 +134,8 @@ const CollectionEntryAddOrUpdateForm = ({
                 platformIds: parsedPlatformIds,
                 isFavorite: isFavorite,
             });
+            collectionEntryQuery.invalidate();
+            collectionEntryQuery.refetch();
         },
         onSuccess: () => {
             notifications.show({
@@ -133,12 +145,7 @@ const CollectionEntryAddOrUpdateForm = ({
                     : "Game added to your library!",
                 color: "green",
             });
-            queryClient.invalidateQueries(["collectionEntries", game.id]);
-            queryClient.invalidateQueries([
-                "review",
-                userLibraryQuery.data?.userId,
-                gameId,
-            ]);
+
             if (onClose) {
                 onClose();
             }
@@ -153,24 +160,8 @@ const CollectionEntryAddOrUpdateForm = ({
     });
 
     const onSubmit = async (data: TGameAddOrUpdateValues) => {
-        await collectionEntryMutation.mutateAsync(data);
+        collectionEntryMutation.mutate(data);
     };
-
-    /**
-     * Effect to use defaults when no platform data is available.
-     */
-    useEffect(() => {
-        if (game?.platforms == undefined || game?.platforms.length === 0) {
-            GameRepositoryService.gameRepositoryControllerGetDefaultPlatforms()
-                .then((platforms) => {
-                    console.log(platforms);
-                    setPlatformOptions(buildPlatformsOptions(platforms));
-                })
-                .catch();
-        } else if (game?.platforms?.length > 0) {
-            setPlatformOptions(buildPlatformsOptions(game?.platforms));
-        }
-    }, [game?.platforms]);
 
     /**
      * Effect to sync with user's collection data.
@@ -205,61 +196,60 @@ const CollectionEntryAddOrUpdateForm = ({
         return null;
     }
 
-    const collectionIdsValue =
-        watch("collectionIds", []).length > 0
-            ? watch("collectionIds", [])
-            : undefined;
+    const collectionIdsValue = watch("collectionIds");
 
-    const platformIdsValue =
-        watch("platformsIds", []).length > 0
-            ? watch("platformsIds", [])
-            : undefined;
+    const platformIdsValue = watch("platformsIds");
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full h-full flex flex-col items-center justify-start gap-4"
-        >
-            <Box className="min-w-[100%] max-w-fit max-h-fit">
-                <GameFigureImage game={game} size={ImageSize.COVER_BIG} />
-            </Box>
-            <Title align={"center"} size={"h5"}>
-                {game.name}
-            </Title>
-            <Space />
+        <SessionAuth>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="w-full h-full flex flex-col items-center justify-start gap-4"
+            >
+                <Box className="min-w-[100%] max-w-fit max-h-fit">
+                    <GameFigureImage game={game} size={ImageSize.COVER_BIG} />
+                </Box>
+                <Title align={"center"} size={"h5"}>
+                    {game.name}
+                </Title>
+                <Space />
 
-            <MultiSelect
-                {...register("collectionIds")}
-                value={collectionIdsValue}
-                className={"w-full"}
-                data={collectionOptions}
-                onChange={(value) => {
-                    setValue("collectionIds", value);
-                }}
-                placeholder={"Select collections"}
-                label={"Collections"}
-                error={errors.collectionIds?.message}
-                withAsterisk
-                description={"Which collections do you want to save it on?"}
-            />
-            <Space />
-            <MultiSelect
-                {...register("platformsIds")}
-                className={"w-full"}
-                value={platformIdsValue}
-                data={platformOptions}
-                onChange={(value) => {
-                    setValue("platformsIds", value);
-                }}
-                multiple
-                placeholder={"Select platforms"}
-                label={"Platforms"}
-                error={errors.platformsIds?.message}
-                withAsterisk
-                description={"Which platforms do you own this game on?"}
-            />
-            <Button type={"submit"}>{isUpdateAction ? "Update" : "Add"}</Button>
-        </form>
+                <MultiSelect
+                    {...register("collectionIds")}
+                    value={collectionIdsValue || []}
+                    className={"w-full"}
+                    data={collectionOptions}
+                    onChange={(value) => {
+                        setValue("collectionIds", value);
+                    }}
+                    placeholder={"Select collections"}
+                    label={"Collections"}
+                    error={errors.collectionIds?.message}
+                    withAsterisk
+                    searchable
+                    description={"Which collections do you want to save it on?"}
+                />
+                <Space />
+                <MultiSelect
+                    {...register("platformsIds")}
+                    className={"w-full"}
+                    value={platformIdsValue || []}
+                    data={platformOptions}
+                    onChange={(value) => {
+                        setValue("platformsIds", value);
+                    }}
+                    searchable
+                    placeholder={"Select platforms"}
+                    label={"Platforms"}
+                    error={errors.platformsIds?.message}
+                    withAsterisk
+                    description={"Which platforms do you own this game on?"}
+                />
+                <Button type={"submit"}>
+                    {isUpdateAction ? "Update" : "Add"}
+                </Button>
+            </form>
+        </SessionAuth>
     );
 };
 

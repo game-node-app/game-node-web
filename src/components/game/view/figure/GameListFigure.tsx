@@ -66,10 +66,12 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
                     {...others}
                     game={game}
                     href={`/game/${game.id}`}
-                    styles={{
-                        root: {
-                            alignItems: "baseline !important",
-                            justifyContent: "start !important",
+                    imageProps={{
+                        styles: {
+                            root: {
+                                alignItems: "baseline !important",
+                                justifyContent: "start !important",
+                            },
                         },
                     }}
                 />

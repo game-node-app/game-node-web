@@ -59,11 +59,7 @@ const CollectionEntriesView = ({
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
-                    <GameView.Content
-                        items={entriesGames}
-                        justify={"flex-start"}
-                        px={"sm"}
-                    />
+                    <GameView.Content items={entriesGames} px={"sm"} />
                     <Space h={"2rem"} />
                     <GameView.Pagination
                         paginationInfo={paginationInfo}

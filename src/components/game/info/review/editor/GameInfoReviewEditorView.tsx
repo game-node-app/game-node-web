@@ -51,6 +51,7 @@ const GameInfoReviewEditorView = ({
             });
         },
         onSuccess: () => {
+            reviewQuery.invalidate();
             notifications.show({
                 title: "Success",
                 message:
@@ -90,17 +91,6 @@ const GameInfoReviewEditorView = ({
     };
 
     const render = () => {
-        if (
-            collectionEntriesQuery.data == undefined ||
-            collectionEntriesQuery.data.length === 0
-        ) {
-            return (
-                <Text>
-                    This game is not in your library. Add it to write a review.
-                </Text>
-            );
-        }
-
         if (!isEditMode && reviewQuery.data != undefined) {
             return (
                 <ReviewListItem
@@ -114,7 +104,7 @@ const GameInfoReviewEditorView = ({
             <form className={"w-full h-full"} onSubmit={handleSubmit(onSubmit)}>
                 <GameInfoReviewEditor
                     gameId={gameId}
-                    onChange={(v) => setValue("content", v)}
+                    onBlur={(v) => setValue("content", v)}
                 />
                 <Break />
                 <Group mt={"md"} justify={"space-between"}>

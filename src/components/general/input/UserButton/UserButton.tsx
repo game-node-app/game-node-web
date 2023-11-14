@@ -6,7 +6,7 @@ import {
 } from "@mantine/core";
 import { IconSelector } from "@tabler/icons-react";
 import classes from "./UserButton.module.css";
-import { UserAvatar } from "@/components/general/UserAvatar";
+import { UserAvatar } from "@/components/general/input/UserAvatar";
 
 interface UserButtonProps extends UnstyledButtonProps {
     image: string;

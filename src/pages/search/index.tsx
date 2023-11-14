@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Container, Stack } from "@mantine/core";
-import SearchBar from "@/components/game/search/SearchBar";
+import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +11,8 @@ import {
     GameSearchResponseDto,
 } from "@/components/game/search/utils/types";
 import { SearchService } from "@/wrapper/search";
+import useSearchGames from "@/components/game/hooks/useSearchGames";
+import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -48,21 +50,14 @@ const Index = () => {
         searchParameters.page != undefined &&
         searchParameters.page > 0;
 
-    const searchQuery = useQuery<GameSearchResponseDto>({
-        queryKey: ["search", searchParameters],
-        queryFn: async (ctx) => {
-            return SearchService.postSearch(searchParameters);
-        },
-        keepPreviousData: true,
-        enabled: isQueryEnabled,
-    });
+    const searchQuery = useSearchGames(searchParameters, isQueryEnabled);
 
     const onSubmit = (data: TSearchFormValues) => {
         const page = data.page || 1;
         setSearchParameters({
             ...DEFAULT_SEARCH_PARAMETERS,
             query: data.query,
-            page: data.page,
+            page: page,
         });
     };
 
@@ -92,8 +87,8 @@ const Index = () => {
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <SearchBar
-                            withButton
                             label={"Search for games"}
+                            withButton
                             error={errors.query?.message}
                             {...register("query")}
                             value={watch("query")}

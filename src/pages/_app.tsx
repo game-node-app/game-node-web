@@ -1,4 +1,9 @@
-import { createTheme, MantineProvider } from "@mantine/core";
+import {
+    createTheme,
+    DEFAULT_THEME,
+    MantineProvider,
+    mergeMantineTheme,
+} from "@mantine/core";
 import { AppProps } from "next/app";
 import TypesafeI18NProvider from "@/components/general/TypesafeI18nProvider";
 import SuperTokensProvider from "@/components/auth/SuperTokensProvider";
@@ -31,7 +36,7 @@ const inter = Inter({
     variable: "--font-inter",
 });
 
-const theme = createTheme({
+const themeOverride = createTheme({
     fontFamily: inter.style.fontFamily,
     colors: {
         brand: [
@@ -49,6 +54,8 @@ const theme = createTheme({
     },
     primaryColor: "brand",
 });
+
+export const theme = mergeMantineTheme(DEFAULT_THEME, themeOverride);
 
 /**
  * Basic configuration for wrapper services

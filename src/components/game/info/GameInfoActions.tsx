@@ -61,7 +61,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
             <CollectionEntryRemoveModal
                 opened={removeModalOpened}
                 onClose={removeModalUtils.close}
-                id={game.id}
+                gameId={game.id}
             />
             <Button onClick={addUpdateModalUtils.open}>
                 {gameInLibrary ? "Update" : "Add to library"}

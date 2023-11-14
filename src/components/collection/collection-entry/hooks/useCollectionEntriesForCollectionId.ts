@@ -1,8 +1,11 @@
 import { useQuery } from "react-query";
-import { CollectionEntry, GetCollectionEntriesDto } from "@/wrapper/server";
+import {
+    CollectionEntriesPaginatedResponseDto,
+    CollectionEntry,
+    GetCollectionEntriesDto,
+} from "@/wrapper/server";
 import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
-import { TPaginationResponse } from "@/util/types/pagination";
 
 /**
  * Returns a collection entry for the current user based on a game ID.
@@ -14,7 +17,7 @@ export function useCollectionEntriesForCollectionId(
     collectionId: string,
     dto: GetCollectionEntriesDto,
 ) {
-    return useQuery<TPaginationResponse<CollectionEntry> | undefined>({
+    return useQuery<CollectionEntriesPaginatedResponseDto | undefined>({
         queryKey: ["collectionEntries", collectionId, dto],
         queryFn: async () => {
             if (!collectionId) {

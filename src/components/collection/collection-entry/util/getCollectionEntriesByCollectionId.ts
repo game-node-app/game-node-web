@@ -1,9 +1,9 @@
 import {
-    CollectionEntry,
+    CollectionEntriesPaginatedResponseDto,
     CollectionsEntriesService,
     GetCollectionEntriesDto,
+    PaginationInfo,
 } from "@/wrapper/server";
-import { TPaginationResponse } from "@/util/types/pagination";
 
 /**
  * Returns a list CollectionEntry entity, given any is available in the user's library.
@@ -13,7 +13,7 @@ import { TPaginationResponse } from "@/util/types/pagination";
 export async function getCollectionEntriesByCollectionId(
     collectionId: string,
     dto: GetCollectionEntriesDto,
-): Promise<TPaginationResponse<CollectionEntry> | undefined> {
+): Promise<CollectionEntriesPaginatedResponseDto | undefined> {
     try {
         return await CollectionsEntriesService.collectionsEntriesControllerFindAllByCollectionId(
             collectionId,

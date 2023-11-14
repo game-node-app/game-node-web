@@ -25,20 +25,20 @@ import useUserId from "@/components/auth/hooks/useUserId";
 
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
     gameId: number;
-    onChange: (html: string) => void;
+    onBlur: (html: string) => void;
 }
 
 export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
 
 const GameInfoReviewEditor = ({
     gameId,
-    onChange,
+    onBlur,
 }: IGameInfoReviewEditorProps) => {
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const previousContent = useMemo(() => {
         if (reviewQuery.data != undefined) {
-            return structuredClone(reviewQuery.data.content);
+            return reviewQuery.data.content;
         }
         return `<i>Write your review...</i>`;
     }, [reviewQuery]);
@@ -49,7 +49,7 @@ const GameInfoReviewEditor = ({
             content: previousContent,
             onBlur: (e) => {
                 const html = e.editor.getHTML();
-                onChange(html || "");
+                onBlur(html || "");
             },
         },
         [previousContent],

@@ -22,10 +22,6 @@ const LibraryViewOwnerHome = () => {
                 <Title ta={"center"} size={"h4"} mt={"lg"}>
                     Welcome to your library, {userProfileQuery.data?.username}!
                 </Title>
-                <Text>
-                    Feel free to browse your collections and add or remove
-                    games, using the sidebar.
-                </Text>
             </Stack>
         </Container>
     );

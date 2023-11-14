@@ -7,7 +7,10 @@ const Collection = () => {
     const router = useRouter();
     const { userId, collectionId } = router.query;
     return (
-        <LibraryView userId={userId as string | undefined}>
+        <LibraryView
+            userId={userId as string | undefined}
+            collectionId={collectionId as string | undefined}
+        >
             <CollectionView collectionId={collectionId as string} />
         </LibraryView>
     );

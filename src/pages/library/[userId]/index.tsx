@@ -24,7 +24,10 @@ const Index = () => {
     }, [session, userId]);
 
     return (
-        <LibraryView userId={userId as string | undefined}>
+        <LibraryView
+            userId={userId as string | undefined}
+            collectionId={undefined}
+        >
             {isOwnLibrary ? <LibraryViewOwnerHome /> : <LibraryViewGuestHome />}
         </LibraryView>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Container } from "@mantine/core";
 import GameInfoView, {
     DEFAULT_GAME_INFO_VIEW_DTO,
@@ -14,6 +14,7 @@ import {
     StatisticsService,
 } from "@/wrapper/server";
 import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const dto: GameRepositoryRequestDto = DEFAULT_GAME_INFO_VIEW_DTO;
@@ -52,6 +53,24 @@ const GameInfoPage = () => {
     const router = useRouter();
     const { id } = router.query;
 
+    const registeredGameView = useRef(false);
+
+    /**
+     * Effect to add to game's statistics views.
+     */
+    useEffect(() => {
+        if (router.isReady && id != undefined && !registeredGameView.current) {
+            const idAsNumber = parseInt(id as string, 10);
+            StatisticsService.statisticsGameQueueControllerRegisterGameView(
+                idAsNumber,
+            );
+            registeredGameView.current = true;
+        }
+    }, [id, router]);
+
+    /**
+     * Effect to render /404 if necessary
+     */
     useEffect(() => {
         if (router.isReady && id == undefined) {
             router.push("/404");
@@ -65,13 +84,13 @@ const GameInfoPage = () => {
     return (
         <Container fluid pos={"relative"} className="mb-12" mih={"100vh"} p={0}>
             <Container fluid mt={"30px"} p={0}>
-                <GameInfoView id={id as string} />
+                <GameInfoView id={idAsNumber} />
             </Container>
             <Container fluid mt={"60px"} p={0}>
                 <GameInfoReviewView gameId={idAsNumber} />
             </Container>
             <Container fluid mt={"120px"} p={0}>
-                <GameExtraInfoView id={id as string} />
+                <GameExtraInfoView id={idAsNumber} />
             </Container>
         </Container>
     );

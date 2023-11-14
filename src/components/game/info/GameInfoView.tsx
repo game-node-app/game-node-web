@@ -26,7 +26,7 @@ export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryRequestDto = {
 };
 
 interface IGameInfoViewProps {
-    id: string | undefined;
+    id: number;
 }
 
 const getCombinedImages = (game: Game) => {
@@ -47,8 +47,7 @@ const getCombinedImages = (game: Game) => {
 };
 
 const GameInfoView = ({ id }: IGameInfoViewProps) => {
-    const idAsNumber = parseInt(id as string, 10);
-    const gameQuery = useGame(idAsNumber, DEFAULT_GAME_INFO_VIEW_DTO);
+    const gameQuery = useGame(id, DEFAULT_GAME_INFO_VIEW_DTO);
     const game = gameQuery.data;
 
     const onMobile = useOnMobile();

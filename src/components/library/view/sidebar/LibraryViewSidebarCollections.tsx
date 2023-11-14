@@ -70,7 +70,7 @@ const LibraryViewSidebarCollections = ({
             return (
                 <Link
                     key={collection.id}
-                    href={`/library/${userId}/collections/${collection.id}`}
+                    href={`/library/${userId}/collection/${collection.id}`}
                     className={classes.mainLink}
                 >
                     <Text className="w-full" ta={"center"}>

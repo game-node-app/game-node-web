@@ -1,4 +1,4 @@
-import { TextInput, UnstyledButton } from "@mantine/core";
+import { Box, TextInput, UnstyledButton } from "@mantine/core";
 import {
     IconBulb,
     IconUser,
@@ -14,6 +14,9 @@ import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
+import { useState } from "react";
+import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
+import { useRouter } from "next/router";
 
 const links = [
     { icon: IconBulb, label: "Activity", href: "/activity" },
@@ -29,12 +32,15 @@ export default function GlobalShellNavbar({
     sidebarOpened,
     onClose,
 }: IGlobalShellNavbarProps) {
+    const router = useRouter();
+    const [query, setQuery] = useState<string>("");
     const session = useSessionContext();
-    const isLoggedIn = !session.loading && session.doesSessionExist;
 
+    const isLoggedIn = !session.loading && session.doesSessionExist;
     const userProfileQuery = useUserProfile(
         session.loading ? undefined : session.userId,
     );
+
     const userProfile = userProfileQuery.data;
 
     const mainLinks = links.map((link) => (
@@ -55,7 +61,6 @@ export default function GlobalShellNavbar({
     ));
 
     const placeholderUserButtonImage = "https://i.imgur.com/fGxgcDF.png";
-
     const userAvatarImageUrl =
         userProfile && userProfile.avatar
             ? `${serverUrl}/public/uploads/${userProfile.avatar.path}${userProfile.avatar.extension}`
@@ -72,15 +77,20 @@ export default function GlobalShellNavbar({
                     />
                 </div>
             )}
-
-            <TextInput
-                placeholder="Search"
-                size="xs"
-                leftSection={<IconSearch size="0.8rem" stroke={1.5} />}
-                styles={{ section: { pointerEvents: "none" } }}
-                mt={isLoggedIn ? 0 : "sm"}
-                mb="sm"
-            />
+            <Box w={"100%"} my={"0.8rem"}>
+                <SearchBarWithSelect
+                    withButton={false}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onOptionSubmit={(value, options, combobox) => {
+                        const valueAsNumber = Number.parseInt(value, 10);
+                        router.push(`/game/${valueAsNumber}`);
+                        combobox.closeDropdown();
+                        if (onClose) onClose();
+                    }}
+                    onClear={() => setQuery("")}
+                />
+            </Box>
 
             <div className={classes.section}>
                 <div className={classes.mainLinks}>{mainLinks}</div>

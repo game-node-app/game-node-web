@@ -56,10 +56,7 @@ const GlobalShellNavbarCollections = ({
     };
 
     return (
-        <div
-            className={classes.section}
-            style={{ display: shouldBeHidden ? "none" : "unset" }}
-        >
+        <div className={classes.section}>
             <GlobalShellNavbarCollectionsHeader />
             <ScrollArea>
                 <Stack className={classes.collections} gap="xs">
