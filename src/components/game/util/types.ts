@@ -1,3 +1,4 @@
-import { Game, GameSearchResponseHit, SearchGame } from "@/wrapper/server";
+import { Game } from "@/wrapper/server";
+import { SearchGame } from "@/components/game/search/utils/types";
 
 export type TGameOrSearchGame = Game | SearchGame;
