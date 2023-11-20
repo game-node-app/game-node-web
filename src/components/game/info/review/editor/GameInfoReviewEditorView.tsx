@@ -7,7 +7,7 @@ import { Box, Button, Flex, Group, Rating, Stack, Text } from "@mantine/core";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Break from "@/components/general/Break";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -29,6 +29,7 @@ interface IGameInfoReviewEditorViewProps {
 const GameInfoReviewEditorView = ({
     gameId,
 }: IGameInfoReviewEditorViewProps) => {
+    const [hasProfanity, setHasProfanity] = useState(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(true);
     const hasSetEditMode = useRef<boolean>(false);
 
@@ -40,9 +41,14 @@ const GameInfoReviewEditorView = ({
                 rating: 5,
             },
         });
+    const queryClient = useQueryClient();
+
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const collectionEntriesQuery = useCollectionEntriesForGameId(gameId);
+    const isGameInLibrary =
+        collectionEntriesQuery.data != undefined &&
+        collectionEntriesQuery.data.length > 0;
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
             await ReviewsService.reviewsControllerCreateOrUpdate({
@@ -69,6 +75,9 @@ const GameInfoReviewEditorView = ({
                 color: "red",
             });
         },
+        onSettled: () => {
+            queryClient.invalidateQueries(["review"]);
+        },
     });
 
     const rating = watch("rating");
@@ -91,6 +100,13 @@ const GameInfoReviewEditorView = ({
     };
 
     const render = () => {
+        if (!isGameInLibrary) {
+            return (
+                <Text>
+                    You need to have this game in your library to review it.
+                </Text>
+            );
+        }
         if (!isEditMode && reviewQuery.data != undefined) {
             return (
                 <ReviewListItem
@@ -105,10 +121,15 @@ const GameInfoReviewEditorView = ({
                 <GameInfoReviewEditor
                     gameId={gameId}
                     onBlur={(v) => setValue("content", v)}
+                    setHasProfanity={setHasProfanity}
                 />
                 <Break />
                 <Group mt={"md"} justify={"space-between"}>
-                    <Text fz={"sm"} c={"red"} ml={{ base: 0, lg: "0.5rem" }}>
+                    <Text
+                        fz={"sm"}
+                        ml={{ base: 0, lg: "0.5rem" }}
+                        className={"text-red-500"}
+                    >
                         {error?.message}
                     </Text>
                     <Group>
@@ -125,7 +146,7 @@ const GameInfoReviewEditorView = ({
     };
 
     return (
-        <Flex wrap={"wrap"} w={"100%"} h={"100%"}>
+        <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
             {render()}
         </Flex>
     );

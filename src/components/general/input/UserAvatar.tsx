@@ -9,7 +9,7 @@ interface UserAvatarProps extends AvatarProps {
 export function UserAvatar({ src, ...others }: UserAvatarProps) {
     return (
         <Avatar
-            src={src && src.length > 0 ? src : placeholderAvatarImage}
+            src={src && src.length > 0 ? src : null}
             radius="xl"
             {...others}
         />

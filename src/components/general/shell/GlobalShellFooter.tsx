@@ -7,7 +7,6 @@ import {
     Group,
     Text,
 } from "@mantine/core";
-import GameNodeLogo from "@/components/general/GameNodeLogo";
 import Link from "next/link";
 import {
     IconBrandDiscord,

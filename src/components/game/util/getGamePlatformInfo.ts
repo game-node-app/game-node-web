@@ -5,6 +5,7 @@ import {
 } from "@/components/game/util/isGameObject";
 
 export interface IGamePlatformInfo {
+    platformsIds: number[] | undefined;
     platformsNames: string[] | undefined;
     platformsAbbreviations: string[] | undefined;
 }
@@ -13,6 +14,7 @@ export function getGamePlatformInfo(
     game: TGameOrSearchGame,
 ): IGamePlatformInfo {
     const platformInfo: IGamePlatformInfo = {
+        platformsIds: undefined,
         platformsNames: undefined,
         platformsAbbreviations: undefined,
     };
@@ -27,6 +29,9 @@ export function getGamePlatformInfo(
         }
     } else if (isGameObject(game)) {
         if (game.platforms) {
+            platformInfo.platformsIds = game.platforms.map(
+                (platform) => platform.id,
+            );
             platformInfo.platformsNames = game.platforms.map(
                 (platform) => platform.name,
             );

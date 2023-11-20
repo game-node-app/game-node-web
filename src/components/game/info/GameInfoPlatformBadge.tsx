@@ -17,9 +17,10 @@ import {
     IconPlaystationTriangle,
     IconPlaystationX,
 } from "@tabler/icons-react";
+import { theme } from "@/pages/_app";
 
 interface IGameInfoPlatformBadgeProps extends BadgeProps {
-    platform: string;
+    platformAbbreviation: string;
 }
 
 const platformIconStore: {
@@ -67,7 +68,7 @@ const platformIconStore: {
 
     default: {
         icon: undefined,
-        color: undefined,
+        color: "gray",
     },
 };
 
@@ -75,14 +76,23 @@ const platformToIcon = (platform: string) =>
     platformIconStore[platform] ?? platformIconStore["default"];
 
 const GameInfoPlatformBadge = ({
-    platform,
+    platformAbbreviation,
+    color,
     ...others
 }: IGameInfoPlatformBadgeProps) => {
-    const { icon: Icon, color } = platformToIcon(platform);
-    const iconToRender = Icon ? <Icon /> : undefined;
+    const toIcon = platformToIcon(platformAbbreviation);
+    const iconToRender = toIcon.icon ? <toIcon.icon /> : undefined;
+    const colorToUse = color ?? toIcon.color;
     return (
-        <Badge color={color} leftSection={iconToRender} {...others}>
-            {platform}
+        <Badge
+            color={theme.colors.teal[0]}
+            bg={colorToUse}
+            leftSection={iconToRender}
+            variant={"filled"}
+            w={85}
+            {...others}
+        >
+            {platformAbbreviation}
         </Badge>
     );
 };

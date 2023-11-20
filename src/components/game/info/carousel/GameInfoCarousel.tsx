@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "@mantine/carousel";
 import { Game } from "@/wrapper/server";
-import GameGridFigure from "@/components/game/view/figure/GameGridFigure";
+import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/hooks/useOnMobile";
 import { Center, Flex, Skeleton, Text } from "@mantine/core";

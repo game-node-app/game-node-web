@@ -1,29 +1,24 @@
-import React, {
-    ComponentProps,
-    ComponentPropsWithoutRef,
-    PropsWithChildren,
-    useState,
-} from "react";
+import React, { PropsWithChildren, useState } from "react";
 import {
     AspectRatio,
-    Box,
-    Skeleton,
     Image,
     ImageProps,
+    Skeleton,
     SkeletonProps,
 } from "@mantine/core";
 import Link from "next/link";
-import { getSizedImageUrl } from "@/components/game/util/getSizedImageUrl";
+import {
+    getSizedImageUrl,
+    ImageSize,
+} from "@/components/game/util/getSizedImageUrl";
 import { TGameOrSearchGame } from "@/components/game/util/types";
-import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { getCoverUrl } from "@/components/game/util/getCoverUrl";
 
-export interface IGameFigureProps {
+export interface IGameFigureProps extends PropsWithChildren {
     game: TGameOrSearchGame | undefined;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-    skeletonProps?: SkeletonProps;
     imageProps?: ImageProps;
-    size: ImageSize;
+    size?: ImageSize;
     href?: string;
 }
 
@@ -41,10 +36,13 @@ const GameFigureImage = ({
     href,
     size,
     onClick,
-    skeletonProps,
+    children,
 }: IGameFigureProps) => {
     const coverUrl = getCoverUrl(game);
-    const sizedCoverUrl = getSizedImageUrl(coverUrl, size);
+    const sizedCoverUrl = getSizedImageUrl(
+        coverUrl,
+        size ?? ImageSize.COVER_BIG,
+    );
     const [showSkeleton, setShowSkeleton] = useState(true);
     const defaultHref = `/game/${game?.id}`;
     return (
@@ -55,20 +53,21 @@ const GameFigureImage = ({
         >
             {showSkeleton && (
                 <Skeleton
-                    className="w-full h-auto max-h-[215px]"
+                    className="w-full min-h-[260px] lg:min-h-[400px] h-auto"
                     animate={true}
-                    visible={showSkeleton}
                 />
             )}
             <AspectRatio ratio={264 / 354} pos="relative" h={"100%"} w={"auto"}>
                 <Image
-                    src={sizedCoverUrl!}
+                    radius={"md"}
+                    src={sizedCoverUrl ?? "img/game_placeholder.jpeg"}
                     alt={"Game cover"}
                     onLoad={() => setShowSkeleton(false)}
                     onError={() => setShowSkeleton(false)}
                     className="w-full h-auto"
                     {...imageProps}
                 />
+                {children}
             </AspectRatio>
         </Link>
     );

@@ -25,7 +25,7 @@ export default function GlobalShellHeader({
                     onClick={toggleSidebar}
                     size="sm"
                 />
-                <Link href={"/"}>
+                <Link href={"/search"}>
                     <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
                 </Link>
                 {!session.loading && !session.doesSessionExist && (

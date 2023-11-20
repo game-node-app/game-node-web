@@ -1,25 +1,24 @@
 import React, { useContext } from "react";
-import {
-    Box,
-    Divider,
-    Grid,
-    GridProps,
-    SimpleGrid,
-    SimpleGridProps,
-} from "@mantine/core";
-import { GameViewContext } from "@/components/game/view/GameView";
-import GameGridFigure from "@/components/game/view/figure/GameGridFigure";
-import GameListFigure from "@/components/game/view/figure/GameListFigure";
+import { Box, Divider, SimpleGrid, SimpleGridProps } from "@mantine/core";
+import { GameViewContext } from "@/components/general/view/game/GameView";
+import GameGridFigure from "@/components/game/figure/GameGridFigure";
+import GameListFigure from "@/components/game/figure/GameListFigure";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { SearchGame } from "@/components/game/search/utils/types";
 import useOnMobile from "@/hooks/useOnMobile";
+import { Game } from "@/wrapper/server";
 
 interface IMetadataGridContentProps extends SimpleGridProps {
     items: TGameOrSearchGame[];
+    badgesBuilder?: (game: TGameOrSearchGame) => React.ReactNode[] | null;
 }
 
-const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
+const GameViewContent = ({
+    items,
+    badgesBuilder,
+    ...others
+}: IMetadataGridContentProps) => {
     const onMobile = useOnMobile();
     const { layout } = useContext(GameViewContext);
     const buildColumns = () => {
@@ -32,7 +31,10 @@ const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
                 return (
                     <Box w={"100%"} key={item.id}>
                         <GameListFigure
-                            size={ImageSize.COVER_BIG}
+                            badgesBuilder={badgesBuilder}
+                            figureProps={{
+                                size: ImageSize.COVER_BIG,
+                            }}
                             game={item}
                         />
                         <Divider mt={"xs"} variant={"dashed"} />

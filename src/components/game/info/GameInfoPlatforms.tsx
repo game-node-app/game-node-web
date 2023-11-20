@@ -17,7 +17,7 @@ const buildBadges = (game: Game) => {
         return (
             <GameInfoPlatformBadge
                 key={index}
-                platform={platformName}
+                platformAbbreviation={platformName}
                 className={"w-28 mx-2"}
             />
         );
@@ -26,7 +26,7 @@ const buildBadges = (game: Game) => {
 
 const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
     return (
-        <Group {...others} w={"100%"} justify={"center"} wrap={"wrap"}>
+        <Group {...others} w={"100%"} justify={"start"} wrap={"wrap"}>
             {buildBadges(game)}
         </Group>
     );

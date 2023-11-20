@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import GameView from "@/components/game/view/GameView";
-import { Box, Container, Space, Stack } from "@mantine/core";
+import GameView from "@/components/general/view/game/GameView";
+import { Box, Container, Flex, Space, Stack } from "@mantine/core";
 import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
-import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
+import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
+import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
 import { SearchGame } from "@/components/game/search/utils/types";
+import useOnMobile from "@/hooks/useOnMobile";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {
     enabled: boolean;
     isLoading: boolean;
     isError: boolean;
-    isFetching: boolean;
     results: SearchGame[] | undefined;
 }
 
@@ -22,7 +22,9 @@ const GameSearchResultScreen = ({
     results,
     paginationInfo,
     onPaginationChange,
+    page,
 }: ISearchResultScreenProps) => {
+    const onMobile = useOnMobile();
     const [layout, setLayout] = useState<"grid" | "list">("grid");
 
     const render = () => {
@@ -51,14 +53,17 @@ const GameSearchResultScreen = ({
                     h={"100%"}
                     mt={"md"}
                 >
-                    <Box className="w-full flex justify-end mb-8 ">
-                        <Box className={"!me-4"}>
+                    <Box className="w-full flex justify-end mb-8">
+                        <Box className={""}>
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
+
                     <GameView.Content items={results} />
+
                     <Space h={"2rem"} />
                     <GameView.Pagination
+                        page={page}
                         paginationInfo={paginationInfo}
                         onPaginationChange={onPaginationChange}
                     />

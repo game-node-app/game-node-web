@@ -139,9 +139,9 @@ const SearchBarWithSelect = ({
                     />
                 </Combobox.Target>
 
-                <Combobox.Dropdown>
+                <Combobox.Dropdown hidden={!isQueryEnabled}>
                     <Combobox.Options>
-                        <ScrollArea h={isResultEmpty ? 30 : 400}>
+                        <ScrollArea.Autosize h={400}>
                             {options}
                             {searchGamesQuery.isError && (
                                 <Combobox.Empty>
@@ -151,7 +151,7 @@ const SearchBarWithSelect = ({
                             {isResultEmpty && (
                                 <Combobox.Empty>No results.</Combobox.Empty>
                             )}
-                        </ScrollArea>
+                        </ScrollArea.Autosize>
                     </Combobox.Options>
                 </Combobox.Dropdown>
             </Combobox>

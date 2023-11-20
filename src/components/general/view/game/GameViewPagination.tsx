@@ -4,30 +4,22 @@ import { PaginationInfo } from "@/wrapper/server";
 import { PaginationInfoDto } from "@/util/types/pagination";
 
 export interface IGameViewPaginationProps {
+    page: number;
     paginationInfo: PaginationInfoDto | undefined;
     onPaginationChange: (page: number) => void;
 }
 
 const GameViewPagination = ({
+    page,
     paginationInfo,
     onPaginationChange,
 }: IGameViewPaginationProps) => {
-    const [page, setPage] = React.useState(1);
-
-    /**
-     * @param page
-     */
-    const handlePagination = (page: number) => {
-        onPaginationChange(page);
-        setPage(page);
-    };
-
     return (
         <Center w={"100%"}>
             <Pagination
                 value={page}
                 total={paginationInfo?.totalPages || 1}
-                onChange={handlePagination}
+                onChange={onPaginationChange}
             />
         </Center>
     );

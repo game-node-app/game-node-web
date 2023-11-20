@@ -23,22 +23,29 @@ const LibraryView = ({ children, userId, collectionId }: ILibraryViewProps) => {
     const router = useRouter();
 
     return (
-        <Container fluid pl={onMobile ? undefined : 0}>
-            <Flex w={"100%"} justify={"center"}>
-                <LibraryViewCollectionsSelect
-                    userId={userId}
-                    value={collectionId}
-                    onChange={(value) => {
-                        console.log(value);
-                        if (collectionId != undefined && value == undefined) {
-                            router.push(`/library/${userId}`);
-                            return;
-                        }
-                        router.push(`/library/${userId}/collection/${value}`);
-                    }}
-                />
-            </Flex>
-            <Grid columns={12}>
+        <Container fluid pl={onMobile ? undefined : 0} w={"100%"} h={"100%"}>
+            {onMobile && (
+                <Flex w={"100%"} justify={"center"}>
+                    <LibraryViewCollectionsSelect
+                        userId={userId}
+                        value={collectionId}
+                        onChange={(value) => {
+                            console.log(value);
+                            if (
+                                collectionId != undefined &&
+                                value == undefined
+                            ) {
+                                router.push(`/library/${userId}`);
+                                return;
+                            }
+                            router.push(
+                                `/library/${userId}/collection/${value}`,
+                            );
+                        }}
+                    />
+                </Flex>
+            )}
+            <Grid columns={12} w={"100%"} h={"100%"}>
                 <Grid.Col
                     span={{ base: 0, lg: 2 }}
                     display={onMobile ? "none" : undefined}
@@ -46,7 +53,9 @@ const LibraryView = ({ children, userId, collectionId }: ILibraryViewProps) => {
                     <LibraryViewSidebar userId={userId} />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 12, lg: 10 }}>{children}</Grid.Col>
+                <Grid.Col span={{ base: 12, lg: 10 }} h={"100%"}>
+                    {children}
+                </Grid.Col>
             </Grid>
         </Container>
     );

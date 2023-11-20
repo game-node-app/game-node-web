@@ -1,8 +1,11 @@
 import React, {
     ComponentPropsWithoutRef,
     MutableRefObject,
+    SetStateAction,
     useEffect,
     useMemo,
+    useRef,
+    useState,
 } from "react";
 import {
     Box,
@@ -22,10 +25,11 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
-
+import Filter from "bad-words";
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
     gameId: number;
     onBlur: (html: string) => void;
+    setHasProfanity: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
@@ -33,7 +37,9 @@ export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
 const GameInfoReviewEditor = ({
     gameId,
     onBlur,
+    setHasProfanity,
 }: IGameInfoReviewEditorProps) => {
+    const badWordsFilter = useRef(new Filter());
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const previousContent = useMemo(() => {
@@ -48,7 +54,11 @@ const GameInfoReviewEditor = ({
             extensions: REVIEW_EDITOR_EXTENSIONS,
             content: previousContent,
             onBlur: (e) => {
-                const html = e.editor.getHTML();
+                let html = e.editor.getHTML();
+                if (badWordsFilter.current.isProfane(html)) {
+                    html = badWordsFilter.current.clean(html);
+                    editor?.commands.setContent(html);
+                }
                 onBlur(html || "");
             },
         },

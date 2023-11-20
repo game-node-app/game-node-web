@@ -10,7 +10,9 @@ export function getGameGenres(game: TGameOrSearchGame): string[] | undefined {
     if (isGameSearchObject(game) && game.genresNames) {
         return game.genresNames.split(", ");
     } else if (!isGameSearchObject(game) && game.genres) {
-        return game.genres.map((genre: GameGenre) => genre.name!);
+        return game.genres
+            .map((genre: GameGenre) => genre.name!)
+            .filter((v) => v != undefined);
     }
 
     return undefined;

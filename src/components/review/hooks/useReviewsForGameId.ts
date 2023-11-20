@@ -20,10 +20,15 @@ export default function useReviewsForGameId(
             queryKey,
             queryFn: async () => {
                 if (gameId == undefined) return undefined;
-                return await ReviewsService.reviewsControllerFindAllByGameId(
-                    gameId,
-                    dto ?? {},
-                );
+
+                try {
+                    return await ReviewsService.reviewsControllerFindAllByGameId(
+                        gameId,
+                        dto ?? {},
+                    );
+                } catch (e) {
+                    return undefined;
+                }
             },
         }),
         queryKey,

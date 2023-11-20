@@ -9,7 +9,7 @@ import {
     Space,
     Title,
 } from "@mantine/core";
-import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
+import GameFigureImage from "@/components/game/figure/GameFigureImage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -53,8 +53,8 @@ interface IGameAddFormProps extends BaseModalChildrenProps {
 function buildCollectionOptions(
     collections: Collection[] | undefined,
 ): ComboboxItem[] {
-    if (!collections) {
-        return [];
+    if (collections == undefined || collections.length === 0) {
+        return undefined;
     }
 
     return collections.map((collection) => {
@@ -68,14 +68,20 @@ function buildCollectionOptions(
 
 function buildPlatformsOptions(
     platforms: GamePlatform[] | undefined,
-): ComboboxItem[] {
-    if (platforms == undefined) return [];
-    return platforms.map((platform) => {
-        return {
-            label: platform.abbreviation ?? platform.name,
-            value: platform.id,
-        };
-    });
+): ComboboxItem[] | undefined {
+    if (platforms == undefined || platforms.length === 0) return undefined;
+    return platforms
+        .filter(
+            (platform) =>
+                platform.abbreviation != undefined ||
+                platform.name != undefined,
+        )
+        .map((platform) => {
+            return {
+                label: platform.abbreviation ?? platform.name,
+                value: `${platform.id}`,
+            };
+        });
 }
 
 const CollectionEntryAddOrUpdateForm = ({
@@ -93,11 +99,14 @@ const CollectionEntryAddOrUpdateForm = ({
         resolver: zodResolver(GameAddOrUpdateSchema),
     });
 
+    const queryClient = useQueryClient();
+
     const collectionEntryQuery = useCollectionEntriesForGameId(gameId);
 
     const gameQuery = useGame(gameId, {
         relations: {
             cover: true,
+            platforms: true,
         },
     });
     const gamePlatformsQuery = useGamePlatforms();
@@ -112,8 +121,12 @@ const CollectionEntryAddOrUpdateForm = ({
     }, [userLibraryQuery?.data?.collections]);
 
     const platformOptions = useMemo(() => {
-        return buildPlatformsOptions(gamePlatformsQuery.data) || [];
-    }, [gamePlatformsQuery.data]);
+        if (game && game.platforms != undefined && game.platforms.length > 0) {
+            return buildPlatformsOptions(game.platforms);
+        }
+        return buildPlatformsOptions(gamePlatformsQuery.data);
+    }, [game, gamePlatformsQuery.data]);
+    console.log(platformOptions);
 
     const isUpdateAction =
         collectionEntryQuery.data != undefined &&
@@ -134,8 +147,10 @@ const CollectionEntryAddOrUpdateForm = ({
                 platformIds: parsedPlatformIds,
                 isFavorite: isFavorite,
             });
+        },
+        onSettled: () => {
             collectionEntryQuery.invalidate();
-            collectionEntryQuery.refetch();
+            queryClient.invalidateQueries(["review"]);
         },
         onSuccess: () => {
             notifications.show({
@@ -175,30 +190,26 @@ const CollectionEntryAddOrUpdateForm = ({
                 .filter((entry) => entry.collection != undefined)
                 .map((entry) => entry.collection.id);
 
-            if (platformOptions.length > 0) {
+            if (platformOptions && platformOptions.length > 0) {
                 const platformIds = collectionEntryQuery.data.flatMap((entry) =>
                     entry.ownedPlatforms.map((platform) => platform.id),
                 );
                 const uniquePlatformIds = Array.from(new Set(platformIds));
-                setValue("platformsIds", uniquePlatformIds);
+                setValue(
+                    "platformsIds",
+                    uniquePlatformIds.map((v) => `${v}`),
+                );
             }
-
-            /**
-             * This is useful not only to avoid showing duplicates to the user, but also to
-             * ensure consistency between collection entries.
-             * See collections-entries.service.ts in game-node-server for more info.
-             */
             setValue("collectionIds", collectionIds);
         }
-    }, [collectionEntryQuery.data, platformOptions.length, setValue]);
+    }, [collectionEntryQuery.data, platformOptions, setValue]);
+
+    const platformsIdsValue = watch("platformsIds", []);
+    const collectionsIdsValue = watch("collectionIds", []);
 
     if (game == undefined) {
         return null;
     }
-
-    const collectionIdsValue = watch("collectionIds");
-
-    const platformIdsValue = watch("platformsIds");
 
     return (
         <SessionAuth>
@@ -216,7 +227,7 @@ const CollectionEntryAddOrUpdateForm = ({
 
                 <MultiSelect
                     {...register("collectionIds")}
-                    value={collectionIdsValue || []}
+                    value={collectionsIdsValue || []}
                     className={"w-full"}
                     data={collectionOptions}
                     onChange={(value) => {
@@ -227,13 +238,14 @@ const CollectionEntryAddOrUpdateForm = ({
                     error={errors.collectionIds?.message}
                     withAsterisk
                     searchable
+                    limit={10}
                     description={"Which collections do you want to save it on?"}
                 />
                 <Space />
                 <MultiSelect
                     {...register("platformsIds")}
+                    value={platformsIdsValue || []}
                     className={"w-full"}
-                    value={platformIdsValue || []}
                     data={platformOptions}
                     onChange={(value) => {
                         setValue("platformsIds", value);
@@ -243,6 +255,7 @@ const CollectionEntryAddOrUpdateForm = ({
                     label={"Platforms"}
                     error={errors.platformsIds?.message}
                     withAsterisk
+                    limit={20}
                     description={"Which platforms do you own this game on?"}
                 />
                 <Button type={"submit"}>

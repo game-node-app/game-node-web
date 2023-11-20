@@ -4,6 +4,7 @@ import {
     IconUser,
     IconCheckbox,
     IconSearch,
+    IconRouteAltLeft,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -19,6 +20,7 @@ import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarW
 import { useRouter } from "next/router";
 
 const links = [
+    { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },

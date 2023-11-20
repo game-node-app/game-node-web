@@ -17,6 +17,7 @@ import { useEffect, useRef } from "react";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useRouter } from "next/router";
 import GradientSeparator from "@/components/general/GradientSeparator";
+import { useSessionStorage } from "@mantine/hooks";
 
 export default function Home() {
     const cardGridRef = useRef<HTMLDivElement>(null);

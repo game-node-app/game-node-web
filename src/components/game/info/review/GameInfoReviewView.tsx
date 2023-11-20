@@ -17,23 +17,15 @@ interface IGameInfoReviewViewProps {
 }
 
 const GameInfoReviewView = ({ gameId }: IGameInfoReviewViewProps) => {
-    const userId = useUserId();
-    const collectionEntries = useCollectionEntriesForGameId(gameId);
-    const shouldRenderEditor =
-        userId != undefined &&
-        collectionEntries.data != undefined &&
-        collectionEntries.data.length > 0;
-
     if (!gameId) return null;
     return (
-        <Paper w={"100%"} h={"100%"} className={"min-h-[300px]"}>
+        <Paper w={"100%"} h={"100%"} className={""}>
             <Stack w={"100%"} h={"100%"} align={"center"}>
-                {shouldRenderEditor && (
-                    <DetailsBox
-                        title={"Your review"}
-                        content={<GameInfoReviewEditorView gameId={gameId} />}
-                    />
-                )}
+                <DetailsBox
+                    title={"Your review"}
+                    content={<GameInfoReviewEditorView gameId={gameId} />}
+                />
+
                 <DetailsBox
                     title={"All reviews"}
                     description={"Reader discretion is advised."}

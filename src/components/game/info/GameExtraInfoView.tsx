@@ -1,12 +1,8 @@
 import React from "react";
-import { useQuery } from "react-query";
-import { GameRepositoryRequestDto } from "@/wrapper/server";
-import { getGameInfo } from "@/components/game/util/getGameInfo";
 import { Flex, Paper } from "@mantine/core";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoCarousel from "@/components/game/info/carousel/GameInfoCarousel";
 import Break from "@/components/general/Break";
-import { sleep } from "@/util/sleep";
 import { useGame } from "@/components/game/hooks/useGame";
 
 interface IGameExtraInfoViewProps {

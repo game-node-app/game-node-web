@@ -9,7 +9,7 @@ import {
     Stack,
     Text,
 } from "@mantine/core";
-import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
+import GameFigureImage from "@/components/game/figure/GameFigureImage";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
 import { useRouter } from "next/router";
@@ -28,15 +28,15 @@ const SearchBarSelectOption = ({ game }: ISearchBarSelectOptions) => {
                 <Box
                     w={{
                         base: "25vw",
-                        lg: "10vw",
+                        lg: "7vw",
                     }}
                     miw={{
                         base: "25vw",
-                        lg: "10vw",
+                        lg: "7vw",
                     }}
                     maw={{
                         base: "25vw",
-                        lg: "10vw",
+                        lg: "7vw",
                     }}
                 >
                     <GameFigureImage

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import {
     CollectionEntriesPaginatedResponseDto,
     CollectionEntry,
@@ -6,6 +6,7 @@ import {
 } from "@/wrapper/server";
 import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
+import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 /**
  * Returns a collection entry for the current user based on a game ID.
@@ -16,25 +17,33 @@ import { getCollectionEntriesByCollectionId } from "@/components/collection/coll
 export function useCollectionEntriesForCollectionId(
     collectionId: string,
     dto: GetCollectionEntriesDto,
-) {
-    return useQuery<CollectionEntriesPaginatedResponseDto | undefined>({
-        queryKey: ["collectionEntries", collectionId, dto],
-        queryFn: async () => {
-            if (!collectionId) {
-                return undefined;
-            }
-            return await getCollectionEntriesByCollectionId(
-                collectionId,
-                dto ?? {
-                    relations: {
-                        game: {
-                            cover: true,
+): ExtendedUseQueryResult<CollectionEntriesPaginatedResponseDto | undefined> {
+    const queryClient = useQueryClient();
+    const queryKey = ["collection-entries", collectionId, dto];
+    const invalidate = () => {
+        return queryClient.invalidateQueries([queryKey[0]]);
+    };
+    return {
+        ...useQuery({
+            queryKey,
+            queryFn: async () => {
+                if (!collectionId) {
+                    return undefined;
+                }
+                return await getCollectionEntriesByCollectionId(
+                    collectionId,
+                    dto ?? {
+                        relations: {
+                            game: {
+                                cover: true,
+                            },
                         },
                     },
-                },
-            );
-        },
-        staleTime: 60 * 1000,
-        enabled: !!collectionId,
-    });
+                );
+            },
+            enabled: !!collectionId,
+        }),
+        queryKey,
+        invalidate,
+    };
 }

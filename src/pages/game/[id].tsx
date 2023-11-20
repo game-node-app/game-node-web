@@ -9,15 +9,16 @@ import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import { NextPageContext } from "next";
 import {
     Game,
-    GameRepositoryRequestDto,
+    GameRepositoryFindOneDto,
     GameRepositoryService,
-    StatisticsService,
+    StatisticsActionDto,
+    StatisticsQueueService,
 } from "@/wrapper/server";
 import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
-import useUserId from "@/components/auth/hooks/useUserId";
+import sourceType = StatisticsActionDto.sourceType;
 
 export const getServerSideProps = async (context: NextPageContext) => {
-    const dto: GameRepositoryRequestDto = DEFAULT_GAME_INFO_VIEW_DTO;
+    const dto: GameRepositoryFindOneDto = DEFAULT_GAME_INFO_VIEW_DTO;
     const idAsNumber = parseInt(context.query.id as string, 10);
 
     const queryClient = new QueryClient();
@@ -34,11 +35,6 @@ export const getServerSideProps = async (context: NextPageContext) => {
         },
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
-    if (idAsNumber) {
-        StatisticsService.statisticsGameQueueControllerRegisterGameView(
-            idAsNumber,
-        );
-    }
 
     console.log("Prefetched game info for ID: " + context.query.id);
 
@@ -53,18 +49,26 @@ const GameInfoPage = () => {
     const router = useRouter();
     const { id } = router.query;
 
-    const registeredGameView = useRef(false);
+    /**
+     * Stores the path parameter "id" of the last registered game view.
+     */
+    const lastRegisteredGameView = useRef<string | undefined>(undefined);
 
     /**
      * Effect to add to game's statistics views.
      */
     useEffect(() => {
-        if (router.isReady && id != undefined && !registeredGameView.current) {
+        if (
+            router.isReady &&
+            id != undefined &&
+            lastRegisteredGameView.current != id
+        ) {
             const idAsNumber = parseInt(id as string, 10);
-            StatisticsService.statisticsGameQueueControllerRegisterGameView(
-                idAsNumber,
-            );
-            registeredGameView.current = true;
+            StatisticsQueueService.statisticsQueueControllerAddView({
+                sourceType: sourceType.GAME,
+                sourceId: `${idAsNumber}`,
+            });
+            lastRegisteredGameView.current = id as string;
         }
     }, [id, router]);
 
@@ -86,10 +90,10 @@ const GameInfoPage = () => {
             <Container fluid mt={"30px"} p={0}>
                 <GameInfoView id={idAsNumber} />
             </Container>
-            <Container fluid mt={"60px"} p={0}>
+            <Container fluid mt={"30px"} p={0}>
                 <GameInfoReviewView gameId={idAsNumber} />
             </Container>
-            <Container fluid mt={"120px"} p={0}>
+            <Container fluid mt={"30px"} p={0}>
                 <GameExtraInfoView id={idAsNumber} />
             </Container>
         </Container>

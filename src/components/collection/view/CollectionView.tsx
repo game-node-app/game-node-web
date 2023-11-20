@@ -12,15 +12,18 @@ import {
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
 import { Collection, GetCollectionEntriesDto } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
-import { IconDots } from "@tabler/icons-react";
+import { IconDots, IconReplace } from "@tabler/icons-react";
 import CollectionEntriesView from "@/components/collection/collection-entry/view/CollectionEntriesView";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CollectionCreateOrUpdateModal from "@/components/collection/form/modal/CollectionCreateOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
+import CollectionEntriesMoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntriesMoveModal";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface ICollectionViewProps {
+    libraryUserId: string;
     collectionId: string;
 }
 
@@ -45,13 +48,19 @@ const DEFAULT_REQUEST_PARAMS: GetCollectionEntriesDto = {
     },
 };
 
-const CollectionView = ({ collectionId }: ICollectionViewProps) => {
-    const [modalOpened, modalUtils] = useDisclosure();
+const CollectionView = ({
+    collectionId,
+    libraryUserId,
+}: ICollectionViewProps) => {
+    const [createUpdateModalOpened, createUpdateModalUtils] = useDisclosure();
+    const [moveModalOpened, moveModalUtils] = useDisclosure();
 
     const { register, watch, setValue } = useForm<CollectionViewFormValues>({
         mode: "onSubmit",
         resolver: zodResolver(CollectionViewFormSchema),
     });
+
+    const currentUserId = useUserId();
 
     const formValues = watch();
 
@@ -65,8 +74,9 @@ const CollectionView = ({ collectionId }: ICollectionViewProps) => {
         };
     }, [formValues]);
 
-    const collectionQuery = useCollection(collectionId);
+    const collectionQuery = useCollection(collectionId, {});
     const collection = collectionQuery.data;
+    const isOwnCollection = libraryUserId === currentUserId;
     const collectionEntriesQuery = useCollectionEntriesForCollectionId(
         collectionId,
         requestParams,
@@ -76,26 +86,40 @@ const CollectionView = ({ collectionId }: ICollectionViewProps) => {
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
                 <Group className="w-[calc(100%-2rem)] mt-8 flex-nowrap justify-between">
                     <CollectionCreateOrUpdateModal
-                        opened={modalOpened}
-                        onClose={() => modalUtils.close()}
+                        opened={createUpdateModalOpened}
+                        onClose={() => createUpdateModalUtils.close()}
                         existingCollectionId={collectionId}
+                    />
+                    <CollectionEntriesMoveModal
+                        collectionId={collectionId}
+                        opened={moveModalOpened}
+                        onClose={moveModalUtils.close}
                     />
                     <Stack w={{ base: "70%", lg: "30%" }}>
                         <Title
                             size={"h3"}
                             className={
-                                "w-fit underline decoration-dotted decoration-2 decoration-stone-700"
+                                "w-full break-all underline decoration-dotted decoration-2 decoration-stone-700"
                             }
                         >
                             {collection?.name}
                         </Title>
-                        <Text c={"dimmed"}>
+                        <Text c={"dimmed"} w={"100%"} className={"break-all"}>
                             {collectionQuery.data?.description}
                         </Text>
                     </Stack>
-                    <ActionIcon onClick={() => modalUtils.open()}>
-                        <IconDots size={"1.2rem"} />
-                    </ActionIcon>
+                    {isOwnCollection && (
+                        <Group>
+                            <ActionIcon
+                                onClick={() => createUpdateModalUtils.open()}
+                            >
+                                <IconDots size={"1.2rem"} />
+                            </ActionIcon>
+                            <ActionIcon onClick={() => moveModalUtils.open()}>
+                                <IconReplace size={"1.2rem"} />
+                            </ActionIcon>
+                        </Group>
+                    )}
                 </Group>
                 <Divider
                     className={"w-[calc(100%-2rem)]"}

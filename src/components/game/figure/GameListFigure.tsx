@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { PropsWithChildren, useMemo, useState } from "react";
 import { AspectRatio, Box, Group, Stack, Text, Title } from "@mantine/core";
 import Image from "next/image";
 import GameFigureImage, {
     IGameFigureProps,
-} from "@/components/game/view/figure/GameFigureImage";
+} from "@/components/game/figure/GameFigureImage";
 import useOnMobile from "@/hooks/useOnMobile";
 import Link from "next/link";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
@@ -14,9 +14,13 @@ import {
     IGamePlatformInfo,
 } from "@/components/game/util/getGamePlatformInfo";
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
+import { Game } from "@/wrapper/server";
+import { getGameSpecialCategoryText } from "@/components/game/util/getGameSpecialCategoryText";
 
-interface IGameListFigureProps extends IGameFigureProps {
+interface IGameListFigureProps extends PropsWithChildren {
     game: TGameOrSearchGame;
+    badgesBuilder?: (game: TGameOrSearchGame) => React.ReactNode[] | null;
+    figureProps?: Partial<IGameFigureProps>;
 }
 
 const buildPlatformBadges = (platforms: IGamePlatformInfo) => {
@@ -30,7 +34,7 @@ const buildPlatformBadges = (platforms: IGamePlatformInfo) => {
                 return (
                     <GameInfoPlatformBadge
                         key={index}
-                        platform={platformAbbreviation}
+                        platformAbbreviation={platformAbbreviation}
                     />
                 );
             },
@@ -39,7 +43,12 @@ const buildPlatformBadges = (platforms: IGamePlatformInfo) => {
     return null;
 };
 
-const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
+const GameListFigure = ({
+    game,
+    figureProps,
+    badgesBuilder,
+    children,
+}: IGameListFigureProps) => {
     let name = game.name ?? "Unknown";
     const onMobile = useOnMobile();
     if (onMobile) {
@@ -47,11 +56,23 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
             name = name.substring(0, 30) + "...";
         }
     }
-    const platforms = getGamePlatformInfo(game);
+
+    const platformInfo = getGamePlatformInfo(game);
+    const badgesToUse = useMemo(() => {
+        if (badgesBuilder) {
+            return badgesBuilder(game);
+        }
+        return buildPlatformBadges(platformInfo);
+    }, [badgesBuilder, game, platformInfo]);
     const platformAbbreviationsNames =
-        platforms.platformsAbbreviations?.join(", ");
+        platformInfo.platformsAbbreviations?.join(", ");
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
+    const summary = game.summary ? game.summary.slice(0, 160) : undefined;
+    const categoryText = useMemo(
+        () => getGameSpecialCategoryText(game?.category),
+        [game],
+    );
 
     return (
         <Group
@@ -63,7 +84,6 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
         >
             <Box className="h-auto w-2/5 lg:w-1/6">
                 <GameFigureImage
-                    {...others}
                     game={game}
                     href={`/game/${game.id}`}
                     imageProps={{
@@ -74,6 +94,7 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
                             },
                         },
                     }}
+                    {...figureProps}
                 />
             </Box>
             <Stack
@@ -95,10 +116,9 @@ const GameListFigure = ({ game, ...others }: IGameListFigureProps) => {
                         )}
                     </Text>
                     <Group w={"100%"} justify={"start"} wrap={"wrap"}>
-                        {buildPlatformBadges(platforms)}
+                        {badgesToUse}
                     </Group>
                 </Stack>
-
                 <Text size="sm" className="text-gray-300">
                     {genreNames}
                 </Text>

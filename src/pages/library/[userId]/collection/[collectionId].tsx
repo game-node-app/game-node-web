@@ -11,7 +11,10 @@ const Collection = () => {
             userId={userId as string | undefined}
             collectionId={collectionId as string | undefined}
         >
-            <CollectionView collectionId={collectionId as string} />
+            <CollectionView
+                libraryUserId={userId as string}
+                collectionId={collectionId as string}
+            />
         </LibraryView>
     );
 };

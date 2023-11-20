@@ -38,8 +38,9 @@
     align-items: center;
     width: 100%;
     font-size: var(--mantine-font-size-xs);
-    padding: rem(8px) var(--mantine-spacing-xs);
+    margin-left: var(--mantine-spacing-sm);
     border-radius: var(--mantine-radius-sm);
+    max-width: 100%;
     font-weight: 500;
     color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
 

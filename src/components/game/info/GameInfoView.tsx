@@ -1,25 +1,25 @@
 import React, { useEffect, useMemo } from "react";
 import { Flex, Grid, Paper, Skeleton, Stack, Title } from "@mantine/core";
-import GameFigureImage from "@/components/game/view/figure/GameFigureImage";
+import GameFigureImage from "@/components/game/figure/GameFigureImage";
 import GameInfoDetails from "@/components/game/info/GameInfoDetails";
 import useOnMobile from "@/hooks/useOnMobile";
 import GameInfoActions from "@/components/game/info/GameInfoActions";
-import { Game, GameRepositoryRequestDto } from "@/wrapper/server";
+import { Game, GameRepositoryFindOneDto } from "@/wrapper/server";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { shuffleArray } from "@/util/shuffleArray";
-import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import Break from "@/components/general/Break";
-import { useQuery } from "react-query";
-import { getGameInfo } from "@/components/game/util/getGameInfo";
 import { useGame } from "@/components/game/hooks/useGame";
 
-export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryRequestDto = {
+export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryFindOneDto = {
     relations: {
         cover: true,
         genres: true,
         platforms: true,
+        gameModes: true,
+        keywords: true,
+        themes: true,
         screenshots: true,
         artworks: true,
     },
@@ -56,6 +56,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
             return getCombinedImages(game);
         }
     }, [game]);
+    console.log(game);
 
     return (
         <Paper w={"100%"} h={"100%"}>

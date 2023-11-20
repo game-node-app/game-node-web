@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Container, Stack } from "@mantine/core";
+import { Box, Container, Flex, Group, Stack } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import {
 import { SearchService } from "@/wrapper/search";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
+import GameSearchLandingView from "@/components/game/search/view/GameSearchLandingView";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -52,7 +53,11 @@ const Index = () => {
 
     const searchQuery = useSearchGames(searchParameters, isQueryEnabled);
 
-    const onSubmit = (data: TSearchFormValues) => {
+    const onSubmit = (data: TSearchFormValues, resetForm: boolean) => {
+        // This will clear previous page values, preventing them from affecting other queries.
+        if (resetForm) {
+            setValue("page", 1);
+        }
         const page = data.page || 1;
         setSearchParameters({
             ...DEFAULT_SEARCH_PARAMETERS,
@@ -69,22 +74,11 @@ const Index = () => {
             pos={"relative"}
             className="bg-mobile lg:bg-desktop bg-cover bg-fixed"
         >
-            <Box
-                pos={"absolute"}
-                h={"80vh"}
-                w={"100%"}
-                className=""
-                style={{ zIndex: -1 }}
-            ></Box>
             <Stack align="center" justify="center" w={"100%"}>
-                <Box
-                    className={`w-5/6 flex justify-center ${
-                        searchQuery.isSuccess ? "mt-12" : "mt-[10%]"
-                    }`}
-                >
+                <Box className={`lg:w-5/6 flex justify-center mt-12`}>
                     <form
                         className="w-full h-full"
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={handleSubmit((data) => onSubmit(data, true))}
                     >
                         <SearchBar
                             label={"Search for games"}
@@ -98,21 +92,24 @@ const Index = () => {
                         />
                     </form>
                 </Box>
+                <Box className={"w-full flex justify-center h-full lg:w-5/6"}>
+                    <GameSearchResultScreen
+                        enabled={isQueryEnabled}
+                        isError={searchQuery.isError}
+                        isLoading={searchQuery.isLoading}
+                        results={searchQuery.data?.data?.items}
+                        page={watch("page")}
+                        paginationInfo={searchQuery.data?.pagination}
+                        onPaginationChange={(page) => {
+                            setValue("page", page);
+                            handleSubmit((data) => onSubmit(data, false))();
+                        }}
+                    />
+                    <GameSearchLandingView
+                        enabled={searchQuery.data == undefined}
+                    />
+                </Box>
             </Stack>
-            <Container fluid my={"3rem"}>
-                <GameSearchResultScreen
-                    enabled={isQueryEnabled}
-                    isError={searchQuery.isError}
-                    isLoading={searchQuery.isLoading}
-                    isFetching={searchQuery.isFetching}
-                    results={searchQuery.data?.data?.items}
-                    paginationInfo={searchQuery.data?.pagination}
-                    onPaginationChange={(page) => {
-                        setValue("page", page);
-                        handleSubmit(onSubmit);
-                    }}
-                />
-            </Container>
         </Container>
     );
 };

@@ -1,13 +1,13 @@
 import { useQuery, UseQueryResult } from "react-query";
 import {
     Game,
-    GameRepositoryRequestDto,
+    GameRepositoryFindOneDto,
     GameRepositoryService,
 } from "@/wrapper/server";
 
 export function useGame(
     id: number,
-    dto: GameRepositoryRequestDto,
+    dto: GameRepositoryFindOneDto,
 ): UseQueryResult<Game | undefined> {
     return useQuery<Game | undefined>({
         queryKey: ["game", id, dto],
