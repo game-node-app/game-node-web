@@ -21,7 +21,7 @@ const buildGamesFigures = (games: Game[] | undefined) => {
                 <Carousel.Slide key={similarGame.id}>
                     <GameGridFigure
                         game={similarGame}
-                        size={ImageSize.COVER_BIG}
+                        figureProps={{ size: ImageSize.COVER_BIG }}
                     />
                 </Carousel.Slide>
             );

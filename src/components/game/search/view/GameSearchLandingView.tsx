@@ -12,8 +12,7 @@ interface IProps {
 }
 
 const GameSearchLandingView = ({ enabled }: IProps) => {
-    const onMobile = useOnMobile();
-    const limit = onMobile ? 4 : 5;
+    const limit = 6;
     const trendingGames = useTrendingItems({
         sourceType: "game",
         offset: 0,
@@ -52,7 +51,7 @@ const GameSearchLandingView = ({ enabled }: IProps) => {
             <DetailsBox
                 title={"Trending"}
                 content={
-                    <SimpleGrid cols={{ base: 2, lg: 5 }} h={"100%"} w={"100%"}>
+                    <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
                         {trendingGames.isLoading || games.isLoading
                             ? elementsSkeletons
                             : null}
@@ -61,7 +60,7 @@ const GameSearchLandingView = ({ enabled }: IProps) => {
                                 <GameGridFigure
                                     key={game.id}
                                     game={game}
-                                    size={ImageSize.COVER_BIG}
+                                    figureProps={{ size: ImageSize.COVER_BIG }}
                                 />
                             );
                         })}

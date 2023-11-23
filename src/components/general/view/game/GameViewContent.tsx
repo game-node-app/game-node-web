@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Box, Divider, SimpleGrid, SimpleGridProps } from "@mantine/core";
 import { GameViewContext } from "@/components/general/view/game/GameView";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
@@ -21,12 +21,11 @@ const GameViewContent = ({
 }: IMetadataGridContentProps) => {
     const onMobile = useOnMobile();
     const { layout } = useContext(GameViewContext);
-    const buildColumns = () => {
+    const columns = useMemo(() => {
         if (items == null || items.length === 0) {
             return null;
         }
-
-        return items.map((item: SearchGame) => {
+        return items.map((item) => {
             if (layout === "list") {
                 return (
                     <Box w={"100%"} key={item.id}>
@@ -45,12 +44,14 @@ const GameViewContent = ({
             return (
                 <GameGridFigure
                     key={item.id}
-                    size={ImageSize.COVER_BIG}
+                    figureProps={{
+                        size: ImageSize.COVER_BIG,
+                    }}
                     game={item}
                 />
             );
         });
-    };
+    }, [items, layout, badgesBuilder]);
 
     return (
         <SimpleGrid
@@ -63,7 +64,7 @@ const GameViewContent = ({
             h={"100%"}
             {...others}
         >
-            {buildColumns()}
+            {columns}
         </SimpleGrid>
     );
 };

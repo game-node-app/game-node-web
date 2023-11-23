@@ -26,6 +26,7 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "react-query";
 import { notifications } from "@mantine/notifications";
+import { useGames } from "@/components/game/hooks/useGames";
 
 const CollectionEntriesMoveFormSchema = z.object({
     gameIds: z.array(z.number()).min(1).default([]),
@@ -70,15 +71,9 @@ const CollectionEntriesMoveForm = ({
         });
     const userId = useUserId();
     const libraryQuery = useUserLibrary(userId);
-    const collectionsEntriesQuery = useCollectionEntriesForCollectionId(
+    const collectionsEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
-        {
-            relations: {
-                game: true,
-                ownedPlatforms: true,
-            },
-        },
-    );
+    });
     const gamesSelectOptions = useMemo<ComboboxItem[] | undefined>(():
         | ComboboxItem[]
         | undefined => {
@@ -127,7 +122,6 @@ const CollectionEntriesMoveForm = ({
                         gameIds.includes(entry.game.id)
                     );
                 });
-            console.log(data, relevantCollectionEntries);
             if (
                 relevantCollectionEntries == undefined ||
                 relevantCollectionEntries.length === 0

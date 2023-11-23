@@ -1,23 +1,24 @@
 import {
     CollectionEntriesPaginatedResponseDto,
     CollectionsEntriesService,
-    GetCollectionEntriesDto,
-    PaginationInfo,
 } from "@/wrapper/server";
 
 /**
  * Returns a list CollectionEntry entity, given any is available in the user's library.
  * @param collectionId
- * @param dto
+ * @param offset
+ * @param limit
  */
 export async function getCollectionEntriesByCollectionId(
     collectionId: string,
-    dto: GetCollectionEntriesDto,
+    offset?: number,
+    limit?: number,
 ): Promise<CollectionEntriesPaginatedResponseDto | undefined> {
     try {
         return await CollectionsEntriesService.collectionsEntriesControllerFindAllByCollectionId(
             collectionId,
-            dto,
+            offset,
+            limit,
         );
     } catch (e) {
         console.error(e);

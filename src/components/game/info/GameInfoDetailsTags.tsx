@@ -31,7 +31,7 @@ interface IProps {
  * @param game
  * @constructor
  */
-const GameInfoTags = ({ game }: IProps) => {
+const GameInfoDetailsTags = ({ game }: IProps) => {
     const tags = useMemo(() => getCombinedTags(game), [game]);
     if (tags == undefined || tags.length === 0) return "Empty";
 
@@ -45,4 +45,4 @@ const GameInfoTags = ({ game }: IProps) => {
     );
 };
 
-export default GameInfoTags;
+export default GameInfoDetailsTags;

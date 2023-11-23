@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQuery } from "react-query";
-import GameSearchResultScreen from "@/components/game/search/result/GameSearchResultScreen";
+import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
 import {
     GameSearchRequestDto,
     GameSearchResponseDto,
@@ -93,7 +93,7 @@ const Index = () => {
                     </form>
                 </Box>
                 <Box className={"w-full flex justify-center h-full lg:w-5/6"}>
-                    <GameSearchResultScreen
+                    <GameSearchResultView
                         enabled={isQueryEnabled}
                         isError={searchQuery.isError}
                         isLoading={searchQuery.isLoading}

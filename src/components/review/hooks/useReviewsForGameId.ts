@@ -1,19 +1,16 @@
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
-import {
-    FindReviewDto,
-    FindReviewPaginatedDto,
-    Review,
-    ReviewsService,
-} from "@/wrapper/server";
+import { FindReviewPaginatedDto, ReviewsService } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "react-query";
+import { TBasePaginationRequest } from "@/util/types/pagination";
 
 export default function useReviewsForGameId(
     gameId: number,
-    dto?: FindReviewDto,
+    dto?: TBasePaginationRequest,
 ): ExtendedUseQueryResult<FindReviewPaginatedDto> {
     const queryClient = useQueryClient();
     const queryKey = ["review", gameId, dto];
-    const invalidate = () => queryClient.invalidateQueries(queryKey);
+    const invalidate = () =>
+        queryClient.invalidateQueries(queryKey.slice(0, 2));
 
     return {
         ...useQuery({
@@ -24,7 +21,8 @@ export default function useReviewsForGameId(
                 try {
                     return await ReviewsService.reviewsControllerFindAllByGameId(
                         gameId,
-                        dto ?? {},
+                        dto?.offset,
+                        dto?.limit,
                     );
                 } catch (e) {
                     return undefined;

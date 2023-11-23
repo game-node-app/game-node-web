@@ -45,9 +45,9 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
                 content={
                     game.isLoading ? (
                         <Skeleton className={"w-64 h-4"} />
-                    ) : (
+                    ) : developersNames && developersNames.length > 0 ? (
                         developersNames
-                    )
+                    ) : undefined
                 }
             />
             <DetailsBox
@@ -55,9 +55,9 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
                 content={
                     game.isLoading ? (
                         <Skeleton className={"w-64 h-4"} />
-                    ) : (
+                    ) : publishersNames && publishersNames.length > 0 ? (
                         publishersNames
-                    )
+                    ) : undefined
                 }
             />
         </>

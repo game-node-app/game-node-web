@@ -16,14 +16,6 @@ export function useUserLibrary(
                 if (!userId) return undefined;
                 return LibrariesService.librariesControllerFindOneByIdWithPermissions(
                     userId,
-                    /**
-                     * Do not load collection's entries here, use useCollectionEntries or useCollection.ts instead.
-                     */
-                    {
-                        relations: {
-                            collections: true,
-                        },
-                    },
                 );
             },
             enabled: !!userId,

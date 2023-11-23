@@ -1,17 +1,12 @@
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
-import {
-    Collection,
-    CollectionsService,
-    GetCollectionDto,
-} from "@/wrapper/server";
+import { Collection, CollectionsService } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "react-query";
 
 export function useCollection(
     collectionId: string | undefined,
-    dto: GetCollectionDto,
 ): ExtendedUseQueryResult<Collection> {
     const queryClient = useQueryClient();
-    const queryKey = ["collection", collectionId, dto];
+    const queryKey = ["collection", collectionId];
     const invalidate = () =>
         queryClient.invalidateQueries([queryKey[0], queryKey[1]]);
     return {
@@ -24,7 +19,6 @@ export function useCollection(
 
                 return CollectionsService.collectionsControllerFindOneByIdWithPermissions(
                     collectionId,
-                    dto ?? {},
                 );
             },
         }),

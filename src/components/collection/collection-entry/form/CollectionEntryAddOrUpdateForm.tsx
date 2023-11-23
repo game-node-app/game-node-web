@@ -126,7 +126,6 @@ const CollectionEntryAddOrUpdateForm = ({
         }
         return buildPlatformsOptions(gamePlatformsQuery.data);
     }, [game, gamePlatformsQuery.data]);
-    console.log(platformOptions);
 
     const isUpdateAction =
         collectionEntryQuery.data != undefined &&
@@ -139,7 +138,9 @@ const CollectionEntryAddOrUpdateForm = ({
                 parseInt(id),
             );
             const isFavorite =
-                isUpdateAction && collectionEntryQuery.data![0].isFavorite;
+                isUpdateAction &&
+                collectionEntryQuery.data != undefined &&
+                collectionEntryQuery.data.some((entry) => entry.isFavorite);
 
             await CollectionsEntriesService.collectionsEntriesControllerCreate({
                 collectionIds: collectionIds,

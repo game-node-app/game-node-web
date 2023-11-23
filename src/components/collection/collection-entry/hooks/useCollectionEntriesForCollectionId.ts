@@ -2,24 +2,44 @@ import { useQuery, useQueryClient } from "react-query";
 import {
     CollectionEntriesPaginatedResponseDto,
     CollectionEntry,
-    GetCollectionEntriesDto,
+    Game,
+    GameRepositoryFindAllDto,
+    GameRepositoryService,
 } from "@/wrapper/server";
-import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
+interface UseCollectionEntriesForCollectionIdProps {
+    collectionId: string;
+    limit?: number;
+    offset?: number;
+    gameRelations?: Record<string, object | boolean>;
+}
+
 /**
- * Returns a collection entry for the current user based on a game ID.
- * The collection entry will be undefined if the user doesn't have the game in their library.
+ * Returns a list of collection entries for the current user based on a collection id.
+ * Automatically aggregates games.
  * @param collectionId
- * @param dto
+ * @param limit
+ * @param offset
+ * @param gameRelations
  */
-export function useCollectionEntriesForCollectionId(
-    collectionId: string,
-    dto: GetCollectionEntriesDto,
-): ExtendedUseQueryResult<CollectionEntriesPaginatedResponseDto | undefined> {
+export function useCollectionEntriesForCollectionId({
+    collectionId,
+    limit,
+    offset,
+    gameRelations,
+}: UseCollectionEntriesForCollectionIdProps): ExtendedUseQueryResult<
+    CollectionEntriesPaginatedResponseDto | undefined
+> {
     const queryClient = useQueryClient();
-    const queryKey = ["collection-entries", collectionId, dto];
+    const queryKey = [
+        "collection-entries",
+        collectionId,
+        offset,
+        limit,
+        gameRelations,
+    ];
     const invalidate = () => {
         return queryClient.invalidateQueries([queryKey[0]]);
     };
@@ -30,18 +50,43 @@ export function useCollectionEntriesForCollectionId(
                 if (!collectionId) {
                     return undefined;
                 }
-                return await getCollectionEntriesByCollectionId(
-                    collectionId,
-                    dto ?? {
-                        relations: {
-                            game: {
-                                cover: true,
+                const collectionEntriesQuery =
+                    await getCollectionEntriesByCollectionId(
+                        collectionId,
+                        offset,
+                        limit,
+                    );
+
+                if (
+                    collectionEntriesQuery &&
+                    collectionEntriesQuery.data &&
+                    collectionEntriesQuery.data.length > 0
+                ) {
+                    const gameIds = collectionEntriesQuery.data.map(
+                        (entry) => entry.gameId,
+                    );
+
+                    const gamesQuery =
+                        await GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                            {
+                                gameIds: gameIds,
+                                limit,
+                                relations: gameRelations,
                             },
-                        },
-                    },
-                );
+                        );
+                    collectionEntriesQuery.data =
+                        collectionEntriesQuery.data.map((entry) => {
+                            // Associates game with current entry
+                            entry.game = gamesQuery.data.find(
+                                (game) => game.id === entry.gameId,
+                            )!;
+                            return entry;
+                        });
+                }
+                return collectionEntriesQuery;
             },
             enabled: !!collectionId,
+            keepPreviousData: true,
         }),
         queryKey,
         invalidate,

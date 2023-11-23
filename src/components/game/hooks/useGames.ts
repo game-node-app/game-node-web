@@ -19,7 +19,7 @@ export function useGames(
         ...useQuery({
             queryKey: queryKey,
             queryFn: () => {
-                if (dto == undefined) {
+                if (dto == undefined || dto.gameIds.length === 0) {
                     return undefined;
                 }
 

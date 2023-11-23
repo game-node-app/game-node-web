@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { CollectionEntry } from "@/wrapper/server";
 import { Container, Stack } from "@mantine/core";
 import GameView from "@/components/general/view/game/GameView";
-import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
+import GameSearchResultErrorMessage from "@/components/game/search/view/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { Box, Space } from "@mantine/core";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
@@ -27,24 +27,32 @@ const badgesBuilder = (
     if (relevantEntry == undefined) return null;
     const ownedPlatforms = relevantEntry.ownedPlatforms;
     const platformInfo = getGamePlatformInfo(game);
+    let platformsAbbreviations: string[] | undefined = undefined;
     if (
-        platformInfo.platformsAbbreviations == undefined ||
-        platformInfo.platformsAbbreviations.length === 0
+        platformInfo.platformsAbbreviations &&
+        platformInfo.platformsAbbreviations.length > 0
     ) {
+        platformsAbbreviations = platformInfo.platformsAbbreviations;
+    } else if (ownedPlatforms && ownedPlatforms.length > 0) {
+        platformsAbbreviations = ownedPlatforms.map(
+            (platform) => platform.abbreviation,
+        );
+    } else {
         return null;
     }
 
-    const sortedPlatformsAbbreviations =
-        platformInfo.platformsAbbreviations?.toSorted((a, b) => {
+    const sortedPlatformsAbbreviations = platformsAbbreviations?.toSorted(
+        (a, b) => {
             if (
                 ownedPlatforms.some((platform) => platform.abbreviation === a)
             ) {
                 return -1;
             }
             return 1;
-        });
+        },
+    );
 
-    return sortedPlatformsAbbreviations.map((platformAbbreviation, index) => {
+    return sortedPlatformsAbbreviations?.map((platformAbbreviation, index) => {
         const isPlatformOwned =
             platformInfo.platformsIds &&
             ownedPlatforms.some(
@@ -67,15 +75,12 @@ const CollectionEntriesView = ({
     isLoading,
     paginationInfo,
     onPaginationChange,
+    page,
 }: ICollectionEntriesViewProps) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
     const entriesGames = useMemo(() => {
         return entries?.map((entry) => entry.game);
     }, [entries]);
-    const platformBadges = useMemo(() => {
-        if (entriesGames == undefined || entriesGames.length === 0)
-            return undefined;
-    }, [entriesGames]);
 
     const render = () => {
         if (isError) {
@@ -115,6 +120,7 @@ const CollectionEntriesView = ({
                     />
                     <Space h={"2rem"} />
                     <GameView.Pagination
+                        page={page}
                         paginationInfo={paginationInfo}
                         onPaginationChange={onPaginationChange}
                     />

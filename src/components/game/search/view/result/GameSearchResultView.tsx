@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import GameView from "@/components/general/view/game/GameView";
 import { Box, Container, Flex, Space, Stack } from "@mantine/core";
-import GameSearchResultErrorMessage from "@/components/game/search/result/GameSearchResultErrorMessage";
+import GameSearchResultErrorMessage from "@/components/game/search/view/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
@@ -15,7 +15,7 @@ interface ISearchResultScreenProps extends IGameViewPaginationProps {
     results: SearchGame[] | undefined;
 }
 
-const GameSearchResultScreen = ({
+const GameSearchResultView = ({
     enabled,
     isError,
     isLoading,
@@ -24,7 +24,6 @@ const GameSearchResultScreen = ({
     onPaginationChange,
     page,
 }: ISearchResultScreenProps) => {
-    const onMobile = useOnMobile();
     const [layout, setLayout] = useState<"grid" | "list">("grid");
 
     const render = () => {
@@ -75,4 +74,4 @@ const GameSearchResultScreen = ({
     return <GameView layout={layout}>{render()}</GameView>;
 };
 
-export default GameSearchResultScreen;
+export default GameSearchResultView;

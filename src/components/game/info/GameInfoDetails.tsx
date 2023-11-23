@@ -8,7 +8,7 @@ import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 import GameInfoDetailsDeveloperInfo from "@/components/game/info/GameInfoDetailsDeveloperInfo";
 import { getGameThemes } from "@/components/game/util/getGameThemes";
 import { shuffleArray } from "@/util/shuffleArray";
-import GameInfoTags from "@/components/game/info/GameInfoTags";
+import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
 
 interface IGameInfoDetailsProps {
     game: Game | undefined;
@@ -31,7 +31,7 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                 <GameInfoDetailsDeveloperInfo gameId={game.id} />
                 <DetailsBox
                     title={"Tags"}
-                    content={<GameInfoTags game={game} />}
+                    content={<GameInfoDetailsTags game={game} />}
                 />
                 <DetailsBox title={"Summary"} content={game.summary} />
                 <DetailsBox

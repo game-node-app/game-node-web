@@ -30,7 +30,6 @@ const LibraryView = ({ children, userId, collectionId }: ILibraryViewProps) => {
                         userId={userId}
                         value={collectionId}
                         onChange={(value) => {
-                            console.log(value);
                             if (
                                 collectionId != undefined &&
                                 value == undefined

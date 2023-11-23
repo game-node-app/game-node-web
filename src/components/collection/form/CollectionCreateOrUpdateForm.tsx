@@ -46,7 +46,7 @@ const CollectionCreateOrUpdateForm = ({
     const userId = session.loading ? undefined : session.userId;
     const userLibraryQuery = useUserLibrary(userId);
 
-    const collectionQuery = useCollection(existingCollectionId, {});
+    const collectionQuery = useCollection(existingCollectionId);
     const existingCollection = collectionQuery.data;
 
     const { setValue, watch, handleSubmit, register, formState } =

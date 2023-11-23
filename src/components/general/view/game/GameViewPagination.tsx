@@ -1,11 +1,11 @@
 import React from "react";
 import { Center, Pagination, PaginationProps } from "@mantine/core";
 import { PaginationInfo } from "@/wrapper/server";
-import { PaginationInfoDto } from "@/util/types/pagination";
+import { TPaginationInfoDto } from "@/util/types/pagination";
 
 export interface IGameViewPaginationProps {
     page: number;
-    paginationInfo: PaginationInfoDto | undefined;
+    paginationInfo: TPaginationInfoDto | undefined;
     onPaginationChange: (page: number) => void;
 }
 

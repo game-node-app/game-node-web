@@ -4,16 +4,24 @@ import GameFigureImage, {
 } from "@/components/game/figure/GameFigureImage";
 import { Badge } from "@mantine/core";
 import { getGameSpecialCategoryText } from "@/components/game/util/getGameSpecialCategoryText";
+import { TGameOrSearchGame } from "@/components/game/util/types";
 
-interface IGameGridFigureProps extends IGameFigureProps {}
+interface IGameGridFigureProps {
+    game: TGameOrSearchGame;
+    figureProps?: Partial<IGameFigureProps>;
+}
 
-const GameGridFigure = ({ game, ...others }: IGameGridFigureProps) => {
+const GameGridFigure = ({ game, figureProps }: IGameGridFigureProps) => {
     const categoryText = useMemo(
         () => getGameSpecialCategoryText(game?.category),
         [game],
     );
     return (
-        <GameFigureImage {...others} game={game} href={`/game/${game?.id}`}>
+        <GameFigureImage
+            {...figureProps}
+            game={game}
+            href={`/game/${game?.id}`}
+        >
             {categoryText && (
                 <Badge
                     className={

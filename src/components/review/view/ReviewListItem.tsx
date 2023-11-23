@@ -18,7 +18,7 @@ interface IReviewListViewProps {
 const UserAvatarGroup = ({ profile }: { profile: Profile }) => {
     const imageSrc = undefined;
     return (
-        <Group wrap={"wrap"}>
+        <Group wrap={"wrap"} justify={"center"}>
             <UserAvatar src={imageSrc} />
             <Text>{profile.username}</Text>
         </Group>
@@ -43,6 +43,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
             extensions: REVIEW_EDITOR_EXTENSIONS,
             content: contentToUse,
             editable: false,
+            injectCSS: true,
         },
         [contentToUse],
     );
@@ -65,7 +66,10 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                         <Rating value={review.rating} />
                     </Group>
                 ) : (
-                    <UserAvatarGroup profile={review.profile} />
+                    <Stack justify={"center"} align={"center"}>
+                        <UserAvatarGroup profile={review.profile} />
+                        <Rating value={review.rating} />
+                    </Stack>
                 )}
                 <EditorContent
                     editor={nonEditableEditor}

@@ -10,7 +10,7 @@ import {
     Title,
 } from "@mantine/core";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
-import { Collection, GetCollectionEntriesDto } from "@/wrapper/server";
+import { Collection } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import { IconDots, IconReplace } from "@tabler/icons-react";
 import CollectionEntriesView from "@/components/collection/collection-entry/view/CollectionEntriesView";
@@ -21,6 +21,7 @@ import CollectionCreateOrUpdateModal from "@/components/collection/form/modal/Co
 import { useDisclosure } from "@mantine/hooks";
 import CollectionEntriesMoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntriesMoveModal";
 import useUserId from "@/components/auth/hooks/useUserId";
+import { useGames } from "@/components/game/hooks/useGames";
 
 interface ICollectionViewProps {
     libraryUserId: string;
@@ -28,24 +29,16 @@ interface ICollectionViewProps {
 }
 
 const CollectionViewFormSchema = z.object({
-    search: z.string().optional(),
     page: z.number().optional().default(1),
 });
 
 type CollectionViewFormValues = z.infer<typeof CollectionViewFormSchema>;
 
-const DEFAULT_REQUEST_PARAMS: GetCollectionEntriesDto = {
-    limit: 20,
+const DEFAULT_LIMIT = 10;
+
+const DEFAULT_REQUEST_PARAMS = {
+    limit: DEFAULT_LIMIT,
     offset: 0,
-    search: undefined,
-    relations: {
-        game: {
-            cover: true,
-            genres: true,
-            platforms: true,
-        },
-        ownedPlatforms: true,
-    },
 };
 
 const CollectionView = ({
@@ -58,29 +51,36 @@ const CollectionView = ({
     const { register, watch, setValue } = useForm<CollectionViewFormValues>({
         mode: "onSubmit",
         resolver: zodResolver(CollectionViewFormSchema),
+        defaultValues: {
+            page: 1,
+        },
     });
 
     const currentUserId = useUserId();
 
-    const formValues = watch();
+    const formPage = watch("page");
 
-    const requestParams: GetCollectionEntriesDto = useMemo(() => {
-        const page = formValues.page || 1;
-        const offset = (page - 1) * DEFAULT_REQUEST_PARAMS.limit!;
+    const requestParams = useMemo(() => {
+        const page = formPage || 1;
+        const offset = (formPage - 1) * DEFAULT_LIMIT;
         return {
             ...DEFAULT_REQUEST_PARAMS,
-            ...formValues,
             offset,
         };
-    }, [formValues]);
+    }, [formPage]);
 
-    const collectionQuery = useCollection(collectionId, {});
+    const collectionQuery = useCollection(collectionId);
     const collection = collectionQuery.data;
     const isOwnCollection = libraryUserId === currentUserId;
-    const collectionEntriesQuery = useCollectionEntriesForCollectionId(
+    const collectionEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
-        requestParams,
-    );
+        offset: requestParams.offset,
+        limit: requestParams.limit,
+        gameRelations: {
+            cover: true,
+            platforms: true,
+        },
+    });
     return (
         <Container fluid p={0} h={"100%"}>
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
@@ -132,6 +132,7 @@ const CollectionView = ({
                     isFetching={collectionEntriesQuery.isFetching}
                     entries={collectionEntriesQuery.data?.data}
                     paginationInfo={collectionEntriesQuery.data?.pagination}
+                    page={watch("page")}
                     onPaginationChange={(page) => {
                         setValue("page", page);
                     }}

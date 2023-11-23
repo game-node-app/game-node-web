@@ -56,7 +56,6 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
             return getCombinedImages(game);
         }
     }, [game]);
-    console.log(game);
 
     return (
         <Paper w={"100%"} h={"100%"}>

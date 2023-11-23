@@ -23,12 +23,7 @@ export function useCollectionEntriesForGameId(
                 if (!gameId) {
                     return undefined;
                 }
-                return await getCollectionEntriesByGameId(gameId, {
-                    relations: {
-                        collection: true,
-                        ownedPlatforms: true,
-                    },
-                });
+                return await getCollectionEntriesByGameId(gameId);
             },
         }),
         queryKey,

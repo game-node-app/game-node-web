@@ -2,26 +2,20 @@ import React, { useMemo, useState } from "react";
 import useReviewsForGameId from "@/components/review/hooks/useReviewsForGameId";
 import { Group, Pagination, Stack, Text } from "@mantine/core";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
-import {
-    FindReviewDto,
-    FindReviewPaginatedDto,
-    Review,
-} from "@/wrapper/server";
 import useOnMobile from "@/hooks/useOnMobile";
+import { TBasePaginationRequest } from "@/util/types/pagination";
 
 interface IReviewListViewProps {
     gameId: number;
 }
 
+const DEFAULT_LIMIT = 7;
+
 const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
-    const DEFAULT_LIMIT = 5;
-    const [reviewsDto, setReviewsDto] = useState<FindReviewDto>({
+    const [reviewsDto, setReviewsDto] = useState<TBasePaginationRequest>({
         limit: DEFAULT_LIMIT,
         offset: 0,
-        relations: {
-            profile: true,
-        },
     });
     const reviewsQuery = useReviewsForGameId(gameId, reviewsDto);
     const reviewsQueryPagination = reviewsQuery.data?.pagination;
