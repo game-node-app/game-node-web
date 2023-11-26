@@ -22,7 +22,7 @@ import {
 } from "@/wrapper/server";
 import { useGame } from "@/components/game/hooks/useGame";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
 import {

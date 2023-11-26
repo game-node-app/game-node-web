@@ -1,4 +1,4 @@
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { ApiError } from "@/wrapper/server";
 
 export type ExtendedUseQueryResult<TData, TError = ApiError> = {

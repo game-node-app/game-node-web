@@ -1,7 +1,7 @@
 import React from "react";
 import { BaseModalProps } from "@/util/types/modal-props";
 import { Button, Center, Group, Modal, Stack, Text } from "@mantine/core";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CollectionsEntriesService } from "@/wrapper/server";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";

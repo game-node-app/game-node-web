@@ -4,7 +4,7 @@ import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
 import {
     GameSearchRequestDto,

@@ -4,7 +4,7 @@ import {
     GameRepositoryPaginatedResponseDto,
     GameRepositoryService,
 } from "@/wrapper/server";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export function useGames(

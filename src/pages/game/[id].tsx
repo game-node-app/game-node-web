@@ -4,7 +4,7 @@ import GameInfoView, {
     DEFAULT_GAME_INFO_VIEW_DTO,
 } from "@/components/game/info/GameInfoView";
 import { useRouter } from "next/router";
-import { dehydrate, QueryClient } from "react-query";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import { NextPageContext } from "next";
 import {

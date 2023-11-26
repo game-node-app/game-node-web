@@ -7,7 +7,7 @@ import { Box, Button, Flex, Group, Rating, Stack, Text } from "@mantine/core";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Break from "@/components/general/Break";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import useUserId from "@/components/auth/hooks/useUserId";

@@ -10,7 +10,7 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { ApiError, CollectionsService } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const CreateCollectionFormSchema = z
     .object({

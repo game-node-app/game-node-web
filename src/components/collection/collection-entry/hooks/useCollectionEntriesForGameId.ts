@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CollectionEntry } from "@/wrapper/server";
 import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";

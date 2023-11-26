@@ -2,7 +2,7 @@ import React from "react";
 import { Review, ReviewsService } from "@/wrapper/server";
 import { Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { BaseModalProps } from "@/util/types/modal-props";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { SessionAuth } from "supertokens-auth-react/recipe/session";
 

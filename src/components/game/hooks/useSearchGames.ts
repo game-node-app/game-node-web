@@ -2,7 +2,7 @@ import {
     GameSearchRequestDto,
     GameSearchResponseDto,
 } from "@/components/game/search/utils/types";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { SearchService } from "@/wrapper/search";
 
 export default function useSearchGames(

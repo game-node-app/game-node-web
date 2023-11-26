@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { useGames } from "@/components/game/hooks/useGames";
 

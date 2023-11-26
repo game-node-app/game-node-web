@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient, UseQueryResult } from "react-query";
+import {
+    useQuery,
+    useQueryClient,
+    UseQueryResult,
+} from "@tanstack/react-query";
 import { ApiError, LibrariesService, Library } from "@/wrapper/server";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 

@@ -3,7 +3,11 @@ import {
     StatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
-import { useQuery, useQueryClient, UseQueryResult } from "react-query";
+import {
+    useQuery,
+    useQueryClient,
+    UseQueryResult,
+} from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export interface UseTrendingItemsProps {

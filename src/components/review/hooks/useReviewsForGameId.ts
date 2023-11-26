@@ -1,6 +1,6 @@
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 import { FindReviewPaginatedDto, ReviewsService } from "@/wrapper/server";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TBasePaginationRequest } from "@/util/types/pagination";
 
 export default function useReviewsForGameId(
