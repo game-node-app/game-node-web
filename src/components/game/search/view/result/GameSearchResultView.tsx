@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import GameView from "@/components/general/view/game/GameView";
 import { Box, Container, Flex, Space, Stack } from "@mantine/core";
-import GameSearchResultErrorMessage from "@/components/game/search/view/result/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
 import { SearchGame } from "@/components/game/search/utils/types";
 import useOnMobile from "@/hooks/useOnMobile";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {
     enabled: boolean;
@@ -32,7 +32,7 @@ const GameSearchResultView = ({
         }
         if (isError) {
             return (
-                <GameSearchResultErrorMessage
+                <CenteredErrorMessage
                     message={"An error occurred. Please try again."}
                 />
             );
@@ -40,7 +40,7 @@ const GameSearchResultView = ({
             return <CenteredLoading />;
         } else if (results == undefined || results.length === 0) {
             return (
-                <GameSearchResultErrorMessage
+                <CenteredErrorMessage
                     message={"No results found. Please try again."}
                 />
             );

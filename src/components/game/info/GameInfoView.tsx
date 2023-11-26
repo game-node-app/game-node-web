@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { Flex, Grid, Paper, Skeleton, Stack, Title } from "@mantine/core";
+import { Box, Flex, Grid, Paper, Skeleton, Stack, Title } from "@mantine/core";
 import GameFigureImage from "@/components/game/figure/GameFigureImage";
 import GameInfoDetails from "@/components/game/info/GameInfoDetails";
 import useOnMobile from "@/hooks/useOnMobile";
@@ -72,10 +72,13 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                             w={"inherit"}
                             h={"inherit"}
                         >
-                            <GameFigureImage
-                                game={game}
-                                size={ImageSize.COVER_BIG}
-                            />
+                            <Box className="w-full lg:w-96">
+                                <GameFigureImage
+                                    game={game}
+                                    size={ImageSize.COVER_BIG}
+                                />
+                            </Box>
+
                             <Break />
                             <Title
                                 ta={"center"}

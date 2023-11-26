@@ -2,9 +2,11 @@ import React, { useMemo } from "react";
 import {
     ActionIcon,
     Box,
+    Center,
     Container,
     Divider,
     Group,
+    SimpleGrid,
     Stack,
     Text,
     Title,
@@ -12,7 +14,12 @@ import {
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
 import { Collection } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
-import { IconDots, IconReplace } from "@tabler/icons-react";
+import {
+    IconDots,
+    IconReplace,
+    IconTrash,
+    IconTrashOff,
+} from "@tabler/icons-react";
 import CollectionEntriesView from "@/components/collection/collection-entry/view/CollectionEntriesView";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -22,6 +29,7 @@ import { useDisclosure } from "@mantine/hooks";
 import CollectionEntriesMoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntriesMoveModal";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useGames } from "@/components/game/hooks/useGames";
+import CollectionRemoveModal from "@/components/collection/form/modal/CollectionRemoveModal";
 
 interface ICollectionViewProps {
     libraryUserId: string;
@@ -47,6 +55,7 @@ const CollectionView = ({
 }: ICollectionViewProps) => {
     const [createUpdateModalOpened, createUpdateModalUtils] = useDisclosure();
     const [moveModalOpened, moveModalUtils] = useDisclosure();
+    const [removeModalOpened, removeModalUtils] = useDisclosure();
 
     const { register, watch, setValue } = useForm<CollectionViewFormValues>({
         mode: "onSubmit",
@@ -62,7 +71,7 @@ const CollectionView = ({
 
     const requestParams = useMemo(() => {
         const page = formPage || 1;
-        const offset = (formPage - 1) * DEFAULT_LIMIT;
+        const offset = (page - 1) * DEFAULT_LIMIT;
         return {
             ...DEFAULT_REQUEST_PARAMS,
             offset,
@@ -81,6 +90,12 @@ const CollectionView = ({
             platforms: true,
         },
     });
+
+    if (collectionQuery.isError || collectionEntriesQuery.isError) {
+        return (
+            <Center>We couldn't fetch this resource. Please, try again.</Center>
+        );
+    }
     return (
         <Container fluid p={0} h={"100%"}>
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
@@ -94,6 +109,11 @@ const CollectionView = ({
                         collectionId={collectionId}
                         opened={moveModalOpened}
                         onClose={moveModalUtils.close}
+                    />
+                    <CollectionRemoveModal
+                        collectionId={collectionId}
+                        opened={removeModalOpened}
+                        onClose={removeModalUtils.close}
                     />
                     <Stack w={{ base: "70%", lg: "30%" }}>
                         <Title
@@ -109,7 +129,7 @@ const CollectionView = ({
                         </Text>
                     </Stack>
                     {isOwnCollection && (
-                        <Group>
+                        <Group justify={"end"}>
                             <ActionIcon
                                 onClick={() => createUpdateModalUtils.open()}
                             >
@@ -117,6 +137,9 @@ const CollectionView = ({
                             </ActionIcon>
                             <ActionIcon onClick={() => moveModalUtils.open()}>
                                 <IconReplace size={"1.2rem"} />
+                            </ActionIcon>
+                            <ActionIcon onClick={() => removeModalUtils.open()}>
+                                <IconTrash size={"1.2rem"} />
                             </ActionIcon>
                         </Group>
                     )}

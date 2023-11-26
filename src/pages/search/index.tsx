@@ -14,6 +14,9 @@ import { SearchService } from "@/wrapper/search";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
 import GameSearchLandingView from "@/components/game/search/view/GameSearchLandingView";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
+import { ParsedUrlQuery } from "querystring";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -30,6 +33,19 @@ const DEFAULT_SEARCH_PARAMETERS: GameSearchRequestDto = {
     limit: 20,
 };
 
+const urlQueryToDto = (urlQuery: ParsedUrlQuery) => {
+    const searchParams = DEFAULT_SEARCH_PARAMETERS;
+    const { query, page } = urlQuery;
+    if (query) {
+        searchParams.query = query as string;
+    }
+    if (page) {
+        searchParams.page = Number.parseInt(page as string, 10);
+    }
+
+    return searchParams;
+};
+
 const Index = () => {
     const {
         handleSubmit,
@@ -41,6 +57,9 @@ const Index = () => {
         resolver: zodResolver(SearchFormSchema),
         mode: "onBlur",
     });
+    const router = useRouter();
+    const pathName = router.pathname;
+    const urlQuery = router.query;
 
     const [searchParameters, setSearchParameters] =
         useState<GameSearchRequestDto>(DEFAULT_SEARCH_PARAMETERS);
@@ -59,12 +78,23 @@ const Index = () => {
             setValue("page", 1);
         }
         const page = data.page || 1;
-        setSearchParameters({
-            ...DEFAULT_SEARCH_PARAMETERS,
-            query: data.query,
-            page: page,
-        });
+        const urlParams = new URLSearchParams();
+        urlParams.set("query", data.query);
+        urlParams.set("page", `${page}`);
+        router.push(`${pathName}?${urlParams.toString()}`);
     };
+
+    /**
+     * Effect that syncs URL query parameters with the actual request DTO
+     */
+    useEffect(() => {
+        const searchParams = urlQueryToDto(urlQuery);
+        if (searchParams.query) {
+            setValue("query", searchParams.query);
+            setValue("page", searchParams.page || 1);
+            setSearchParameters(searchParams);
+        }
+    }, [setValue, urlQuery]);
 
     return (
         <Container
@@ -75,7 +105,9 @@ const Index = () => {
             className="bg-mobile lg:bg-desktop bg-cover bg-fixed"
         >
             <Stack align="center" justify="center" w={"100%"}>
-                <Box className={`lg:w-5/6 flex justify-center mt-12`}>
+                <Box
+                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12`}
+                >
                     <form
                         className="w-full h-full"
                         onSubmit={handleSubmit((data) => onSubmit(data, true))}
@@ -102,7 +134,9 @@ const Index = () => {
                         paginationInfo={searchQuery.data?.pagination}
                         onPaginationChange={(page) => {
                             setValue("page", page);
-                            handleSubmit((data) => onSubmit(data, false))();
+                            handleSubmit((data) => {
+                                onSubmit(data, false);
+                            });
                         }}
                     />
                     <GameSearchLandingView

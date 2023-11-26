@@ -10,6 +10,7 @@ import { IGameViewPaginationProps } from "@/components/general/view/game/GameVie
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 interface ICollectionEntriesViewProps extends IGameViewPaginationProps {
     isLoading: boolean;
@@ -85,7 +86,7 @@ const CollectionEntriesView = ({
     const render = () => {
         if (isError) {
             return (
-                <GameSearchResultErrorMessage
+                <CenteredErrorMessage
                     message={"An error occurred. Please try again."}
                 />
             );
@@ -97,9 +98,7 @@ const CollectionEntriesView = ({
             entriesGames.length === 0
         ) {
             return (
-                <GameSearchResultErrorMessage
-                    message={"No results found. Please try again."}
-                />
+                <CenteredErrorMessage message={"This collection is empty."} />
             );
         } else {
             return (

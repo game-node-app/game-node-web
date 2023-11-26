@@ -17,7 +17,8 @@ import {
     IconPlaystationTriangle,
     IconPlaystationX,
 } from "@tabler/icons-react";
-import { theme } from "@/pages/_app";
+
+import { theme } from "@/util/theme";
 
 interface IGameInfoPlatformBadgeProps extends BadgeProps {
     platformAbbreviation: string;

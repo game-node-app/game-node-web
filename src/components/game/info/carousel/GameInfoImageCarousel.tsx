@@ -9,6 +9,7 @@ import {
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/hooks/useOnMobile";
+import GameInfoImageCarouselSlide from "@/components/game/info/carousel/GameInfoImageCarouselSlide";
 
 interface IGameInfoImageCarouselProps {
     urls: string[] | undefined;
@@ -39,10 +40,9 @@ const GameInfoImageCarousel = ({
     const buildSlides = () => {
         return urls.map((url, index) => {
             const urlToUse = getSizedImageUrl(url, imageSize);
+            if (!urlToUse) return null;
             return (
-                <Carousel.Slide {...slideProps} key={index}>
-                    <Image src={urlToUse!} alt={"Game Image"} />
-                </Carousel.Slide>
+                <GameInfoImageCarouselSlide imageSrc={urlToUse} key={index} />
             );
         });
     };

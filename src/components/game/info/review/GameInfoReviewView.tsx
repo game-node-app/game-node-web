@@ -25,7 +25,6 @@ const GameInfoReviewView = ({ gameId }: IGameInfoReviewViewProps) => {
                     title={"Your review"}
                     content={<GameInfoReviewEditorView gameId={gameId} />}
                 />
-
                 <DetailsBox
                     title={"All reviews"}
                     description={"Reader discretion is advised."}
