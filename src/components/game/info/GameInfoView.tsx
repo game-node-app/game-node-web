@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { Box, Flex, Grid, Paper, Skeleton, Stack, Title } from "@mantine/core";
 import GameFigureImage from "@/components/game/figure/GameFigureImage";
 import GameInfoDetails from "@/components/game/info/GameInfoDetails";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import GameInfoActions from "@/components/game/info/GameInfoActions";
 import { Game, GameRepositoryFindOneDto } from "@/wrapper/server";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";

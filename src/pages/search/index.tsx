@@ -7,10 +7,17 @@ import { z } from "zod";
 import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
 import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
-import GameSearchLandingView from "@/components/game/search/view/GameSearchLandingView";
+import GameSearchTrendingGames, {
+    DEFAULT_SEARCH_TRENDING_GAMES_DTO,
+} from "@/components/game/search/view/GameSearchTrendingGames";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { NextPageContext } from "next";
+import { GetStaticPropsResult, NextPageContext } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { StatisticsService } from "@/wrapper/server";
+import { DehydratedState } from "@tanstack/react-query/build/modern/index";
+import { DehydrationResult } from "@/pages/_app";
+import { sleep } from "@/util/sleep";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -40,7 +47,36 @@ const urlQueryToDto = (urlQuery: ParsedUrlQuery) => {
     return searchParams;
 };
 
-export function getServerSideProps(ctx: NextPageContext) {}
+export async function getServerSideProps(): Promise<
+    GetStaticPropsResult<DehydrationResult>
+> {
+    const queryClient = new QueryClient();
+    const defaultDto = DEFAULT_SEARCH_TRENDING_GAMES_DTO;
+    const queryKey = [
+        "statistics",
+        "trending",
+        defaultDto.sourceType,
+        defaultDto.offset,
+        defaultDto.limit,
+    ];
+
+    await queryClient.prefetchQuery({
+        queryKey,
+        queryFn: () => {
+            return StatisticsService.statisticsControllerFindTrending(
+                defaultDto.sourceType,
+                defaultDto.offset,
+                defaultDto.limit,
+            );
+        },
+    });
+
+    return {
+        props: {
+            dehydratedState: dehydrate(queryClient),
+        },
+    };
+}
 
 const Index = () => {
     const {
@@ -68,11 +104,7 @@ const Index = () => {
 
     const searchQuery = useSearchGames(searchParameters, isQueryEnabled);
 
-    const onSubmit = (data: TSearchFormValues, resetForm: boolean) => {
-        // This will clear previous page values, preventing them from affecting other queries.
-        if (resetForm) {
-            setValue("page", 1);
-        }
+    const onSubmit = (data: TSearchFormValues) => {
         const page = data.page || 1;
         const urlParams = new URLSearchParams();
         urlParams.set("query", data.query);
@@ -106,7 +138,10 @@ const Index = () => {
                 >
                     <form
                         className="w-full h-full"
-                        onSubmit={handleSubmit((data) => onSubmit(data, true))}
+                        onSubmit={handleSubmit((data) => {
+                            setValue("page", 1);
+                            onSubmit(data);
+                        })}
                     >
                         <SearchBar
                             label={"Search for games"}
@@ -130,12 +165,10 @@ const Index = () => {
                         paginationInfo={searchQuery.data?.pagination}
                         onPaginationChange={(page) => {
                             setValue("page", page);
-                            handleSubmit((data) => {
-                                onSubmit(data, false);
-                            });
+                            handleSubmit(onSubmit)();
                         }}
                     />
-                    <GameSearchLandingView
+                    <GameSearchTrendingGames
                         enabled={searchQuery.data == undefined}
                     />
                 </Box>

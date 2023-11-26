@@ -6,7 +6,12 @@ import GameInfoView, {
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
-import { NextPageContext } from "next";
+import {
+    GetStaticPaths,
+    GetStaticPathsContext,
+    GetStaticPathsResult,
+    NextPageContext,
+} from "next";
 import {
     Game,
     GameRepositoryFindOneDto,
@@ -61,7 +66,7 @@ const GameInfoPage = () => {
         if (
             router.isReady &&
             id != undefined &&
-            lastRegisteredGameView.current != id
+            lastRegisteredGameView.current !== id
         ) {
             const idAsNumber = parseInt(id as string, 10);
             StatisticsQueueService.statisticsQueueControllerAddView({

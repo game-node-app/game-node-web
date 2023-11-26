@@ -25,7 +25,7 @@ const CollectionEntryRemoveModal = ({
         },
         onSuccess: () => {
             collectionEntriesQuery.invalidate();
-            queryClient.invalidateQueries(["review", gameId]);
+            queryClient.invalidateQueries({ queryKey: ["review", gameId] });
         },
     });
 

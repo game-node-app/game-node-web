@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import useReviewsForGameId from "@/components/review/hooks/useReviewsForGameId";
 import { Group, Pagination, Stack, Text } from "@mantine/core";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { TBasePaginationRequest } from "@/util/types/pagination";
 
 interface IReviewListViewProps {

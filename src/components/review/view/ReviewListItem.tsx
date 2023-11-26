@@ -4,7 +4,7 @@ import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/G
 import { ActionIcon, Box, Group, Rating, Stack, Text } from "@mantine/core";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import { Profile, Review } from "@/wrapper/server";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { IconDots, IconThumbDown, IconThumbUp } from "@tabler/icons-react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ReviewListItemLikes from "@/components/review/view/ReviewListItemLikes";

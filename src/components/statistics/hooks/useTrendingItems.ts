@@ -9,6 +9,7 @@ import {
     UseQueryResult,
 } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
+import { sleep } from "@/util/sleep";
 
 export interface UseTrendingItemsProps {
     sourceType: "game" | "review" | "activity" | "collection";

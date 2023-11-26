@@ -13,7 +13,7 @@ export function useReviewStatistics(
     const queryClient = useQueryClient();
     const queryKey = ["statistics", "review", reviewId];
     const invalidate = () =>
-        queryClient.invalidateQueries(queryKey.slice(0, 2));
+        queryClient.invalidateQueries({ queryKey: queryKey.slice(0, 2) });
     return {
         ...useQuery({
             queryKey,

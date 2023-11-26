@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import LibraryViewSidebar from "@/components/library/view/sidebar/LibraryViewSidebar";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { Container, Flex, Grid, SelectProps } from "@mantine/core";
 import LibraryViewCollectionsSelect from "@/components/library/view/sidebar/LibraryViewCollectionsSelect";
 import { useRouter } from "next/router";

@@ -8,7 +8,7 @@ import {
     getSizedImageUrl,
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import GameInfoImageCarouselSlide from "@/components/game/info/carousel/GameInfoImageCarouselSlide";
 
 interface IGameInfoImageCarouselProps {

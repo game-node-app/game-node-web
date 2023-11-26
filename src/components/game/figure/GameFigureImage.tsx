@@ -51,7 +51,7 @@ const GameFigureImage = ({
             <AspectRatio ratio={264 / 354} pos="relative" h={"100%"} w={"auto"}>
                 <Skeleton animate visible={showSkeleton} className={"z-10"} />
                 <Image
-                    radius={"md"}
+                    radius={"sm"}
                     src={sizedCoverUrl ?? "/img/game_placeholder.jpeg"}
                     alt={"Game cover"}
                     onLoad={() => setShowSkeleton(false)}

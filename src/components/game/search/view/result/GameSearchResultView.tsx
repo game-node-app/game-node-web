@@ -5,7 +5,7 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
 import { SearchGame } from "@/components/game/search/utils/types";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {

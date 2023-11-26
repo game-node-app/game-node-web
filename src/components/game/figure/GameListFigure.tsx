@@ -4,7 +4,7 @@ import Image from "next/image";
 import GameFigureImage, {
     IGameFigureProps,
 } from "@/components/game/figure/GameFigureImage";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 import Link from "next/link";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
 import { TGameOrSearchGame } from "@/components/game/util/types";

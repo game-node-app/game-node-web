@@ -30,7 +30,7 @@ const GlobalShellFooter = () => {
         );
     });
     return (
-        <footer className={"w-full p-2 px-4 h-full"}>
+        <footer className={"w-full p-2 px-4 h-full "}>
             <Container
                 fluid
                 p={0}

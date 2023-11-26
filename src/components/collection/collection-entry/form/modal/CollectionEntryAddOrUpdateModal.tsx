@@ -6,7 +6,7 @@ import { BaseModalProps } from "@/util/types/modal-props";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useRouter } from "next/router";
-import useOnMobile from "@/hooks/useOnMobile";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface IGameAddModalProps extends BaseModalProps {
     id: number;

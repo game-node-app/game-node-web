@@ -76,7 +76,7 @@ const GameInfoReviewEditorView = ({
             });
         },
         onSettled: () => {
-            queryClient.invalidateQueries(["review"]);
+            queryClient.invalidateQueries({ queryKey: ["review"] });
         },
     });
 

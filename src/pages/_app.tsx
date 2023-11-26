@@ -33,11 +33,24 @@ ServerOpenAPI.BASE = process.env.NEXT_PUBLIC_SERVER_URL!;
 ServerOpenAPI.WITH_CREDENTIALS = true;
 SearchOpenAPI.BASE = process.env.NEXT_PUBLIC_SEARCH_URL!;
 
+export interface DehydrationResult {
+    dehydratedState: DehydratedState;
+}
+
 export default function App({
     Component,
     pageProps,
-}: AppProps<{ dehydratedState: DehydratedState }>) {
-    const [queryClient, _] = useState(() => new QueryClient());
+}: AppProps<DehydrationResult>) {
+    const [queryClient, _] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        staleTime: 60 * 1000,
+                    },
+                },
+            }),
+    );
     return (
         <MantineProvider theme={theme} forceColorScheme={"dark"}>
             <Head>

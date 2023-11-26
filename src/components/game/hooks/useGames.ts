@@ -20,7 +20,7 @@ export function useGames(
             queryKey: queryKey,
             queryFn: () => {
                 if (dto == undefined || dto.gameIds.length === 0) {
-                    return undefined;
+                    return null;
                 }
 
                 return GameRepositoryService.gameRepositoryControllerFindAllByIds(
