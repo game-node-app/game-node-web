@@ -8,7 +8,7 @@ export function useCollection(
     const queryClient = useQueryClient();
     const queryKey = ["collection", collectionId];
     const invalidate = () =>
-        queryClient.invalidateQueries([queryKey[0], queryKey[1]]);
+        queryClient.invalidateQueries({ queryKey: [queryKey[0], queryKey[1]] });
     return {
         ...useQuery({
             queryKey: queryKey,

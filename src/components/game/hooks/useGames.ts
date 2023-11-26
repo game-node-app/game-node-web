@@ -13,7 +13,7 @@ export function useGames(
     const queryClient = useQueryClient();
     const queryKey = ["game", "all", dto];
     const invalidate = () =>
-        queryClient.invalidateQueries([queryKey[0], queryKey[1]]);
+        queryClient.invalidateQueries({ queryKey: [queryKey[0], queryKey[1]] });
 
     return {
         ...useQuery({

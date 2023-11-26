@@ -1,22 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Container, Flex, Group, Stack } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Stack } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery } from "@tanstack/react-query";
 import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
-import {
-    GameSearchRequestDto,
-    GameSearchResponseDto,
-} from "@/components/game/search/utils/types";
-import { SearchService } from "@/wrapper/search";
+import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
-import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
 import GameSearchLandingView from "@/components/game/search/view/GameSearchLandingView";
 import { useRouter } from "next/router";
-import { usePathname } from "next/navigation";
 import { ParsedUrlQuery } from "querystring";
+import { NextPageContext } from "next";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -45,6 +39,8 @@ const urlQueryToDto = (urlQuery: ParsedUrlQuery) => {
 
     return searchParams;
 };
+
+export function getServerSideProps(ctx: NextPageContext) {}
 
 const Index = () => {
     const {

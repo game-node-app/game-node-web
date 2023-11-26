@@ -9,7 +9,7 @@ const UseReviewForUserIdAndGameId = (
 ): ExtendedUseQueryResult<Review> => {
     const queryClient = useQueryClient();
     const queryKey = ["review", userId, gameId];
-    const invalidate = () => queryClient.invalidateQueries(queryKey);
+    const invalidate = () => queryClient.invalidateQueries({ queryKey });
     return {
         ...useQuery({
             queryKey,

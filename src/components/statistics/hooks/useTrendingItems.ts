@@ -28,13 +28,13 @@ export function useTrendingItems(
         dto.limit,
     ];
     const invalidate = () =>
-        queryClient.invalidateQueries(queryKey.slice(0, 3));
+        queryClient.invalidateQueries({ queryKey: queryKey.slice(0, 3) });
 
     return {
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                return await StatisticsService.statisticsControllerFindTrending(
+                return StatisticsService.statisticsControllerFindTrending(
                     dto.sourceType,
                     dto.offset,
                     dto.limit,

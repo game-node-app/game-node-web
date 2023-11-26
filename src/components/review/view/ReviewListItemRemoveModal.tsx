@@ -19,7 +19,7 @@ const ReviewListItemRemoveModal = ({ reviewId, opened, onClose }: Props) => {
         },
         onSettled: () => {
             if (userId) {
-                queryClient.invalidateQueries(["review"]).then();
+                queryClient.invalidateQueries({ queryKey: ["review"] }).then();
             }
         },
     });

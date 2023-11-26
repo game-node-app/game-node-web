@@ -1,6 +1,5 @@
 import { MantineProvider } from "@mantine/core";
 import { AppProps } from "next/app";
-import TypesafeI18NProvider from "@/components/general/TypesafeI18nProvider";
 import SuperTokensProvider from "@/components/auth/SuperTokensProvider";
 import GlobalShell from "@/components/general/shell/GlobalShell";
 import React, { useState } from "react";
@@ -8,10 +7,10 @@ import { RouterTransition } from "@/components/general/RouterTransition";
 import { Inter } from "next/font/google";
 import {
     DehydratedState,
-    Hydrate,
     QueryClient,
     QueryClientProvider,
-} from "react-query";
+    HydrationBoundary,
+} from "@tanstack/react-query";
 import Head from "next/head";
 import { Notifications } from "@mantine/notifications";
 import { OpenAPI as ServerOpenAPI } from "@/wrapper/server";
@@ -48,19 +47,17 @@ export default function App({
                     content="width=device-width, initial-scale=1"
                 />
             </Head>
-            <TypesafeI18NProvider>
-                <SuperTokensProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <Notifications />
-                        <RouterTransition />
-                        <GlobalShell>
-                            <Hydrate state={pageProps.dehydratedState}>
-                                <Component {...pageProps} />
-                            </Hydrate>
-                        </GlobalShell>
-                    </QueryClientProvider>
-                </SuperTokensProvider>
-            </TypesafeI18NProvider>
+            <SuperTokensProvider>
+                <QueryClientProvider client={queryClient}>
+                    <Notifications />
+                    <RouterTransition />
+                    <GlobalShell>
+                        <HydrationBoundary state={pageProps.dehydratedState}>
+                            <Component {...pageProps} />
+                        </HydrationBoundary>
+                    </GlobalShell>
+                </QueryClientProvider>
+            </SuperTokensProvider>
         </MantineProvider>
     );
 }

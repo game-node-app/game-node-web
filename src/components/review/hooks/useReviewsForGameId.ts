@@ -10,7 +10,7 @@ export default function useReviewsForGameId(
     const queryClient = useQueryClient();
     const queryKey = ["review", gameId, dto];
     const invalidate = () =>
-        queryClient.invalidateQueries(queryKey.slice(0, 2));
+        queryClient.invalidateQueries({ queryKey: queryKey.slice(0, 2) });
 
     return {
         ...useQuery({

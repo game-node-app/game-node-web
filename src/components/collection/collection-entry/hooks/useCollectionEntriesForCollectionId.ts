@@ -1,9 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import {
     CollectionEntriesPaginatedResponseDto,
-    CollectionEntry,
-    Game,
-    GameRepositoryFindAllDto,
     GameRepositoryService,
 } from "@/wrapper/server";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
@@ -41,7 +42,7 @@ export function useCollectionEntriesForCollectionId({
         gameRelations,
     ];
     const invalidate = () => {
-        return queryClient.invalidateQueries([queryKey[0]]);
+        return queryClient.invalidateQueries({ queryKey: [queryKey[0]] });
     };
     return {
         ...useQuery({
@@ -86,7 +87,7 @@ export function useCollectionEntriesForCollectionId({
                 return collectionEntriesQuery;
             },
             enabled: !!collectionId,
-            keepPreviousData: true,
+            placeholderData: keepPreviousData,
         }),
         queryKey,
         invalidate,

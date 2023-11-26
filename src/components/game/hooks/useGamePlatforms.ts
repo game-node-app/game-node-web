@@ -8,6 +8,5 @@ export default function useGamePlatforms() {
             return GameRepositoryService.gameRepositoryControllerFindAllPlatforms();
         },
         staleTime: Infinity,
-        cacheTime: Infinity,
     });
 }

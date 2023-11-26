@@ -7,15 +7,13 @@ export default function useUserProfile(
 ): ExtendedUseQueryResult<Profile | undefined> {
     const queryClient = useQueryClient();
     const queryKey = ["userProfile", userId];
-    const invalidate = () => queryClient.invalidateQueries(queryKey);
+    const invalidate = () => queryClient.invalidateQueries({ queryKey });
     return {
         ...useQuery({
             queryKey: queryKey,
             queryFn: async () => {
-                if (!userId) return undefined;
-                return await ProfileService.profileControllerFindOneById(
-                    userId,
-                );
+                if (!userId) return null;
+                return ProfileService.profileControllerFindOneById(userId);
             },
             enabled: !!userId,
         }),

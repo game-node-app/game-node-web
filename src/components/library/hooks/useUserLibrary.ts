@@ -11,7 +11,7 @@ export function useUserLibrary(
 ): ExtendedUseQueryResult<Library | undefined> {
     const queryClient = useQueryClient();
     const queryKey = ["library", userId];
-    const invalidate = () => queryClient.invalidateQueries(queryKey);
+    const invalidate = () => queryClient.invalidateQueries({ queryKey });
 
     return {
         ...useQuery({

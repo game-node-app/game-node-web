@@ -14,7 +14,7 @@ export function useCollectionEntriesForGameId(
     const queryClient = useQueryClient();
     const queryKey = ["collection-entries", "own", gameId];
     const invalidate = () => {
-        queryClient.invalidateQueries([queryKey[0]]);
+        queryClient.invalidateQueries({ queryKey: [queryKey[0]] });
     };
     return {
         ...useQuery({
