@@ -6,7 +6,6 @@ import { Collection } from "@/wrapper/server";
 import Link from "next/link";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
-import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 

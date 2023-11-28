@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
 import { Container, SimpleGrid } from "@mantine/core";
-import { useFavoriteCollectionEntries } from "@/components/collection/collection-entry/hooks/useFavoriteCollectionEntries";
 import { useGames } from "@/components/game/hooks/useGames";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
+import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
+import getFavoriteCollectionEntries from "@/components/collection/collection-entry/util/getFavoriteCollectionEntries";
 
 interface Props {
     userId: string;
@@ -12,14 +13,17 @@ interface Props {
 
 const ProfileFavoriteGames = ({ userId }: Props) => {
     const onMobile = useOnMobile();
-    const favoriteGamesQuery = useFavoriteCollectionEntries(userId, 0, 12);
+    const collectionEntriesQuery = useCollectionEntriesForUserId(userId);
     const gamesIds = useMemo(() => {
-        if (favoriteGamesQuery.data && favoriteGamesQuery.data.length > 0) {
-            return favoriteGamesQuery.data.map((entry) => entry.gameId);
+        if (collectionEntriesQuery.data) {
+            const favoriteGames = getFavoriteCollectionEntries(
+                collectionEntriesQuery.data,
+            );
+            return favoriteGames.map((entry) => entry.gameId);
         }
 
         return [];
-    }, [favoriteGamesQuery.data]);
+    }, [collectionEntriesQuery.data]);
     const gamesQuery = useGames({
         gameIds: gamesIds,
         relations: {
@@ -27,11 +31,11 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
         },
     });
 
-    const isFailed = favoriteGamesQuery.isError || gamesQuery.isError;
+    const isFailed = collectionEntriesQuery.isError || gamesQuery.isError;
 
     const isEmpty =
-        favoriteGamesQuery.data == undefined ||
-        favoriteGamesQuery.data.length === 0 ||
+        collectionEntriesQuery.data == undefined ||
+        collectionEntriesQuery.data.length === 0 ||
         gamesQuery.data == undefined ||
         gamesQuery.data.data.length === 0;
 

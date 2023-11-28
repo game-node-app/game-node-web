@@ -10,7 +10,7 @@ import GlobalShellNavbar from "@/components/general/shell/GlobalShellNavbar/Glob
  * @param children - The main content of the page
  * @constructor
  */
-const GlobalShell = ({ children }: { children: React.ReactNode }) => {
+const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
     const [sidebarOpened, modalUtils] = useDisclosure(false);
     return (
         <AppShell
@@ -52,4 +52,4 @@ const GlobalShell = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export default GlobalShell;
+export default GlobalAppShell;

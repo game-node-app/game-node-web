@@ -15,7 +15,7 @@ const ProfileView = ({ userId }: Props) => {
                     "w-full h-full flex-wrap lg:!flex-nowrap items-start mt-20"
                 }
             >
-                <Box className={"w-full lg:w-2/6"}>
+                <Box className={"w-full lg:w-1/6"}>
                     <ProfileUserDescription userId={userId} />
                 </Box>
                 <Box className={"w-full lg:w-5/6"}>

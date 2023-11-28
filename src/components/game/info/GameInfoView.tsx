@@ -58,7 +58,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
     }, [game]);
 
     return (
-        <Paper w={"100%"} h={"100%"}>
+        <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Stack>
                 <Grid
                     columns={12}

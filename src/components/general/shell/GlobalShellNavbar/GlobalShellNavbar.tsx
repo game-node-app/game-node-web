@@ -3,21 +3,18 @@ import {
     IconBulb,
     IconUser,
     IconCheckbox,
-    IconSearch,
     IconRouteAltLeft,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
 import { serverUrl } from "@/util/constants";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
-import GlobalShellNavbarCollectionsHeader from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollectionsHeader";
 import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useState } from "react";
 import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
-import { useRouter } from "next/router";
 
 const links = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
@@ -34,7 +31,6 @@ export default function GlobalShellNavbar({
     sidebarOpened,
     onClose,
 }: IGlobalShellNavbarProps) {
-    const router = useRouter();
     const [query, setQuery] = useState<string>("");
     const session = useSessionContext();
 
@@ -85,8 +81,9 @@ export default function GlobalShellNavbar({
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onOptionSubmit={(value, options, combobox) => {
-                        const valueAsNumber = Number.parseInt(value, 10);
-                        router.push(`/game/${valueAsNumber}`);
+                        /**
+                         * Navigation is already handled by <Link> in the options components!
+                         */
                         combobox.closeDropdown();
                         if (onClose) onClose();
                     }}

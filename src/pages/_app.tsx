@@ -1,10 +1,9 @@
 import { MantineProvider } from "@mantine/core";
 import { AppProps } from "next/app";
 import SuperTokensProvider from "@/components/auth/SuperTokensProvider";
-import GlobalShell from "@/components/general/shell/GlobalShell";
+import GlobalAppShell from "@/components/general/shell/GlobalAppShell";
 import React, { useState } from "react";
 import { RouterTransition } from "@/components/general/RouterTransition";
-import { Inter } from "next/font/google";
 import {
     DehydratedState,
     QueryClient,
@@ -64,11 +63,11 @@ export default function App({
                 <QueryClientProvider client={queryClient}>
                     <Notifications />
                     <RouterTransition />
-                    <GlobalShell>
+                    <GlobalAppShell>
                         <HydrationBoundary state={pageProps.dehydratedState}>
                             <Component {...pageProps} />
                         </HydrationBoundary>
-                    </GlobalShell>
+                    </GlobalAppShell>
                 </QueryClientProvider>
             </SuperTokensProvider>
         </MantineProvider>

@@ -19,7 +19,7 @@ interface IGameInfoReviewViewProps {
 const GameInfoReviewView = ({ gameId }: IGameInfoReviewViewProps) => {
     if (!gameId) return null;
     return (
-        <Paper w={"100%"} h={"100%"} className={""}>
+        <Paper w={"100%"} h={"100%"} className={""} suppressHydrationWarning>
             <Stack w={"100%"} h={"100%"} align={"center"}>
                 <DetailsBox
                     title={"Your review"}

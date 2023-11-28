@@ -86,8 +86,8 @@ const LibraryViewSidebarCollections = ({
             <div className={classes.section}>
                 <Accordion variant={"default"} chevronPosition={"left"}>
                     <Accordion.Item value={"collections"}>
-                        <CollectionsAccordionControl>
-                            Collections
+                        <CollectionsAccordionControl ta={"center"}>
+                            All Collections
                         </CollectionsAccordionControl>
                         <Accordion.Panel>
                             <ScrollArea.Autosize mah={200}>

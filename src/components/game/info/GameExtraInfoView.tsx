@@ -9,20 +9,22 @@ interface IGameExtraInfoViewProps {
     id: number;
 }
 
-const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
-    const gameQuery = useGame(id, {
-        relations: {
-            dlcs: {
-                cover: true,
-            },
-            similarGames: {
-                cover: true,
-            },
+export const DEFAULT_GAME_EXTRA_INFO_DTO = {
+    relations: {
+        dlcs: {
+            cover: true,
         },
-    });
+        similarGames: {
+            cover: true,
+        },
+    },
+};
+
+const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
+    const gameQuery = useGame(id, DEFAULT_GAME_EXTRA_INFO_DTO);
 
     return (
-        <Paper w={"100%"} h={"100%"}>
+        <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
                 <DetailsBox
                     title={"Similar games"}

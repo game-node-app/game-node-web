@@ -5,7 +5,9 @@ import GameInfoView, {
 } from "@/components/game/info/GameInfoView";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
+import GameExtraInfoView, {
+    DEFAULT_GAME_EXTRA_INFO_DTO,
+} from "@/components/game/info/GameExtraInfoView";
 import {
     GetStaticPaths,
     GetStaticPathsContext,
@@ -24,9 +26,11 @@ import sourceType = StatisticsActionDto.sourceType;
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const dto: GameRepositoryFindOneDto = DEFAULT_GAME_INFO_VIEW_DTO;
+    const extraInfoDto = DEFAULT_GAME_EXTRA_INFO_DTO;
     const idAsNumber = parseInt(context.query.id as string, 10);
 
     const queryClient = new QueryClient();
+
     await queryClient.prefetchQuery({
         queryKey: ["game", idAsNumber, dto],
         queryFn: async (): Promise<Game | undefined> => {
@@ -38,9 +42,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
                 dto,
             );
         },
-        staleTime: 5 * 60 * 1000, // 5 minutes
     });
-
     console.log("Prefetched game info for ID: " + context.query.id);
 
     return {

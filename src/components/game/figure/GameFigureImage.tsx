@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import {
     AspectRatio,
     Image,
@@ -42,6 +42,11 @@ const GameFigureImage = ({
     const sizedCoverUrl = getSizedImageUrl(coverUrl, ImageSize.COVER_BIG);
     const [showSkeleton, setShowSkeleton] = useState(true);
     const defaultHref = `/game/${game?.id}`;
+    useEffect(() => {
+        if (showSkeleton) {
+            setShowSkeleton(false);
+        }
+    }, [showSkeleton, game?.id]);
     return (
         <Link
             href={href ?? defaultHref}

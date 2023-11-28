@@ -45,10 +45,7 @@ const GameInfoReviewEditorView = ({
 
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
-    const collectionEntriesQuery = useCollectionEntriesForGameId(gameId);
-    const isGameInLibrary =
-        collectionEntriesQuery.data != undefined &&
-        collectionEntriesQuery.data.length > 0;
+
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
             await ReviewsService.reviewsControllerCreateOrUpdate({
@@ -100,13 +97,6 @@ const GameInfoReviewEditorView = ({
     };
 
     const render = () => {
-        if (!isGameInLibrary) {
-            return (
-                <Text>
-                    You need to have this game in your library to review it.
-                </Text>
-            );
-        }
         if (!isEditMode && reviewQuery.data != undefined) {
             return (
                 <ReviewListItem

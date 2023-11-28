@@ -29,9 +29,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
                 gameId,
-                {
-                    isFavorite: !gameInFavorites,
-                },
+                { isFavorite: true },
             );
         },
         onSuccess: () => {

@@ -1,9 +1,6 @@
-import React, { ComponentProps, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
-import { SearchBarProps } from "@/components/general/input/SearchBar/SearchBar";
-import { FloatingLabelInput } from "@/components/general/input/FloatingLabelInput/FloatingLabelInput";
 import {
-    ActionIcon,
     Box,
     Button,
     Combobox,
@@ -15,7 +12,7 @@ import {
     TextInputProps,
     useCombobox,
 } from "@mantine/core";
-import { useDebouncedState, useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedValue } from "@mantine/hooks";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import {
     IconClearAll,
@@ -24,9 +21,6 @@ import {
     IconX,
 } from "@tabler/icons-react";
 import SearchBarSelectOption from "@/components/general/input/SearchBar/SearchBarSelectOption";
-import { Game } from "@/wrapper/server";
-import { SearchGame } from "@/components/game/search/utils/types";
-import { useRouter } from "next/router";
 
 interface ISearchBarWithSelectProps extends TextInputProps {
     withButton: boolean;
@@ -47,7 +41,6 @@ const SearchBarWithSelect = ({
     onClear,
     ...others
 }: ISearchBarWithSelectProps) => {
-    const router = useRouter();
     const combobox = useCombobox();
     const [debouncedQuery] = useDebouncedValue(value, 300);
     const isQueryEnabled =
