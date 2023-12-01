@@ -1,12 +1,12 @@
 import { CollectionEntry, CollectionsEntriesService } from "@/wrapper/server";
 
 /**
- * Returns a list CollectionEntry entity, given any is available in the user's library.
+ * Returns a list CollectionEntry entity, given any is available in the current user's library.
  * @param gameId
  */
-export async function getCollectionEntriesByGameId(
+export async function getOwnCollectionEntryByGameId(
     gameId: number,
-): Promise<CollectionEntry[] | undefined> {
+): Promise<CollectionEntry | undefined> {
     try {
         return await CollectionsEntriesService.collectionsEntriesControllerFindOwnEntryByGameId(
             gameId,

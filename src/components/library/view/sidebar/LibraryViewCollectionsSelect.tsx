@@ -1,6 +1,12 @@
 import React, { useMemo } from "react";
 import { useCollection } from "@/components/collection/hooks/useCollection";
-import { ComboboxData, ComboboxItem, Select, SelectProps } from "@mantine/core";
+import {
+    ComboboxData,
+    ComboboxItem,
+    ComboboxItemGroup,
+    Select,
+    SelectProps,
+} from "@mantine/core";
 import { Library } from "@/wrapper/server";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 
@@ -10,15 +16,38 @@ interface Props extends SelectProps {
 
 const LibraryViewCollectionsSelect = ({ userId, ...others }: Props) => {
     const libraryQuery = useUserLibrary(userId);
-    const collectionOptions = useMemo<ComboboxItem[] | undefined>(() => {
-        const collections = libraryQuery.data?.collections;
-        if (collections == undefined || collections.length === 0)
-            return undefined;
+    const collectionOptions = useMemo<ComboboxItemGroup[] | undefined>(() => {
+        const collections = libraryQuery.data?.collections.filter(
+            (collection) => !collection.isFeatured,
+        );
+        const featuredCollections = libraryQuery.data?.collections.filter(
+            (collection) => collection.isFeatured,
+        );
+        const options: ComboboxItemGroup[] = [];
+        if (featuredCollections && featuredCollections.length > 0) {
+            options.push({
+                group: "Featured",
+                items: featuredCollections.map((collection) => {
+                    return {
+                        label: collection.name,
+                        value: collection.id,
+                    };
+                }),
+            });
+        }
+        if (collections && collections.length > 0) {
+            options.push({
+                group: "All",
+                items: collections.map((collection) => {
+                    return {
+                        label: collection.name,
+                        value: collection.id,
+                    };
+                }),
+            });
+        }
 
-        return collections.map((collection) => ({
-            value: collection.id,
-            label: collection.name,
-        }));
+        return options;
     }, [libraryQuery.data?.collections]);
     return (
         <Select

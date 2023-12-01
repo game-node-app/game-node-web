@@ -14,7 +14,7 @@ export function useCollection(
             queryKey: queryKey,
             queryFn: () => {
                 if (collectionId == undefined) {
-                    return undefined;
+                    return null;
                 }
 
                 return CollectionsService.collectionsControllerFindOneByIdWithPermissions(

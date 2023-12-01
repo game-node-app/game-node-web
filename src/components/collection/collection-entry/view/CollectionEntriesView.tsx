@@ -24,47 +24,19 @@ const badgesBuilder = (
     entries: CollectionEntry[] | undefined,
 ) => {
     if (entries == undefined || entries.length === 0) return null;
-    const relevantEntry = entries.find((entry) => entry.game.id === game.id);
-    if (relevantEntry == undefined) return null;
-    const ownedPlatforms = relevantEntry.ownedPlatforms;
-    const platformInfo = getGamePlatformInfo(game);
-    let platformsAbbreviations: string[] | undefined = undefined;
-    if (
-        platformInfo.platformsAbbreviations &&
-        platformInfo.platformsAbbreviations.length > 0
-    ) {
-        platformsAbbreviations = platformInfo.platformsAbbreviations;
-    } else if (ownedPlatforms && ownedPlatforms.length > 0) {
-        platformsAbbreviations = ownedPlatforms.map(
-            (platform) => platform.abbreviation,
-        );
-    } else {
+    const relevantEntry = entries.find((entry) => entry.gameId === game.id);
+    if (!relevantEntry) {
         return null;
     }
+    const ownedPlatforms = relevantEntry.ownedPlatforms;
+    if (ownedPlatforms.length === 0) return null;
 
-    const sortedPlatformsAbbreviations = platformsAbbreviations?.toSorted(
-        (a, b) => {
-            if (
-                ownedPlatforms.some((platform) => platform.abbreviation === a)
-            ) {
-                return -1;
-            }
-            return 1;
-        },
-    );
-
-    return sortedPlatformsAbbreviations?.map((platformAbbreviation, index) => {
-        const isPlatformOwned =
-            platformInfo.platformsIds &&
-            ownedPlatforms.some(
-                (ownedPlatform) =>
-                    ownedPlatform.abbreviation === platformAbbreviation,
-            );
+    return ownedPlatforms.map((platform) => {
+        const abbreviation = platform.abbreviation;
         return (
             <GameInfoPlatformBadge
-                key={index}
-                platformAbbreviation={platformAbbreviation}
-                color={isPlatformOwned ? undefined : "gray"}
+                key={platform.id}
+                platformAbbreviation={abbreviation}
             />
         );
     });

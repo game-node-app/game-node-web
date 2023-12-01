@@ -57,13 +57,7 @@ const GameSearchTrendingGames = ({ enabled }: IProps) => {
                             ? elementsSkeletons
                             : null}
                         {games.data?.data.map((game) => {
-                            return (
-                                <GameGridFigure
-                                    key={game.id}
-                                    game={game}
-                                    figureProps={{ size: ImageSize.COVER_BIG }}
-                                />
-                            );
+                            return <GameGridFigure key={game.id} game={game} />;
                         })}
                     </SimpleGrid>
                 }

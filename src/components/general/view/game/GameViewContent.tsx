@@ -31,9 +31,6 @@ const GameViewContent = ({
                     <Box w={"100%"} key={item.id}>
                         <GameListFigure
                             badgesBuilder={badgesBuilder}
-                            figureProps={{
-                                size: ImageSize.COVER_BIG,
-                            }}
                             game={item}
                         />
                         <Divider mt={"xs"} variant={"dashed"} />
@@ -41,15 +38,7 @@ const GameViewContent = ({
                 );
             }
 
-            return (
-                <GameGridFigure
-                    key={item.id}
-                    figureProps={{
-                        size: ImageSize.COVER_BIG,
-                    }}
-                    game={item}
-                />
-            );
+            return <GameGridFigure key={item.id} game={item} />;
         });
     }, [items, layout, badgesBuilder]);
 

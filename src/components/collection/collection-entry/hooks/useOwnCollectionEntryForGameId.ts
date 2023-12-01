@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CollectionEntry } from "@/wrapper/server";
-import { getCollectionEntriesByGameId } from "@/components/collection/collection-entry/util/getCollectionEntriesByGameId";
+import { getOwnCollectionEntryByGameId } from "@/components/collection/collection-entry/util/getOwnCollectionEntryByGameId";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 /**
@@ -8,22 +8,23 @@ import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
  * The collection entry will be undefined if the user doesn't have the game in their library.
  * @param gameId
  */
-export function useCollectionEntriesForGameId(
+export function useOwnCollectionEntryForGameId(
     gameId: number,
-): ExtendedUseQueryResult<CollectionEntry[] | undefined> {
+): ExtendedUseQueryResult<CollectionEntry | undefined> {
     const queryClient = useQueryClient();
     const queryKey = ["collection-entries", "own", gameId];
-    const invalidate = () => {
-        queryClient.invalidateQueries({ queryKey: [queryKey[0]] });
-    };
+    const invalidate = () =>
+        queryClient.invalidateQueries({ queryKey: queryKey.slice(0, 2) });
     return {
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                if (!gameId) {
-                    return undefined;
+                if (!gameId) return null;
+                try {
+                    return await getOwnCollectionEntryByGameId(gameId);
+                } catch (e) {
+                    return null;
                 }
-                return await getCollectionEntriesByGameId(gameId);
             },
         }),
         queryKey,

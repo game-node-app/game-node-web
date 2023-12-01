@@ -37,7 +37,6 @@ const SearchBarSelectOption = ({ game }: ISearchBarSelectOptions) => {
                                 e.preventDefault();
                             }}
                             game={game}
-                            size={ImageSize.COVER_BIG}
                         />
                     </Box>
                     <Stack justify={"start"} h={"100%"}>

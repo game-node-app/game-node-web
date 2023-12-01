@@ -5,7 +5,7 @@ import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-
 import { useDisclosure } from "@mantine/hooks";
 import { CollectionsEntriesService, Game } from "@/wrapper/server";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
+import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import CollectionEntryRemoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntryRemoveModal";
 
 interface IGameViewActionsProps {
@@ -22,9 +22,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
     const [removeModalOpened, removeModalUtils] = useDisclosure();
 
-    const collectionEntriesQuery = useCollectionEntriesForGameId(
-        game?.id ?? -1,
-    );
+    const collectionEntriesQuery = useOwnCollectionEntryForGameId(game!.id);
     const collectionEntryFavoriteMutation = useMutation({
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
@@ -33,17 +31,16 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
             );
         },
         onSuccess: () => {
-            collectionEntriesQuery.refetch();
+            collectionEntriesQuery.invalidate();
         },
     });
 
     const gameInLibrary =
-        collectionEntriesQuery.data != undefined &&
-        collectionEntriesQuery.data.length > 0;
+        !collectionEntriesQuery.isError &&
+        collectionEntriesQuery.data != undefined;
 
     const gameInFavorites =
-        gameInLibrary &&
-        collectionEntriesQuery.data!.some((entry) => entry.isFavorite);
+        gameInLibrary && collectionEntriesQuery.data!.isFavorite;
 
     if (game == undefined) {
         return null;

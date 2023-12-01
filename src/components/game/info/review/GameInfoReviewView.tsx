@@ -10,7 +10,7 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoReviewEditorView from "@/components/game/info/review/editor/GameInfoReviewEditorView";
 import ReviewListView from "@/components/review/view/ReviewListView";
 import useUserId from "@/components/auth/hooks/useUserId";
-import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
+import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 
 interface IGameInfoReviewViewProps {
     gameId: number;

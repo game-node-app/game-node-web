@@ -26,7 +26,6 @@ import sourceType = StatisticsActionDto.sourceType;
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const dto: GameRepositoryFindOneDto = DEFAULT_GAME_INFO_VIEW_DTO;
-    const extraInfoDto = DEFAULT_GAME_EXTRA_INFO_DTO;
     const idAsNumber = parseInt(context.query.id as string, 10);
 
     const queryClient = new QueryClient();

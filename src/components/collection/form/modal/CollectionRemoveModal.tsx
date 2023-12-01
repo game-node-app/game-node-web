@@ -7,12 +7,14 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
+import { useRouter } from "next/router";
 
 interface Props extends BaseModalProps {
     collectionId: string;
 }
 
 const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
+    const router = useRouter();
     const userId = useUserId();
     const queryClient = useQueryClient();
     const libraryQuery = useUserLibrary(userId);
@@ -29,6 +31,9 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
             collectionQuery.invalidate();
             collectionEntriesQuery.invalidate();
             libraryQuery.invalidate();
+        },
+        onSuccess: () => {
+            router.push(`/library/${userId}`);
         },
     });
 

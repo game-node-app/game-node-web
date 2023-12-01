@@ -4,7 +4,7 @@ import { Review, ReviewsService } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const UseReviewForUserIdAndGameId = (
-    userId: string | undefined = "",
+    userId: string | undefined,
     gameId: number,
 ): ExtendedUseQueryResult<Review> => {
     const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ const UseReviewForUserIdAndGameId = (
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                if (!userId || userId === "" || !gameId) return undefined;
+                if (!userId || userId === "" || !gameId) return null;
                 try {
                     const review =
                         await ReviewsService.reviewsControllerFindOneByUserIdAndGameId(
@@ -23,11 +23,11 @@ const UseReviewForUserIdAndGameId = (
                         );
                     // No idea why this happens.
                     if (typeof review === "string") {
-                        return undefined;
+                        return null;
                     }
                     return review;
                 } catch (e) {
-                    return undefined;
+                    return null;
                 }
             },
             retry: false,

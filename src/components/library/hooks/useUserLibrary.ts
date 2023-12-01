@@ -8,7 +8,7 @@ import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export function useUserLibrary(
     userId: string | undefined,
-): ExtendedUseQueryResult<Library | undefined> {
+): ExtendedUseQueryResult<Library | null> {
     const queryClient = useQueryClient();
     const queryKey = ["library", userId];
     const invalidate = () => queryClient.invalidateQueries({ queryKey });
@@ -16,8 +16,8 @@ export function useUserLibrary(
     return {
         ...useQuery({
             queryKey: queryKey,
-            queryFn: async (): Promise<Library | undefined> => {
-                if (!userId) return undefined;
+            queryFn: async (): Promise<Library | null> => {
+                if (!userId) return null;
                 return LibrariesService.librariesControllerFindOneByIdWithPermissions(
                     userId,
                 );

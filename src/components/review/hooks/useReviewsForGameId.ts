@@ -16,7 +16,7 @@ export default function useReviewsForGameId(
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                if (gameId == undefined) return undefined;
+                if (gameId == undefined) return null;
 
                 try {
                     return await ReviewsService.reviewsControllerFindAllByGameId(
@@ -25,7 +25,7 @@ export default function useReviewsForGameId(
                         dto?.limit,
                     );
                 } catch (e) {
-                    return undefined;
+                    return null;
                 }
             },
         }),

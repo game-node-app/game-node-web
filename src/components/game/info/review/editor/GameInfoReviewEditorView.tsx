@@ -13,7 +13,7 @@ import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { notifications } from "@mantine/notifications";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
-import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
+import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),

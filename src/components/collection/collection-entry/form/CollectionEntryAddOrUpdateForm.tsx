@@ -24,7 +24,7 @@ import { useGame } from "@/components/game/hooks/useGame";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { useCollectionEntriesForGameId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForGameId";
+import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import {
     SessionAuth,
     useSessionContext,
@@ -101,7 +101,7 @@ const CollectionEntryAddOrUpdateForm = ({
 
     const queryClient = useQueryClient();
 
-    const collectionEntryQuery = useCollectionEntriesForGameId(gameId);
+    const collectionEntryQuery = useOwnCollectionEntryForGameId(gameId);
 
     const gameQuery = useGame(gameId, {
         relations: {
@@ -127,9 +127,7 @@ const CollectionEntryAddOrUpdateForm = ({
         return buildPlatformsOptions(gamePlatformsQuery.data);
     }, [game, gamePlatformsQuery.data]);
 
-    const isUpdateAction =
-        collectionEntryQuery.data != undefined &&
-        collectionEntryQuery.data.length > 0;
+    const isUpdateAction = collectionEntryQuery.data != null;
 
     const collectionEntryMutation = useMutation({
         mutationFn: async (data: TGameAddOrUpdateValues) => {
@@ -140,7 +138,7 @@ const CollectionEntryAddOrUpdateForm = ({
             const isFavorite =
                 isUpdateAction &&
                 collectionEntryQuery.data != undefined &&
-                collectionEntryQuery.data.some((entry) => entry.isFavorite);
+                collectionEntryQuery.data.isFavorite;
 
             await CollectionsEntriesService.collectionsEntriesControllerCreate({
                 collectionIds: collectionIds,
@@ -151,7 +149,7 @@ const CollectionEntryAddOrUpdateForm = ({
         },
         onSettled: () => {
             collectionEntryQuery.invalidate();
-            queryClient.invalidateQueries(["review"]);
+            queryClient.invalidateQueries(["review"]).then();
         },
         onSuccess: () => {
             notifications.show({
@@ -183,18 +181,16 @@ const CollectionEntryAddOrUpdateForm = ({
      * Effect to sync with user's collection data.
      */
     useEffect(() => {
-        if (
-            collectionEntryQuery.data != undefined &&
-            collectionEntryQuery.data.length > 0
-        ) {
-            const collectionIds = collectionEntryQuery.data
-                .filter((entry) => entry.collection != undefined)
-                .map((entry) => entry.collection.id);
+        if (collectionEntryQuery.data != undefined) {
+            const collectionIds = collectionEntryQuery.data.collections.map(
+                (collection) => collection.id,
+            );
 
             if (platformOptions && platformOptions.length > 0) {
-                const platformIds = collectionEntryQuery.data.flatMap((entry) =>
-                    entry.ownedPlatforms.map((platform) => platform.id),
-                );
+                const platformIds =
+                    collectionEntryQuery.data.ownedPlatforms.map(
+                        (platform) => platform.id,
+                    );
                 const uniquePlatformIds = Array.from(new Set(platformIds));
                 setValue(
                     "platformsIds",

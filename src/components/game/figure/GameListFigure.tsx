@@ -1,5 +1,13 @@
 import React, { PropsWithChildren, useMemo, useState } from "react";
-import { AspectRatio, Box, Group, Stack, Text, Title } from "@mantine/core";
+import {
+    AspectRatio,
+    Box,
+    Group,
+    Stack,
+    Text,
+    Title,
+    Badge,
+} from "@mantine/core";
 import Image from "next/image";
 import GameFigureImage, {
     IGameFigureProps,
@@ -68,7 +76,6 @@ const GameListFigure = ({
         platformInfo.platformsAbbreviations?.join(", ");
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
-    const summary = game.summary ? game.summary.slice(0, 160) : undefined;
     const categoryText = useMemo(
         () => getGameSpecialCategoryText(game?.category),
         [game],
@@ -95,7 +102,17 @@ const GameListFigure = ({
                         },
                     }}
                     {...figureProps}
-                />
+                >
+                    {categoryText && (
+                        <Badge
+                            className={
+                                "!absolute !w-fit !max-w-fit !max-h-fit !h-fit bg-gray-800 ml-1 mt-1"
+                            }
+                        >
+                            {categoryText}
+                        </Badge>
+                    )}
+                </GameFigureImage>
             </Box>
             <Stack
                 h={"100%"}

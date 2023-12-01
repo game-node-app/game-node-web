@@ -19,10 +19,7 @@ const buildGamesFigures = (games: Game[] | undefined) => {
         if (index < 20) {
             return (
                 <Carousel.Slide key={similarGame.id}>
-                    <GameGridFigure
-                        game={similarGame}
-                        figureProps={{ size: ImageSize.COVER_BIG }}
-                    />
+                    <GameGridFigure game={similarGame} />
                 </Carousel.Slide>
             );
         }

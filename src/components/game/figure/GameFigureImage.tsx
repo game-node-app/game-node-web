@@ -18,7 +18,6 @@ export interface IGameFigureProps extends PropsWithChildren {
     game: TGameOrSearchGame | undefined;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
     imageProps?: ImageProps;
-    size?: ImageSize;
     href?: string;
 }
 
@@ -34,7 +33,6 @@ const GameFigureImage = ({
     game,
     imageProps,
     href,
-    size,
     onClick,
     children,
 }: IGameFigureProps) => {
