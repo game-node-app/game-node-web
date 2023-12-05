@@ -61,7 +61,7 @@ export default function GlobalShellNavbar({
     const placeholderUserButtonImage = "https://i.imgur.com/fGxgcDF.png";
     const userAvatarImageUrl =
         userProfile && userProfile.avatar
-            ? `${serverUrl}/public/uploads/${userProfile.avatar.path}${userProfile.avatar.extension}`
+            ? `${serverUrl}/v1/public/uploads/${userProfile.avatar.path}${userProfile.avatar.extension}`
             : placeholderUserButtonImage;
 
     return (

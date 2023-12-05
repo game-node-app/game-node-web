@@ -3,7 +3,6 @@ import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Stack, TextInput, Text, Switch } from "@mantine/core";
-import buildAxiosInstance from "@/util/buildAxiosInstance";
 import { useRouter } from "next/router";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";

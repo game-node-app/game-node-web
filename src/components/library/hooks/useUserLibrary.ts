@@ -5,12 +5,14 @@ import {
 } from "@tanstack/react-query";
 import { ApiError, LibrariesService, Library } from "@/wrapper/server";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 export function useUserLibrary(
     userId: string | undefined,
 ): ExtendedUseQueryResult<Library | null> {
     const queryClient = useQueryClient();
     const queryKey = ["library", userId];
+    const currentUserId = useUserId();
     const invalidate = () => queryClient.invalidateQueries({ queryKey });
 
     return {
@@ -18,6 +20,9 @@ export function useUserLibrary(
             queryKey: queryKey,
             queryFn: async (): Promise<Library | null> => {
                 if (!userId) return null;
+                if (currentUserId && currentUserId === userId) {
+                    return LibrariesService.librariesControllerFindOwn();
+                }
                 return LibrariesService.librariesControllerFindOneByIdWithPermissions(
                     userId,
                 );
