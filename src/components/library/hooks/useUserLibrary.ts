@@ -20,9 +20,9 @@ export function useUserLibrary(
             queryKey: queryKey,
             queryFn: async (): Promise<Library | null> => {
                 if (!userId) return null;
-                if (currentUserId && currentUserId === userId) {
-                    return LibrariesService.librariesControllerFindOwn();
-                }
+                // if (currentUserId && currentUserId === userId) {
+                //     return LibrariesService.librariesControllerFindOwn();
+                // }
                 return LibrariesService.librariesControllerFindOneByIdWithPermissions(
                     userId,
                 );

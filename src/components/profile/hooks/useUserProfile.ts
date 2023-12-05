@@ -15,9 +15,9 @@ export default function useUserProfile(
             queryKey: queryKey,
             queryFn: async () => {
                 if (!userId) return null;
-                if (currentUserId && currentUserId === userId) {
-                    return ProfileService.profileControllerFindOwn();
-                }
+                // if (currentUserId && currentUserId === userId) {
+                //     return ProfileService.profileControllerFindOwn();
+                // }
 
                 return ProfileService.profileControllerFindOneById(userId);
             },
