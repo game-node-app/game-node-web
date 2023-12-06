@@ -68,11 +68,13 @@ export default function GlobalShellNavbar({
         <nav className={classes.navbar} style={undefined}>
             {isLoggedIn && userProfile && (
                 <div className={classes.section}>
-                    <UserButton
-                        image={userAvatarImageUrl}
-                        username={userProfile.username}
-                        description="Product owner"
-                    />
+                    <Link href={`/profile/${userProfile.userId}`}>
+                        <UserButton
+                            image={userAvatarImageUrl}
+                            username={userProfile.username}
+                            description="Seeker of Souls"
+                        />
+                    </Link>
                 </div>
             )}
             <Box w={"100%"} my={"0.8rem"}>

@@ -14,19 +14,20 @@ const ProfileUserDescription = ({ userId }: Props) => {
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
     return (
-        <Paper className={"w-full h-full p-4"} withBorder>
+        <Paper className={"w-full h-full p-1"} withBorder>
             <Stack className={"w-full h-full items-center p-2"}>
                 <UserAvatar src={undefined} size={"8rem"} />
                 <Text>{profileQuery.data?.username}</Text>
                 <Stack className={"w-full h-full mt-8"}>
-                    <Group className={"w-full justify-between px-4"}>
-                        <Title size={"h5"}>Games</Title>
-                        <Link href={`/library/${profileQuery.data?.userId}`}>
+                    <Link href={`/library/${profileQuery.data?.userId}`}>
+                        <Group className={"w-full justify-between px-4"}>
+                            <Title size={"h5"}>Games</Title>
                             <Text>
-                                {collectionEntriesQuery.data?.length ?? 0}
+                                {collectionEntriesQuery.data?.pagination
+                                    .totalItems ?? 0}
                             </Text>
-                        </Link>
-                    </Group>
+                        </Group>
+                    </Link>
                     <Divider />
                     <Group className={"w-full justify-between px-4"}>
                         <Title size={"h5"}>Reviews</Title>

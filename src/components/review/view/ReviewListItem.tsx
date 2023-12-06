@@ -5,10 +5,10 @@ import { ActionIcon, Box, Group, Rating, Stack, Text } from "@mantine/core";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import { Profile, Review } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import { IconDots, IconThumbDown, IconThumbUp } from "@tabler/icons-react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ReviewListItemLikes from "@/components/review/view/ReviewListItemLikes";
 import ReviewListItemDropdown from "@/components/review/view/ReviewListItemDropdown";
+import Link from "next/link";
 
 interface IReviewListViewProps {
     review: Review;
@@ -18,10 +18,12 @@ interface IReviewListViewProps {
 const UserAvatarGroup = ({ profile }: { profile: Profile }) => {
     const imageSrc = undefined;
     return (
-        <Group wrap={"wrap"} justify={"center"}>
-            <UserAvatar src={imageSrc} />
-            <Text>{profile.username}</Text>
-        </Group>
+        <Link href={`/profile/${profile.userId}`}>
+            <Group wrap={"wrap"} justify={"center"}>
+                <UserAvatar src={imageSrc} />
+                <Text>{profile.username}</Text>
+            </Group>
+        </Link>
     );
 };
 

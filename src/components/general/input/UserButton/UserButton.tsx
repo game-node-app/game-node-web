@@ -29,11 +29,9 @@ export function UserButton({
                     <Text size="sm">{username}</Text>
 
                     <Text c="dimmed" size="xs">
-                        Seeker of Souls
+                        {description}
                     </Text>
                 </div>
-
-                <IconSelector size="0.9rem" stroke={1.5} />
             </Group>
         </UnstyledButton>
     );

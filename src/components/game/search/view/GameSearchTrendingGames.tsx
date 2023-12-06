@@ -21,14 +21,16 @@ const GameSearchTrendingGames = ({ enabled }: IProps) => {
     const trendingGames = useTrendingItems(DEFAULT_SEARCH_TRENDING_GAMES_DTO);
 
     const gamesIds = trendingGames.data?.data?.map(
-        (statistics) => statistics.sourceId,
+        (statistics) => statistics.sourceId as unknown as number,
     );
     const games = useGames({
-        gameIds: gamesIds as unknown as number[],
+        gameIds: gamesIds || [],
         relations: {
             cover: true,
         },
     });
+
+    const isEmpty = games.data == undefined || games.data.data.length === 0;
 
     const elementsSkeletons = useMemo(() => {
         return Array(DEFAULT_SEARCH_TRENDING_GAMES_DTO.limit)
@@ -43,11 +45,7 @@ const GameSearchTrendingGames = ({ enabled }: IProps) => {
             w={"100%"}
             h={"100%"}
             justify={"center"}
-            display={
-                !enabled || games.isError || trendingGames.isError
-                    ? "none"
-                    : "flex"
-            }
+            display={!enabled || isEmpty ? "none" : "flex"}
         >
             <DetailsBox
                 title={"Trending"}

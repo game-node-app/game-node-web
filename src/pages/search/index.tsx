@@ -12,12 +12,6 @@ import GameSearchTrendingGames, {
 } from "@/components/game/search/view/GameSearchTrendingGames";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { GetStaticPropsResult, NextPageContext } from "next";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { StatisticsService } from "@/wrapper/server";
-import { DehydratedState } from "@tanstack/react-query/build/modern/index";
-import { DehydrationResult } from "@/pages/_app";
-import { sleep } from "@/util/sleep";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -46,37 +40,6 @@ const urlQueryToDto = (urlQuery: ParsedUrlQuery) => {
 
     return searchParams;
 };
-
-export async function getServerSideProps(): Promise<
-    GetStaticPropsResult<DehydrationResult>
-> {
-    const queryClient = new QueryClient();
-    const defaultDto = DEFAULT_SEARCH_TRENDING_GAMES_DTO;
-    const queryKey = [
-        "statistics",
-        "trending",
-        defaultDto.sourceType,
-        defaultDto.offset,
-        defaultDto.limit,
-    ];
-
-    await queryClient.prefetchQuery({
-        queryKey,
-        queryFn: () => {
-            return StatisticsService.statisticsControllerFindTrending(
-                defaultDto.sourceType,
-                defaultDto.offset,
-                defaultDto.limit,
-            );
-        },
-    });
-
-    return {
-        props: {
-            dehydratedState: dehydrate(queryClient),
-        },
-    };
-}
 
 const Index = () => {
     const {
@@ -134,7 +97,7 @@ const Index = () => {
         >
             <Stack align="center" justify="center" w={"100%"}>
                 <Box
-                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12`}
+                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12 px-4`}
                 >
                     <form
                         className="w-full h-full"

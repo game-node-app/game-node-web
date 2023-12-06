@@ -6,6 +6,7 @@ import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
 import getFavoriteCollectionEntries from "@/components/collection/collection-entry/util/getFavoriteCollectionEntries";
+import { useFavoriteCollectionEntriesForUserId } from "@/components/collection/collection-entry/hooks/useFavoriteCollectionEntriesForUserId";
 
 interface Props {
     userId: string;
@@ -13,29 +14,24 @@ interface Props {
 
 const ProfileFavoriteGames = ({ userId }: Props) => {
     const onMobile = useOnMobile();
-    const collectionEntriesQuery = useCollectionEntriesForUserId(userId);
-    const gamesIds = useMemo(() => {
-        if (collectionEntriesQuery.data) {
-            const favoriteGames = getFavoriteCollectionEntries(
-                collectionEntriesQuery.data,
-            );
-            return favoriteGames.map((entry) => entry.gameId);
-        }
-
-        return [];
-    }, [collectionEntriesQuery.data]);
+    const favoriteCollectionEntriesQuery =
+        useFavoriteCollectionEntriesForUserId(userId, 0, 10);
+    const gamesIds = favoriteCollectionEntriesQuery.data?.data.map(
+        (entry) => entry.gameId,
+    );
     const gamesQuery = useGames({
-        gameIds: gamesIds,
+        gameIds: gamesIds || [],
         relations: {
             cover: true,
         },
     });
 
-    const isFailed = collectionEntriesQuery.isError || gamesQuery.isError;
+    const isFailed =
+        favoriteCollectionEntriesQuery.isError || gamesQuery.isError;
 
     const isEmpty =
-        collectionEntriesQuery.data == undefined ||
-        collectionEntriesQuery.data.length === 0 ||
+        favoriteCollectionEntriesQuery.data == undefined ||
+        favoriteCollectionEntriesQuery.data.data.length === 0 ||
         gamesQuery.data == undefined ||
         gamesQuery.data.data.length === 0;
 

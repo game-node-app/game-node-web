@@ -2,6 +2,7 @@ import React from "react";
 import { Game } from "@/wrapper/server";
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 import { Group, GroupProps } from "@mantine/core";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface IGameInfoPlatformsProps extends GroupProps {
     game: Game;
@@ -25,8 +26,14 @@ const buildBadges = (game: Game) => {
 };
 
 const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
+    const onMobile = useOnMobile();
     return (
-        <Group {...others} w={"100%"} justify={"start"} wrap={"wrap"}>
+        <Group
+            {...others}
+            w={"100%"}
+            justify={onMobile ? "center" : "start"}
+            wrap={"wrap"}
+        >
             {buildBadges(game)}
         </Group>
     );
