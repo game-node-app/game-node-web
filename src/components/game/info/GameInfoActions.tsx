@@ -22,25 +22,25 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
     const [removeModalOpened, removeModalUtils] = useDisclosure();
 
-    const collectionEntriesQuery = useOwnCollectionEntryForGameId(game!.id);
+    const collectionEntryQuery = useOwnCollectionEntryForGameId(game!.id);
+
+    const gameInLibrary =
+        !collectionEntryQuery.isError && collectionEntryQuery.data != undefined;
+
+    const gameInFavorites =
+        gameInLibrary && collectionEntryQuery.data!.isFavorite;
+
     const collectionEntryFavoriteMutation = useMutation({
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
                 gameId,
-                { isFavorite: true },
+                { isFavorite: !gameInFavorites },
             );
         },
         onSuccess: () => {
-            collectionEntriesQuery.invalidate();
+            collectionEntryQuery.invalidate();
         },
     });
-
-    const gameInLibrary =
-        !collectionEntriesQuery.isError &&
-        collectionEntriesQuery.data != undefined;
-
-    const gameInFavorites =
-        gameInLibrary && collectionEntriesQuery.data!.isFavorite;
 
     if (game == undefined) {
         return null;
