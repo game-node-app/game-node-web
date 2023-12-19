@@ -37,6 +37,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
                 { isFavorite: !gameInFavorites },
             );
         },
+
         onSuccess: () => {
             collectionEntryQuery.invalidate();
         },

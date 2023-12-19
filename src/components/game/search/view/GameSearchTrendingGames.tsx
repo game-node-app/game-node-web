@@ -4,18 +4,22 @@ import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import { useTrendingItems } from "@/components/statistics/hooks/useTrendingItems";
+import {
+    useTrendingItems,
+    UseTrendingItemsProps,
+} from "@/components/statistics/hooks/useTrendingItems";
 import { useGames } from "@/components/game/hooks/useGames";
 
 interface IProps {
     enabled: boolean;
 }
 
-export const DEFAULT_SEARCH_TRENDING_GAMES_DTO = {
+export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: UseTrendingItemsProps = {
+    minimumItems: 6,
     sourceType: "game",
     offset: 0,
     limit: 6,
-} as const;
+};
 
 const GameSearchTrendingGames = ({ enabled }: IProps) => {
     const trendingGames = useTrendingItems(DEFAULT_SEARCH_TRENDING_GAMES_DTO);

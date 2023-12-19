@@ -1,7 +1,8 @@
 import { Container, Burger, Box, Button, AppShell } from "@mantine/core";
 import GameNodeLogo from "@/components/general/GameNodeLogo";
 import Link from "next/link";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import { IconAdjustmentsCog } from "@tabler/icons-react";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface IGlobalShellHeaderProps {
     sidebarOpened: boolean;
@@ -12,7 +13,7 @@ export default function GlobalShellHeader({
     sidebarOpened,
     toggleSidebar,
 }: IGlobalShellHeaderProps) {
-    const session = useSessionContext();
+    const userId = useUserId();
 
     return (
         <header className="h-full">
@@ -28,11 +29,16 @@ export default function GlobalShellHeader({
                 <Link href={"/search"}>
                     <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
                 </Link>
-                {!session.loading && !session.doesSessionExist && (
+                {!userId && (
                     <Box className="ms-auto">
                         <Link href={"/auth"}>
                             <Button variant="outline">Sign in</Button>
                         </Link>
+                    </Box>
+                )}
+                {userId && (
+                    <Box className={"ms-auto"}>
+                        <IconAdjustmentsCog />
                     </Box>
                 )}
             </Container>

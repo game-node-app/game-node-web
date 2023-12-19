@@ -1,19 +1,14 @@
 import {
-    StatisticsActionDto,
     StatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
-import {
-    useQuery,
-    useQueryClient,
-    UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
-import { sleep } from "@/util/sleep";
 
 export interface UseTrendingItemsProps {
+    minimumItems: number;
     sourceType: "game" | "review" | "activity" | "collection";
-    offset?: number;
+    offset: number;
     limit: number;
 }
 
@@ -25,6 +20,7 @@ export function useTrendingItems(
         "statistics",
         "trending",
         dto.sourceType,
+        dto.minimumItems,
         dto.offset,
         dto.limit,
     ];
@@ -36,6 +32,7 @@ export function useTrendingItems(
             queryKey,
             queryFn: async () => {
                 return StatisticsService.statisticsControllerFindTrending(
+                    dto.minimumItems,
                     dto.sourceType,
                     dto.offset,
                     dto.limit,

@@ -3,6 +3,7 @@ import { useCollectionEntriesForCollectionId } from "@/components/collection/col
 import { z, ZodError, ZodIssueCode } from "zod";
 import {
     ApiError,
+    CancelablePromise,
     CollectionsEntriesService,
     CreateCollectionEntryDto,
     Game,
@@ -26,7 +27,6 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
-import { useGames } from "@/components/game/hooks/useGames";
 
 const CollectionEntriesMoveFormSchema = z.object({
     gameIds: z.array(z.number()).min(1).default([]),
@@ -131,13 +131,13 @@ const CollectionEntriesMoveForm = ({
                 );
             }
 
-            const promises: Promise<void>[] = [];
+            const promises: Promise<CancelablePromise<any>>[] = [];
             for (const entry of relevantCollectionEntries) {
                 const ownedPlatformsIds = entry.ownedPlatforms.map(
                     (platform) => platform.id,
                 );
-                const createPromise =
-                    CollectionsEntriesService.collectionsEntriesControllerCreate(
+                const replacePromise =
+                    CollectionsEntriesService.collectionsEntriesControllerReplace(
                         {
                             isFavorite: entry.isFavorite,
                             platformIds: ownedPlatformsIds as unknown as any,
@@ -145,7 +145,7 @@ const CollectionEntriesMoveForm = ({
                             gameId: entry.game.id,
                         },
                     );
-                promises.push(createPromise);
+                promises.push(replacePromise);
             }
             return Promise.all(promises);
         },
