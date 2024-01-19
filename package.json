@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:all": "npm-run-all --parallel dev typesafe-i18n",
-    "dev": "next dev",
+    "dev": "yarn run wrapper:generate && next dev",
     "dev:turbo": "next dev --turbo",
     "build": "yarn run wrapper:generate && next build",
     "start": "next start",
