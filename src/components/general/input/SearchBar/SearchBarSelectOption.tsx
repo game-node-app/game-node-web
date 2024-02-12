@@ -32,10 +32,7 @@ const SearchBarSelectOption = ({ game }: ISearchBarSelectOptions) => {
                         }}
                     >
                         <GameFigureImage
-                            href={"#"}
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}
+                            href={`/game/${game.id}`}
                             game={game}
                         />
                     </Box>

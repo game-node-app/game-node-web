@@ -1,4 +1,3 @@
-import React from "react";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 const useUserId = (): string | undefined => {

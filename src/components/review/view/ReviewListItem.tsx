@@ -16,11 +16,10 @@ interface IReviewListViewProps {
 }
 
 const UserAvatarGroup = ({ profile }: { profile: Profile }) => {
-    const imageSrc = undefined;
     return (
         <Link href={`/profile/${profile.userId}`}>
             <Group wrap={"wrap"} justify={"center"}>
-                <UserAvatar src={imageSrc} />
+                <UserAvatar avatar={profile.avatar} />
                 <Text>{profile.username}</Text>
             </Group>
         </Link>

@@ -56,6 +56,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
             return getCombinedImages(game);
         }
     }, [game]);
+    const hasImages = combinedImages && combinedImages.length > 0;
 
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
@@ -98,6 +99,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                 </Grid>
                 <Flex className={"w-full"} wrap={"wrap"}>
                     <DetailsBox
+                        enabled={hasImages}
                         title={"Images"}
                         content={
                             <GameInfoImageCarousel

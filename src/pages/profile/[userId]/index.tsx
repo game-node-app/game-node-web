@@ -34,7 +34,6 @@ export async function getServerSideProps(
         }),
     );
     await Promise.all(promises);
-    console.log("Prefetched queries for /profile/" + userId);
     return {
         props: {
             dehydratedState: dehydrate(queryClient),

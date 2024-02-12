@@ -8,7 +8,7 @@ import { TGameOrSearchGame } from "@/components/game/util/types";
 
 interface IGameGridFigureProps {
     game: TGameOrSearchGame;
-    figureProps?: Partial<IGameFigureProps>;
+    figureProps?: Omit<Partial<IGameFigureProps>, "game">;
 }
 
 const GameGridFigure = ({ game, figureProps }: IGameGridFigureProps) => {

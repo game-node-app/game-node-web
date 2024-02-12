@@ -22,15 +22,23 @@ export const DEFAULT_GAME_EXTRA_INFO_DTO = {
 
 const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
     const gameQuery = useGame(id, DEFAULT_GAME_EXTRA_INFO_DTO);
-
+    const hasDlcs =
+        gameQuery.data != undefined &&
+        gameQuery.data.dlcs != undefined &&
+        gameQuery.data.dlcs.length > 0;
+    const hasSimilarGames =
+        gameQuery.data != undefined &&
+        gameQuery.data.similarGames != undefined &&
+        gameQuery.data.similarGames.length > 0;
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
                 <DetailsBox
-                    title={"Similar games"}
+                    enabled={hasDlcs}
+                    title={"DLCs"}
                     content={
                         <GameInfoCarousel
-                            games={gameQuery.data?.similarGames}
+                            games={gameQuery.data?.dlcs}
                             isLoading={gameQuery.isLoading}
                             isError={gameQuery.isError}
                         />
@@ -38,10 +46,11 @@ const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
                 />
                 <Break />
                 <DetailsBox
-                    title={"DLCs"}
+                    enabled={hasSimilarGames}
+                    title={"Similar games"}
                     content={
                         <GameInfoCarousel
-                            games={gameQuery.data?.dlcs}
+                            games={gameQuery.data?.similarGames}
                             isLoading={gameQuery.isLoading}
                             isError={gameQuery.isError}
                         />

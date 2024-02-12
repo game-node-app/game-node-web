@@ -25,8 +25,12 @@ import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView
 import sourceType = StatisticsActionDto.sourceType;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+    const queryId = context.query.id;
+    if (queryId == undefined) {
+        return;
+    }
     const dto: GameRepositoryFindOneDto = DEFAULT_GAME_INFO_VIEW_DTO;
-    const idAsNumber = parseInt(context.query.id as string, 10);
+    const idAsNumber = parseInt(queryId as string, 10);
 
     const queryClient = new QueryClient();
 
@@ -42,7 +46,6 @@ export const getServerSideProps = async (context: NextPageContext) => {
             );
         },
     });
-    console.log("Prefetched game info for ID: " + context.query.id);
 
     return {
         props: {

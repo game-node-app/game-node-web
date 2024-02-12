@@ -4,7 +4,7 @@ import { Game } from "@/wrapper/server";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import { Center, Flex, Skeleton, Text } from "@mantine/core";
+import { Box, Center, Flex, Skeleton, Text } from "@mantine/core";
 
 interface IGameInfoCarouselProps {
     isLoading: boolean;
