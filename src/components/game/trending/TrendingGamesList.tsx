@@ -10,10 +10,6 @@ import {
 } from "@/components/statistics/hooks/useTrendingItems";
 import { useGames } from "@/components/game/hooks/useGames";
 
-interface IProps {
-    enabled: boolean;
-}
-
 export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: UseTrendingItemsProps = {
     minimumItems: 6,
     sourceType: "game",
@@ -21,7 +17,7 @@ export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: UseTrendingItemsProps = {
     limit: 6,
 };
 
-const GameSearchTrendingGames = ({ enabled }: IProps) => {
+const TrendingGamesList = () => {
     const trendingGames = useTrendingItems(DEFAULT_SEARCH_TRENDING_GAMES_DTO);
 
     const gamesIds = trendingGames.data?.data?.map(
@@ -45,14 +41,9 @@ const GameSearchTrendingGames = ({ enabled }: IProps) => {
     }, []);
 
     return (
-        <Flex
-            w={"100%"}
-            h={"100%"}
-            justify={"center"}
-            display={!enabled || isEmpty ? "none" : "flex"}
-        >
+        !isEmpty && (
             <DetailsBox
-                title={"Trending"}
+                title={"Trending Games"}
                 content={
                     <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
                         {trendingGames.isLoading || games.isLoading
@@ -64,8 +55,8 @@ const GameSearchTrendingGames = ({ enabled }: IProps) => {
                     </SimpleGrid>
                 }
             />
-        </Flex>
+        )
     );
 };
 
-export default GameSearchTrendingGames;
+export default TrendingGamesList;

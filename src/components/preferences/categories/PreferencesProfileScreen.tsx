@@ -15,18 +15,21 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
-import PreferencesAvatarUploader from "@/components/preferences/PreferencesAvatarUploader";
+import PreferencesAvatarUploader from "@/components/preferences/handlers/PreferencesAvatarUploader";
 import { IconEdit } from "@tabler/icons-react";
-import PreferencesUsernameChanger from "@/components/preferences/categories/PreferencesUsernameChanger";
+import PreferencesUsernameChanger from "@/components/preferences/handlers/PreferencesUsernameChanger";
 import Link from "next/link";
+import { useFeaturedObtainedAchievement } from "@/components/achievement/hooks/useFeaturedObtainedAchievement";
+import AchievementItem from "@/components/achievement/AchievementItem";
 
 const PreferencesProfileScreen = () => {
     const userId = useUserId();
     const userProfile = useUserProfile(userId);
     const [avatarModalOpened, avatarModalOpenedUtils] = useDisclosure();
     const [usernameModalOpened, usernameModalUtils] = useDisclosure();
+    const featuredAchievement = useFeaturedObtainedAchievement(userId);
     return (
-        <Stack w={"100%"} align={"center"}>
+        <Stack w={"100%"} className={"items-center lg:items-start"}>
             <Group className={"w-full items-start"}>
                 <Modal
                     opened={avatarModalOpened}
@@ -79,7 +82,8 @@ const PreferencesProfileScreen = () => {
                     </Stack>
                 </Group>
             </Group>
-            <Text c={"dimmed"} className={"text-center text-sm"}>
+            <Stack></Stack>
+            <Text c={"dimmed"} className={"text-center lg:text-start text-sm"}>
                 Click on your profile picture or username to edit it.
             </Text>
         </Stack>

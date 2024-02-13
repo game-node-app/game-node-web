@@ -8,8 +8,8 @@ import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 export interface UseTrendingItemsProps {
     minimumItems: number;
     sourceType: "game" | "review" | "activity" | "collection";
-    offset: number;
-    limit: number;
+    offset?: number;
+    limit?: number;
 }
 
 export function useTrendingItems(

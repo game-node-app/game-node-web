@@ -1,30 +1,18 @@
 import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { ActionIcon, Box, Group, Rating, Stack, Text } from "@mantine/core";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
-import { Profile, Review } from "@/wrapper/server";
+import { Divider, Flex, Group, Rating, Stack } from "@mantine/core";
+import { Review } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ReviewListItemLikes from "@/components/review/view/ReviewListItemLikes";
 import ReviewListItemDropdown from "@/components/review/view/ReviewListItemDropdown";
-import Link from "next/link";
+import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 
 interface IReviewListViewProps {
     review: Review;
     onEditStart?: () => void;
 }
-
-const UserAvatarGroup = ({ profile }: { profile: Profile }) => {
-    return (
-        <Link href={`/profile/${profile.userId}`}>
-            <Group wrap={"wrap"} justify={"center"}>
-                <UserAvatar avatar={profile.avatar} />
-                <Text>{profile.username}</Text>
-            </Group>
-        </Link>
-    );
-};
 
 const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
@@ -50,8 +38,9 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
     );
 
     const userId = useUserId();
-    const reviewProfile = review.profile;
-    const isOwnReview = userId === reviewProfile?.userId;
+    const profileUserId = review.profileUserId;
+    // const isOwnReview = userId === profileUserId;
+    const isOwnReview = false;
 
     return (
         <Stack w={"100%"} align={"center"}>
@@ -61,17 +50,26 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                 wrap={onMobile ? "wrap" : "nowrap"}
                 onClick={() => setIsReadMore(!isReadMore)}
             >
-                {onMobile ? (
-                    <Group w={"100%"} justify={"space-between"}>
-                        <UserAvatarGroup profile={review.profile} />
-                        <Rating value={review.rating} />
-                    </Group>
-                ) : (
-                    <Stack justify={"center"} align={"center"}>
-                        <UserAvatarGroup profile={review.profile} />
-                        <Rating value={review.rating} />
-                    </Stack>
-                )}
+                <Flex
+                    direction={{
+                        base: "row",
+                        lg: "column",
+                    }}
+                    w={{
+                        base: "100%",
+                        lg: "fit-content",
+                    }}
+                    justify={{
+                        base: "space-between",
+                        lg: "center",
+                    }}
+                    align={{
+                        lg: "center",
+                    }}
+                >
+                    <UserAvatarGroup userId={profileUserId} />
+                    <Rating value={review.rating} />
+                </Flex>
                 <EditorContent
                     editor={nonEditableEditor}
                     className={"w-full"}
@@ -88,6 +86,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     onEditStart={onEditStart}
                 />
             </Group>
+            <Divider w={"100%"} orientation={"horizontal"} />
         </Stack>
     );
 };

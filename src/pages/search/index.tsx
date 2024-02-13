@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Stack } from "@mantine/core";
+import { Box, Container, Flex, Space, Stack } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,11 +7,12 @@ import { z } from "zod";
 import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
 import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
-import GameSearchTrendingGames, {
+import TrendingGamesList, {
     DEFAULT_SEARCH_TRENDING_GAMES_DTO,
-} from "@/components/game/search/view/GameSearchTrendingGames";
+} from "@/components/game/trending/TrendingGamesList";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
+import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -87,6 +88,12 @@ const Index = () => {
         }
     }, [setValue, urlQuery]);
 
+    /**
+     * Trending games, reviews, etc.
+     */
+    const extraItemsEnabled =
+        !searchQuery.isLoading && searchQuery.data == undefined;
+
     return (
         <Container
             fluid
@@ -131,9 +138,18 @@ const Index = () => {
                             handleSubmit(onSubmit)();
                         }}
                     />
-                    <GameSearchTrendingGames
-                        enabled={searchQuery.data == undefined}
-                    />
+                    {extraItemsEnabled && (
+                        <Flex
+                            w={"100%"}
+                            h={"100%"}
+                            justify={"center"}
+                            wrap={"wrap"}
+                        >
+                            <TrendingGamesList />
+                            <Space />
+                            <TrendingReviewCarousel />
+                        </Flex>
+                    )}
                 </Box>
             </Stack>
         </Container>

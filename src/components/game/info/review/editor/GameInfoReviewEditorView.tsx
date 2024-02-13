@@ -45,6 +45,7 @@ const GameInfoReviewEditorView = ({
 
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
+    const collectionEntryQuery = useOwnCollectionEntryForGameId(gameId);
 
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
@@ -96,7 +97,11 @@ const GameInfoReviewEditorView = ({
         setIsEditMode(false);
     };
 
-    const render = () => {
+    if (collectionEntryQuery.data == undefined) {
+        return null;
+    }
+
+    const renderInnerContent = () => {
         if (!isEditMode && reviewQuery.data != undefined) {
             return (
                 <ReviewListItem
@@ -136,9 +141,14 @@ const GameInfoReviewEditorView = ({
     };
 
     return (
-        <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
-            {render()}
-        </Flex>
+        <DetailsBox
+            title={"Your review"}
+            content={
+                <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
+                    {renderInnerContent()}
+                </Flex>
+            }
+        />
     );
 };
 

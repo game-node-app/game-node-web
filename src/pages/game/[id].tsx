@@ -8,12 +8,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import GameExtraInfoView, {
     DEFAULT_GAME_EXTRA_INFO_DTO,
 } from "@/components/game/info/GameExtraInfoView";
-import {
-    GetStaticPaths,
-    GetStaticPathsContext,
-    GetStaticPathsResult,
-    NextPageContext,
-} from "next";
+import { NextPageContext } from "next";
 import {
     Game,
     GameRepositoryFindOneDto,
@@ -23,6 +18,7 @@ import {
 } from "@/wrapper/server";
 import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
 import sourceType = StatisticsActionDto.sourceType;
+import { useUserView } from "@/components/statistics/hooks/useUserView";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const queryId = context.query.id;
@@ -57,29 +53,23 @@ export const getServerSideProps = async (context: NextPageContext) => {
 const GameInfoPage = () => {
     const router = useRouter();
     const { id } = router.query;
+    const [_, isViewed, incrementView] = useUserView(`${id}`, "game");
 
     /**
      * Stores the path parameter "id" of the last registered game view.
      */
     const lastRegisteredGameView = useRef<string | undefined>(undefined);
 
-    /**
-     * Effect to add to game's statistics views.
-     */
     useEffect(() => {
         if (
             router.isReady &&
             id != undefined &&
             lastRegisteredGameView.current !== id
         ) {
-            const idAsNumber = parseInt(id as string, 10);
-            StatisticsQueueService.statisticsQueueControllerAddView({
-                sourceType: sourceType.GAME,
-                sourceId: `${idAsNumber}`,
-            });
+            incrementView();
             lastRegisteredGameView.current = id as string;
         }
-    }, [id, router]);
+    }, [id, incrementView, router]);
 
     /**
      * Effect to render /404 if necessary

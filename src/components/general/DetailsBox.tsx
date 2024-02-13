@@ -5,7 +5,6 @@ interface IDetailsBoxProps {
     enabled?: boolean;
     title: string;
     description?: string | undefined;
-    descriptionColor?: MantineColor;
     content:
         | React.ReactElement
         | React.ReactElement[]
@@ -18,7 +17,6 @@ export const DetailsBox = ({
     enabled = true,
     title,
     description,
-    descriptionColor,
     content,
 }: IDetailsBoxProps) => {
     return (
@@ -29,16 +27,9 @@ export const DetailsBox = ({
                 className="flex justify-start p-2 lg:p-0"
             >
                 <Box className={"w-full px-4 py-2"}>
-                    <Text c={""} className="font-bold text-md mb-2">
-                        {title}
-                    </Text>
+                    <Text className="font-bold text-md mb-2">{title}</Text>
                     {description && (
-                        <Text
-                            fz={"sm"}
-                            lh={"md"}
-                            c={descriptionColor ?? "dimmed"}
-                            className="mb-2"
-                        >
+                        <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-2">
                             {description}
                         </Text>
                     )}

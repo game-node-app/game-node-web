@@ -20,6 +20,7 @@ import { OpenAPI as SearchOpenAPI } from "@/wrapper/search";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/dropzone/styles.css";
+import "@mantine/carousel/styles.css";
 
 /**
  * Includes tailwind styles

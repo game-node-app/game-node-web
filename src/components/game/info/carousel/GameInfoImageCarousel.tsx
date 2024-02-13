@@ -1,9 +1,7 @@
-import "@mantine/carousel/styles.css";
 import React from "react";
 import { Carousel, CarouselProps } from "@mantine/carousel";
-import { Game } from "@/wrapper/server";
 import { CarouselSlideProps } from "@mantine/carousel/lib/CarouselSlide/CarouselSlide";
-import { Flex, Image, Text } from "@mantine/core";
+import { Flex, Text } from "@mantine/core";
 import {
     getSizedImageUrl,
     ImageSize,
@@ -49,7 +47,10 @@ const GameInfoImageCarousel = ({
 
     return (
         <Carousel
-            slideSize={onMobile ? "100%" : "35%"}
+            slideSize={{
+                base: "100%",
+                lg: "35%",
+            }}
             height={"fit-content"}
             align="start"
             slideGap="xs"

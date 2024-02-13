@@ -54,7 +54,7 @@ function buildCollectionOptions(
     collections: Collection[] | undefined,
 ): ComboboxItem[] {
     if (collections == undefined || collections.length === 0) {
-        return undefined;
+        return null;
     }
 
     return collections.map((collection) => {
@@ -140,12 +140,14 @@ const CollectionEntryAddOrUpdateForm = ({
                 collectionEntryQuery.data != undefined &&
                 collectionEntryQuery.data.isFavorite;
 
-            await CollectionsEntriesService.collectionsEntriesControllerCreate({
-                collectionIds: collectionIds,
-                gameId: gameId,
-                platformIds: parsedPlatformIds,
-                isFavorite: isFavorite,
-            });
+            await CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
+                {
+                    collectionIds: collectionIds,
+                    gameId: gameId,
+                    platformIds: parsedPlatformIds,
+                    isFavorite: isFavorite,
+                },
+            );
         },
         onSettled: () => {
             collectionEntryQuery.invalidate();
@@ -164,7 +166,8 @@ const CollectionEntryAddOrUpdateForm = ({
                 onClose();
             }
         },
-        onError: () => {
+        onError: (err) => {
+            console.error(err);
             notifications.show({
                 title: "Error",
                 message: "Something went wrong!",

@@ -22,17 +22,15 @@ const PreferencesScreen = () => {
     };
 
     return (
-        <SessionAuth>
-            <Paper className={"w-full h-full"}>
-                <Group className={"w-full h-full items-start"}>
+        <Flex className={"justify-center w-full h-full"}>
+            <Paper className={"w-full lg:w-[80vw] h-full mt-8"}>
+                <Group className={"w-full h-full  items-start"}>
                     <Stack className={"w-full lg:w-3/12 lg:mt-12"}>
                         {onMobile ? (
-                            <Flex className={"w-full"}>
-                                <PreferencesScreenSelector
-                                    activeItem={currentActiveItem}
-                                    onChange={setCurrentActiveItem}
-                                />
-                            </Flex>
+                            <PreferencesScreenSelector
+                                activeItem={currentActiveItem}
+                                onChange={setCurrentActiveItem}
+                            />
                         ) : (
                             <PreferencesScreenSideBar
                                 activeItem={currentActiveItem}
@@ -41,16 +39,12 @@ const PreferencesScreen = () => {
                         )}
                     </Stack>
                     {!onMobile && <Divider orientation={"vertical"} />}
-                    <Stack
-                        className={
-                            "w-full h-full lg:w-8/12 justify-start items-start"
-                        }
-                    >
+                    <Stack className={"w-full h-full lg:w-7/12 mt-4"}>
                         {render()}
                     </Stack>
                 </Group>
             </Paper>
-        </SessionAuth>
+        </Flex>
     );
 };
 
