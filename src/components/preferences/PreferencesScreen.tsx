@@ -3,48 +3,64 @@ import { Box, Divider, Flex, Group, Paper, Stack } from "@mantine/core";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import PreferencesScreenSideBar, {
-    PreferencesActiveItem,
+    PreferencesActiveCategory,
 } from "@/components/preferences/PreferencesScreenSideBar";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import PreferencesScreenSelector from "@/components/preferences/PreferencesScreenSelector";
 import PreferencesProfileScreen from "@/components/preferences/categories/PreferencesProfileScreen";
+import { useRouter } from "next/router";
 
-const PreferencesScreen = () => {
+interface Props {
+    category: PreferencesActiveCategory;
+}
+const PreferencesScreen = ({ category }: Props) => {
+    const router = useRouter();
     const onMobile = useOnMobile();
-    const [currentActiveItem, setCurrentActiveItem] =
-        useState<PreferencesActiveItem>("profile");
+
+    const onCategoryChange = (category: PreferencesActiveCategory) => {
+        if (router.isReady) {
+            router.push(`/preferences/${category}`);
+        }
+    };
 
     const render = () => {
-        switch (currentActiveItem) {
+        switch (category) {
             default:
                 return <PreferencesProfileScreen />;
         }
     };
 
     return (
-        <Flex className={"justify-center w-full h-full"}>
-            <Paper className={"w-full lg:w-[80vw] h-full mt-8"}>
-                <Group className={"w-full h-full  items-start"}>
-                    <Stack className={"w-full lg:w-3/12 lg:mt-12"}>
+        <Stack className={"justify-center items-center w-full relative"}>
+            <Paper className={"w-full lg:w-[90vw]  mt-8 relative"}>
+                <Group
+                    wrap={"wrap"}
+                    h={"fit-content"}
+                    className={"w-full items-start wrap"}
+                    gap={0}
+                >
+                    <Stack className={"w-full lg:w-1/5 lg:mt-12 lg:mb-12"}>
                         {onMobile ? (
                             <PreferencesScreenSelector
-                                activeItem={currentActiveItem}
-                                onChange={setCurrentActiveItem}
+                                activeCategory={category}
+                                onChange={onCategoryChange}
                             />
                         ) : (
                             <PreferencesScreenSideBar
-                                activeItem={currentActiveItem}
-                                onChange={setCurrentActiveItem}
+                                activeItem={category}
+                                onChange={onCategoryChange}
                             />
                         )}
                     </Stack>
                     {!onMobile && <Divider orientation={"vertical"} />}
-                    <Stack className={"w-full h-full lg:w-7/12 mt-4"}>
+                    <Stack
+                        className={"w-full h-full lg:w-9/12 lg:mt-4 lg:ms-4"}
+                    >
                         {render()}
                     </Stack>
                 </Group>
             </Paper>
-        </Flex>
+        </Stack>
     );
 };
 

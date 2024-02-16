@@ -46,8 +46,6 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
             }
 
             StatisticsQueueService.statisticsQueueControllerAddLike(dto).then();
-
-            console.log("Finished action for : " + sourceId);
         },
         onSuccess: () => {},
 
@@ -83,10 +81,6 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
             };
 
             await queryClient.setQueryData(statisticsQueryKey, newStatistics);
-            console.log({
-                previousStatistics,
-                newStatistics,
-            });
 
             return {
                 previousStatistics,

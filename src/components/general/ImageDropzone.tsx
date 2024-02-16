@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Flex, Group, rem, Text } from "@mantine/core";
+import { Flex, Group, rem, Stack, Text } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { FileError } from "react-dropzone-esm";
 
@@ -55,7 +55,7 @@ const ImageDropzone = ({
                         stroke={1.5}
                     />
                 </Dropzone.Idle>
-                <Flex justify={"center"} wrap={"wrap"}>
+                <Stack justify={"center"}>
                     <Text size="xl" inline>
                         Drag images here or click to select files
                     </Text>
@@ -76,7 +76,7 @@ const ImageDropzone = ({
                         );
                     })}
                     {props.children}
-                </Flex>
+                </Stack>
             </Group>
         </Dropzone>
     );

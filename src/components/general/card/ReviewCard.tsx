@@ -1,17 +1,5 @@
 import React from "react";
-import {
-    Button,
-    Paper,
-    rem,
-    Stack,
-    Title,
-    Text,
-    Box,
-    Group,
-    Skeleton,
-    Overlay,
-} from "@mantine/core";
-import { Review } from "@/wrapper/server";
+import { Button, Group, Overlay, Paper, Skeleton, Text } from "@mantine/core";
 import classes from "./ReviewCard.module.css";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
@@ -57,10 +45,9 @@ const ReviewCard = ({ reviewId }: IProps) => {
         "",
     );
 
-    const imageSize = onMobile ? ImageSize.COVER_BIG : ImageSize.HD;
     const backgroundUrl = getSizedImageUrl(
         gameQuery.data.cover?.url,
-        imageSize,
+        ImageSize.COVER_BIG,
     );
 
     return (
@@ -84,7 +71,7 @@ const ReviewCard = ({ reviewId }: IProps) => {
                 </Text>
             </div>
             <Button variant="white" color="dark" className={"z-10"}>
-                Visit game
+                Visit
             </Button>
         </Paper>
     );

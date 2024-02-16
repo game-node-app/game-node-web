@@ -1,13 +1,15 @@
-import React from "react";
-import { SessionAuth } from "supertokens-auth-react/recipe/session";
-import PreferencesScreen from "@/components/preferences/PreferencesScreen";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 const Index = () => {
-    return (
-        <SessionAuth>
-            <PreferencesScreen />
-        </SessionAuth>
-    );
+    const router = useRouter();
+    useEffect(() => {
+        if (router.isReady) {
+            router.push("/preferences/profile");
+        }
+    }, [router]);
+    return <CenteredLoading />;
 };
 
 export default Index;

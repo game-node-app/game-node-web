@@ -39,8 +39,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
 
     const userId = useUserId();
     const profileUserId = review.profileUserId;
-    // const isOwnReview = userId === profileUserId;
-    const isOwnReview = false;
+    const isOwnReview = userId === profileUserId;
 
     return (
         <Stack w={"100%"} align={"center"}>

@@ -2,6 +2,7 @@ import { useAchievements } from "@/components/achievement/hooks/useAchievements"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AchievementsService, ObtainedAchievement } from "@/wrapper/server";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
+import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAllObtainedAchievements";
 
 export function useFeaturedObtainedAchievement(
     userId: string | undefined,
@@ -9,40 +10,26 @@ export function useFeaturedObtainedAchievement(
     const queryClient = useQueryClient();
     const queryKey = ["achievements", "featured", userId];
 
-    const achievements = useAchievements({
-        limit: 1000,
-    });
+    const obtainedAchievements = useAllObtainedAchievements(userId);
 
-    const invalidate = () =>
+    const invalidate = () => {
         queryClient.invalidateQueries({
             queryKey,
         });
+        obtainedAchievements.invalidate();
+    };
 
     return {
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                if (!userId) return undefined;
-                if (!achievements.data) return undefined;
-
-                let obtainedAchievements: ObtainedAchievement[] = [];
-
-                for (const achievement of achievements.data.data) {
-                    try {
-                        const response =
-                            await AchievementsService.achievementsControllerGetObtainedAchievement(
-                                achievement.id,
-                                userId!,
-                            );
-                        obtainedAchievements.push(response);
-                    } catch (e) {}
-                }
-
-                return obtainedAchievements.find(
+                const featuredAchievement = obtainedAchievements.data?.find(
                     (achievement) => achievement.isFeatured,
                 );
+                if (!featuredAchievement) return null;
+
+                return featuredAchievement;
             },
-            enabled: !!userId,
         }),
         invalidate,
         queryKey,

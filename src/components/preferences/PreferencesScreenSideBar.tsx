@@ -2,43 +2,43 @@ import React from "react";
 import { Box, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 
-export type PreferencesActiveItem = "profile" | "connections" | "privacy";
+export type PreferencesActiveCategory = "profile" | "connections" | "privacy";
 
 interface PreferencesCategory {
     name: string;
-    activeItemName: PreferencesActiveItem;
+    activeCategoryName: PreferencesActiveCategory;
 }
 
 interface Props {
-    activeItem: PreferencesActiveItem;
-    onChange: (activeItem: PreferencesActiveItem) => void;
+    activeItem: PreferencesActiveCategory;
+    onChange: (activeCategory: PreferencesActiveCategory) => void;
 }
 
 export const preferencesCategories: PreferencesCategory[] = [
     {
         name: "Profile",
-        activeItemName: "profile",
+        activeCategoryName: "profile",
     },
     {
         name: "Connections",
-        activeItemName: "connections",
+        activeCategoryName: "connections",
     },
     {
         name: "Privacy",
-        activeItemName: "privacy",
+        activeCategoryName: "privacy",
     },
 ];
 
 const PreferencesScreenSideBar = ({ activeItem, onChange }: Props) => {
     const itemsElements = preferencesCategories.map((item) => {
-        const isActiveItem = item.activeItemName === activeItem;
+        const isActiveItem = item.activeCategoryName === activeItem;
         return (
             <Link
-                key={item.activeItemName}
+                key={item.activeCategoryName}
                 href={``}
                 onClick={(evt) => {
                     evt.preventDefault();
-                    onChange(item.activeItemName);
+                    onChange(item.activeCategoryName);
                 }}
             >
                 <Box

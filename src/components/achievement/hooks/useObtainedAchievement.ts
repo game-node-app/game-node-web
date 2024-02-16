@@ -3,14 +3,17 @@ import { AchievementsService } from "@/wrapper/server/services/AchievementsServi
 
 export function useObtainedAchievement(
     targetUserId: string,
-    achievementId: string,
+    achievementId: string | undefined,
 ) {
     return useQuery({
         queryKey: ["obtained-achievement", targetUserId, achievementId],
         queryFn: () => {
+            if (!achievementId) {
+                return null;
+            }
             return AchievementsService.achievementsControllerGetObtainedAchievement(
-                targetUserId,
                 achievementId,
+                targetUserId,
             );
         },
         retry: false,

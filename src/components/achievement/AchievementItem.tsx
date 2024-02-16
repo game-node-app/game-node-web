@@ -12,17 +12,21 @@ import {
 import { AchievementDto } from "@/wrapper/server";
 import { useObtainedAchievement } from "@/components/achievement/hooks/useObtainedAchievement";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
+import GameNodeLogo from "@/components/general/GameNodeLogo";
 
 interface Props {
     targetUserId: string;
-    achievement: AchievementDto;
+    achievement: AchievementDto | undefined;
 }
 
 const AchievementItem = ({ targetUserId, achievement }: Props) => {
     const obtainedAchievementQuery = useObtainedAchievement(
         targetUserId,
-        achievement.id,
+        achievement?.id,
     );
+    if (!achievement) {
+        return null;
+    }
     const obtainedAchievement = obtainedAchievementQuery.data;
     const achievementNotYetObtained = obtainedAchievement == undefined;
 
@@ -33,6 +37,8 @@ const AchievementItem = ({ targetUserId, achievement }: Props) => {
     const obtainedText = achievementNotYetObtained
         ? "Not yet obtained"
         : `Obtained at ${new Date(obtainedAchievement?.createdAt).toLocaleDateString()}`;
+    const icon = getServerStoredIcon(achievement.id);
+
     return (
         <Paper
             className={"border-4 border-[#282828]"}
@@ -53,6 +59,8 @@ const AchievementItem = ({ targetUserId, achievement }: Props) => {
                     className="w-[48px] h-[48px]"
                     src={getServerStoredIcon(achievement.id)}
                     alt={achievement.name}
+                    height={48}
+                    width={48}
                 />
 
                 <Stack gap={"0.5rem"} w={"50%"}>

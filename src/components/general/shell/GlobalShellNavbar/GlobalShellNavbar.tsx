@@ -4,6 +4,8 @@ import {
     IconUser,
     IconCheckbox,
     IconRouteAltLeft,
+    TablerIconsProps,
+    IconSettings,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -13,15 +15,21 @@ import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
-import { getServerStoredUpload } from "@/util/getServerStoredImages";
 
-const links = [
+interface NavbarItem {
+    icon: (props: TablerIconsProps) => ReactElement;
+    label: string;
+    href: string;
+}
+
+const links: NavbarItem[] = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
+    { icon: IconSettings, label: "Preferences", href: "/preferences" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {

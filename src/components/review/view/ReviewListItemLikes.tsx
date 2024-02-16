@@ -22,7 +22,6 @@ const ReviewListItemLikes = ({
         <Group gap={"0.5rem"}>
             <ActionIcon
                 onClick={() => {
-                    console.log("OnClick - UserLike");
                     toggleUserLike();
                 }}
                 variant={isLiked ? "filled" : "subtle"}

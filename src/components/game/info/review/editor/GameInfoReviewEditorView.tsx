@@ -143,6 +143,9 @@ const GameInfoReviewEditorView = ({
     return (
         <DetailsBox
             title={"Your review"}
+            description={
+                "Write your opinions about this game. Reviews are public to all users."
+            }
             content={
                 <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
                     {renderInnerContent()}

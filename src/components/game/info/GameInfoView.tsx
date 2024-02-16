@@ -8,7 +8,6 @@ import { Game, GameRepositoryFindOneDto } from "@/wrapper/server";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImageCarousel";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import { shuffleArray } from "@/util/shuffleArray";
 import Break from "@/components/general/Break";
 import { useGame } from "@/components/game/hooks/useGame";
 
@@ -38,12 +37,12 @@ const getCombinedImages = (game: Game) => {
         ?.filter((screenshot) => screenshot.url != undefined)
         .map((screenshot) => screenshot.url!);
 
-    const combinedImages = [
+    const combinedImagesUrls = [
         ...(screenshotsUrls ?? []),
         ...(artworksUrls ?? []),
     ];
 
-    return shuffleArray(combinedImages);
+    return combinedImagesUrls;
 };
 
 const GameInfoView = ({ id }: IGameInfoViewProps) => {
