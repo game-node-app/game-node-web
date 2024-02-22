@@ -1,27 +1,24 @@
 import React, { useMemo } from "react";
-import { Flex, SimpleGrid, Skeleton } from "@mantine/core";
+import { SimpleGrid, Skeleton } from "@mantine/core";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
-import { ImageSize } from "@/components/game/util/getSizedImageUrl";
-import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import {
-    useTrendingItems,
-    UseTrendingItemsProps,
-} from "@/components/statistics/hooks/useTrendingItems";
 import { useGames } from "@/components/game/hooks/useGames";
+import { useTrendingGames } from "@/components/statistics/hooks/useTrendingGames";
+import { FindStatisticsTrendingGamesDto } from "@/wrapper/server";
 
-export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: UseTrendingItemsProps = {
-    minimumItems: 6,
-    sourceType: "game",
-    offset: 0,
-    limit: 6,
-};
+export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
+    {
+        offset: 0,
+        limit: 6,
+        criteria: {},
+        period: FindStatisticsTrendingGamesDto.period.WEEK,
+    };
 
 const TrendingGamesList = () => {
-    const trendingGames = useTrendingItems(DEFAULT_SEARCH_TRENDING_GAMES_DTO);
+    const trendingGames = useTrendingGames(DEFAULT_SEARCH_TRENDING_GAMES_DTO);
 
     const gamesIds = trendingGames.data?.data?.map(
-        (statistics) => statistics.sourceId as unknown as number,
+        (statistics) => statistics.gameId as unknown as number,
     );
     const games = useGames({
         gameIds: gamesIds || [],

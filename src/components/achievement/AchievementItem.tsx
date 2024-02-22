@@ -13,6 +13,7 @@ import { AchievementDto } from "@/wrapper/server";
 import { useObtainedAchievement } from "@/components/achievement/hooks/useObtainedAchievement";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
 import GameNodeLogo from "@/components/general/GameNodeLogo";
+import AchievementLogo from "@/components/achievement/AchievementLogo";
 
 interface Props {
     targetUserId: string;
@@ -55,14 +56,7 @@ const AchievementItem = ({ targetUserId, achievement }: Props) => {
                 py={"1.5rem"}
                 opacity={achievementNotYetObtained ? "0.78" : "1"}
             >
-                <Image
-                    className="w-[48px] h-[48px]"
-                    src={getServerStoredIcon(achievement.id)}
-                    alt={achievement.name}
-                    height={48}
-                    width={48}
-                />
-
+                <AchievementLogo achievementId={achievement.id} />
                 <Stack gap={"0.5rem"} w={"50%"}>
                     <Title fz={"1rem"}>{achievement.name}</Title>
                     <Text fz={"0.85rem"} className={"break-words"}>

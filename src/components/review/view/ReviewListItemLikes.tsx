@@ -6,13 +6,9 @@ import { useUserLike } from "@/components/statistics/hooks/useUserLike";
 
 interface IReviewListLikesProps {
     review: Review;
-    isOwnReview: boolean;
 }
 
-const ReviewListItemLikes = ({
-    review,
-    isOwnReview,
-}: IReviewListLikesProps) => {
+const ReviewListItemLikes = ({ review }: IReviewListLikesProps) => {
     const [likesCount, isLiked, toggleUserLike] = useUserLike({
         sourceId: review.id,
         sourceType: "review",
@@ -26,8 +22,7 @@ const ReviewListItemLikes = ({
                 }}
                 variant={isLiked ? "filled" : "subtle"}
                 size={"xl"}
-                color={"brand"}
-                disabled={isOwnReview}
+                color={isLiked ? "brand" : "white"}
             >
                 <IconThumbUp />
                 <Text>{likesCount}</Text>

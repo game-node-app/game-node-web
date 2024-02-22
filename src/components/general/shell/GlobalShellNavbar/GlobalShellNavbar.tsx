@@ -29,7 +29,7 @@ const links: NavbarItem[] = [
     { icon: IconBulb, label: "Activity", href: "/activity" },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
-    { icon: IconSettings, label: "Preferences", href: "/preferences" },
+    // { icon: IconSettings, label: "Preferences", href: "/preferences" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {

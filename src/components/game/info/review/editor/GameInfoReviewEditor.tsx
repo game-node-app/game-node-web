@@ -29,7 +29,6 @@ import Filter from "bad-words";
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
     gameId: number;
     onBlur: (html: string) => void;
-    setHasProfanity: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
@@ -37,7 +36,6 @@ export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
 const GameInfoReviewEditor = ({
     gameId,
     onBlur,
-    setHasProfanity,
 }: IGameInfoReviewEditorProps) => {
     const badWordsFilter = useRef(new Filter());
     const userId = useUserId();
@@ -55,10 +53,6 @@ const GameInfoReviewEditor = ({
             content: previousContent,
             onBlur: (e) => {
                 let html = e.editor.getHTML();
-                if (badWordsFilter.current.isProfane(html)) {
-                    html = badWordsFilter.current.clean(html);
-                    editor?.commands.setContent(html);
-                }
                 onBlur(html || "");
             },
         },

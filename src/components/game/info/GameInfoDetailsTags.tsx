@@ -5,6 +5,7 @@ import { getGameThemes } from "@/components/game/util/getGameThemes";
 import { Badge, Group } from "@mantine/core";
 import { getGameModes } from "@/components/game/util/getGameModes";
 import { getGamePerspectives } from "@/components/game/util/getGamePerspectives";
+import { shuffleArray } from "@/util/shuffleArray";
 
 const getCombinedTags = (game?: Game) => {
     if (!game) return undefined;

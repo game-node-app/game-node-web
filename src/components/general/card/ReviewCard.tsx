@@ -9,6 +9,7 @@ import {
     getSizedImageUrl,
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
+import Link from "next/link";
 
 interface IProps {
     reviewId: string;
@@ -70,9 +71,11 @@ const ReviewCard = ({ reviewId }: IProps) => {
                     {strippedContent}
                 </Text>
             </div>
-            <Button variant="white" color="dark" className={"z-10"}>
-                Visit
-            </Button>
+            <Link href={`/game/${gameId}`}>
+                <Button variant="white" color="dark" className={"z-10"}>
+                    Visit
+                </Button>
+            </Link>
         </Paper>
     );
 };

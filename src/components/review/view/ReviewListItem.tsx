@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { ReactElement, useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Divider, Flex, Group, Rating, Stack } from "@mantine/core";
+import { Divider, Flex, Group, Rating, Stack, Text } from "@mantine/core";
 import { Review } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -75,10 +75,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                 />
             </Group>
             <Group w={"100%"} justify={"space-between"}>
-                <ReviewListItemLikes
-                    review={review}
-                    isOwnReview={isOwnReview}
-                />
+                <ReviewListItemLikes review={review} />
                 <ReviewListItemDropdown
                     review={review}
                     isOwnReview={isOwnReview}

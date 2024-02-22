@@ -53,9 +53,7 @@ const GameSearchResultView = ({
                     mt={"md"}
                 >
                     <Box className="w-full flex justify-end mb-8">
-                        <Box className={""}>
-                            <GameViewLayoutSwitcher setLayout={setLayout} />
-                        </Box>
+                        <GameView.LayoutSwitcher setLayout={setLayout} />
                     </Box>
 
                     <GameView.Content items={results} />

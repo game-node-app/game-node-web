@@ -29,7 +29,6 @@ interface IGameInfoReviewEditorViewProps {
 const GameInfoReviewEditorView = ({
     gameId,
 }: IGameInfoReviewEditorViewProps) => {
-    const [hasProfanity, setHasProfanity] = useState(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(true);
     const hasSetEditMode = useRef<boolean>(false);
 
@@ -116,7 +115,6 @@ const GameInfoReviewEditorView = ({
                 <GameInfoReviewEditor
                     gameId={gameId}
                     onBlur={(v) => setValue("content", v)}
-                    setHasProfanity={setHasProfanity}
                 />
                 <Break />
                 <Group mt={"md"} justify={"space-between"}>
@@ -144,7 +142,9 @@ const GameInfoReviewEditorView = ({
         <DetailsBox
             title={"Your review"}
             description={
-                "Write your opinions about this game. Reviews are public to all users."
+                isEditMode
+                    ? "Write your opinions about this game. Reviews are public to all users."
+                    : undefined
             }
             content={
                 <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>

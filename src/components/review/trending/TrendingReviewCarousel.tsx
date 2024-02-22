@@ -1,10 +1,12 @@
 import React from "react";
-import { useTrendingItems } from "@/components/statistics/hooks/useTrendingItems";
 import { Carousel } from "@mantine/carousel";
 import { Skeleton } from "@mantine/core";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import ReviewCard from "@/components/general/card/ReviewCard";
+import { useTrendingReviews } from "@/components/statistics/hooks/useTrendingReviews";
+import { FindStatisticsTrendingReviewsDto, Statistics } from "@/wrapper/server";
+import period = FindStatisticsTrendingReviewsDto.period;
 
 const buildSkeletons = () => {
     const skeletons = [];
@@ -21,11 +23,10 @@ const buildSkeletons = () => {
 
 const TrendingReviewCarousel = () => {
     const onMobile = useOnMobile();
-    const trendingReviews = useTrendingItems({
+    const trendingReviews = useTrendingReviews({
         limit: 10,
-        minimumItems: 5,
-        sourceType: "review",
         offset: 0,
+        period: period.WEEK,
     });
     const isEmpty =
         trendingReviews.isError || trendingReviews.data?.data.length === 0;
@@ -36,9 +37,15 @@ const TrendingReviewCarousel = () => {
         }
 
         return trendingReviews.data?.data?.map((reviewStatistics) => {
+            if (
+                reviewStatistics == undefined ||
+                reviewStatistics.reviewId == undefined
+            ) {
+                return null;
+            }
             return (
                 <Carousel.Slide key={reviewStatistics.id}>
-                    <ReviewCard reviewId={reviewStatistics.sourceId} />
+                    <ReviewCard reviewId={reviewStatistics.reviewId!} />
                 </Carousel.Slide>
             );
         });

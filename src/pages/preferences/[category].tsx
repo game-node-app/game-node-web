@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import PreferencesScreen from "@/components/preferences/PreferencesScreen";
 import { PreferencesActiveCategory } from "@/components/preferences/PreferencesScreenSideBar";
+import { Container } from "@mantine/core";
 
 const Category = () => {
     const router = useRouter();
@@ -16,9 +17,11 @@ const Category = () => {
 
     return (
         <SessionAuth>
-            <PreferencesScreen
-                category={category as PreferencesActiveCategory}
-            />
+            <Container fluid pos={"relative"} p={0}>
+                <PreferencesScreen
+                    category={category as PreferencesActiveCategory}
+                />
+            </Container>
         </SessionAuth>
     );
 };

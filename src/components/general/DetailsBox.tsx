@@ -29,7 +29,7 @@ export const DetailsBox = ({
                 <Box className={"w-full px-4 py-2"}>
                     <Text className="font-bold text-md mb-2">{title}</Text>
                     {description && (
-                        <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-2">
+                        <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-4">
                             {description}
                         </Text>
                     )}

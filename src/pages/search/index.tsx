@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, Container, Flex, Space, Stack } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
@@ -7,12 +7,12 @@ import { z } from "zod";
 import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
 import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
-import TrendingGamesList, {
-    DEFAULT_SEARCH_TRENDING_GAMES_DTO,
-} from "@/components/game/trending/TrendingGamesList";
+import TrendingGamesList from "@/components/game/trending/TrendingGamesList";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
+import { useURLState } from "@/components/general/hooks/useURLState";
+import Break from "@/components/general/Break";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -53,12 +53,10 @@ const Index = () => {
         resolver: zodResolver(SearchFormSchema),
         mode: "onBlur",
     });
-    const router = useRouter();
-    const pathName = router.pathname;
-    const urlQuery = router.query;
 
-    const [searchParameters, setSearchParameters] =
-        useState<GameSearchRequestDto>(DEFAULT_SEARCH_PARAMETERS);
+    const [searchParameters, setSearchParameters] = useURLState(
+        DEFAULT_SEARCH_PARAMETERS,
+    );
 
     const isQueryEnabled =
         searchParameters.query != undefined &&
@@ -69,30 +67,17 @@ const Index = () => {
     const searchQuery = useSearchGames(searchParameters, isQueryEnabled);
 
     const onSubmit = (data: TSearchFormValues) => {
-        const page = data.page || 1;
-        const urlParams = new URLSearchParams();
-        urlParams.set("query", data.query);
-        urlParams.set("page", `${page}`);
-        router.push(`${pathName}?${urlParams.toString()}`);
+        data.page = data.page || 1;
+        setSearchParameters(data);
     };
-
-    /**
-     * Effect that syncs URL query parameters with the actual request DTO
-     */
-    useEffect(() => {
-        const searchParams = urlQueryToDto(urlQuery);
-        if (searchParams.query) {
-            setValue("query", searchParams.query);
-            setValue("page", searchParams.page || 1);
-            setSearchParameters(searchParams);
-        }
-    }, [setValue, urlQuery]);
 
     /**
      * Trending games, reviews, etc.
      */
     const extraItemsEnabled =
-        !searchQuery.isLoading && searchQuery.data == undefined;
+        !searchQuery.isLoading &&
+        !searchQuery.isError &&
+        searchQuery.data == undefined;
 
     return (
         <Container

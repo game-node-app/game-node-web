@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import {
     Box,
-    Button,
-    Center,
     Group,
     Modal,
-    Overlay,
     Stack,
     Text,
+    TextInput,
     Title,
 } from "@mantine/core";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -16,20 +14,31 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import PreferencesAvatarUploader from "@/components/preferences/handlers/PreferencesAvatarUploader";
-import { IconEdit } from "@tabler/icons-react";
 import PreferencesUsernameChanger from "@/components/preferences/handlers/PreferencesUsernameChanger";
 import Link from "next/link";
-import { useFeaturedObtainedAchievement } from "@/components/achievement/hooks/useFeaturedObtainedAchievement";
-import AchievementItem from "@/components/achievement/AchievementItem";
 import PreferencesFeaturedAchievement from "@/components/preferences/handlers/PreferencesFeaturedAchievement";
-import useOnMobile from "@/components/general/hooks/useOnMobile";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAllObtainedAchievements";
+import { DetailsBox } from "@/components/general/DetailsBox";
+import { useAchievements } from "@/components/achievement/hooks/useAchievements";
+import AchievementLogo from "@/components/achievement/AchievementLogo";
+import PreferencesBioForm from "@/components/preferences/handlers/PreferencesBioForm";
 
 const PreferencesProfileScreen = () => {
     const userId = useUserId();
     const userProfile = useUserProfile(userId);
     const [avatarModalOpened, avatarModalOpenedUtils] = useDisclosure();
     const [usernameModalOpened, usernameModalUtils] = useDisclosure();
+    const obtainedAchievements = useAllObtainedAchievements(userId);
+    const sortedObtainedAchievements = useMemo(() => {
+        if (obtainedAchievements.data == undefined) return undefined;
+        return obtainedAchievements.data.toSorted((a, b) => {
+            const aCreateDate = new Date(a.createdAt);
+            const bCreateDate = new Date(b.createdAt);
+            return aCreateDate.getTime() - bCreateDate.getTime();
+        });
+    }, [obtainedAchievements.data]);
+
     if (userProfile.isLoading) {
         return <CenteredLoading />;
     }
@@ -37,7 +46,7 @@ const PreferencesProfileScreen = () => {
         <Stack w={"100%"} className={"items-center"}>
             <Group
                 wrap={"wrap"}
-                className={"w-full items-start justify-between h-56 wrap"}
+                className={"w-full items-start justify-between wrap"}
             >
                 <Stack className={"w-full lg:w-6/12 justify-start mt-4"}>
                     <Modal
@@ -98,6 +107,25 @@ const PreferencesProfileScreen = () => {
                     <PreferencesFeaturedAchievement />
                 </Box>
             </Group>
+            <DetailsBox
+                title={"Achievements"}
+                content={
+                    <Link href={`/achievements/${userId}`} className={"w-full"}>
+                        <Group justify={"center"}>
+                            {sortedObtainedAchievements?.map((achievement) => {
+                                if (!achievement) return null;
+                                return (
+                                    <AchievementLogo
+                                        key={achievement.id}
+                                        achievementId={achievement.id}
+                                    />
+                                );
+                            })}
+                        </Group>
+                    </Link>
+                }
+            />
+            <DetailsBox title={"Bio"} content={<PreferencesBioForm />} />
         </Stack>
     );
 };

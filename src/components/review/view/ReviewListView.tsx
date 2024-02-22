@@ -5,6 +5,7 @@ import ReviewListItem from "@/components/review/view/ReviewListItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { TBasePaginationRequest } from "@/util/types/pagination";
 import { DetailsBox } from "@/components/general/DetailsBox";
+import { useURLState } from "@/components/general/hooks/useURLState";
 
 interface IReviewListViewProps {
     gameId: number;
@@ -14,7 +15,7 @@ const DEFAULT_LIMIT = 7;
 
 const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
-    const [reviewsDto, setReviewsDto] = useState<TBasePaginationRequest>({
+    const [reviewsDto, setReviewsDto] = useURLState<TBasePaginationRequest>({
         limit: DEFAULT_LIMIT,
         offset: 0,
     });

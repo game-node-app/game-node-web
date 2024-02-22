@@ -1,11 +1,18 @@
-import { StatisticsActionDto, StatisticsService } from "@/wrapper/server";
+import {
+    Statistics,
+    StatisticsService,
+    StatisticsStatus,
+} from "@/wrapper/server";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { StatisticsSourceType } from "@/components/statistics/statistics-types";
+import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
+
+type StatisticsWithStatus = Statistics & StatisticsStatus;
 
 export function useItemStatistics(
-    sourceId: string,
+    sourceId: "review" | "game",
     sourceType: StatisticsSourceType,
-) {
+): ExtendedUseQueryResult<StatisticsWithStatus> {
     const queryClient = useQueryClient();
     const queryKey = ["statistics", sourceType, sourceId];
     const invalidate = () => {
@@ -18,11 +25,23 @@ export function useItemStatistics(
     return {
         ...useQuery({
             queryKey,
-            queryFn: () => {
-                return StatisticsService.statisticsControllerFindOne(
-                    sourceId,
-                    sourceType as StatisticsActionDto.sourceType,
-                );
+            queryFn: async () => {
+                const statistics =
+                    await StatisticsService.statisticsControllerFindOneBySourceIdAndType(
+                        {
+                            sourceId: sourceId as any,
+                            sourceType: sourceType,
+                        },
+                    );
+                const statisticsStatus =
+                    await StatisticsService.statisticsControllerGetStatus(
+                        statistics.id,
+                        sourceType,
+                    );
+                return {
+                    ...statistics,
+                    ...statisticsStatus,
+                };
             },
         }),
         invalidate,
