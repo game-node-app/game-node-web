@@ -5,20 +5,18 @@ import GameInfoView, {
 } from "@/components/game/info/GameInfoView";
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import GameExtraInfoView, {
-    DEFAULT_GAME_EXTRA_INFO_DTO,
-} from "@/components/game/info/GameExtraInfoView";
+import GameExtraInfoView from "@/components/game/info/GameExtraInfoView";
 import { NextPageContext } from "next";
 import {
+    FindOneStatisticsDto,
     Game,
     GameRepositoryFindOneDto,
     GameRepositoryService,
     StatisticsActionDto,
-    StatisticsQueueService,
 } from "@/wrapper/server";
 import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
-import sourceType = StatisticsActionDto.sourceType;
 import { useUserView } from "@/components/statistics/hooks/useUserView";
+import sourceType = FindOneStatisticsDto.sourceType;
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const queryId = context.query.id;
@@ -53,7 +51,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
 const GameInfoPage = () => {
     const router = useRouter();
     const { id } = router.query;
-    const [_, isViewed, incrementView] = useUserView(`${id}`, "game");
+    const [_, isViewed, incrementView] = useUserView(`${id}`, sourceType.GAME);
 
     /**
      * Stores the path parameter "id" of the last registered game view.

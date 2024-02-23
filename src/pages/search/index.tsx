@@ -8,11 +8,9 @@ import GameSearchResultView from "@/components/game/search/view/result/GameSearc
 import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import TrendingGamesList from "@/components/game/trending/TrendingGamesList";
-import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
 import { useURLState } from "@/components/general/hooks/useURLState";
-import Break from "@/components/general/Break";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),

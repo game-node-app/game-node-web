@@ -14,5 +14,5 @@ export function UserAvatar({ src, avatar, ...others }: UserAvatarProps) {
         : undefined;
 
     const srcToUse = avatarFileSrc ? avatarFileSrc : src;
-    return <Avatar src={srcToUse} radius="xl" {...others} />;
+    return <Avatar src={srcToUse} {...others} />;
 }

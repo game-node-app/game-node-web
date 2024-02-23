@@ -20,39 +20,40 @@ const TrendingGamesList = () => {
     const gamesIds = trendingGames.data?.data?.map(
         (statistics) => statistics.gameId as unknown as number,
     );
-    const games = useGames({
+    const gamesQuery = useGames({
         gameIds: gamesIds || [],
         relations: {
             cover: true,
         },
     });
 
-    const isEmpty = games.data == undefined || games.data.data.length === 0;
+    const isLoading = trendingGames.isLoading || gamesQuery.isLoading;
+
+    const isEmpty =
+        !isLoading &&
+        (gamesQuery.data == undefined || gamesQuery.data.data.length === 0);
 
     const elementsSkeletons = useMemo(() => {
         return Array(DEFAULT_SEARCH_TRENDING_GAMES_DTO.limit)
             .fill(0)
             .map((v, i) => {
-                return <Skeleton className={"w-auto h-[240px]"} key={i} />;
+                return <Skeleton className={"h-36 lg:h-60"} key={i} />;
             });
     }, []);
 
     return (
-        !isEmpty && (
-            <DetailsBox
-                title={"Trending Games"}
-                content={
-                    <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
-                        {trendingGames.isLoading || games.isLoading
-                            ? elementsSkeletons
-                            : null}
-                        {games.data?.data.map((game) => {
-                            return <GameGridFigure key={game.id} game={game} />;
-                        })}
-                    </SimpleGrid>
-                }
-            />
-        )
+        <DetailsBox
+            enabled={!isEmpty}
+            title={"Trending Games"}
+            content={
+                <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
+                    {isLoading && elementsSkeletons}
+                    {gamesQuery.data?.data.map((game) => {
+                        return <GameGridFigure key={game.id} game={game} />;
+                    })}
+                </SimpleGrid>
+            }
+        />
     );
 };
 

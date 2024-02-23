@@ -19,10 +19,12 @@ const UserLevelInfo = ({ targetUserId }: Props) => {
             <Link href={`/profile/${targetUserId}`} className={"w-full"}>
                 <Stack w={"100%"} gap={2}>
                     <Group justify={"space-between"} w={"100%"}>
-                        <Text fw={"bold"}>Level {userLevel?.currentLevel}</Text>
+                        <Text fw={"bold"}>
+                            Level {userLevel?.currentLevel ?? 1}
+                        </Text>
                         <Text>
-                            {userLevel?.currentLevelExp} /{" "}
-                            {userLevel?.levelUpExpCost} XP
+                            {userLevel?.currentLevelExp ?? 0} /{" "}
+                            {userLevel?.levelUpExpCost ?? 0} XP
                         </Text>
                     </Group>
                     <Progress

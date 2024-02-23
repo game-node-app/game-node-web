@@ -35,7 +35,9 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
         gamesQuery.data == undefined ||
         gamesQuery.data.data.length === 0;
 
-    if (isEmpty) {
+    if (favoriteCollectionEntriesQuery.isLoading) {
+        return null;
+    } else if (isEmpty) {
         return (
             <CenteredErrorMessage
                 message={"This user has no public favorite games."}
@@ -49,7 +51,7 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
         );
     }
     return (
-        <SimpleGrid cols={onMobile ? 3 : 6} w={"100%"}>
+        <SimpleGrid cols={onMobile ? 3 : 5} w={"100%"}>
             {gamesQuery.data?.data.map((game) => {
                 return <GameGridFigure key={game.id} game={game} />;
             })}

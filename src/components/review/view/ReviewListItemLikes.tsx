@@ -1,7 +1,7 @@
 import React from "react";
 import { IconThumbUp } from "@tabler/icons-react";
 import { ActionIcon, Group, Text } from "@mantine/core";
-import { Review } from "@/wrapper/server";
+import { FindOneStatisticsDto, Review } from "@/wrapper/server";
 import { useUserLike } from "@/components/statistics/hooks/useUserLike";
 
 interface IReviewListLikesProps {
@@ -11,7 +11,7 @@ interface IReviewListLikesProps {
 const ReviewListItemLikes = ({ review }: IReviewListLikesProps) => {
     const [likesCount, isLiked, toggleUserLike] = useUserLike({
         sourceId: review.id,
-        sourceType: "review",
+        sourceType: FindOneStatisticsDto.sourceType.REVIEW,
     });
 
     return (

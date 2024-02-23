@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Container,
+    Flex,
     Grid,
     Group,
     SimpleGrid,
@@ -16,6 +17,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Home() {
     const cardGridRef = useRef<HTMLDivElement>(null);
@@ -29,17 +31,26 @@ export default function Home() {
     return (
         <Container fluid h={"100%"}>
             <Stack className="h-[80vh] mb-32">
-                <Box className="mt-32 lg:mt-40">
-                    <Title className="">
-                        Catalog all your games in a single place
-                    </Title>
-                </Box>
+                <Stack gap={0} className="mt-32 lg:mt-40 w-full">
+                    <Title className="">Play. Review. Share.</Title>
+                </Stack>
 
-                <Group className="justify-start">
-                    <Button component={"a"} href={"/search"}>
-                        Start searching
-                    </Button>
-                </Group>
+                <Link href={"/search"}>
+                    <Button>Join in</Button>
+                </Link>
+                <Stack>
+                    <Text c={"dimmed"} fz={"1rem"}>
+                        Games metadata are a courtesy of{" "}
+                        <a
+                            className={"text-blue-800"}
+                            href={"https://igdb.com"}
+                        >
+                            IGDB
+                        </a>
+                        .
+                    </Text>
+                    <Text c={"dimmed"} fz={"0.9rem"}></Text>
+                </Stack>
                 <Stack
                     gap={0}
                     align="center"

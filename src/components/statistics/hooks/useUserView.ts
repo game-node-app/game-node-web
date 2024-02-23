@@ -1,12 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { StatisticsActionDto, StatisticsQueueService } from "@/wrapper/server";
+import {
+    FindOneStatisticsDto,
+    StatisticsActionDto,
+    StatisticsQueueService,
+} from "@/wrapper/server";
 import { useItemStatistics } from "@/components/statistics/hooks/useItemStatistics";
-import { StatisticsSourceType } from "@/components/statistics/statistics-types";
 import { useRef } from "react";
 
 export function useUserView(
     sourceId: string | number,
-    sourceType: StatisticsSourceType,
+    sourceType: FindOneStatisticsDto.sourceType,
 ) {
     const statisticsQuery = useItemStatistics(`${sourceId}`, sourceType);
     const viewsCount = statisticsQuery.data?.viewsCount || 0;

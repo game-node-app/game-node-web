@@ -1,5 +1,5 @@
-import { Box, MantineColor, Stack, Text } from "@mantine/core";
-import React, { useMemo } from "react";
+import { Box, Stack, Text } from "@mantine/core";
+import React from "react";
 
 interface IDetailsBoxProps {
     enabled?: boolean;

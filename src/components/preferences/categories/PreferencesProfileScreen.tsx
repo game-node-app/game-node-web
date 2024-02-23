@@ -39,6 +39,10 @@ const PreferencesProfileScreen = () => {
         });
     }, [obtainedAchievements.data]);
 
+    const hasObtainedAchievements =
+        obtainedAchievements.data != undefined &&
+        obtainedAchievements.data.length > 0;
+
     if (userProfile.isLoading) {
         return <CenteredLoading />;
     }
@@ -46,7 +50,7 @@ const PreferencesProfileScreen = () => {
         <Stack w={"100%"} className={"items-center"}>
             <Group
                 wrap={"wrap"}
-                className={"w-full items-start justify-between wrap"}
+                className={"w-full items-start justify-between wrap px-4"}
             >
                 <Stack className={"w-full lg:w-6/12 justify-start mt-4"}>
                     <Modal
@@ -109,9 +113,16 @@ const PreferencesProfileScreen = () => {
             </Group>
             <DetailsBox
                 title={"Achievements"}
+                description={
+                    "Your recent obtained achievements will show here."
+                }
                 content={
                     <Link href={`/achievements/${userId}`} className={"w-full"}>
-                        <Group justify={"center"}>
+                        <Group
+                            justify={
+                                hasObtainedAchievements ? "center" : "start"
+                            }
+                        >
                             {sortedObtainedAchievements?.map((achievement) => {
                                 if (!achievement) return null;
                                 return (
@@ -121,6 +132,9 @@ const PreferencesProfileScreen = () => {
                                     />
                                 );
                             })}
+                            {!hasObtainedAchievements && (
+                                <Text>None, for now ;)</Text>
+                            )}
                         </Group>
                     </Link>
                 }

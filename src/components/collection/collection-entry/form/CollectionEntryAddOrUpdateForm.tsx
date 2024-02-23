@@ -258,7 +258,10 @@ const CollectionEntryAddOrUpdateForm = ({
                     limit={20}
                     description={"Which platforms do you own this game on?"}
                 />
-                <Button type={"submit"}>
+                <Button
+                    type={"submit"}
+                    loading={collectionEntryMutation.isPending}
+                >
                     {isUpdateAction ? "Update" : "Add"}
                 </Button>
             </form>

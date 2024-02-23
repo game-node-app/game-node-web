@@ -1,17 +1,17 @@
 import {
+    FindOneStatisticsDto,
     Statistics,
     StatisticsService,
     StatisticsStatus,
 } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { StatisticsSourceType } from "@/components/statistics/statistics-types";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
-type StatisticsWithStatus = Statistics & StatisticsStatus;
+export type StatisticsWithStatus = Statistics & StatisticsStatus;
 
 export function useItemStatistics(
-    sourceId: "review" | "game",
-    sourceType: StatisticsSourceType,
+    sourceId: string | number,
+    sourceType: FindOneStatisticsDto.sourceType,
 ): ExtendedUseQueryResult<StatisticsWithStatus> {
     const queryClient = useQueryClient();
     const queryKey = ["statistics", sourceType, sourceId];

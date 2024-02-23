@@ -1,15 +1,17 @@
 import {
+    FindOneStatisticsDto,
     StatisticsActionDto,
-    StatisticsEntityDto,
     StatisticsQueueService,
 } from "@/wrapper/server";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useItemStatistics } from "@/components/statistics/hooks/useItemStatistics";
-import { StatisticsSourceType } from "@/components/statistics/statistics-types";
+import {
+    StatisticsWithStatus,
+    useItemStatistics,
+} from "@/components/statistics/hooks/useItemStatistics";
 
 interface IToggleLikeProps {
     sourceId: string | number;
-    sourceType: StatisticsSourceType;
+    sourceType: FindOneStatisticsDto.sourceType;
 }
 
 /**
@@ -19,11 +21,10 @@ interface IToggleLikeProps {
  * @param sourceId
  * @param sourceType
  * @param onSuccess
- * @param onError
  */
 export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
     const queryClient = useQueryClient();
-    const statisticsQuery = useItemStatistics(`${sourceId}`, sourceType);
+    const statisticsQuery = useItemStatistics(sourceId, sourceType);
     const statisticsQueryKey = statisticsQuery.queryKey;
     const isLiked = statisticsQuery.data?.isLiked || false;
     const likesCount = statisticsQuery.data?.likesCount || 0;
@@ -55,7 +56,7 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
             });
 
             let previousStatistics =
-                await queryClient.getQueryData<Promise<StatisticsEntityDto>>(
+                await queryClient.getQueryData<Promise<StatisticsWithStatus>>(
                     statisticsQueryKey,
                 )!;
 
@@ -64,7 +65,7 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
                     isLiked: isLiked,
                     likesCount: 0,
                     viewsCount: 0,
-                } as StatisticsEntityDto;
+                } as StatisticsWithStatus;
             }
 
             let finalLikeCount = 0;
@@ -74,7 +75,7 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
                 finalLikeCount = ++previousStatistics.likesCount;
             }
 
-            const newStatistics: StatisticsEntityDto = {
+            const newStatistics: StatisticsWithStatus = {
                 ...previousStatistics,
                 isLiked: !previousStatistics.isLiked,
                 likesCount: finalLikeCount,

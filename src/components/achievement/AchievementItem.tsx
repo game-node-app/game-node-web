@@ -12,7 +12,6 @@ import {
 import { AchievementDto } from "@/wrapper/server";
 import { useObtainedAchievement } from "@/components/achievement/hooks/useObtainedAchievement";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
-import GameNodeLogo from "@/components/general/GameNodeLogo";
 import AchievementLogo from "@/components/achievement/AchievementLogo";
 
 interface Props {
