@@ -79,6 +79,14 @@ const ExploreScreen = () => {
             },
         );
     }, [trendingGamesQuery.data, trendingGamesQuery.isError]);
+    const gamesQueryDtoRelations =
+        layout === "grid"
+            ? {
+                  cover: true,
+              }
+            : {
+                  cover: true,
+              };
     const gamesQuery = useGames(
         {
             gameIds: gamesIds!,

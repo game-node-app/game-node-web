@@ -130,7 +130,7 @@ const Index = () => {
                         >
                             <TrendingGamesList />
                             <Space />
-                            <TrendingReviewCarousel />
+                            <TrendingReviewCarousel limit={6} />
                         </Flex>
                     )}
                 </Box>

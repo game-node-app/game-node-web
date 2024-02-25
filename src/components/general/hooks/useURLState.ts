@@ -42,7 +42,7 @@ export function useURLState<T extends IURLObj | undefined>(
     );
 
     useEffect(() => {
-        if (hasLoadedFirstParams.current) {
+        if (!router.isReady || hasLoadedFirstParams.current) {
             return;
         }
 
@@ -53,7 +53,7 @@ export function useURLState<T extends IURLObj | undefined>(
         }
         setParams(urlObj);
         hasLoadedFirstParams.current = true;
-    }, [internalParams, setParams, urlQuery]);
+    }, [internalParams, router.isReady, setParams, urlQuery]);
 
     return [internalParams, setParams];
 }

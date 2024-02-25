@@ -28,7 +28,7 @@ const GameViewLayoutSwitcher = ({
                     onClick={() => handleLayoutChange("grid")}
                     variant={layout === "grid" ? "filled" : "outline"}
                 >
-                    <IconLayoutColumns size="1.05rem" stroke={1.5} />
+                    <IconLayoutColumns />
                 </ActionIcon>
             </Tooltip>
             <Divider orientation={"vertical"} />
@@ -38,7 +38,7 @@ const GameViewLayoutSwitcher = ({
                     onClick={() => handleLayoutChange("list")}
                     variant={layout === "list" ? "filled" : "outline"}
                 >
-                    <IconLayoutList size="1.05rem" stroke={1.5} />
+                    <IconLayoutList />
                 </ActionIcon>
             </Tooltip>
         </Group>

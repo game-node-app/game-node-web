@@ -19,10 +19,14 @@ const buildSkeletons = () => {
     return skeletons;
 };
 
-const TrendingReviewCarousel = () => {
+interface Props {
+    limit: number;
+}
+
+const TrendingReviewCarousel = ({ limit }: Props) => {
     const onMobile = useOnMobile();
     const trendingReviews = useTrendingReviews({
-        limit: 10,
+        limit,
         offset: 0,
     });
     const isEmpty =

@@ -27,5 +27,6 @@ export function useInfiniteTrendingGames(dto: InfiniteQueryTrendingGamesDto) {
         },
         placeholderData: keepPreviousData,
         initialPageParam: 0,
+        staleTime: 300 * 1000,
     });
 }
