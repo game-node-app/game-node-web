@@ -30,8 +30,8 @@ import {
     useSessionContext,
 } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
-import useGamePlatforms from "@/components/game/hooks/useGamePlatforms";
 import useUserId from "@/components/auth/hooks/useUserId";
+import { useGamesResource } from "@/components/game/hooks/useGamesResource";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -109,7 +109,7 @@ const CollectionEntryAddOrUpdateForm = ({
             platforms: true,
         },
     });
-    const gamePlatformsQuery = useGamePlatforms();
+    const gamePlatformsQuery = useGamesResource<GamePlatform>("platform");
 
     const game = gameQuery.data;
     const userId = useUserId();

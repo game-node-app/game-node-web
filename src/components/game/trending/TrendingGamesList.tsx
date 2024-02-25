@@ -11,7 +11,6 @@ export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
         offset: 0,
         limit: 6,
         criteria: {},
-        period: FindStatisticsTrendingGamesDto.period.WEEK,
     };
 
 const TrendingGamesList = () => {
@@ -31,7 +30,7 @@ const TrendingGamesList = () => {
 
     const isEmpty =
         !isLoading &&
-        (gamesQuery.data == undefined || gamesQuery.data.data.length === 0);
+        (gamesQuery.data == undefined || gamesQuery.data.length === 0);
 
     const elementsSkeletons = useMemo(() => {
         return Array(DEFAULT_SEARCH_TRENDING_GAMES_DTO.limit)
@@ -48,7 +47,7 @@ const TrendingGamesList = () => {
             content={
                 <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
                     {isLoading && elementsSkeletons}
-                    {gamesQuery.data?.data.map((game) => {
+                    {gamesQuery.data?.map((game) => {
                         return <GameGridFigure key={game.id} game={game} />;
                     })}
                 </SimpleGrid>

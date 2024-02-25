@@ -67,7 +67,7 @@ export function useCollectionEntriesForCollectionId({
                         (entry) => entry.gameId,
                     );
 
-                    const gamesQuery =
+                    const gamesRequest =
                         await GameRepositoryService.gameRepositoryControllerFindAllByIds(
                             {
                                 gameIds: gameIds,
@@ -78,7 +78,7 @@ export function useCollectionEntriesForCollectionId({
                     collectionEntriesQuery.data =
                         collectionEntriesQuery.data.map((entry) => {
                             // Associates game with current entry
-                            entry.game = gamesQuery.data.find(
+                            entry.game = gamesRequest.find(
                                 (game) => game.id === entry.gameId,
                             )!;
                             return entry;

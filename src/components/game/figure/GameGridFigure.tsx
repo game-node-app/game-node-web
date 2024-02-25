@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { MutableRefObject, useMemo } from "react";
 import GameFigureImage, {
     IGameFigureProps,
 } from "@/components/game/figure/GameFigureImage";

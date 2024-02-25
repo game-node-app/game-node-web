@@ -33,7 +33,7 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
         favoriteCollectionEntriesQuery.data == undefined ||
         favoriteCollectionEntriesQuery.data.data.length === 0 ||
         gamesQuery.data == undefined ||
-        gamesQuery.data.data.length === 0;
+        gamesQuery.data.length === 0;
 
     if (favoriteCollectionEntriesQuery.isLoading) {
         return null;
@@ -52,7 +52,7 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
     }
     return (
         <SimpleGrid cols={onMobile ? 3 : 5} w={"100%"}>
-            {gamesQuery.data?.data.map((game) => {
+            {gamesQuery.data?.map((game) => {
                 return <GameGridFigure key={game.id} game={game} />;
             })}
         </SimpleGrid>
