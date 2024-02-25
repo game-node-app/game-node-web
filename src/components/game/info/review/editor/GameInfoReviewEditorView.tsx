@@ -29,7 +29,6 @@ interface IGameInfoReviewEditorViewProps {
 const GameInfoReviewEditorView = ({
     gameId,
 }: IGameInfoReviewEditorViewProps) => {
-    const [hasProfanity, setHasProfanity] = useState(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(true);
     const hasSetEditMode = useRef<boolean>(false);
 
@@ -45,6 +44,7 @@ const GameInfoReviewEditorView = ({
 
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
+    const collectionEntryQuery = useOwnCollectionEntryForGameId(gameId);
 
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
@@ -96,7 +96,11 @@ const GameInfoReviewEditorView = ({
         setIsEditMode(false);
     };
 
-    const render = () => {
+    if (collectionEntryQuery.data == undefined) {
+        return null;
+    }
+
+    const renderInnerContent = () => {
         if (!isEditMode && reviewQuery.data != undefined) {
             return (
                 <ReviewListItem
@@ -111,7 +115,6 @@ const GameInfoReviewEditorView = ({
                 <GameInfoReviewEditor
                     gameId={gameId}
                     onBlur={(v) => setValue("content", v)}
-                    setHasProfanity={setHasProfanity}
                 />
                 <Break />
                 <Group mt={"md"} justify={"space-between"}>
@@ -136,9 +139,19 @@ const GameInfoReviewEditorView = ({
     };
 
     return (
-        <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
-            {render()}
-        </Flex>
+        <DetailsBox
+            title={"Your review"}
+            description={
+                isEditMode
+                    ? "Write your opinions about this game. Reviews are public to all users."
+                    : undefined
+            }
+            content={
+                <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
+                    {renderInnerContent()}
+                </Flex>
+            }
+        />
     );
 };
 

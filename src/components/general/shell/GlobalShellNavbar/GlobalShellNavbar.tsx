@@ -4,6 +4,8 @@ import {
     IconUser,
     IconCheckbox,
     IconRouteAltLeft,
+    TablerIconsProps,
+    IconSettings,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -13,14 +15,21 @@ import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
 
-const links = [
+interface NavbarItem {
+    icon: (props: TablerIconsProps) => ReactElement;
+    label: string;
+    href: string;
+}
+
+const links: NavbarItem[] = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
+    // { icon: IconSettings, label: "Preferences", href: "/preferences" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {
@@ -33,7 +42,6 @@ export default function GlobalShellNavbar({
 }: IGlobalShellNavbarProps) {
     const [query, setQuery] = useState<string>("");
     const session = useSessionContext();
-
     const isLoggedIn = !session.loading && session.doesSessionExist;
     const userProfileQuery = useUserProfile(
         session.loading ? undefined : session.userId,
@@ -58,22 +66,12 @@ export default function GlobalShellNavbar({
         </UnstyledButton>
     ));
 
-    const placeholderUserButtonImage = "https://i.imgur.com/fGxgcDF.png";
-    const userAvatarImageUrl =
-        userProfile && userProfile.avatar
-            ? `${serverUrl}/v1/public/uploads/${userProfile.avatar.path}${userProfile.avatar.extension}`
-            : placeholderUserButtonImage;
-
     return (
         <nav className={classes.navbar} style={undefined}>
             {isLoggedIn && userProfile && (
                 <div className={classes.section}>
                     <Link href={`/profile/${userProfile.userId}`}>
-                        <UserButton
-                            image={userAvatarImageUrl}
-                            username={userProfile.username}
-                            description="Seeker of Souls"
-                        />
+                        <UserButton userId={userProfile.userId} />
                     </Link>
                 </div>
             )}
@@ -86,6 +84,7 @@ export default function GlobalShellNavbar({
                         /**
                          * Navigation is already handled by <Link> in the options components!
                          */
+                        setQuery("");
                         combobox.closeDropdown();
                         if (onClose) onClose();
                     }}

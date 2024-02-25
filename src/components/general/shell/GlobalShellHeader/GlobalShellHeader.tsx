@@ -1,8 +1,9 @@
 import { Container, Burger, Box, Button, AppShell } from "@mantine/core";
 import GameNodeLogo from "@/components/general/GameNodeLogo";
 import Link from "next/link";
-import { IconAdjustmentsCog } from "@tabler/icons-react";
 import useUserId from "@/components/auth/hooks/useUserId";
+import { useDisclosure } from "@mantine/hooks";
+import { IconSettings } from "@tabler/icons-react";
 
 interface IGlobalShellHeaderProps {
     sidebarOpened: boolean;
@@ -14,7 +15,8 @@ export default function GlobalShellHeader({
     toggleSidebar,
 }: IGlobalShellHeaderProps) {
     const userId = useUserId();
-
+    const [preferencesModalOpened, preferencesModalUtils] =
+        useDisclosure(false);
     return (
         <header className="h-full">
             <Container
@@ -26,21 +28,21 @@ export default function GlobalShellHeader({
                     onClick={toggleSidebar}
                     size="sm"
                 />
-                <Link href={"/search"}>
+                <a href={"/search"}>
                     <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
-                </Link>
-                {!userId && (
-                    <Box className="ms-auto">
+                </a>
+                <Box className="ms-auto">
+                    {!userId && (
                         <Link href={"/auth"}>
                             <Button variant="outline">Sign in</Button>
                         </Link>
-                    </Box>
-                )}
-                {userId && (
-                    <Box className={"ms-auto"}>
-                        <IconAdjustmentsCog />
-                    </Box>
-                )}
+                    )}
+                    {userId && (
+                        <Link href={`/preferences`}>
+                            <IconSettings />
+                        </Link>
+                    )}
+                </Box>
             </Container>
         </header>
     );

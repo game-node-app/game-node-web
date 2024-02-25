@@ -1,9 +1,11 @@
 import React from "react";
-import { Center, Loader } from "@mantine/core";
+import { Center, CenterProps, Loader } from "@mantine/core";
 
-const CenteredLoading = () => {
+interface Props extends CenterProps {}
+
+const CenteredLoading = (props: Props) => {
     return (
-        <Center w={"100%"} h={"100%"}>
+        <Center w={"100%"} h={"100%"} {...props}>
             <Loader variant="bars" />
         </Center>
     );

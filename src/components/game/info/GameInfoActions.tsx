@@ -22,7 +22,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
     const [removeModalOpened, removeModalUtils] = useDisclosure();
 
-    const collectionEntryQuery = useOwnCollectionEntryForGameId(game!.id);
+    const collectionEntryQuery = useOwnCollectionEntryForGameId(game?.id);
 
     const gameInLibrary =
         !collectionEntryQuery.isError && collectionEntryQuery.data != undefined;

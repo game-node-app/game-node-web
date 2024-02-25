@@ -6,7 +6,7 @@ import {
 } from "@/wrapper/server";
 
 export function useGame(
-    id: number,
+    id: number | undefined,
     dto: GameRepositoryFindOneDto,
 ): UseQueryResult<Game | undefined> {
     return useQuery<Game | undefined>({
@@ -23,6 +23,7 @@ export function useGame(
 
             return game;
         },
-        staleTime: 5 * 60 * 1000, // 5 minutes
+        staleTime: 5 * 60 * 1000, // 5 minutes,
+        enabled: !!id,
     });
 }

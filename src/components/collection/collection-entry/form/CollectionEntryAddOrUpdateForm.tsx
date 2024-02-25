@@ -30,8 +30,8 @@ import {
     useSessionContext,
 } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
-import useGamePlatforms from "@/components/game/hooks/useGamePlatforms";
 import useUserId from "@/components/auth/hooks/useUserId";
+import { useGamesResource } from "@/components/game/hooks/useGamesResource";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -54,7 +54,7 @@ function buildCollectionOptions(
     collections: Collection[] | undefined,
 ): ComboboxItem[] {
     if (collections == undefined || collections.length === 0) {
-        return undefined;
+        return null;
     }
 
     return collections.map((collection) => {
@@ -109,7 +109,7 @@ const CollectionEntryAddOrUpdateForm = ({
             platforms: true,
         },
     });
-    const gamePlatformsQuery = useGamePlatforms();
+    const gamePlatformsQuery = useGamesResource<GamePlatform>("platform");
 
     const game = gameQuery.data;
     const userId = useUserId();
@@ -140,12 +140,14 @@ const CollectionEntryAddOrUpdateForm = ({
                 collectionEntryQuery.data != undefined &&
                 collectionEntryQuery.data.isFavorite;
 
-            await CollectionsEntriesService.collectionsEntriesControllerCreate({
-                collectionIds: collectionIds,
-                gameId: gameId,
-                platformIds: parsedPlatformIds,
-                isFavorite: isFavorite,
-            });
+            await CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
+                {
+                    collectionIds: collectionIds,
+                    gameId: gameId,
+                    platformIds: parsedPlatformIds,
+                    isFavorite: isFavorite,
+                },
+            );
         },
         onSettled: () => {
             collectionEntryQuery.invalidate();
@@ -164,7 +166,8 @@ const CollectionEntryAddOrUpdateForm = ({
                 onClose();
             }
         },
-        onError: () => {
+        onError: (err) => {
+            console.error(err);
             notifications.show({
                 title: "Error",
                 message: "Something went wrong!",
@@ -255,7 +258,10 @@ const CollectionEntryAddOrUpdateForm = ({
                     limit={20}
                     description={"Which platforms do you own this game on?"}
                 />
-                <Button type={"submit"}>
+                <Button
+                    type={"submit"}
+                    loading={collectionEntryMutation.isPending}
+                >
                     {isUpdateAction ? "Update" : "Add"}
                 </Button>
             </form>

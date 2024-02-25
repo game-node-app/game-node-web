@@ -141,7 +141,7 @@ const SearchBarWithSelect = ({
                                     Failed to fetch results.
                                 </Combobox.Empty>
                             )}
-                            {isResultEmpty && (
+                            {!searchGamesQuery.isLoading && isResultEmpty && (
                                 <Combobox.Empty>No results.</Combobox.Empty>
                             )}
                         </ScrollArea.Autosize>

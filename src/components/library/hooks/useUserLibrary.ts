@@ -8,7 +8,7 @@ import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 import useUserId from "@/components/auth/hooks/useUserId";
 
 export function useUserLibrary(
-    userId: string | undefined,
+    userId: string | undefined | null,
 ): ExtendedUseQueryResult<Library | null> {
     const queryClient = useQueryClient();
     const queryKey = ["library", userId];

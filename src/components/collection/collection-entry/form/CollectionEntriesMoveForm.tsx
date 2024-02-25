@@ -137,7 +137,7 @@ const CollectionEntriesMoveForm = ({
                     (platform) => platform.id,
                 );
                 const replacePromise =
-                    CollectionsEntriesService.collectionsEntriesControllerReplace(
+                    CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
                         {
                             isFavorite: entry.isFavorite,
                             platformIds: ownedPlatformsIds as unknown as any,

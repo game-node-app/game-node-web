@@ -4,6 +4,8 @@ import { Group, Pagination, Stack, Text } from "@mantine/core";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { TBasePaginationRequest } from "@/util/types/pagination";
+import { DetailsBox } from "@/components/general/DetailsBox";
+import { useURLState } from "@/components/general/hooks/useURLState";
 
 interface IReviewListViewProps {
     gameId: number;
@@ -13,7 +15,7 @@ const DEFAULT_LIMIT = 7;
 
 const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
-    const [reviewsDto, setReviewsDto] = useState<TBasePaginationRequest>({
+    const [reviewsDto, setReviewsDto] = useURLState<TBasePaginationRequest>({
         limit: DEFAULT_LIMIT,
         offset: 0,
     });
@@ -30,38 +32,37 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
             return <ReviewListItem key={review.id} review={review} />;
         });
     }, [isReviewsEmpty, reviewsQuery.data]);
+
+    if (isReviewsEmpty) {
+        return null;
+    }
+
     return (
-        <Stack w={"100%"} justify={"space-between"}>
-            <Stack w={"100%"} align={"start"}>
-                {isReviewsEmpty ? (
-                    <>
-                        <Text mt={"1.5rem"}>
-                            No reviews found for this game.
-                        </Text>
-                        <Text fz={"sm"} c={"dimmed"}>
-                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                            It's your chance to be the first one 😉
-                        </Text>
-                    </>
-                ) : (
-                    reviewsList
-                )}
-            </Stack>
-            <Group w={"100%"} justify={"center"}>
-                {!isReviewsEmpty && (
-                    <Pagination
-                        total={reviewsQueryPagination?.totalPages ?? 1}
-                        onChange={(page) => {
-                            const offset = (page - 1) * DEFAULT_LIMIT;
-                            setReviewsDto({
-                                ...reviewsDto,
-                                offset,
-                            });
-                        }}
-                    />
-                )}
-            </Group>
-        </Stack>
+        <DetailsBox
+            title={"All reviews"}
+            description={"Reader discretion is advised."}
+            content={
+                <Stack w={"100%"} justify={"space-between"}>
+                    <Stack w={"100%"} align={"start"}>
+                        {reviewsList}
+                    </Stack>
+                    <Group w={"100%"} justify={"center"}>
+                        {!isReviewsEmpty && (
+                            <Pagination
+                                total={reviewsQueryPagination?.totalPages ?? 1}
+                                onChange={(page) => {
+                                    const offset = (page - 1) * DEFAULT_LIMIT;
+                                    setReviewsDto({
+                                        ...reviewsDto,
+                                        offset,
+                                    });
+                                }}
+                            />
+                        )}
+                    </Group>
+                </Stack>
+            }
+        />
     );
 };
 

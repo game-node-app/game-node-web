@@ -2,9 +2,8 @@ import React from "react";
 import { Carousel } from "@mantine/carousel";
 import { Game } from "@/wrapper/server";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
-import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import { Center, Flex, Skeleton, Text } from "@mantine/core";
+import { Flex, Skeleton, Text } from "@mantine/core";
 
 interface IGameInfoCarouselProps {
     isLoading: boolean;
@@ -64,10 +63,16 @@ const GameInfoCarousel = ({
 
     return (
         <Carousel
-            slideSize={onMobile ? "80%" : "15%"}
+            slideSize={{
+                base: "65%",
+                lg: "15%",
+            }}
             height={300}
             align="start"
-            slideGap="xs"
+            slideGap={{
+                base: "xs",
+                lg: "md",
+            }}
             controlsOffset="xs"
             dragFree
         >

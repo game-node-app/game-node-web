@@ -6,7 +6,7 @@ interface Props {
 
 const CenteredErrorMessage = ({ message }: Props) => {
     return (
-        <Center>
+        <Center className={"w-full"}>
             <Title size={"h4"}>{message}</Title>
         </Center>
     );

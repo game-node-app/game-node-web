@@ -2,11 +2,10 @@ import React, { useMemo } from "react";
 import { Game } from "@/wrapper/server";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
 import { getGameThemes } from "@/components/game/util/getGameThemes";
-import { shuffleArray } from "@/util/shuffleArray";
-import { DetailsBox } from "@/components/general/DetailsBox";
 import { Badge, Group } from "@mantine/core";
 import { getGameModes } from "@/components/game/util/getGameModes";
 import { getGamePerspectives } from "@/components/game/util/getGamePerspectives";
+import { shuffleArray } from "@/util/shuffleArray";
 
 const getCombinedTags = (game?: Game) => {
     if (!game) return undefined;
@@ -17,9 +16,9 @@ const getCombinedTags = (game?: Game) => {
         (perspective) => perspective.name,
     );
     const tags = [genres, themes, modes, perspectives];
-    const filteredFlatTags = tags.filter((item) => item != undefined);
-    const arrayToShuffle = filteredFlatTags.flat();
-    return shuffleArray(arrayToShuffle);
+    const flatTags = tags.flat();
+    const filteredTags = flatTags.filter((item) => item != undefined);
+    return filteredTags;
 };
 
 interface IProps {

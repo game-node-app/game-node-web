@@ -9,7 +9,7 @@ import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
  * @param gameId
  */
 export function useOwnCollectionEntryForGameId(
-    gameId: number,
+    gameId: number | undefined,
 ): ExtendedUseQueryResult<CollectionEntry | undefined> {
     const queryClient = useQueryClient();
     const queryKey = ["collection-entries", "own", gameId];

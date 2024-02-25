@@ -52,8 +52,8 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
                     </Text>
                     <Text fw={"bold"}>
                         This will also remove all games from this collection. If
-                        the games doesn't exist in other collections, your
-                        reviews will also be removed.
+                        the games don't exist in other collections, your reviews
+                        from them will also be removed.
                     </Text>
                     <Group wrap={"nowrap"} justify={"center"}>
                         <Button onClick={onClose} color={"blue"}>
