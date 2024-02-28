@@ -23,5 +23,5 @@ export function RouterTransition() {
         };
     }, [router]);
 
-    return <NavigationProgress />;
+    return <NavigationProgress className={"absolute"} />;
 }

@@ -11,6 +11,23 @@ type UseUrlStateReturn<T extends IURLObj | undefined> = [
     (values: T) => void,
 ];
 
+export const parseParams = (query: ParsedUrlQuery) => {
+    const result: any = {};
+    // Loop through the URLSearchParams object and add each key/value
+    for (const [key, value] of Object.entries(query)) {
+        if (typeof value === "string") {
+            const isPossibleArray = value.includes(",");
+            if (isPossibleArray) {
+                result[key] = value.split(",");
+            } else {
+                result[key] = value;
+            }
+        }
+    }
+
+    return result;
+};
+
 export function useURLState<T extends IURLObj | undefined>(
     defaultValue: T,
 ): UseUrlStateReturn<T> {
@@ -30,13 +47,13 @@ export function useURLState<T extends IURLObj | undefined>(
                 valuesWithInternalParams as IURLObj,
             )) {
                 if (v == undefined) continue;
-
                 urlParams.set(k, `${v}`);
             }
+            setInternalParams(valuesWithInternalParams as T);
+
             router.replace({
                 query: urlParams.toString(),
             });
-            setInternalParams(valuesWithInternalParams as T);
         },
         [internalParams, router],
     );
@@ -45,14 +62,6 @@ export function useURLState<T extends IURLObj | undefined>(
         if (!router.isReady || hasLoadedFirstParams.current) {
             return;
         }
-
-        const urlObj: any = {};
-        for (const [urlKey, urlValue] of Object.entries(urlQuery)) {
-            if (typeof urlValue !== "string") continue;
-            urlObj[urlKey] = urlValue;
-        }
-        setParams(urlObj);
-        hasLoadedFirstParams.current = true;
     }, [internalParams, router.isReady, setParams, urlQuery]);
 
     return [internalParams, setParams];

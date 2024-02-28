@@ -5,12 +5,14 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import { useGames } from "@/components/game/hooks/useGames";
 import { useTrendingGames } from "@/components/statistics/hooks/useTrendingGames";
 import { FindStatisticsTrendingGamesDto } from "@/wrapper/server";
+import period = FindStatisticsTrendingGamesDto.period;
 
 export const DEFAULT_SEARCH_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
     {
         offset: 0,
         limit: 6,
         criteria: {},
+        period: period.WEEK,
     };
 
 const TrendingGamesList = () => {

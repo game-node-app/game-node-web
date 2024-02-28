@@ -44,7 +44,7 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
                 />
             </AppShell.Navbar>
 
-            <AppShell.Main>{children}</AppShell.Main>
+            <AppShell.Main pos={"relative"}>{children}</AppShell.Main>
             <AppShell.Footer pos={"static"}>
                 <GlobalShellFooter />
             </AppShell.Footer>

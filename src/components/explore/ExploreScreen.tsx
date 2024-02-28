@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     FindStatisticsTrendingGamesDto,
     GameRepositoryFilterDto,
@@ -8,64 +7,53 @@ import { useURLState } from "@/components/general/hooks/useURLState";
 import {
     ActionIcon,
     Affix,
-    Box,
-    Button,
+    ComboboxItem,
     Group,
-    rem,
-    ScrollArea,
-    Space,
+    Select,
     Stack,
     Transition,
 } from "@mantine/core";
 import {
     useDisclosure,
     useIntersection,
-    useInViewport,
     useWindowScroll,
 } from "@mantine/hooks";
-import ExploreScreenDrawer from "@/components/explore/ExploreScreenDrawer";
+import ExploreScreenFilters, {
+    DEFAULT_EXPLORE_SCREEN_PERIOD,
+} from "@/components/explore/ExploreScreenFilters";
 import GameView from "@/components/general/view/game/GameView";
-import { useTrendingGames } from "@/components/statistics/hooks/useTrendingGames";
 import { useGames } from "@/components/game/hooks/useGames";
 import {
     InfiniteQueryTrendingGamesDto,
     useInfiniteTrendingGames,
 } from "@/components/statistics/hooks/useInfiniteTrendingGames";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import {
-    IconAdjustments,
-    IconArrowUp,
-    IconFilter,
-    IconNavigationTop,
-} from "@tabler/icons-react";
+import { IconAdjustments, IconArrowUp } from "@tabler/icons-react";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import period = FindStatisticsTrendingGamesDto.period;
 
 export const DEFAULT_EXPLORE_RESULT_LIMIT = 20;
 
 export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
     {
         limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-        criteria: undefined,
+        criteria: {},
+        period: DEFAULT_EXPLORE_SCREEN_PERIOD as period,
     };
 
 const ExploreScreen = () => {
-    const [layout, setLayout] = useState<"list" | "grid">("grid");
-
-    const [drawerOpened, drawerUtils] = useDisclosure();
     const { ref, entry } = useIntersection({
         threshold: 1,
     });
     const [scroll, scrollTo] = useWindowScroll();
+    const [currentPeriod, setCurrentPeriod] = useState<string>(
+        DEFAULT_EXPLORE_SCREEN_PERIOD,
+    );
 
-    const [filterDto, setFilterDto] = useURLState<
-        GameRepositoryFilterDto | undefined
-    >(undefined);
-    const trendingGamesDto = useMemo<InfiniteQueryTrendingGamesDto>(() => {
-        return {
-            criteria: filterDto,
-            limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-        };
-    }, [filterDto]);
+    const [trendingGamesDto, setTrendingGamesDto] = useState(
+        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+    );
+
     const trendingGamesQuery = useInfiniteTrendingGames(trendingGamesDto);
 
     const gamesIds = useMemo(() => {
@@ -79,14 +67,7 @@ const ExploreScreen = () => {
             },
         );
     }, [trendingGamesQuery.data, trendingGamesQuery.isError]);
-    const gamesQueryDtoRelations =
-        layout === "grid"
-            ? {
-                  cover: true,
-              }
-            : {
-                  cover: true,
-              };
+
     const gamesQuery = useGames(
         {
             gameIds: gamesIds!,
@@ -100,46 +81,31 @@ const ExploreScreen = () => {
     const games = gamesQuery.data;
     const isFetching = trendingGamesQuery.isFetching || gamesQuery.isFetching;
     const isLoading = trendingGamesQuery.isLoading || gamesQuery.isLoading;
+    const isError = trendingGamesQuery.isError || gamesQuery.isError;
 
     useEffect(() => {
-        if (
-            !trendingGamesQuery.isError &&
-            !trendingGamesQuery.isFetching &&
-            entry?.isIntersecting
-        ) {
+        if (!isError && !isFetching && entry?.isIntersecting) {
             trendingGamesQuery.fetchNextPage();
         }
-    }, [entry, trendingGamesQuery]);
+    }, [entry, isError, isFetching, trendingGamesQuery]);
 
     if (isLoading) {
         return <CenteredLoading />;
-    }
-
-    if (!games)
+    } else if (isError) {
         return (
             <CenteredErrorMessage
                 message={"Error while trying to fetch games"}
             />
         );
+    }
 
     return (
         <Stack className={"w-full"} align={"center"}>
-            <ExploreScreenDrawer
-                setFilter={setFilterDto}
-                opened={drawerOpened}
-                onClose={drawerUtils.close}
-            />
             <Stack className={"w-full lg:w-10/12 "}>
-                <GameView layout={layout}>
-                    <Group justify={"space-between"} w={"100%"}>
-                        <ActionIcon
-                            className="mt-4 mb-2"
-                            onClick={() => drawerUtils.open()}
-                        >
-                            <IconAdjustments />
-                        </ActionIcon>
-                        <GameView.LayoutSwitcher setLayout={setLayout} />
-                    </Group>
+                <GameView layout={"grid"}>
+                    <ExploreScreenFilters
+                        setTrendingGamesDto={setTrendingGamesDto}
+                    />
                     <GameView.Content items={games!}></GameView.Content>
                 </GameView>
                 <div id={"last-element-ref-tracker"} ref={ref}></div>
