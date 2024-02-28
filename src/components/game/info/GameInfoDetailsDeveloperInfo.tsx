@@ -41,6 +41,8 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
     return (
         <>
             <DetailsBox
+                withBorder
+                dimmedTitle
                 title={"Developer(s)"}
                 content={
                     game.isLoading ? (
@@ -51,6 +53,8 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
                 }
             />
             <DetailsBox
+                withBorder
+                dimmedTitle
                 title={"Publisher(s)"}
                 content={
                     game.isLoading ? (

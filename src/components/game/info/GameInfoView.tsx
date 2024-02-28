@@ -58,7 +58,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
     const hasImages = combinedImages && combinedImages.length > 0;
 
     return (
-        <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
+        <Paper w={"100%"} h={"100%"}>
             <Stack>
                 <Grid
                     columns={12}

@@ -18,7 +18,9 @@ import {
     useIntersection,
     useWindowScroll,
 } from "@mantine/hooks";
-import ExploreScreenDrawer from "@/components/explore/ExploreScreenDrawer";
+import ExploreScreenFilters, {
+    DEFAULT_EXPLORE_SCREEN_PERIOD,
+} from "@/components/explore/ExploreScreenFilters";
 import GameView from "@/components/general/view/game/GameView";
 import { useGames } from "@/components/game/hooks/useGames";
 import {
@@ -35,52 +37,24 @@ export const DEFAULT_EXPLORE_RESULT_LIMIT = 20;
 export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
     {
         limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-        criteria: undefined,
-        period: period.WEEK,
+        criteria: {},
+        period: DEFAULT_EXPLORE_SCREEN_PERIOD as period,
     };
 
-const SELECT_PERIOD_DATA: ComboboxItem[] = [
-    { label: "Week", value: period.WEEK.valueOf() },
-    { label: "Month", value: period.MONTH.valueOf() },
-    {
-        label: "3 months",
-        value: period.QUARTER.valueOf(),
-    },
-    {
-        label: "6 months",
-        value: period.HALF_YEAR.valueOf(),
-    },
-    {
-        label: "Year",
-        value: period.YEAR.valueOf(),
-    },
-];
-
-const DEFAULT_SELECT_PERIOD = period.MONTH.valueOf();
-
 const ExploreScreen = () => {
-    const [drawerOpened, drawerUtils] = useDisclosure();
     const { ref, entry } = useIntersection({
         threshold: 1,
     });
     const [scroll, scrollTo] = useWindowScroll();
     const [currentPeriod, setCurrentPeriod] = useState<string>(
-        DEFAULT_SELECT_PERIOD,
+        DEFAULT_EXPLORE_SCREEN_PERIOD,
     );
 
-    const [filterDto, setFilterDto] = useURLState<
-        GameRepositoryFilterDto | undefined
-    >(undefined);
-    const trendingGamesDto = useMemo<InfiniteQueryTrendingGamesDto>(() => {
-        return {
-            criteria: filterDto ?? {},
-            limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-            period: currentPeriod as period,
-        };
-    }, [currentPeriod, filterDto]);
-    const trendingGamesQuery = useInfiniteTrendingGames(trendingGamesDto);
+    const [trendingGamesDto, setTrendingGamesDto] = useState(
+        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+    );
 
-    console.log(trendingGamesDto);
+    const trendingGamesQuery = useInfiniteTrendingGames(trendingGamesDto);
 
     const gamesIds = useMemo(() => {
         if (trendingGamesQuery.isError || trendingGamesQuery.data == undefined)
@@ -93,6 +67,7 @@ const ExploreScreen = () => {
             },
         );
     }, [trendingGamesQuery.data, trendingGamesQuery.isError]);
+
     const gamesQuery = useGames(
         {
             gameIds: gamesIds!,
@@ -126,33 +101,11 @@ const ExploreScreen = () => {
 
     return (
         <Stack className={"w-full"} align={"center"}>
-            <ExploreScreenDrawer
-                setFilter={setFilterDto}
-                opened={drawerOpened}
-                onClose={drawerUtils.close}
-            />
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
-                    <Group
-                        justify={"space-between"}
-                        align={"center"}
-                        w={"100%"}
-                    >
-                        <ActionIcon
-                            className="mt-4 mb-2"
-                            onClick={() => drawerUtils.open()}
-                        >
-                            <IconAdjustments />
-                        </ActionIcon>
-                        <Select
-                            data={SELECT_PERIOD_DATA}
-                            value={currentPeriod}
-                            allowDeselect={false}
-                            onChange={(v) =>
-                                setCurrentPeriod(v ?? period.MONTH.valueOf())
-                            }
-                        ></Select>
-                    </Group>
+                    <ExploreScreenFilters
+                        setTrendingGamesDto={setTrendingGamesDto}
+                    />
                     <GameView.Content items={games!}></GameView.Content>
                 </GameView>
                 <div id={"last-element-ref-tracker"} ref={ref}></div>

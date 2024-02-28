@@ -15,7 +15,15 @@ export function useInfiniteTrendingGames(dto: InfiniteQueryTrendingGamesDto) {
     const limitToUse = dto.limit || 20;
 
     return useInfiniteQuery({
-        queryKey: ["statistics", "game", "infinite", limitToUse, dto.criteria],
+        queryKey: [
+            "statistics",
+            "trending",
+            "game",
+            "infinite",
+            limitToUse,
+            dto.period,
+            dto.criteria,
+        ],
         queryFn: ({ pageParam = 0 }) => {
             return StatisticsService.statisticsControllerFindTrendingGames({
                 ...dto,

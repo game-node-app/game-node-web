@@ -20,6 +20,8 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
         <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
             <SimpleGrid cols={{ base: 1, lg: 2 }}>
                 <DetailsBox
+                    withBorder
+                    dimmedTitle
                     title={"Launch date"}
                     content={getLocalizedFirstReleaseDate(
                         game.firstReleaseDate,
@@ -27,19 +29,18 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                 />
                 <GameInfoDetailsDeveloperInfo gameId={game.id} />
                 <DetailsBox
+                    withBorder
+                    dimmedTitle
                     title={"Tags"}
                     content={<GameInfoDetailsTags game={game} />}
                 />
-                <DetailsBox title={"Summary"} content={game.summary} />
                 <DetailsBox
-                    title={"Platforms"}
-                    content={
-                        <GameInfoPlatforms
-                            className={"my-4 gap-2"}
-                            game={game}
-                        />
-                    }
+                    withBorder
+                    dimmedTitle
+                    title={"Summary"}
+                    content={game.summary}
                 />
+                <GameInfoPlatforms game={game} />
             </SimpleGrid>
         </Stack>
     );

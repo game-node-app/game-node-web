@@ -8,7 +8,6 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import {
     GameRepositoryFindAllDto,
     GameRepositoryService,
-    StatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
 
@@ -18,10 +17,12 @@ export const getServerSideProps = async (context: NextPageContext) => {
     await queryClient.prefetchInfiniteQuery({
         queryKey: [
             "statistics",
+            "trending",
             "game",
             "infinite",
             DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
-            {},
+            DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
+            DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
         ],
         queryFn: async () => {
             const response =

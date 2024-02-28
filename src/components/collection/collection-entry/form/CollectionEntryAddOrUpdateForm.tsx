@@ -32,6 +32,9 @@ import {
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useGamesResource } from "@/components/game/hooks/useGamesResource";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
+import CenteredLoading from "@/components/general/CenteredLoading";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
@@ -103,13 +106,11 @@ const CollectionEntryAddOrUpdateForm = ({
 
     const collectionEntryQuery = useOwnCollectionEntryForGameId(gameId);
 
-    const gameQuery = useGame(gameId, {
-        relations: {
-            cover: true,
-            platforms: true,
-        },
-    });
-    const gamePlatformsQuery = useGamesResource<GamePlatform>("platform");
+    /**
+     * We re-use the default DTO here because the query is probably already cached for it at this point
+     */
+    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
+    const gamePlatformsQuery = useGamesResource<GamePlatform>("platforms");
 
     const game = gameQuery.data;
     const userId = useUserId();
@@ -207,8 +208,14 @@ const CollectionEntryAddOrUpdateForm = ({
     const platformsIdsValue = watch("platformsIds", []);
     const collectionsIdsValue = watch("collectionIds", []);
 
-    if (game == undefined) {
-        return null;
+    if (gameQuery.isLoading || collectionEntryQuery.isLoading) {
+        return <CenteredLoading />;
+    } else if (gameQuery.isError || collectionEntryQuery.isError) {
+        return (
+            <CenteredErrorMessage
+                message={"Error while fetching data. Please try again."}
+            />
+        );
     }
 
     return (

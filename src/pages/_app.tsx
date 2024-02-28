@@ -66,9 +66,9 @@ export default function App({
             <SuperTokensProvider>
                 <QueryClientProvider client={queryClient}>
                     <Notifications />
-                    <RouterTransition />
                     <GlobalAppShell>
                         <HydrationBoundary state={pageProps.dehydratedState}>
+                            <RouterTransition />
                             <Component {...pageProps} />
                         </HydrationBoundary>
                     </GlobalAppShell>

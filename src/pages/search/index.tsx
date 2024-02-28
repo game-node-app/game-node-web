@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Container, Flex, Space, Stack } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
@@ -10,7 +10,7 @@ import useSearchGames from "@/components/game/hooks/useSearchGames";
 import TrendingGamesList from "@/components/game/trending/TrendingGamesList";
 import { ParsedUrlQuery } from "querystring";
 import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
-import { useURLState } from "@/components/general/hooks/useURLState";
+import { useRouter } from "next/router";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -40,6 +40,14 @@ const urlQueryToDto = (urlQuery: ParsedUrlQuery) => {
     return searchParams;
 };
 
+const queryDtoToSearchParams = (dto: GameSearchRequestDto) => {
+    const params = new URLSearchParams();
+    const { query, page } = dto;
+    if (query) params.set("query", query);
+    if (page) params.set("page", `${page}`);
+    return params;
+};
+
 const Index = () => {
     const {
         handleSubmit,
@@ -52,7 +60,10 @@ const Index = () => {
         mode: "onBlur",
     });
 
-    const [searchParameters, setSearchParameters] = useURLState(
+    const router = useRouter();
+    const query = router.query;
+
+    const [searchParameters, setSearchParameters] = useState(
         DEFAULT_SEARCH_PARAMETERS,
     );
 
@@ -62,10 +73,16 @@ const Index = () => {
         searchParameters.page != undefined &&
         searchParameters.page > 0;
 
+    const hasSetQueryParams = useRef(false);
+
     const searchQuery = useSearchGames(searchParameters, isQueryEnabled);
 
     const onSubmit = (data: TSearchFormValues) => {
         data.page = data.page || 1;
+        const searchParams = queryDtoToSearchParams(data);
+        router.replace({
+            query: searchParams.toString(),
+        });
         setSearchParameters(data);
     };
 
@@ -76,6 +93,20 @@ const Index = () => {
         !searchQuery.isLoading &&
         !searchQuery.isError &&
         searchQuery.data == undefined;
+
+    useEffect(() => {
+        if (hasSetQueryParams.current) return;
+        if (router.isReady) {
+            const dto = urlQueryToDto(query);
+            if (dto.query) setValue("query", dto.query);
+            if (dto.page) setValue("page", dto.page);
+            setSearchParameters((params) => ({
+                ...params,
+                dto,
+            }));
+            hasSetQueryParams.current = true;
+        }
+    }, [isQueryEnabled, query, router.isReady, setValue]);
 
     return (
         <Container
