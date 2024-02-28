@@ -21,6 +21,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
             "game",
             "infinite",
             DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
+            {},
         ],
         queryFn: async () => {
             const response =

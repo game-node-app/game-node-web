@@ -71,7 +71,6 @@ export function useCollectionEntriesForCollectionId({
                         await GameRepositoryService.gameRepositoryControllerFindAllByIds(
                             {
                                 gameIds: gameIds,
-                                limit,
                                 relations: gameRelations,
                             },
                         );

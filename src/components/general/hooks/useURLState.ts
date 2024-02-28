@@ -30,7 +30,6 @@ export function useURLState<T extends IURLObj | undefined>(
                 valuesWithInternalParams as IURLObj,
             )) {
                 if (v == undefined) continue;
-
                 urlParams.set(k, `${v}`);
             }
             router.replace({

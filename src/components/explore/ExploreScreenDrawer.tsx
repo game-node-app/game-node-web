@@ -69,8 +69,8 @@ const ExploreScreenDrawer = ({ onClose, opened, setFilter }: Props) => {
                 convertedData[k] = v.map((text) => parseInt(text), 10);
             }
         }
-        console.log("Converted data: ", convertedData);
         setFilter(convertedData);
+        onClose();
     };
 
     return (
