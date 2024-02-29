@@ -21,7 +21,10 @@ export function useOwnCollectionEntryForGameId(
             queryFn: async () => {
                 if (!gameId) return null;
                 try {
-                    return await getOwnCollectionEntryByGameId(gameId);
+                    const collectionEntry =
+                        await getOwnCollectionEntryByGameId(gameId);
+                    if (!collectionEntry) return null;
+                    return collectionEntry;
                 } catch (e) {
                     return null;
                 }

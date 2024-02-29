@@ -23,9 +23,8 @@ import { useRouter } from "next/router";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import period = FindStatisticsTrendingReviewsDto.period;
-import { InfiniteQueryTrendingGamesDto } from "@/components/statistics/hooks/useInfiniteTrendingGames";
 import { ParsedUrlQuery } from "querystring";
-import { DEFAULT_EXPLORE_TRENDING_GAMES_DTO } from "@/components/explore/ExploreScreen";
+import { DEFAULT_EXPLORE_TRENDING_GAMES_DTO } from "@/pages/explore";
 
 export const DEFAULT_EXPLORE_SCREEN_PERIOD = period.MONTH.valueOf();
 
@@ -91,6 +90,7 @@ export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
     const dto: FindStatisticsTrendingGamesDto =
         DEFAULT_EXPLORE_TRENDING_GAMES_DTO;
     for (const [k, v] of Object.entries(query)) {
+        console.log(k, v, typeof v);
         if (k !== "period" && typeof v === "string") {
             if (v.includes(",")) {
                 //@ts-ignore
@@ -141,9 +141,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
             const updatedState = {
                 ...previousState,
                 period: period as period,
-                criteria:
-                    (criteria as GameRepositoryFilterDto) ??
-                    previousState.criteria,
+                criteria: criteria as GameRepositoryFilterDto,
             };
             const searchParams = exploreScreenDtoToSearchParams(updatedState);
             router.replace(
@@ -162,10 +160,13 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
         const query = router.query;
         if (router.isReady && !hasSetInitialUrlParams.current) {
             const dto = exploreScreenUrlQueryToDto(query);
-            for (const [k, v] of Object.entries(dto)) {
-                setValue(k as any, `${v}`);
+            if (dto.criteria) {
+                for (const [k, v] of Object.entries(dto.criteria)) {
+                    setValue(k as any, v);
+                }
             }
-            setTrendingGamesDto(dto);
+            setValue("period", dto.period);
+            setTrendingGamesDto((prevState) => ({ ...prevState, dto }));
             hasSetInitialUrlParams.current = true;
         }
     }, [router.isReady, router.query, setTrendingGamesDto, setValue]);
@@ -218,9 +219,10 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
                 onChange={(v) => {
                     const value = v ?? period.MONTH.valueOf();
                     setValue("period", value);
-                    onSubmit({
-                        period: value,
-                    });
+                    setTrendingGamesDto((prevState) => ({
+                        ...prevState,
+                        period: value as period,
+                    }));
                 }}
             ></Select>
         </Group>
