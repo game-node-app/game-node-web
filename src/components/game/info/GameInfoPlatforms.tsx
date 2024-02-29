@@ -32,6 +32,8 @@ const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
             );
         });
     }, [iconsQuery.data, iconsQuery.isLoading]);
+    const isPlatformsEmpty =
+        iconsImageElements == undefined || iconsImageElements.length === 0;
     return (
         <DetailsBox
             withBorder
@@ -44,6 +46,7 @@ const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
                     wrap={"wrap"}
                     className={"my-4 gap-5"}
                 >
+                    {isPlatformsEmpty && "Unknown"}
                     {iconsImageElements}
                 </Group>
             }
