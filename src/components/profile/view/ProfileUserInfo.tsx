@@ -38,9 +38,7 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
     const followersCountQuery = useFollowersCount(userId);
     const profileAvatar = profileQuery.data?.avatar;
-    const obtainedAchievementsQuery = useAllObtainedAchievements(
-        profileQuery.data?.userId,
-    );
+    const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
 
     const featuredAchievement = useMemo(() => {
         if (obtainedAchievementsQuery.data == undefined) return null;
