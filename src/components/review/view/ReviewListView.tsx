@@ -98,22 +98,21 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
         <DetailsBox
             title={"All reviews"}
             description={"Reader discretion is advised."}
-            content={
-                <Stack w={"100%"} justify={"space-between"}>
-                    <Stack w={"100%"} align={"start"}>
-                        {reviewsList}
-                    </Stack>
-                    <Group w={"100%"} justify={"center"}>
-                        {!isReviewsEmpty && (
-                            <Pagination
-                                total={reviewsQueryPagination?.totalPages ?? 1}
-                                onChange={handlePagination}
-                            />
-                        )}
-                    </Group>
+        >
+            <Stack w={"100%"} justify={"space-between"}>
+                <Stack w={"100%"} align={"start"}>
+                    {reviewsList}
                 </Stack>
-            }
-        />
+                <Group w={"100%"} justify={"center"}>
+                    {!isReviewsEmpty && (
+                        <Pagination
+                            total={reviewsQueryPagination?.totalPages ?? 1}
+                            onChange={handlePagination}
+                        />
+                    )}
+                </Group>
+            </Stack>
+        </DetailsBox>
     );
 };
 

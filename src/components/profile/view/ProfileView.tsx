@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { Box, Container, Flex, Group } from "@mantine/core";
-import ProfileUserDescription from "@/components/profile/view/ProfileUserDescription";
+import ProfileUserInfo from "@/components/profile/view/ProfileUserInfo";
 import ProfileFavoriteGames from "@/components/profile/view/ProfileFavoriteGames";
 
 interface Props {
@@ -16,7 +16,7 @@ const ProfileView = ({ userId }: Props) => {
                 }
             >
                 <Box className={"w-full lg:w-3/12"}>
-                    <ProfileUserDescription userId={userId} />
+                    <ProfileUserInfo userId={userId} />
                 </Box>
                 <Box className={"w-full lg:w-9/12"}>
                     <ProfileFavoriteGames userId={userId} />

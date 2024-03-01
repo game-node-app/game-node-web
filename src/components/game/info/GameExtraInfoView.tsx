@@ -33,29 +33,21 @@ const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
-                <DetailsBox
-                    enabled={hasDlcs}
-                    title={"DLCs"}
-                    content={
-                        <GameInfoCarousel
-                            games={gameQuery.data?.dlcs}
-                            isLoading={gameQuery.isLoading}
-                            isError={gameQuery.isError}
-                        />
-                    }
-                />
+                <DetailsBox enabled={hasDlcs} title={"DLCs"}>
+                    <GameInfoCarousel
+                        games={gameQuery.data?.dlcs}
+                        isLoading={gameQuery.isLoading}
+                        isError={gameQuery.isError}
+                    />
+                </DetailsBox>
                 <Break />
-                <DetailsBox
-                    enabled={hasSimilarGames}
-                    title={"Similar games"}
-                    content={
-                        <GameInfoCarousel
-                            games={gameQuery.data?.similarGames}
-                            isLoading={gameQuery.isLoading}
-                            isError={gameQuery.isError}
-                        />
-                    }
-                />
+                <DetailsBox enabled={hasSimilarGames} title={"Similar games"}>
+                    <GameInfoCarousel
+                        games={gameQuery.data?.similarGames}
+                        isLoading={gameQuery.isLoading}
+                        isError={gameQuery.isError}
+                    />
+                </DetailsBox>
             </Flex>
         </Paper>
     );

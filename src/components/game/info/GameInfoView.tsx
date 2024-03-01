@@ -97,20 +97,16 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                     </Grid.Col>
                 </Grid>
                 <Flex className={"w-full"} wrap={"wrap"}>
-                    <DetailsBox
-                        enabled={hasImages}
-                        title={"Images"}
-                        content={
-                            <GameInfoImageCarousel
-                                urls={combinedImages}
-                                imageSize={ImageSize.SCREENSHOT_BIG}
-                                carouselProps={{
-                                    withIndicators: !onMobile,
-                                    withControls: !onMobile,
-                                }}
-                            />
-                        }
-                    />
+                    <DetailsBox enabled={hasImages} title={"Images"}>
+                        <GameInfoImageCarousel
+                            urls={combinedImages}
+                            imageSize={ImageSize.SCREENSHOT_BIG}
+                            carouselProps={{
+                                withIndicators: !onMobile,
+                                withControls: !onMobile,
+                            }}
+                        />
+                    </DetailsBox>
                 </Flex>
             </Stack>
         </Paper>

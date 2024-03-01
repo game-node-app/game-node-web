@@ -146,12 +146,11 @@ const GameInfoReviewEditorView = ({
                     ? "Write your opinions about this game. Reviews are public to all users."
                     : undefined
             }
-            content={
-                <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
-                    {renderInnerContent()}
-                </Flex>
-            }
-        />
+        >
+            <Flex wrap={"wrap"} w={"100%"} h={"100%"} justify={"start"}>
+                {renderInnerContent()}
+            </Flex>
+        </DetailsBox>
     );
 };
 

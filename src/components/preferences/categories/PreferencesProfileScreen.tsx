@@ -116,30 +116,29 @@ const PreferencesProfileScreen = () => {
                 description={
                     "Your recent obtained achievements will show here."
                 }
-                content={
-                    <Link href={`/achievements/${userId}`} className={"w-full"}>
-                        <Group
-                            justify={
-                                hasObtainedAchievements ? "center" : "start"
-                            }
-                        >
-                            {sortedObtainedAchievements?.map((achievement) => {
-                                if (!achievement) return null;
-                                return (
-                                    <AchievementLogo
-                                        key={achievement.id}
-                                        achievementId={achievement.id}
-                                    />
-                                );
-                            })}
-                            {!hasObtainedAchievements && (
-                                <Text>None, for now ;)</Text>
-                            )}
-                        </Group>
-                    </Link>
-                }
-            />
-            <DetailsBox title={"Bio"} content={<PreferencesBioForm />} />
+            >
+                <Link href={`/achievements/${userId}`} className={"w-full"}>
+                    <Group
+                        justify={hasObtainedAchievements ? "center" : "start"}
+                    >
+                        {sortedObtainedAchievements?.map((achievement) => {
+                            if (!achievement) return null;
+                            return (
+                                <AchievementLogo
+                                    key={achievement.id}
+                                    achievementId={achievement.id}
+                                />
+                            );
+                        })}
+                        {!hasObtainedAchievements && (
+                            <Text>None, for now ;)</Text>
+                        )}
+                    </Group>
+                </Link>
+            </DetailsBox>
+            <DetailsBox title={"Bio"}>
+                <PreferencesBioForm />
+            </DetailsBox>
         </Stack>
     );
 };
