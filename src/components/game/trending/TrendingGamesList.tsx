@@ -43,18 +43,14 @@ const TrendingGamesList = () => {
     }, []);
 
     return (
-        <DetailsBox
-            enabled={!isEmpty}
-            title={"Trending Games"}
-            content={
-                <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
-                    {isLoading && elementsSkeletons}
-                    {gamesQuery.data?.map((game) => {
-                        return <GameGridFigure key={game.id} game={game} />;
-                    })}
-                </SimpleGrid>
-            }
-        />
+        <DetailsBox enabled={!isEmpty} title={"Trending Games"}>
+            <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
+                {isLoading && elementsSkeletons}
+                {gamesQuery.data?.map((game) => {
+                    return <GameGridFigure key={game.id} game={game} />;
+                })}
+            </SimpleGrid>
+        </DetailsBox>
     );
 };
 

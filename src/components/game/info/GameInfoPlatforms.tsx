@@ -35,22 +35,17 @@ const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
     const isPlatformsEmpty =
         iconsImageElements == undefined || iconsImageElements.length === 0;
     return (
-        <DetailsBox
-            withBorder
-            dimmedTitle
-            title={"Platforms"}
-            content={
-                <Group
-                    w={"100%"}
-                    justify={"start"}
-                    wrap={"wrap"}
-                    className={"my-4 gap-5"}
-                >
-                    {isPlatformsEmpty && "Unknown"}
-                    {iconsImageElements}
-                </Group>
-            }
-        />
+        <DetailsBox withBorder withDimmedTitle title={"Platforms"}>
+            <Group
+                w={"100%"}
+                justify={"start"}
+                wrap={"wrap"}
+                className={"my-4 gap-5"}
+            >
+                {isPlatformsEmpty && "Unknown"}
+                {iconsImageElements}
+            </Group>
+        </DetailsBox>
     );
 };
 

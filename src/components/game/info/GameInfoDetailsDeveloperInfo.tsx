@@ -40,30 +40,20 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
 
     return (
         <>
-            <DetailsBox
-                withBorder
-                dimmedTitle
-                title={"Developer(s)"}
-                content={
-                    game.isLoading ? (
-                        <Skeleton className={"w-64 h-4"} />
-                    ) : developersNames && developersNames.length > 0 ? (
-                        developersNames
-                    ) : undefined
-                }
-            />
-            <DetailsBox
-                withBorder
-                dimmedTitle
-                title={"Publisher(s)"}
-                content={
-                    game.isLoading ? (
-                        <Skeleton className={"w-64 h-4"} />
-                    ) : publishersNames && publishersNames.length > 0 ? (
-                        publishersNames
-                    ) : undefined
-                }
-            />
+            <DetailsBox withBorder withDimmedTitle title={"Developer(s)"}>
+                {game.isLoading ? (
+                    <Skeleton className={"w-64 h-4"} />
+                ) : developersNames && developersNames.length > 0 ? (
+                    developersNames
+                ) : undefined}
+            </DetailsBox>
+            <DetailsBox withBorder withDimmedTitle title={"Publisher(s)"}>
+                {game.isLoading ? (
+                    <Skeleton className={"w-64 h-4"} />
+                ) : publishersNames && publishersNames.length > 0 ? (
+                    publishersNames
+                ) : undefined}
+            </DetailsBox>
         </>
     );
 };

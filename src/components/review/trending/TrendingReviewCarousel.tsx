@@ -57,28 +57,25 @@ const TrendingReviewCarousel = ({ limit }: Props) => {
 
     return (
         !isEmpty && (
-            <DetailsBox
-                title={"Trending Reviews"}
-                content={
-                    <Carousel
-                        slideSize={{
-                            base: "90%",
-                            sm: "40%",
-                        }}
-                        height={440}
-                        align="start"
-                        slideGap={{
-                            base: "xs",
-                            lg: "md",
-                        }}
-                        slidesToScroll={onMobile ? 1 : 2}
-                        controlsOffset="xs"
-                        dragFree
-                    >
-                        {buildSlides()}
-                    </Carousel>
-                }
-            />
+            <DetailsBox title={"Trending Reviews"}>
+                <Carousel
+                    slideSize={{
+                        base: "90%",
+                        sm: "40%",
+                    }}
+                    height={440}
+                    align="start"
+                    slideGap={{
+                        base: "xs",
+                        lg: "md",
+                    }}
+                    slidesToScroll={onMobile ? 1 : 2}
+                    controlsOffset="xs"
+                    dragFree
+                >
+                    {buildSlides()}
+                </Carousel>
+            </DetailsBox>
         )
     );
 };

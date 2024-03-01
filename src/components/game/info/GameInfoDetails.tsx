@@ -6,6 +6,7 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 import GameInfoDetailsDeveloperInfo from "@/components/game/info/GameInfoDetailsDeveloperInfo";
 import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
+import GameInfoScore from "@/components/game/info/GameInfoScore";
 
 interface IGameInfoDetailsProps {
     game: Game | undefined;
@@ -19,28 +20,19 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
     return (
         <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
             <SimpleGrid cols={{ base: 1, lg: 2 }}>
-                <DetailsBox
-                    withBorder
-                    dimmedTitle
-                    title={"Launch date"}
-                    content={getLocalizedFirstReleaseDate(
-                        game.firstReleaseDate,
-                    )}
-                />
+                <DetailsBox withBorder withDimmedTitle title={"Launch date"}>
+                    {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
+                        "Unknown"}
+                </DetailsBox>
                 <GameInfoDetailsDeveloperInfo gameId={game.id} />
-                <DetailsBox
-                    withBorder
-                    dimmedTitle
-                    title={"Tags"}
-                    content={<GameInfoDetailsTags game={game} />}
-                />
-                <DetailsBox
-                    withBorder
-                    dimmedTitle
-                    title={"Summary"}
-                    content={game.summary}
-                />
+                <DetailsBox withBorder withDimmedTitle title={"Tags"}>
+                    <GameInfoDetailsTags game={game} />
+                </DetailsBox>
+                <DetailsBox withBorder withDimmedTitle title={"Summary"}>
+                    {game.summary ?? "Unknown"}
+                </DetailsBox>
                 <GameInfoPlatforms game={game} />
+                <GameInfoScore gameId={game.id} />
             </SimpleGrid>
         </Stack>
     );
