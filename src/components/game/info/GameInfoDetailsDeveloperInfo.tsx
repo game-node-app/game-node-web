@@ -31,28 +31,26 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
                 .map((ic) => ic.company);
         }
     }, [involvedCompanies]);
-    const developersNames = developers
-        ?.map((company) => company.name)
-        ?.join(", ");
-    const publishersNames = publishers
-        ?.map((company) => company.name)
-        .join(", ");
+    const developersNames =
+        developers?.map((company) => company.name)?.join(", ") ?? "Unknown";
+    const publishersNames =
+        publishers?.map((company) => company.name).join(", ") ?? "Unknown";
 
     return (
         <>
             <DetailsBox withBorder withDimmedTitle title={"Developer(s)"}>
                 {game.isLoading ? (
                     <Skeleton className={"w-64 h-4"} />
-                ) : developersNames && developersNames.length > 0 ? (
+                ) : (
                     developersNames
-                ) : undefined}
+                )}
             </DetailsBox>
             <DetailsBox withBorder withDimmedTitle title={"Publisher(s)"}>
                 {game.isLoading ? (
                     <Skeleton className={"w-64 h-4"} />
-                ) : publishersNames && publishersNames.length > 0 ? (
+                ) : (
                     publishersNames
-                ) : undefined}
+                )}
             </DetailsBox>
         </>
     );

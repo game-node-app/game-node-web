@@ -21,27 +21,36 @@ import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAl
 import AchievementItem from "@/components/achievement/AchievementItem";
 import ObtainedAchievementItem from "@/components/achievement/ObtainedAchievementItem";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
+import ProfileFollowActions from "@/components/profile/view/ProfileFollowActions";
+import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 const dateFormater = new Intl.DateTimeFormat();
 
 interface Props {
     userId: string;
 }
-const ProfileUserDescription = ({ userId }: Props) => {
+const ProfileUserInfo = ({ userId }: Props) => {
+    const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
     const libraryQuery = useUserLibrary(profileQuery.data?.userId);
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
+    const followersCountQuery = useFollowersCount(userId);
     const profileAvatar = profileQuery.data?.avatar;
     const obtainedAchievementsQuery = useAllObtainedAchievements(
         profileQuery.data?.userId,
     );
+
     const featuredAchievement = useMemo(() => {
         if (obtainedAchievementsQuery.data == undefined) return null;
         return obtainedAchievementsQuery.data.find(
             (achievement) => achievement.isFeatured,
         );
     }, [obtainedAchievementsQuery.data]);
+
+    const shouldShowFollowActions =
+        ownUserId != undefined && ownUserId !== userId;
 
     if (profileQuery.isLoading) {
         return <CenteredLoading />;
@@ -98,7 +107,17 @@ const ProfileUserDescription = ({ userId }: Props) => {
                             </Text>
                         </Group>
                     </Link>
+                    <Divider />
+                    <Group className={"w-full justify-between px-4"}>
+                        <Title size={"h5"}>Followers</Title>
+                        <Text>{followersCountQuery.data}</Text>
+                    </Group>
                 </Stack>
+                {shouldShowFollowActions && (
+                    <Box className={"w-full mt-6"}>
+                        <ProfileFollowActions targetUserId={userId} />
+                    </Box>
+                )}
                 <Text className={"mt-4"} fz={"0.9rem"}>
                     {profileQuery.data.bio}
                 </Text>
@@ -117,4 +136,4 @@ const ProfileUserDescription = ({ userId }: Props) => {
     );
 };
 
-export default ProfileUserDescription;
+export default ProfileUserInfo;

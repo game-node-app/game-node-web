@@ -35,10 +35,10 @@ const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
     const isPlatformsEmpty =
         iconsImageElements == undefined || iconsImageElements.length === 0;
     return (
-        <DetailsBox withBorder withDimmedTitle title={"Platforms"}>
+        <DetailsBox withBorder withDimmedTitle title={"Where to play"}>
             <Group
                 w={"100%"}
-                justify={"start"}
+                justify={onMobile ? "center" : "start"}
                 wrap={"wrap"}
                 className={"my-4 gap-5"}
             >
