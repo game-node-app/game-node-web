@@ -88,7 +88,7 @@ const resources: ComboboxItem[] = [
 
 export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
     const dto: FindStatisticsTrendingGamesDto =
-        DEFAULT_EXPLORE_TRENDING_GAMES_DTO;
+        structuredClone(DEFAULT_EXPLORE_TRENDING_GAMES_DTO);
     for (const [k, v] of Object.entries(query)) {
         console.log(k, v, typeof v);
         if (k !== "period" && typeof v === "string") {
@@ -151,6 +151,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
                 undefined,
                 { shallow: true },
             );
+            console.log(updatedState);
             return updatedState;
         });
         drawerUtils.close();
@@ -166,7 +167,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
                 }
             }
             setValue("period", dto.period);
-            setTrendingGamesDto((prevState) => ({ ...prevState, dto }));
+            setTrendingGamesDto((prevState) => ({ ...prevState, ...dto }));
             hasSetInitialUrlParams.current = true;
         }
     }, [router.isReady, router.query, setTrendingGamesDto, setValue]);
@@ -219,10 +220,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
                 onChange={(v) => {
                     const value = v ?? period.MONTH.valueOf();
                     setValue("period", value);
-                    setTrendingGamesDto((prevState) => ({
-                        ...prevState,
-                        period: value as period,
-                    }));
+                    onSubmit({ period: v as period });
                 }}
             ></Select>
         </Group>

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useMemo } from "react";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useFollowStatus } from "@/components/follow/hooks/useFollowStatus";
-import { Button, Center, Stack, Text } from "@mantine/core";
+import {
+    ActionIcon,
+    Button,
+    Center,
+    Group,
+    Stack,
+    Text,
+    Tooltip,
+} from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
 import { FollowService } from "@/wrapper/server";
+import { IconX } from "@tabler/icons-react";
 
 interface Props {
     targetUserId: string;
@@ -25,9 +34,17 @@ const ProfileFollowActions = ({ targetUserId }: Props) => {
     const isFollowedBack = isFollowing && isBeingFollowed;
 
     const followMutation = useMutation({
-        mutationFn: async () => {
-            if (isFollowing) return;
-            await FollowService.followControllerRegisterFollow({
+        mutationFn: async (action: "register" | "unregister") => {
+            if (action === "register" && isFollowing) return;
+            if (action === "register") {
+                await FollowService.followControllerRegisterFollow({
+                    followedUserId: targetUserId,
+                });
+
+                return;
+            }
+
+            await FollowService.followControllerRemoveFollow({
                 followedUserId: targetUserId,
             });
         },
@@ -38,20 +55,39 @@ const ProfileFollowActions = ({ targetUserId }: Props) => {
         },
     });
 
-    if (!ownUserId || ownUserId === targetUserId) return null;
-
     return (
         <Stack w={"100%"} align={"center"}>
-            <Button
-                disabled={isFollowing}
-                loading={followMutation.isPending}
-                onClick={() => {
-                    followMutation.mutate();
-                }}
-            >
-                {isFollowing ? "Following" : "Follow"}
-            </Button>
-            {isBeingFollowed && (
+            <Group>
+                <Button
+                    disabled={isFollowing}
+                    loading={followMutation.isPending}
+                    onClick={() => {
+                        followMutation.mutate("register");
+                    }}
+                >
+                    {isFollowing
+                        ? "Following"
+                        : isBeingFollowed
+                          ? "Follow Back"
+                          : "Follow"}
+                </Button>
+                {isFollowing && (
+                    <Tooltip label={"Unfollow this user"}>
+                        <ActionIcon
+                            loading={followMutation.isPending}
+                            variant="default"
+                            size="lg"
+                            onClick={() => {
+                                followMutation.mutate("unregister");
+                            }}
+                        >
+                            <IconX color="red" />
+                        </ActionIcon>
+                    </Tooltip>
+                )}
+            </Group>
+
+            {isBeingFollowed && !isFollowedBack && (
                 <Text fz={"0.8rem"} c={"dimmed"}>
                     This user is following you.
                 </Text>

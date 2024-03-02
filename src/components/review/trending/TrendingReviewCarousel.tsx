@@ -30,7 +30,7 @@ const TrendingReviewCarousel = ({ limit }: Props) => {
     const trendingReviews = useTrendingReviews({
         limit,
         offset: 0,
-        period: period.WEEK,
+        period: period.MONTH,
     });
     const isEmpty =
         trendingReviews.isError || trendingReviews.data?.data.length === 0;

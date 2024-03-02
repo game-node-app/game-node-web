@@ -21,7 +21,7 @@ export const UserAvatarGroup = ({ userId }: IProps) => {
                 gap={onMobile ? undefined : 5}
             >
                 <UserAvatar avatar={profileQuery.data?.avatar} />
-                <Text>{profileQuery.data?.username}</Text>
+                <Text c={"white"}>{profileQuery.data?.username}</Text>
             </Group>
         </Link>
     );

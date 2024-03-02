@@ -24,37 +24,16 @@ import {
 import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 import { Game } from "@/wrapper/server";
 import { getGameSpecialCategoryText } from "@/components/game/util/getGameSpecialCategoryText";
+import { useIconsForGamePlatforms } from "@/components/game/hooks/useIconsForGamePlatforms";
 
 interface IGameListFigureProps extends PropsWithChildren {
     game: TGameOrSearchGame;
-    badgesBuilder?: (game: TGameOrSearchGame) => React.ReactNode[] | null;
     figureProps?: Partial<IGameFigureProps>;
 }
-
-const buildPlatformBadges = (platforms: IGamePlatformInfo) => {
-    if (
-        platforms &&
-        platforms.platformsAbbreviations &&
-        platforms.platformsAbbreviations.length > 0
-    ) {
-        return platforms.platformsAbbreviations.map(
-            (platformAbbreviation, index) => {
-                return (
-                    <GameInfoPlatformBadge
-                        key={index}
-                        platformAbbreviation={platformAbbreviation}
-                    />
-                );
-            },
-        );
-    }
-    return null;
-};
 
 const GameListFigure = ({
     game,
     figureProps,
-    badgesBuilder,
     children,
 }: IGameListFigureProps) => {
     let name = game.name ?? "Unknown";
@@ -64,15 +43,8 @@ const GameListFigure = ({
             name = name.substring(0, 30) + "...";
         }
     }
-
     const platformInfo = getGamePlatformInfo(game);
-    const badgesToUse = useMemo(() => {
-        if (badgesBuilder) {
-            return badgesBuilder(game);
-        }
-        return buildPlatformBadges(platformInfo);
-    }, [badgesBuilder, game, platformInfo]);
-    const platformAbbreviationsNames =
+    const platformsAbbreviations =
         platformInfo.platformsAbbreviations?.join(", ");
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
@@ -132,11 +104,11 @@ const GameListFigure = ({
                             undefined,
                         )}
                     </Text>
-                    <Group w={"100%"} justify={"start"} wrap={"wrap"}>
-                        {badgesToUse}
-                    </Group>
                 </Stack>
-                <Text size="sm" className="text-gray-300">
+                <Text size={"sm"} c={"dimmed"}>
+                    {platformsAbbreviations}
+                </Text>
+                <Text size="sm" c={"dimmed"}>
                     {genreNames}
                 </Text>
             </Stack>

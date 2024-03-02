@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { UserLevelService } from "@/wrapper/server";
+import { LevelService } from "@/wrapper/server";
 
 export function useUserLevel(targetUserId: string) {
     return useQuery({
         queryKey: ["user-level", targetUserId],
         queryFn: () => {
-            return UserLevelService.userLevelControllerFindOne(targetUserId);
+            return LevelService.levelControllerFindOne(targetUserId);
         },
         enabled: targetUserId != undefined,
     });

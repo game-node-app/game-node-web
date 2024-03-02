@@ -19,29 +19,6 @@ interface ICollectionEntriesViewProps extends IGameViewPaginationProps {
     entries: CollectionEntry[] | undefined;
 }
 
-const badgesBuilder = (
-    game: TGameOrSearchGame,
-    entries: CollectionEntry[] | undefined,
-) => {
-    if (entries == undefined || entries.length === 0) return null;
-    const relevantEntry = entries.find((entry) => entry.gameId === game.id);
-    if (!relevantEntry) {
-        return null;
-    }
-    const ownedPlatforms = relevantEntry.ownedPlatforms;
-    if (ownedPlatforms.length === 0) return null;
-
-    return ownedPlatforms.map((platform) => {
-        const abbreviation = platform.abbreviation;
-        return (
-            <GameInfoPlatformBadge
-                key={platform.id}
-                platformAbbreviation={abbreviation}
-            />
-        );
-    });
-};
-
 const CollectionEntriesView = ({
     entries,
     isError,
@@ -85,10 +62,7 @@ const CollectionEntriesView = ({
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
-                    <GameView.Content
-                        items={entriesGames}
-                        badgesBuilder={(game) => badgesBuilder(game, entries)}
-                    />
+                    <GameView.Content items={entriesGames} />
                     <Space h={"2rem"} />
                     <GameView.Pagination
                         page={page}

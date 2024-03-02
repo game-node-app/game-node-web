@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Stack, StackProps, Text } from "@mantine/core";
 import React, { PropsWithChildren } from "react";
 
 interface IDetailsBoxProps extends PropsWithChildren {
@@ -7,6 +7,7 @@ interface IDetailsBoxProps extends PropsWithChildren {
     withDimmedTitle?: boolean;
     withBorder?: boolean;
     description?: string | undefined;
+    stackProps?: StackProps;
 }
 
 export const DetailsBox = ({
@@ -15,6 +16,7 @@ export const DetailsBox = ({
     withDimmedTitle = false,
     withBorder = false,
     description,
+    stackProps,
     children,
 }: IDetailsBoxProps) => {
     return (
@@ -29,26 +31,25 @@ export const DetailsBox = ({
                         borderRadius: withBorder ? "6px" : undefined,
                     },
                 }}
-                className={`flex justify-start p-2 lg:p-0`}
+                className={`justify-start px-4 py-2 lg:p-0`}
+                {...stackProps}
             >
-                <Box className={"w-full px-4 py-2"}>
-                    <Text
-                        className={
-                            withDimmedTitle
-                                ? "text-[#5C5C5C] text-sm mb-1"
-                                : "font-bold text-md mb-2"
-                        }
-                    >
-                        {title}
+                <Text
+                    className={
+                        withDimmedTitle
+                            ? "text-[#5C5C5C] text-sm mb-1"
+                            : "font-bold text-md mb-2"
+                    }
+                >
+                    {title}
+                </Text>
+                {description && (
+                    <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-4">
+                        {description}
                     </Text>
-                    {description && (
-                        <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-4">
-                            {description}
-                        </Text>
-                    )}
+                )}
 
-                    {children}
-                </Box>
+                {children}
             </Stack>
         )
     );

@@ -32,47 +32,57 @@ export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto 
     };
 
 export const getServerSideProps = async (context: NextPageContext) => {
+    const query = context.query;
+    const queryDto = exploreScreenUrlQueryToDto(query);
+    const isDefaultDto =
+        JSON.stringify(DEFAULT_EXPLORE_TRENDING_GAMES_DTO) ===
+        JSON.stringify(queryDto);
     const queryClient = new QueryClient();
     let gameIds: number[] | undefined = undefined;
-    await queryClient.prefetchInfiniteQuery({
-        queryKey: [
-            "statistics",
-            "trending",
-            "game",
-            "infinite",
-            DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
-            DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
-            DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
-        ],
-        queryFn: async () => {
-            const response =
-                await StatisticsService.statisticsControllerFindTrendingGames(
-                    DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-                );
-            if (response && response.data) {
-                gameIds = response.data.map((s) => s.gameId!);
-            }
-            return response;
-        },
-        initialPageParam: 0,
-    });
-
-    if (gameIds) {
-        const useGamesDto: GameRepositoryFindAllDto = {
-            gameIds: gameIds,
-            relations: {
-                cover: true,
+    /**
+     * Only attempts to pre-fetch when the default page is loaded; Prevents hydration errors.
+     */
+    if (isDefaultDto) {
+        await queryClient.prefetchInfiniteQuery({
+            queryKey: [
+                "statistics",
+                "trending",
+                "game",
+                "infinite",
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
+            ],
+            queryFn: async () => {
+                const response =
+                    await StatisticsService.statisticsControllerFindTrendingGames(
+                        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+                    );
+                if (response && response.data) {
+                    gameIds = response.data.map((s) => s.gameId!);
+                }
+                return response;
             },
-        };
-
-        await queryClient.prefetchQuery({
-            queryKey: ["game", "all", useGamesDto],
-            queryFn: () => {
-                return GameRepositoryService.gameRepositoryControllerFindAllByIds(
-                    useGamesDto,
-                );
-            },
+            initialPageParam: 0,
         });
+
+        if (gameIds) {
+            const useGamesDto: GameRepositoryFindAllDto = {
+                gameIds: gameIds,
+                relations: {
+                    cover: true,
+                },
+            };
+
+            await queryClient.prefetchQuery({
+                queryKey: ["game", "all", useGamesDto],
+                queryFn: () => {
+                    return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                        useGamesDto,
+                    );
+                },
+            });
+        }
     }
 
     return {
@@ -117,6 +127,7 @@ const Index = () => {
     );
 
     const games = gamesQuery.data;
+
     const isFetching = trendingGamesQuery.isFetching || gamesQuery.isFetching;
     const isLoading = trendingGamesQuery.isLoading || gamesQuery.isLoading;
     const isError = trendingGamesQuery.isError || gamesQuery.isError;
@@ -140,6 +151,7 @@ const Index = () => {
     return (
         <Stack className={"w-full"} align={"center"}>
             <Stack className={"w-full lg:w-10/12 "}>
+                {isFetching && <CenteredLoading className={"mt-4 mb-4"} />}
                 <GameView layout={"grid"}>
                     <ExploreScreenFilters
                         setTrendingGamesDto={setTrendingGamesDto}

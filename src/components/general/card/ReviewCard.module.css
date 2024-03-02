@@ -4,7 +4,7 @@
             sans-serif;
     font-weight: 900;
     max-width: 100%;
-    word-break: break-all;
+    word-break: break-word;
     color: var(--mantine-color-white);
     line-height: 1.2;
     font-size: rem(18px);

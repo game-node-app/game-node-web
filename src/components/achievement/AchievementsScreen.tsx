@@ -16,6 +16,7 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import { useAchievements } from "@/components/achievement/hooks/useAchievements";
 import AchievementItem from "@/components/achievement/AchievementItem";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 interface Props {
     targetUserId: string;
@@ -33,12 +34,6 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
     return (
         <Paper className={"w-full h-full"}>
             <Stack w={"100%"} py={"3rem"} px={"2rem"}>
-                {achievements.isError && (
-                    <Center className={"mt-10"}>
-                        Something happened while loading achievements. Please
-                        try again.
-                    </Center>
-                )}
                 <Group
                     wrap={"nowrap"}
                     className={"justify-center lg:justify-between lg:mx-4"}
@@ -51,9 +46,15 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
                         <Button className={""}>Redeem a code</Button>
                     )}
                 </Group>
-                <Box className={"w-full"}>
-                    <Divider />
-                </Box>
+
+                <Divider className={"w-full"} />
+                {achievements.isError && (
+                    <Center className={"mt-10"}>
+                        Something happened while loading achievements. Please
+                        try again.
+                    </Center>
+                )}
+                {achievements.isLoading && <CenteredLoading />}
                 <SimpleGrid
                     cols={{
                         base: 1,
