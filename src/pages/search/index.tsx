@@ -153,16 +153,16 @@ const Index = () => {
                         }}
                     />
                     {extraItemsEnabled && (
-                        <Flex
+                        <Stack
                             w={"100%"}
                             h={"100%"}
                             justify={"center"}
-                            wrap={"wrap"}
+                            align={"center"}
                         >
                             <TrendingGamesList />
-                            <Space />
+                            <Space h={"1rem"} />
                             <TrendingReviewCarousel limit={6} />
-                        </Flex>
+                        </Stack>
                     )}
                 </Box>
             </Stack>

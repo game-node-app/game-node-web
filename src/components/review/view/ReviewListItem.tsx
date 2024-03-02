@@ -1,7 +1,7 @@
 import React, { ReactElement, useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Divider, Flex, Group, Rating, Stack, Text } from "@mantine/core";
+import { Box, Divider, Flex, Group, Rating, Stack, Text } from "@mantine/core";
 import { Review } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -63,24 +63,44 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                         lg: "center",
                     }}
                     align={{
+                        base: "center",
                         lg: "center",
                     }}
                 >
-                    <UserAvatarGroup userId={profileUserId} />
-                    <Rating value={review.rating} />
+                    <UserAvatarGroup
+                        size={onMobile ? "lg" : "xl"}
+                        userId={profileUserId}
+                    />
+                    {onMobile && (
+                        <Rating
+                            value={review.rating}
+                            className={"mt-0 lg:mt-4"}
+                        />
+                    )}
                 </Flex>
-                <EditorContent
-                    editor={nonEditableEditor}
-                    className={"w-full"}
-                />
-            </Group>
-            <Group w={"100%"} justify={"space-between"}>
-                <ReviewListItemLikes review={review} />
-                <ReviewListItemDropdown
-                    review={review}
-                    isOwnReview={isOwnReview}
-                    onEditStart={onEditStart}
-                />
+                <Stack className={"w-full"}>
+                    <EditorContent
+                        editor={nonEditableEditor}
+                        className={"w-full"}
+                    />
+                    <Group justify={onMobile ? "end" : "space-between"}>
+                        {!onMobile && (
+                            <Rating
+                                value={review.rating}
+                                className={"mt-0 lg:mt-4"}
+                            />
+                        )}
+                        <Group>
+                            <ReviewListItemLikes review={review} />
+
+                            <ReviewListItemDropdown
+                                review={review}
+                                isOwnReview={isOwnReview}
+                                onEditStart={onEditStart}
+                            />
+                        </Group>
+                    </Group>
+                </Stack>
             </Group>
             <Divider w={"100%"} orientation={"horizontal"} />
         </Stack>
