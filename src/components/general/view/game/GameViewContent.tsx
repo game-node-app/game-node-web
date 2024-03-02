@@ -11,14 +11,9 @@ import { Game } from "@/wrapper/server";
 
 interface IMetadataGridContentProps extends SimpleGridProps {
     items: TGameOrSearchGame[];
-    badgesBuilder?: (game: TGameOrSearchGame) => React.ReactNode[] | null;
 }
 
-const GameViewContent = ({
-    items,
-    badgesBuilder,
-    ...others
-}: IMetadataGridContentProps) => {
+const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
     const onMobile = useOnMobile();
     const { layout } = useContext(GameViewContext);
     const columns = useMemo(() => {
@@ -29,10 +24,7 @@ const GameViewContent = ({
             if (layout === "list") {
                 return (
                     <Box w={"100%"} key={item.id}>
-                        <GameListFigure
-                            badgesBuilder={badgesBuilder}
-                            game={item}
-                        />
+                        <GameListFigure game={item} />
                         <Divider mt={"xs"} variant={"dashed"} />
                     </Box>
                 );
@@ -40,7 +32,7 @@ const GameViewContent = ({
 
             return <GameGridFigure key={item.id} game={item} />;
         });
-    }, [items, layout, badgesBuilder]);
+    }, [items, layout]);
 
     return (
         <SimpleGrid

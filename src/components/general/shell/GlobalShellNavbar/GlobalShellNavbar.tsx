@@ -24,9 +24,11 @@ interface NavbarItem {
     href: string;
 }
 
+const IN_DEVELOPMENT_URL = "/503";
+
 const links: NavbarItem[] = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
-    { icon: IconBulb, label: "Activity", href: "/activity" },
+    { icon: IconBulb, label: "Activity", href: IN_DEVELOPMENT_URL },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
     // { icon: IconSettings, label: "Preferences", href: "/preferences" },
@@ -70,7 +72,10 @@ export default function GlobalShellNavbar({
         <nav className={classes.navbar} style={undefined}>
             {isLoggedIn && userProfile && (
                 <div className={classes.section}>
-                    <Link href={`/profile/${userProfile.userId}`}>
+                    <Link
+                        href={`/profile/${userProfile.userId}`}
+                        onClick={onClose}
+                    >
                         <UserButton userId={userProfile.userId} />
                     </Link>
                 </div>

@@ -7,15 +7,17 @@ import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
 import getFavoriteCollectionEntries from "@/components/collection/collection-entry/util/getFavoriteCollectionEntries";
 import { useFavoriteCollectionEntriesForUserId } from "@/components/collection/collection-entry/hooks/useFavoriteCollectionEntriesForUserId";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 interface Props {
     userId: string;
+    limit?: number;
 }
 
-const ProfileFavoriteGames = ({ userId }: Props) => {
+const ProfileFavoriteGames = ({ userId, limit = 10 }: Props) => {
     const onMobile = useOnMobile();
     const favoriteCollectionEntriesQuery =
-        useFavoriteCollectionEntriesForUserId(userId, 0, 10);
+        useFavoriteCollectionEntriesForUserId(userId, 0, limit);
     const gamesIds = favoriteCollectionEntriesQuery.data?.data.map(
         (entry) => entry.gameId,
     );
@@ -36,7 +38,7 @@ const ProfileFavoriteGames = ({ userId }: Props) => {
         gamesQuery.data.length === 0;
 
     if (favoriteCollectionEntriesQuery.isLoading) {
-        return null;
+        return <CenteredLoading />;
     } else if (isEmpty) {
         return (
             <CenteredErrorMessage

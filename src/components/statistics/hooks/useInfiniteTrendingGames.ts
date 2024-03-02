@@ -11,7 +11,10 @@ import {
 export interface InfiniteQueryTrendingGamesDto
     extends Omit<FindStatisticsTrendingGamesDto, "offset" | "search"> {}
 
-export function useInfiniteTrendingGames(dto: InfiniteQueryTrendingGamesDto) {
+export function useInfiniteTrendingGames(
+    dto: InfiniteQueryTrendingGamesDto,
+    enabled = true,
+) {
     const limitToUse = dto.limit || 20;
 
     return useInfiniteQuery({
@@ -35,6 +38,7 @@ export function useInfiniteTrendingGames(dto: InfiniteQueryTrendingGamesDto) {
         },
         placeholderData: keepPreviousData,
         initialPageParam: 0,
-        staleTime: 300 * 1000,
+        staleTime: Infinity,
+        enabled,
     });
 }
