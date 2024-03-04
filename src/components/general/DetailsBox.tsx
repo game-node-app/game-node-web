@@ -37,18 +37,17 @@ export const DetailsBox = ({
                 <Text
                     className={
                         withDimmedTitle
-                            ? "text-[#5C5C5C] text-sm mb-1"
-                            : "font-bold text-md mb-2"
+                            ? "text-[#5C5C5C] text-sm"
+                            : "font-bold text-md"
                     }
                 >
                     {title}
                 </Text>
                 {description && (
-                    <Text fz={"sm"} lh={"md"} c={"dimmed"} className="mb-4">
+                    <Text fz={"sm"} lh={"md"} c={"dimmed"} className="">
                         {description}
                     </Text>
                 )}
-
                 {children}
             </Stack>
         )

@@ -24,7 +24,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
             }
             return review.content.slice(0, 280) + "...";
         }
-        return "";
+        return undefined;
     }, [isReadMore, review]);
 
     const nonEditableEditor = useEditor(
@@ -102,7 +102,6 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     </Group>
                 </Stack>
             </Group>
-            <Divider w={"100%"} orientation={"horizontal"} />
         </Stack>
     );
 };

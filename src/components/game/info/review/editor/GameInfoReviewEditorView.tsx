@@ -3,7 +3,17 @@ import GameInfoReviewEditor from "@/components/game/info/review/editor/GameInfoR
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { z } from "zod";
 import { CreateReviewDto, ReviewsService } from "@/wrapper/server";
-import { Box, Button, Flex, Group, Rating, Stack, Text } from "@mantine/core";
+import {
+    ActionIcon,
+    Box,
+    Button,
+    Flex,
+    Group,
+    Rating,
+    Stack,
+    Text,
+    Tooltip,
+} from "@mantine/core";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Break from "@/components/general/Break";
@@ -14,6 +24,7 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import { notifications } from "@mantine/notifications";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
+import { IconX } from "@tabler/icons-react";
 
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),
@@ -131,6 +142,18 @@ const GameInfoReviewEditorView = ({
                             value={rating}
                             onChange={(v) => setValue("rating", v)}
                         />
+                        {reviewQuery.data != undefined && (
+                            <Tooltip label={"Cancel edit"}>
+                                <ActionIcon
+                                    size={"lg"}
+                                    variant={"default"}
+                                    c={"red"}
+                                    onClick={() => setIsEditMode(false)}
+                                >
+                                    <IconX />
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
                         <Button type={"submit"}>Submit</Button>
                     </Group>
                 </Group>

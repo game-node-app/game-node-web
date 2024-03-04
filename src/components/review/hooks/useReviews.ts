@@ -9,7 +9,6 @@ export function useReviews(reviewsIds: string[] | undefined) {
             const all = await ReviewsService.reviewsControllerFindAllById({
                 reviewsIds,
             });
-            console.log(all, reviewsIds);
             return all;
         },
     });
