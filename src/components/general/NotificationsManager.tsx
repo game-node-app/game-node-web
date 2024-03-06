@@ -1,27 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Notifications } from "@mantine/notifications";
+import React, { useEffect } from "react";
+import {
+    Notifications,
+    notifications as notificationsManager,
+} from "@mantine/notifications";
 import { Notification } from "@/wrapper/server";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ReconnectingEventSource from "reconnecting-eventsource";
-import { notifications } from "@mantine/notifications";
 import { Text } from "@mantine/core";
+
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 const targetSSEUrl = baseUrl + "/v1/notifications/stream";
+import category = Notification.category;
+import sourceType = Notification.sourceType;
 
 const handleNotifications = async (notificationsEntities: Notification[]) => {
     for (const notification of notificationsEntities) {
-        if (notification.category === "like") {
-            if (notification.sourceType === "review") {
-                notifications.show({
-                    message: (
-                        <Text fz={"sm"}>
-                            <strong>{notification.profile?.username}</strong>{" "}
-                            has liked your review!{" "}
-                        </Text>
-                    ),
-                    autoClose: 4000,
-                });
-            }
+        switch (notification.category) {
+            case category.FOLLOW:
+                if (notification.sourceType === sourceType.PROFILE) {
+                    notificationsManager.show({
+                        message: (
+                            <Text>
+                                <strong>
+                                    {notification.profile?.username}
+                                </strong>{" "}
+                                has started following you!
+                            </Text>
+                        ),
+                        autoClose: 7000,
+                    });
+                }
+                break;
+            case category.COMMENT:
+                break;
+            case category.LIKE:
+                if (notification.sourceType === sourceType.REVIEW) {
+                    notificationsManager.show({
+                        message: (
+                            <Text>
+                                <strong>
+                                    {notification.profile?.username}
+                                </strong>{" "}
+                                has liked your review!
+                            </Text>
+                        ),
+                        autoClose: 7000,
+                    });
+                }
+                break;
+            case category.LAUNCH:
+                break;
         }
     }
 };
