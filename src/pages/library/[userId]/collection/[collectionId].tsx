@@ -2,11 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import LibraryView from "@/components/library/view/LibraryView";
 import CollectionView from "@/components/collection/view/CollectionView";
-import { NextPageContext } from "next";
-
-export const getServerSideProps = (context: NextPageContext) => {
-    const { userId, collectionId } = context.query;
-};
 
 const Collection = () => {
     const router = useRouter();
