@@ -10,17 +10,11 @@ import GameInfoImageCarousel from "@/components/game/info/carousel/GameInfoImage
 import { DetailsBox } from "@/components/general/DetailsBox";
 import Break from "@/components/general/Break";
 import { useGame } from "@/components/game/hooks/useGame";
+import Head from "next/head";
 
 export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryFindOneDto = {
     relations: {
         cover: true,
-        genres: true,
-        platforms: true,
-        gameModes: true,
-        keywords: true,
-        themes: true,
-        screenshots: true,
-        artworks: true,
     },
 };
 
@@ -28,37 +22,21 @@ interface IGameInfoViewProps {
     id: number;
 }
 
-const getCombinedImages = (game: Game) => {
-    const screenshotsUrls = game.screenshots
-        ?.filter((screenshot) => screenshot.url != undefined)
-        .map((screenshot) => screenshot.url!);
-
-    const artworksUrls = game.artworks
-        ?.filter((screenshot) => screenshot.url != undefined)
-        .map((screenshot) => screenshot.url!);
-
-    const combinedImagesUrls = [
-        ...(screenshotsUrls ?? []),
-        ...(artworksUrls ?? []),
-    ];
-
-    return combinedImagesUrls;
-};
-
 const GameInfoView = ({ id }: IGameInfoViewProps) => {
     const gameQuery = useGame(id, DEFAULT_GAME_INFO_VIEW_DTO);
     const game = gameQuery.data;
 
     const onMobile = useOnMobile();
-    const combinedImages = useMemo(() => {
-        if (game != undefined) {
-            return getCombinedImages(game);
-        }
-    }, [game]);
-    const hasImages = combinedImages && combinedImages.length > 0;
 
     return (
         <Paper w={"100%"} h={"100%"}>
+            <Head>
+                {game ? (
+                    <title>{game.name} - GameNode</title>
+                ) : (
+                    <title>GameNode</title>
+                )}
+            </Head>
             <Stack>
                 <Grid
                     columns={12}
@@ -96,18 +74,15 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                         <GameInfoDetails game={game} />
                     </Grid.Col>
                 </Grid>
-                <Flex className={"w-full"} wrap={"wrap"}>
-                    <DetailsBox enabled={hasImages} title={"Images"}>
-                        <GameInfoImageCarousel
-                            urls={combinedImages}
-                            imageSize={ImageSize.SCREENSHOT_BIG}
-                            carouselProps={{
-                                withIndicators: !onMobile,
-                                withControls: !onMobile,
-                            }}
-                        />
-                    </DetailsBox>
-                </Flex>
+
+                <GameInfoImageCarousel
+                    gameId={game?.id}
+                    imageSize={ImageSize.SCREENSHOT_BIG}
+                    carouselProps={{
+                        withIndicators: !onMobile,
+                        withControls: !onMobile,
+                    }}
+                />
             </Stack>
         </Paper>
     );

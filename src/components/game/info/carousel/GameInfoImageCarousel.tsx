@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Carousel, CarouselProps } from "@mantine/carousel";
 import { CarouselSlideProps } from "@mantine/carousel/lib/CarouselSlide/CarouselSlide";
 import { Flex, Text } from "@mantine/core";
@@ -8,26 +8,63 @@ import {
 } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import GameInfoImageCarouselSlide from "@/components/game/info/carousel/GameInfoImageCarouselSlide";
+import { useGame } from "@/components/game/hooks/useGame";
+import { Game } from "@/wrapper/server";
+import { DetailsBox } from "@/components/general/DetailsBox";
 
 interface IGameInfoImageCarouselProps {
-    urls: string[] | undefined;
+    gameId: number | undefined;
     imageSize: ImageSize;
     carouselProps?: CarouselProps;
     slideProps?: CarouselSlideProps;
 }
 
+const getCombinedImages = (game: Game) => {
+    const screenshotsUrls = game.screenshots
+        ?.filter((screenshot) => screenshot.url != undefined)
+        .map((screenshot) => screenshot.url!);
+
+    const artworksUrls = game.artworks
+        ?.filter((screenshot) => screenshot.url != undefined)
+        .map((screenshot) => screenshot.url!);
+
+    const combinedImagesUrls = [
+        ...(screenshotsUrls ?? []),
+        ...(artworksUrls ?? []),
+    ];
+
+    return combinedImagesUrls;
+};
+
 const GameInfoImageCarousel = ({
-    urls,
+    gameId,
     carouselProps,
     imageSize,
     slideProps,
 }: IGameInfoImageCarouselProps) => {
     const onMobile = useOnMobile();
-    if (!urls) {
+    const gameQuery = useGame(gameId, {
+        relations: {
+            artworks: true,
+            screenshots: true,
+        },
+    });
+
+    const game = gameQuery.data;
+
+    const combinedImages = useMemo(() => {
+        if (game != undefined) {
+            return getCombinedImages(game);
+        }
+    }, [game]);
+
+    const hasImages = combinedImages && combinedImages.length > 0;
+
+    if (!combinedImages) {
         return null;
     }
 
-    if (urls == undefined || urls.length === 0) {
+    if (combinedImages == undefined || combinedImages.length === 0) {
         return (
             <Flex>
                 <Text>No images found.</Text>
@@ -36,7 +73,7 @@ const GameInfoImageCarousel = ({
     }
 
     const buildSlides = () => {
-        return urls.map((url, index) => {
+        return combinedImages.map((url, index) => {
             const urlToUse = getSizedImageUrl(url, imageSize);
             if (!urlToUse) return null;
             return (
@@ -46,20 +83,24 @@ const GameInfoImageCarousel = ({
     };
 
     return (
-        <Carousel
-            slideSize={{
-                base: "100%",
-                lg: "35%",
-            }}
-            height={"fit-content"}
-            align="start"
-            slideGap="xs"
-            controlsOffset="xs"
-            dragFree
-            {...carouselProps}
-        >
-            {buildSlides()}
-        </Carousel>
+        <Flex w={"100%"} wrap={"wrap"}>
+            <DetailsBox title={"Images"} enabled={hasImages}>
+                <Carousel
+                    slideSize={{
+                        base: "100%",
+                        lg: "35%",
+                    }}
+                    height={"fit-content"}
+                    align="start"
+                    slideGap="xs"
+                    controlsOffset="xs"
+                    dragFree
+                    {...carouselProps}
+                >
+                    {buildSlides()}
+                </Carousel>
+            </DetailsBox>
+        </Flex>
     );
 };
 

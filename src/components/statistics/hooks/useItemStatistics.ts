@@ -12,7 +12,7 @@ export type StatisticsWithStatus = Statistics & StatisticsStatus;
 export function useItemStatistics(
     sourceId: string | number,
     sourceType: FindOneStatisticsDto.sourceType,
-): ExtendedUseQueryResult<StatisticsWithStatus> {
+): ExtendedUseQueryResult<StatisticsWithStatus | null> {
     const queryClient = useQueryClient();
     const queryKey = ["statistics", sourceType, sourceId];
     const invalidate = () => {
@@ -25,7 +25,7 @@ export function useItemStatistics(
     return {
         ...useQuery({
             queryKey,
-            queryFn: async () => {
+            queryFn: async (): Promise<StatisticsWithStatus | null> => {
                 const statistics =
                     await StatisticsService.statisticsControllerFindOneBySourceIdAndType(
                         {
@@ -33,15 +33,19 @@ export function useItemStatistics(
                             sourceType: sourceType,
                         },
                     );
-                const statisticsStatus =
-                    await StatisticsService.statisticsControllerGetStatus(
-                        statistics.id,
-                        sourceType,
-                    );
-                return {
-                    ...statistics,
-                    ...statisticsStatus,
-                };
+                if (statistics) {
+                    const statisticsStatus =
+                        await StatisticsService.statisticsControllerGetStatus(
+                            statistics.id,
+                            sourceType,
+                        );
+                    return {
+                        ...statistics,
+                        ...statisticsStatus,
+                    } as any;
+                }
+
+                return null;
             },
         }),
         invalidate,

@@ -1,6 +1,6 @@
 import React from "react";
-import { SimpleGrid, Stack } from "@mantine/core";
-import { Game } from "@/wrapper/server";
+import { Center, SimpleGrid, Stack } from "@mantine/core";
+import { Game, GameRepositoryFindOneDto } from "@/wrapper/server";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
@@ -13,7 +13,7 @@ interface IGameInfoDetailsProps {
 }
 
 const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
-    if (!game) {
+    if (!game || game == undefined) {
         return null;
     }
 
@@ -24,14 +24,12 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
                         "Unknown"}
                 </DetailsBox>
-                <GameInfoDetailsDeveloperInfo gameId={game.id} />
-                <DetailsBox withBorder withDimmedTitle title={"Tags"}>
-                    <GameInfoDetailsTags game={game} />
-                </DetailsBox>
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
                     {game.summary ?? "Unknown"}
                 </DetailsBox>
-                <GameInfoPlatforms game={game} />
+                <GameInfoDetailsDeveloperInfo gameId={game.id} />
+                <GameInfoDetailsTags gameId={game.id} />
+                <GameInfoPlatforms gameId={game.id} />
                 <GameInfoScore gameId={game.id} />
             </SimpleGrid>
         </Stack>

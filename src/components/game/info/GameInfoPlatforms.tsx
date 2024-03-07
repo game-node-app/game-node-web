@@ -15,14 +15,21 @@ import { useIconsForGamePlatforms } from "@/components/game/hooks/useIconsForGam
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
+import { useGame } from "@/components/game/hooks/useGame";
 
 interface IGameInfoPlatformsProps extends GroupProps {
-    game: Game;
+    gameId: number | undefined;
 }
 
-const GameInfoPlatforms = ({ game, ...others }: IGameInfoPlatformsProps) => {
+const GameInfoPlatforms = ({ gameId, ...others }: IGameInfoPlatformsProps) => {
     const onMobile = useOnMobile();
-    const [icons, isIconsEmpty] = useIconsForGamePlatforms(game.platforms);
+    const gameQuery = useGame(gameId, {
+        relations: {
+            platforms: true,
+        },
+    });
+    const game = gameQuery.data;
+    const [icons, isIconsEmpty] = useIconsForGamePlatforms(game?.platforms);
     const platformInfo = getGamePlatformInfo(game);
     const platformsNames = platformInfo.platformsAbbreviations?.join(", ");
     return (

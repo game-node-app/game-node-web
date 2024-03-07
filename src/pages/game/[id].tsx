@@ -17,6 +17,7 @@ import {
 import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
 import { useUserView } from "@/components/statistics/hooks/useUserView";
 import sourceType = FindOneStatisticsDto.sourceType;
+import Head from "next/head";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const queryId = context.query.id;

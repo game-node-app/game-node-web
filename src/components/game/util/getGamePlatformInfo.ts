@@ -11,7 +11,7 @@ export interface IGamePlatformInfo {
 }
 
 export function getGamePlatformInfo(
-    game: TGameOrSearchGame,
+    game: TGameOrSearchGame | undefined,
 ): IGamePlatformInfo {
     const platformInfo: IGamePlatformInfo = {
         platformsIds: undefined,
@@ -19,7 +19,7 @@ export function getGamePlatformInfo(
         platformsAbbreviations: undefined,
     };
 
-    if (isGameSearchObject(game)) {
+    if (game && isGameSearchObject(game)) {
         if (game.platformsNames) {
             platformInfo.platformsNames = game.platformsNames.split(", ");
         }
@@ -27,7 +27,7 @@ export function getGamePlatformInfo(
             platformInfo.platformsAbbreviations =
                 game.platformsAbbreviations.split(", ");
         }
-    } else if (isGameObject(game)) {
+    } else if (game && isGameObject(game)) {
         if (game.platforms) {
             platformInfo.platformsIds = game.platforms.map(
                 (platform) => platform.id,
