@@ -124,7 +124,10 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
             );
         }
         const reviews = reviewsQuery.data
-            ?.filter((review) => review != undefined)
+            ?.filter(
+                (review) =>
+                    review != undefined && review.profileUserId !== userId,
+            )
             .toSorted((a, b) => {
                 const random = Math.random();
                 if (random > 0.5) return 1;
@@ -139,7 +142,7 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
         }
 
         return reviews;
-    }, [isError, isLoading, reviewsQuery.data]);
+    }, [isError, isLoading, reviewsQuery.data, userId]);
 
     return (
         <DetailsBox enabled={content != undefined} title={"Reviews"}>

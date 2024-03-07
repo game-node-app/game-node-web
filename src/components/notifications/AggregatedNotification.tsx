@@ -10,7 +10,7 @@ export interface AggregatedNotificationProps {
 const AggregatedNotification = ({
     aggregatedNotification,
 }: AggregatedNotificationProps) => {
-    const content = useMemo(() => {
+    return useMemo(() => {
         switch (aggregatedNotification.sourceType) {
             case sourceType.REVIEW:
                 return (
@@ -22,7 +22,6 @@ const AggregatedNotification = ({
 
         return null;
     }, [aggregatedNotification]);
-    return content;
 };
 
 export default AggregatedNotification;

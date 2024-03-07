@@ -1,18 +1,20 @@
 import { Avatar, AvatarProps } from "@mantine/core";
 import { ProfileAvatar } from "@/wrapper/server";
 import { getServerStoredUpload } from "@/util/getServerStoredImages";
+import useUserProfile from "@/components/profile/hooks/useUserProfile";
 
 const placeholderAvatarImage = "https://i.imgur.com/fGxgcDF.png";
 
 interface UserAvatarProps extends AvatarProps {
-    avatar: ProfileAvatar | undefined;
+    userId: string | undefined;
 }
 
-export function UserAvatar({ src, avatar, ...others }: UserAvatarProps) {
+export function UserAvatar({ userId, ...others }: UserAvatarProps) {
+    const profileQuery = useUserProfile(userId);
+    const avatar = profileQuery.data?.avatar;
     const avatarFileSrc = avatar
         ? getServerStoredUpload(`${avatar.filename}.${avatar.extension}`)
         : undefined;
 
-    const srcToUse = avatarFileSrc ? avatarFileSrc : src;
-    return <Avatar src={srcToUse} {...others} />;
+    return <Avatar src={avatarFileSrc} {...others} />;
 }

@@ -81,7 +81,7 @@ const PreferencesProfileScreen = () => {
                             className={"relative"}
                         >
                             <UserAvatar
-                                avatar={userProfile.data?.avatar}
+                                userId={userId}
                                 className={
                                     "relative w-[152px] lg:w-[92px] h-[152px] lg:h-[92px]"
                                 }
