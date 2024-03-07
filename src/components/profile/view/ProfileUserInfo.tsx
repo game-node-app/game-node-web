@@ -66,7 +66,7 @@ const ProfileUserInfo = ({ userId }: Props) => {
             }}
         >
             <Stack className={"w-full h-full items-center p-2"}>
-                <UserAvatar avatar={profileAvatar} size={"8rem"} />
+                <UserAvatar userId={userId} size={"8rem"} />
                 <Text fw={"bold"}>{profileQuery.data.username}</Text>
                 <Box w={"80%"}>
                     <UserLevelInfo targetUserId={profileQuery.data?.userId} />

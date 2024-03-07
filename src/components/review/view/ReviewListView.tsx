@@ -73,17 +73,21 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     const router = useRouter();
     const userId = useUserId();
     const hasSetInitialQueryParams = useRef(false);
-    const [reviewsDto, setReviewsDto] =
-        useState<FindStatisticsTrendingReviewsDto>({
+    const [currentPeriod, setCurrentPeriod] = useState(period.MONTH.valueOf());
+    const [offset, setOffset] = useState(0);
+    const trendingReviewsDto = useMemo((): FindStatisticsTrendingReviewsDto => {
+        return {
             ...DEFAULT_REVIEW_LIST_VIEW_DTO,
+            offset: offset,
             gameId: gameId,
-        });
-    const trendingReviewsQuery = useTrendingReviews(reviewsDto);
+            period: currentPeriod as period,
+        };
+    }, [offset, gameId, currentPeriod]);
+    const trendingReviewsQuery = useTrendingReviews(trendingReviewsDto);
     const trendingReviewsPagination = trendingReviewsQuery.data?.pagination;
 
     const reviewsIds = trendingReviewsQuery.data?.data.map((s) => s.reviewId!);
     const reviewsQuery = useReviews(reviewsIds);
-    console.log(reviewsQuery.data);
 
     const isEmpty =
         reviewsQuery.data == undefined || reviewsQuery.data.length === 0;
@@ -93,7 +97,7 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     const handlePagination = (page: number) => {
         const offset = (page - 1) * DEFAULT_LIMIT;
         const updatedDto: FindStatisticsTrendingReviewsDto = {
-            ...reviewsDto,
+            ...trendingReviewsDto,
             offset,
         };
         const searchParams = queryDtoToSearchParams(updatedDto);
@@ -106,7 +110,7 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
                 shallow: true,
             },
         );
-        setReviewsDto(updatedDto);
+        setOffset(offset);
     };
 
     const content = useMemo(() => {
@@ -119,8 +123,11 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
                 />
             );
         }
-        return reviewsQuery.data
-            ?.filter((review) => review != undefined)
+        const reviews = reviewsQuery.data
+            ?.filter(
+                (review) =>
+                    review != undefined && review.profileUserId !== userId,
+            )
             .toSorted((a, b) => {
                 const random = Math.random();
                 if (random > 0.5) return 1;
@@ -129,31 +136,32 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
             .map((review) => {
                 return <ReviewListItem key={review.id} review={review} />;
             });
-    }, [isError, isLoading, reviewsQuery.data]);
+
+        if (reviews == undefined || reviews.length === 0) {
+            return null;
+        }
+
+        return reviews;
+    }, [isError, isLoading, reviewsQuery.data, userId]);
 
     return (
-        <DetailsBox
-            title={"All reviews"}
-            description={"Reader discretion is advised."}
-        >
+        <DetailsBox enabled={content != undefined} title={"Reviews"}>
             <Stack w={"100%"} justify={"space-between"}>
                 <Stack w={"100%"} align={"start"}>
-                    <Group className={"w-full justify-start mb-3"}>
-                        <Select
-                            w={onMobile ? "100%" : undefined}
-                            data={PERIOD_SELECT_DATA}
-                            defaultValue={period.MONTH.valueOf()}
-                            onChange={(v) => {
-                                if (v) {
-                                    setReviewsDto((prevState) => ({
-                                        ...prevState,
-                                        period: v as period,
-                                    }));
-                                }
-                            }}
-                            allowDeselect={false}
-                        />
-                    </Group>
+                    <Tabs
+                        value={currentPeriod}
+                        onChange={(v) => setCurrentPeriod(v as period)}
+                        w={"100%"}
+                    >
+                        <Tabs.List grow={onMobile}>
+                            <Tabs.Tab value={period.MONTH.valueOf()}>
+                                Trending
+                            </Tabs.Tab>
+                            <Tabs.Tab value={period.ALL.valueOf()}>
+                                All
+                            </Tabs.Tab>
+                        </Tabs.List>
+                    </Tabs>
                     {content}
                 </Stack>
                 <Group w={"100%"} justify={"center"}>

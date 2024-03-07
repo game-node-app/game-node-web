@@ -12,6 +12,7 @@ const ReviewListItemLikes = ({ review }: IReviewListLikesProps) => {
     const [likesCount, isLiked, toggleUserLike] = useUserLike({
         sourceId: review.id,
         sourceType: FindOneStatisticsDto.sourceType.REVIEW,
+        targetUserId: review.profileUserId,
     });
 
     return (

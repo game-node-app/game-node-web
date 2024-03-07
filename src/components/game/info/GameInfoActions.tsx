@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, Group, Stack, Tooltip, Text } from "@mantine/core";
 import { IconHeartFilled, IconHeartPlus, IconX } from "@tabler/icons-react";
 import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-entry/form/modal/CollectionEntryAddOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
@@ -30,6 +30,18 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const gameInFavorites =
         gameInLibrary && collectionEntryQuery.data!.isFavorite;
 
+    const invisibleFavoriteGame = useMemo(() => {
+        if (collectionEntryQuery.data != undefined) {
+            const gameOnlyInPrivateCollections =
+                collectionEntryQuery.data.collections.every(
+                    (collection) => !collection.isPublic,
+                );
+            return gameInFavorites && gameOnlyInPrivateCollections;
+        }
+
+        return false;
+    }, [gameInFavorites, collectionEntryQuery.data]);
+
     const collectionEntryFavoriteMutation = useMutation({
         mutationFn: (gameId: number) => {
             return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
@@ -48,50 +60,58 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     }
 
     return (
-        <Group gap={"0.725rem"} {...wrapperProps}>
-            <CollectionEntryAddOrUpdateModal
-                opened={addUpdateModalOpened}
-                onClose={addUpdateModalUtils.close}
-                id={game.id}
-            />
-            <CollectionEntryRemoveModal
-                opened={removeModalOpened}
-                onClose={removeModalUtils.close}
-                gameId={game.id}
-            />
-            <Button onClick={addUpdateModalUtils.open}>
-                {gameInLibrary ? "Update" : "Add to library"}
-            </Button>
+        <Stack align={"center"}>
+            <Group gap={"0.725rem"} {...wrapperProps}>
+                <CollectionEntryAddOrUpdateModal
+                    opened={addUpdateModalOpened}
+                    onClose={addUpdateModalUtils.close}
+                    id={game.id}
+                />
+                <CollectionEntryRemoveModal
+                    opened={removeModalOpened}
+                    onClose={removeModalUtils.close}
+                    gameId={game.id}
+                />
+                <Button onClick={addUpdateModalUtils.open}>
+                    {gameInLibrary ? "Update" : "Add to library"}
+                </Button>
 
-            <Tooltip label={"Add to your favorites"}>
-                <ActionIcon
-                    size="lg"
-                    variant="default"
-                    disabled={!gameInLibrary}
-                    onClick={() => {
-                        collectionEntryFavoriteMutation.mutate(game.id);
-                    }}
-                >
-                    {gameInFavorites ? (
-                        <IconHeartFilled size={"1.05rem"} />
-                    ) : (
-                        <IconHeartPlus size={"1.05rem"} />
-                    )}
-                </ActionIcon>
-            </Tooltip>
-
-            {gameInLibrary && (
-                <Tooltip label={"Remove from your library"}>
+                <Tooltip label={"Add to your favorites"}>
                     <ActionIcon
-                        variant="default"
                         size="lg"
-                        onClick={removeModalUtils.open}
+                        variant="default"
+                        disabled={!gameInLibrary}
+                        onClick={() => {
+                            collectionEntryFavoriteMutation.mutate(game.id);
+                        }}
                     >
-                        <IconX color="red" />
+                        {gameInFavorites ? (
+                            <IconHeartFilled size={"1.05rem"} />
+                        ) : (
+                            <IconHeartPlus size={"1.05rem"} />
+                        )}
                     </ActionIcon>
                 </Tooltip>
+
+                {gameInLibrary && (
+                    <Tooltip label={"Remove from your library"}>
+                        <ActionIcon
+                            variant="default"
+                            size="lg"
+                            onClick={removeModalUtils.open}
+                        >
+                            <IconX color="red" />
+                        </ActionIcon>
+                    </Tooltip>
+                )}
+            </Group>
+            {invisibleFavoriteGame && (
+                <Text c={"dimmed"} fz={"sm"} className={"text-center"}>
+                    This favorite game will not be shown in your public profile
+                    because it's only included in private collections.
+                </Text>
             )}
-        </Group>
+        </Stack>
     );
 };
 

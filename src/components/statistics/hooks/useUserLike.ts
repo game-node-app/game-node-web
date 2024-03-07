@@ -10,6 +10,7 @@ import {
 } from "@/components/statistics/hooks/useItemStatistics";
 
 interface IToggleLikeProps {
+    targetUserId: string | undefined;
     sourceId: string | number;
     sourceType: FindOneStatisticsDto.sourceType;
 }
@@ -22,7 +23,11 @@ interface IToggleLikeProps {
  * @param sourceType
  * @param onSuccess
  */
-export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
+export function useUserLike({
+    sourceId,
+    sourceType,
+    targetUserId,
+}: IToggleLikeProps) {
     const queryClient = useQueryClient();
     const statisticsQuery = useItemStatistics(sourceId, sourceType);
     const statisticsQueryKey = statisticsQuery.queryKey;
@@ -37,6 +42,7 @@ export function useUserLike({ sourceId, sourceType }: IToggleLikeProps) {
             const dto = {
                 sourceId: `${sourceId}`,
                 sourceType: sourceType as StatisticsActionDto.sourceType,
+                targetUserId: targetUserId,
             };
 
             if (isLiked) {

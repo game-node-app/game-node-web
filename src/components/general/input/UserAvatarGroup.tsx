@@ -20,7 +20,7 @@ export const UserAvatarGroup = ({ userId, ...others }: IProps) => {
                 justify={"center"}
                 gap={onMobile ? undefined : 5}
             >
-                <UserAvatar {...others} avatar={profileQuery.data?.avatar} />
+                <UserAvatar {...others} userId={userId} />
                 <Text c={"white"}>{profileQuery.data?.username}</Text>
             </Group>
         </Link>

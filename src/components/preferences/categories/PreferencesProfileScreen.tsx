@@ -81,7 +81,7 @@ const PreferencesProfileScreen = () => {
                             className={"relative"}
                         >
                             <UserAvatar
-                                avatar={userProfile.data?.avatar}
+                                userId={userId}
                                 className={
                                     "relative w-[152px] lg:w-[92px] h-[152px] lg:h-[92px]"
                                 }
@@ -90,11 +90,12 @@ const PreferencesProfileScreen = () => {
 
                         <Stack>
                             <Link href={"#"} onClick={usernameModalUtils.open}>
-                                <Group className={"relative"}>
-                                    <Title size={"h4"}>
-                                        {userProfile.data?.username}
-                                    </Title>
-                                </Group>
+                                <Title
+                                    size={"h4"}
+                                    className={"text-center lg:text-start"}
+                                >
+                                    {userProfile.data?.username}
+                                </Title>
                             </Link>
                             {userId && <UserLevelInfo targetUserId={userId} />}
                         </Stack>

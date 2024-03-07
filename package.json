@@ -37,6 +37,7 @@
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.5",
     "react-hook-form": "^7.45.1",
+    "reconnecting-eventsource": "^1.6.2",
     "supertokens-auth-react": "^0.35.6",
     "supertokens-node": "^16.3.2",
     "supertokens-web-js": "^0.8.0",
@@ -60,7 +61,7 @@
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "3.3.3",
     "ts-node": "^10.9.1",
-    "typescript": "5.2.2"
+    "typescript": "^5.3.3"
   },
   "prettier": {
     "tabWidth": 4,

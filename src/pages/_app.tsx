@@ -11,7 +11,6 @@ import {
     HydrationBoundary,
 } from "@tanstack/react-query";
 import Head from "next/head";
-import { Notifications } from "@mantine/notifications";
 import { OpenAPI as ServerOpenAPI } from "@/wrapper/server";
 import { OpenAPI as SearchOpenAPI } from "@/wrapper/search";
 /**
@@ -28,6 +27,7 @@ import "@mantine/carousel/styles.css";
 import "@/components/globals.css";
 
 import { theme } from "@/util/theme";
+import NotificationsManager from "@/components/general/NotificationsManager";
 
 /**
  * Basic configuration for wrapper services
@@ -65,7 +65,7 @@ export default function App({
             </Head>
             <SuperTokensProvider>
                 <QueryClientProvider client={queryClient}>
-                    <Notifications />
+                    <NotificationsManager />
                     <GlobalAppShell>
                         <HydrationBoundary state={pageProps.dehydratedState}>
                             <RouterTransition />

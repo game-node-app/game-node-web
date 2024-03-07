@@ -95,7 +95,6 @@ export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
         DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
     );
     for (const [k, v] of Object.entries(query)) {
-        console.log(k, v, typeof v);
         if (k !== "period" && typeof v === "string") {
             if (v.includes(",")) {
                 //@ts-ignore
@@ -156,7 +155,6 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
                 undefined,
                 { shallow: true },
             );
-            console.log(updatedState);
             return updatedState;
         });
         drawerUtils.close();

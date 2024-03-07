@@ -1,9 +1,10 @@
-import { Container, Burger, Box, Button, AppShell } from "@mantine/core";
+import { Container, Burger, Box, Button, AppShell, Group } from "@mantine/core";
 import GameNodeLogo from "@/components/general/GameNodeLogo";
 import Link from "next/link";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSettings } from "@tabler/icons-react";
+import GlobalShellHeaderNotifications from "@/components/general/shell/GlobalShellHeader/GlobalShellHeaderNotifications";
 
 interface IGlobalShellHeaderProps {
     sidebarOpened: boolean;
@@ -31,18 +32,20 @@ export default function GlobalShellHeader({
                 <a href={"/search"}>
                     <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
                 </a>
-                <Box className="ms-auto">
+                <Group className="ms-auto">
                     {!userId && (
                         <Link href={"/auth"}>
                             <Button variant="outline">Sign in</Button>
                         </Link>
                     )}
+                    {userId && <GlobalShellHeaderNotifications />}
+
                     {userId && (
-                        <Link href={`/preferences`}>
+                        <Link href={`/preferences`} className={"ms-auto"}>
                             <IconSettings />
                         </Link>
                     )}
-                </Box>
+                </Group>
             </Container>
         </header>
     );
