@@ -47,7 +47,7 @@ const ReviewAggregatedNotification = ({
                                 )
                             }
                         >
-                            <Text fz={"sm"} lineClamp={4}>
+                            <Text lineClamp={4}>
                                 <strong>{latestProfileNames}</strong>{" "}
                                 {hasMoreProfileNames && (
                                     <>and {profileNames.length - 2} others</>
@@ -81,7 +81,7 @@ const ReviewAggregatedNotification = ({
                                 )
                             }
                         >
-                            <Text fz={"sm"} lineClamp={4}>
+                            <Text lineClamp={4}>
                                 <strong>{latestProfileNames}</strong>{" "}
                                 {hasMoreProfileNames && (
                                     <>and {profileNames.length - 2} others</>

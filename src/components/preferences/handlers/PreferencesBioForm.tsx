@@ -7,6 +7,7 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useMutation } from "@tanstack/react-query";
 import { ProfileService } from "@/wrapper/server";
+import { notifications } from "@mantine/notifications";
 
 const BioForm = z.object({
     bio: z.string().min(1).max(240),
@@ -17,7 +18,7 @@ type TBioForm = z.infer<typeof BioForm>;
 const PreferencesBioForm = () => {
     const userId = useUserId();
     const profile = useUserProfile(userId);
-    const { register, handleSubmit, formState } = useForm<TBioForm>({
+    const { register, handleSubmit, formState, control } = useForm<TBioForm>({
         mode: "onBlur",
         resolver: zodResolver(BioForm),
     });
@@ -25,6 +26,12 @@ const PreferencesBioForm = () => {
         mutationFn: (values: TBioForm) => {
             return ProfileService.profileControllerUpdate({
                 bio: values.bio,
+            });
+        },
+        onSuccess: () => {
+            notifications.show({
+                message: "Successfully updated your bio!",
+                color: "green",
             });
         },
     });
@@ -38,7 +45,9 @@ const PreferencesBioForm = () => {
                     defaultValue={profile.data?.bio}
                 ></Textarea>
                 {formState.dirtyFields.bio && (
-                    <Button type={"submit"}>Submit</Button>
+                    <Button type={"submit"} loading={profileMutation.isPending}>
+                        Submit
+                    </Button>
                 )}
             </Stack>
         </form>

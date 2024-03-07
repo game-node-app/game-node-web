@@ -106,7 +106,7 @@ const GlobalShellHeaderNotifications = () => {
                 </ActionIcon>
             </Popover.Target>
             <Popover.Dropdown p={0}>
-                <ScrollArea h={400}>
+                <ScrollArea.Autosize mah={400}>
                     <Stack w={"100%"} h={"100%"} align={"center"} gap={4}>
                         {aggregations?.map((aggregatedNotification, index) => {
                             const key = `${aggregatedNotification.sourceType}-${aggregatedNotification.sourceId}-${aggregatedNotification.sourceType}`;
@@ -147,7 +147,7 @@ const GlobalShellHeaderNotifications = () => {
                             ref={intersection.ref}
                         />
                     </Stack>
-                </ScrollArea>
+                </ScrollArea.Autosize>
             </Popover.Dropdown>
         </Popover>
     );

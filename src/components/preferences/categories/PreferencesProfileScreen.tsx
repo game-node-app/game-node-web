@@ -90,11 +90,12 @@ const PreferencesProfileScreen = () => {
 
                         <Stack>
                             <Link href={"#"} onClick={usernameModalUtils.open}>
-                                <Group className={"relative"}>
-                                    <Title size={"h4"}>
-                                        {userProfile.data?.username}
-                                    </Title>
-                                </Group>
+                                <Title
+                                    size={"h4"}
+                                    className={"text-center lg:text-start"}
+                                >
+                                    {userProfile.data?.username}
+                                </Title>
                             </Link>
                             {userId && <UserLevelInfo targetUserId={userId} />}
                         </Stack>

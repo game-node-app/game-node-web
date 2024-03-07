@@ -66,7 +66,11 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
                     disabled={checkBlockedFromUpdating()}
                 />
 
-                <Button type={"submit"} disabled={checkBlockedFromUpdating()}>
+                <Button
+                    loading={true}
+                    type={"submit"}
+                    disabled={checkBlockedFromUpdating()}
+                >
                     Submit
                 </Button>
             </Stack>

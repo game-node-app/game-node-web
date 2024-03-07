@@ -19,14 +19,14 @@ export const preferencesCategories: PreferencesCategory[] = [
         name: "Profile",
         activeCategoryName: "profile",
     },
-    {
-        name: "Connections",
-        activeCategoryName: "connections",
-    },
-    {
-        name: "Privacy",
-        activeCategoryName: "privacy",
-    },
+    // {
+    //     name: "Connections",
+    //     activeCategoryName: "connections",
+    // },
+    // {
+    //     name: "Privacy",
+    //     activeCategoryName: "privacy",
+    // },
 ];
 
 const PreferencesScreenSideBar = ({ activeItem, onChange }: Props) => {
@@ -53,7 +53,7 @@ const PreferencesScreenSideBar = ({ activeItem, onChange }: Props) => {
     });
 
     return (
-        <Stack gap={0} className={"w-full h-80 justify-between"}>
+        <Stack gap={0} className={"w-full h-96 justify-between"}>
             <Stack gap={0} className={"w-full"}>
                 {itemsElements}
             </Stack>
