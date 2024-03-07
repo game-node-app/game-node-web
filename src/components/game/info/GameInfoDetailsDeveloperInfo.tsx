@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useGame } from "@/components/game/hooks/useGame";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { Skeleton, Text } from "@mantine/core";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 interface IProps {
     gameId: number;
@@ -35,6 +36,10 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
         developers?.map((company) => company.name)?.join(", ") ?? "Unknown";
     const publishersNames =
         publishers?.map((company) => company.name).join(", ") ?? "Unknown";
+
+    if (game.isLoading) {
+        return <CenteredLoading />;
+    }
 
     return (
         <>

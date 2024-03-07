@@ -41,6 +41,9 @@ const GameInfoScore = ({ gameId }: Props) => {
                 if (k === "total") return null;
                 const total = score.data.distribution.total;
                 const percentage = (v / total) * 100;
+                const percentageToUse = Number.isNaN(percentage)
+                    ? 0
+                    : percentage;
                 const lastElement = index + 1 === arr.length;
                 return (
                     <Stack
@@ -58,7 +61,7 @@ const GameInfoScore = ({ gameId }: Props) => {
                                 </Text>
                             </Group>
 
-                            <Text fz={"sm"}>{percentage}%</Text>
+                            <Text fz={"sm"}>{percentageToUse}%</Text>
                         </Group>
                         {!lastElement && <Divider />}
                     </Stack>
