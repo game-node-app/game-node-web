@@ -18,9 +18,9 @@ export const frontendConfig = () => {
                 contactMethod: "EMAIL",
                 signInUpFeature: {
                     providers: [
-                        ThirdPartyPasswordlessReact.Google.init(),
-                        ThirdPartyPasswordlessReact.Github.init(),
-                        ThirdPartyPasswordlessReact.Apple.init(),
+                        // TODO: Enable once it's approved
+                        // ThirdPartyPasswordlessReact.Google.init(),
+                        ThirdPartyPasswordlessReact.Discord.init(),
                     ],
                 },
             }),
