@@ -10,6 +10,7 @@ import { Button, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { ProfileService } from "@/wrapper/server";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
+import { notifications } from "@mantine/notifications";
 
 interface Props extends BaseModalChildrenProps {}
 
@@ -24,15 +25,13 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
         },
         onSuccess: () => {
             profile.invalidate();
+            notifications.show({
+                color: "green",
+                message: "Your username has been updated!",
+            });
             if (onClose) onClose();
         },
     });
-
-    const checkBlockedFromUpdating = useCallback(() => {
-        // TODO: Implement this check
-
-        return false;
-    }, []);
 
     const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
@@ -44,12 +43,6 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
 
     return (
         <form className={"w-full h-full"} onSubmit={handleSubmit}>
-            {checkBlockedFromUpdating() && (
-                <Text c={"red"} mb={"2rem"}>
-                    You have updated your username in the last 30 days and can't
-                    update it yet.
-                </Text>
-            )}
             {profileMutation.isError && (
                 <Text c={"red"}>{profileMutation.error.message}</Text>
             )}
@@ -63,13 +56,13 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
                         "It must be unique and have at least five characters."
                     }
                     minLength={5}
-                    disabled={checkBlockedFromUpdating()}
+                    defaultValue={profile.data?.username}
                 />
 
                 <Button
-                    loading={true}
+                    loading={profileMutation.isPending}
                     type={"submit"}
-                    disabled={checkBlockedFromUpdating()}
+                    disabled={profileMutation.isPending}
                 >
                     Submit
                 </Button>
