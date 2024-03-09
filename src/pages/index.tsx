@@ -32,11 +32,13 @@ export default function Home() {
         <Container fluid h={"100%"}>
             <Stack className="h-[80vh] mb-32">
                 <Stack gap={0} className="mt-32 lg:mt-40 w-full">
-                    <Title className="">Play. Review. Share.</Title>
+                    <Title size={"h1"} className="text-7xl">
+                        Play. Review. Share.
+                    </Title>
                 </Stack>
 
                 <Link href={"/search"}>
-                    <Button>Join in</Button>
+                    <Button size={"lg"}>Join in</Button>
                 </Link>
                 <Stack>
                     <Text c={"dimmed"} fz={"1rem"}>

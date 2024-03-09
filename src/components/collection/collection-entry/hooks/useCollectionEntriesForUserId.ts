@@ -4,16 +4,19 @@ import {
     CollectionsService,
 } from "@/wrapper/server";
 
-export default function useCollectionEntriesForUserId(userId: string) {
+export default function useCollectionEntriesForUserId(
+    userId: string,
+    offset = 0,
+    limit = 20,
+) {
     return useQuery({
-        queryKey: ["collection-entries", "all", userId],
+        queryKey: ["collection-entries", "all", userId, offset, limit],
         queryFn: async () => {
             return CollectionsEntriesService.collectionsEntriesControllerFindAllByLibraryId(
                 userId,
-                0,
-                100,
+                offset,
+                limit,
             );
         },
-        staleTime: 5 * 60 * 1000,
     });
 }

@@ -34,10 +34,9 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
     const libraryQuery = useUserLibrary(profileQuery.data?.userId);
-    const collectionEntriesQuery = useCollectionEntriesForUserId(userId);
+    const collectionEntriesQuery = useCollectionEntriesForUserId(userId, 0, 1);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
     const followersCountQuery = useFollowersCount(userId);
-    const profileAvatar = profileQuery.data?.avatar;
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
 
     const featuredAchievement = useMemo(() => {
