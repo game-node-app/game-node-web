@@ -7,8 +7,8 @@ import {
     Text,
     Title,
     Badge,
+    Flex,
 } from "@mantine/core";
-import Image from "next/image";
 import GameFigureImage, {
     IGameFigureProps,
 } from "@/components/game/figure/GameFigureImage";
@@ -17,25 +17,16 @@ import Link from "next/link";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
-import {
-    getGamePlatformInfo,
-    IGamePlatformInfo,
-} from "@/components/game/util/getGamePlatformInfo";
-import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
-import { Game } from "@/wrapper/server";
+import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
 import { getGameSpecialCategoryText } from "@/components/game/util/getGameSpecialCategoryText";
-import { useIconsForGamePlatforms } from "@/components/game/hooks/useIconsForGamePlatforms";
+import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 
-interface IGameListFigureProps extends PropsWithChildren {
+interface IGameListFigureProps {
     game: TGameOrSearchGame;
     figureProps?: Partial<IGameFigureProps>;
 }
 
-const GameListFigure = ({
-    game,
-    figureProps,
-    children,
-}: IGameListFigureProps) => {
+const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
     let name = game.name ?? "Unknown";
     const onMobile = useOnMobile();
     if (onMobile) {
@@ -50,7 +41,7 @@ const GameListFigure = ({
     const genreNames = genres?.join(", ");
     const categoryText = useMemo(
         () => getGameSpecialCategoryText(game?.category),
-        [game],
+        [game.category],
     );
 
     return (
@@ -105,9 +96,16 @@ const GameListFigure = ({
                         )}
                     </Text>
                 </Stack>
-                <Text size={"sm"} c={"dimmed"}>
-                    {platformsAbbreviations}
-                </Text>
+                <Flex className={"w-full"}>
+                    <GameInfoPlatforms
+                        gameId={game.id}
+                        justify={"start"}
+                        iconsProps={{
+                            w: 28,
+                        }}
+                    />
+                </Flex>
+
                 <Text size="sm" c={"dimmed"}>
                     {genreNames}
                 </Text>

@@ -67,7 +67,6 @@ const NotificationsManager = () => {
         };
         eventSource.onmessage = (message) => {
             const notifications: Notification[] = JSON.parse(message.data);
-            console.log(notifications);
             handleNotifications(notifications).then().catch(console.error);
         };
 

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Game } from "@/wrapper/server";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
 import { getGameThemes } from "@/components/game/util/getGameThemes";
-import { Badge, Group } from "@mantine/core";
+import { Badge, Group, Skeleton } from "@mantine/core";
 import { getGameModes } from "@/components/game/util/getGameModes";
 import { getGamePerspectives } from "@/components/game/util/getGamePerspectives";
 import { shuffleArray } from "@/util/shuffleArray";
@@ -43,18 +43,18 @@ const GameInfoDetailsTags = ({ gameId }: IProps) => {
     });
     const game = gameQuery.data;
     const tags = useMemo(() => getCombinedTags(game), [game]);
-    if (gameQuery.isLoading) {
-        return <CenteredLoading />;
-    }
-    if (tags == undefined || tags.length === 0) return "Empty";
-
+    const hasTags = tags != undefined && tags.length > 0;
     return (
         <DetailsBox withBorder withDimmedTitle title={"Tags"}>
             <Group justify={"start"} gap={10}>
-                {tags?.map((tag, index) => {
-                    if (!tag) return null;
-                    return <Badge key={index}>{tag}</Badge>;
-                })}
+                {gameQuery.isLoading && (
+                    <Skeleton className={"w-10/12 lg:w-4/12 h-4"}></Skeleton>
+                )}
+                {hasTags &&
+                    tags?.map((tag, index) => {
+                        if (!tag) return null;
+                        return <Badge key={index}>{tag}</Badge>;
+                    })}
             </Group>
         </DetailsBox>
     );

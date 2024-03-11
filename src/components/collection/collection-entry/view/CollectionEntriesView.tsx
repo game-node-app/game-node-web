@@ -7,9 +7,6 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 import { Box, Space } from "@mantine/core";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
-import { TGameOrSearchGame } from "@/components/game/util/types";
-import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
-import GameInfoPlatformBadge from "@/components/game/info/GameInfoPlatformBadge";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 interface ICollectionEntriesViewProps extends IGameViewPaginationProps {
