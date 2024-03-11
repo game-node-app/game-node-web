@@ -14,32 +14,30 @@ import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo"
 import { useGame } from "@/components/game/hooks/useGame";
 import { useQuery } from "@tanstack/react-query";
 import { GameRepositoryService } from "@/wrapper/server";
+import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 
-interface IGameInfoPlatformsProps extends GroupProps {
+interface IGameInfoOwnedPlatformsProps extends GroupProps {
     gameId: number | undefined;
-    ownedOnly?: boolean;
     iconsProps?: ImageProps;
 }
 
-const GameInfoPlatforms = ({
+const GameInfoOwnedPlatforms = ({
     gameId,
     iconsProps,
-    ownedOnly = false,
     ...others
-}: IGameInfoPlatformsProps) => {
+}: IGameInfoOwnedPlatformsProps) => {
     const onMobile = useOnMobile();
-    const gameQuery = useGame(gameId, {
-        relations: {
-            platforms: true,
-        },
-    });
-    const game = gameQuery.data;
-    const platforms = game?.platforms;
+    const collectionEntry = useOwnCollectionEntryForGameId(gameId);
     const iconsQuery = useQuery({
-        queryKey: ["game", "platform", "icon", platforms],
+        queryKey: [
+            "game",
+            "owned-platforms",
+            "icon",
+            collectionEntry.data?.ownedPlatforms,
+        ],
         queryFn: () => {
-            if (!platforms) return [];
-            const abbreviations = platforms
+            if (!collectionEntry.data?.ownedPlatforms) return [];
+            const abbreviations = collectionEntry.data?.ownedPlatforms
                 .map((platform) => platform?.abbreviation)
                 .filter((abbreviation) => abbreviation != undefined);
             try {
@@ -76,8 +74,11 @@ const GameInfoPlatforms = ({
     }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
 
     const isEmpty = icons == undefined || icons.length === 0;
-    const platformInfo = getGamePlatformInfo(game);
-    const platformsNames = platformInfo.platformsAbbreviations?.join(", ");
+    const platformsNames = collectionEntry.data?.ownedPlatforms
+        .map((platform) => {
+            return platform.abbreviation;
+        })
+        .join(", ");
     return (
         <Popover shadow={"md"}>
             <Popover.Target>
@@ -101,4 +102,4 @@ const GameInfoPlatforms = ({
     );
 };
 
-export default GameInfoPlatforms;
+export default GameInfoOwnedPlatforms;

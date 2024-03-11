@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const UseReviewForUserIdAndGameId = (
     userId: string | undefined,
-    gameId: number,
+    gameId: number | undefined,
 ): ExtendedUseQueryResult<Review> => {
     const queryClient = useQueryClient();
     const queryKey = ["review", userId, gameId];

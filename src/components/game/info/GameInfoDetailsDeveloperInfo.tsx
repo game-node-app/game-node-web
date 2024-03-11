@@ -37,10 +37,6 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
     const publishersNames =
         publishers?.map((company) => company.name).join(", ") ?? "Unknown";
 
-    if (game.isLoading) {
-        return <CenteredLoading />;
-    }
-
     return (
         <>
             <DetailsBox withBorder withDimmedTitle title={"Developer(s)"}>

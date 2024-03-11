@@ -24,12 +24,17 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
                         "Unknown"}
                 </DetailsBox>
+                <GameInfoDetailsDeveloperInfo gameId={game.id} />
+                <GameInfoDetailsTags gameId={game.id} />
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
                     {game.summary ?? "Unknown"}
                 </DetailsBox>
-                <GameInfoDetailsDeveloperInfo gameId={game.id} />
-                <GameInfoDetailsTags gameId={game.id} />
-                <GameInfoPlatforms gameId={game.id} />
+                <DetailsBox title={"Where to play"} withBorder withDimmedTitle>
+                    <GameInfoPlatforms
+                        gameId={game.id}
+                        className={"my-4 gap-5"}
+                    />
+                </DetailsBox>
                 <GameInfoScore gameId={game.id} />
             </SimpleGrid>
         </Stack>

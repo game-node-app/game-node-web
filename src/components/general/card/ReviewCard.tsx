@@ -62,7 +62,7 @@ const ReviewCard = ({ reviewId }: IProps) => {
                 "relative w-full h-full flex flex-col justify-between items-start bg-cover bg-center p-xl rounded-md shadow-md z-0"
             }
         >
-            <Overlay color="#000" backgroundOpacity={0.8} className={"z-10"} />
+            <Overlay color="#000" backgroundOpacity={0.7} className={"z-10"} />
             <div className="z-20 relative">
                 <Group justify={"start"}>
                     <UserAvatarGroup userId={profileUserId} />

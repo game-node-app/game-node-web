@@ -1,12 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ActionIcon, Button, Group, Stack, Tooltip, Text } from "@mantine/core";
-import { IconHeartFilled, IconHeartPlus, IconX } from "@tabler/icons-react";
+import {
+    ActionIcon,
+    Button,
+    Group,
+    Stack,
+    Tooltip,
+    Text,
+    Modal,
+} from "@mantine/core";
+import {
+    IconHeartFilled,
+    IconHeartPlus,
+    IconShare,
+    IconX,
+} from "@tabler/icons-react";
 import CollectionEntryAddOrUpdateModal from "@/components/collection/collection-entry/form/modal/CollectionEntryAddOrUpdateModal";
 import { useDisclosure } from "@mantine/hooks";
 import { CollectionsEntriesService, Game } from "@/wrapper/server";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import CollectionEntryRemoveModal from "@/components/collection/collection-entry/form/modal/CollectionEntryRemoveModal";
+import GameInfoShare from "@/components/game/info/share/GameInfoShare";
+import useReviewForUserIdAndGameId from "@/components/review/hooks/useReviewForUserIdAndGameId";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface IGameViewActionsProps {
     wrapperProps?: React.ComponentPropsWithoutRef<typeof Group>;
@@ -21,7 +37,8 @@ interface IGameViewActionsProps {
 const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
     const [addUpdateModalOpened, addUpdateModalUtils] = useDisclosure();
     const [removeModalOpened, removeModalUtils] = useDisclosure();
-
+    const [shareModalOpened, shareModalUtils] = useDisclosure();
+    const userId = useUserId();
     const collectionEntryQuery = useOwnCollectionEntryForGameId(game?.id);
 
     const gameInLibrary =
@@ -29,6 +46,10 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
 
     const gameInFavorites =
         gameInLibrary && collectionEntryQuery.data!.isFavorite;
+
+    const reviewQuery = useReviewForUserIdAndGameId(userId, game?.id);
+
+    const hasReview = reviewQuery.data != undefined;
 
     const invisibleFavoriteGame = useMemo(() => {
         if (collectionEntryQuery.data != undefined) {
@@ -72,6 +93,17 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
                     onClose={removeModalUtils.close}
                     gameId={game.id}
                 />
+                <Modal
+                    opened={shareModalOpened}
+                    onClose={shareModalUtils.close}
+                    title={"Share"}
+                >
+                    <GameInfoShare
+                        gameId={game.id}
+                        onClose={shareModalUtils.close}
+                    />
+                </Modal>
+
                 <Button onClick={addUpdateModalUtils.open}>
                     {gameInLibrary ? "Update" : "Add to library"}
                 </Button>
@@ -101,6 +133,17 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
                             onClick={removeModalUtils.open}
                         >
                             <IconX color="red" />
+                        </ActionIcon>
+                    </Tooltip>
+                )}
+                {hasReview && (
+                    <Tooltip label={"Share this game"}>
+                        <ActionIcon
+                            size="lg"
+                            variant="default"
+                            onClick={() => shareModalUtils.toggle()}
+                        >
+                            <IconShare size={"1.05rem"} />
                         </ActionIcon>
                     </Tooltip>
                 )}

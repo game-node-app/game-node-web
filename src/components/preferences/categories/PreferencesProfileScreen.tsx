@@ -23,8 +23,10 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import { useAchievements } from "@/components/achievement/hooks/useAchievements";
 import AchievementLogo from "@/components/achievement/AchievementLogo";
 import PreferencesBioForm from "@/components/preferences/handlers/PreferencesBioForm";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 const PreferencesProfileScreen = () => {
+    const onMobile = useOnMobile();
     const userId = useUserId();
     const userProfile = useUserProfile(userId);
     const [avatarModalOpened, avatarModalOpenedUtils] = useDisclosure();
@@ -140,6 +142,15 @@ const PreferencesProfileScreen = () => {
             <DetailsBox title={"Bio"}>
                 <PreferencesBioForm />
             </DetailsBox>
+            {onMobile && (
+                <Box w={"100%"} mt={"1rem"} mb={"1rem"}>
+                    <Link href={"/auth/logout"}>
+                        <Text className={"text-center"} c={"dimmed"}>
+                            Log out
+                        </Text>
+                    </Link>
+                </Box>
+            )}
         </Stack>
     );
 };

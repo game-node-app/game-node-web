@@ -27,13 +27,12 @@ export const frontendConfig = () => {
             }),
             SessionReact.init(),
         ],
-        // this is so that the SDK uses the next router for navigation
         windowHandler: (oI: any) => {
             return {
                 ...oI,
                 location: {
                     ...oI.location,
-                    setHref: (href: any) => {
+                    setHref: (href: string) => {
                         Router.push(href);
                     },
                 },
