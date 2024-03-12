@@ -21,7 +21,6 @@ export const frontendConfig = () => {
                         // TODO: Enable once it's approved
                         // ThirdPartyPasswordlessReact.Google.init(),
                         ThirdPartyPasswordlessReact.Discord.init(),
-                        ThirdPartyPasswordlessReact.Twitter.init(),
                     ],
                 },
             }),
