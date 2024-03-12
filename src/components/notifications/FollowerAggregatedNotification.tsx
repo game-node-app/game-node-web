@@ -35,7 +35,7 @@ const FollowerAggregatedNotification = ({
                 </Notification>
             </Link>
         );
-    }, [aggregatedNotification]);
+    }, [aggregatedNotification, ownUserId]);
 
     return content;
 };
