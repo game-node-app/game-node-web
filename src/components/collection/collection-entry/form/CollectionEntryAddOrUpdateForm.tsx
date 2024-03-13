@@ -109,7 +109,12 @@ const CollectionEntryAddOrUpdateForm = ({
     /**
      * We re-use the default DTO here because the query is probably already cached for it at this point
      */
-    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
+    const gameQuery = useGame(gameId, {
+        relations: {
+            cover: true,
+            platforms: true,
+        },
+    });
     const gamePlatformsQuery = useGamesResource<GamePlatform>("platforms");
 
     const game = gameQuery.data;
@@ -263,7 +268,9 @@ const CollectionEntryAddOrUpdateForm = ({
                     error={errors.platformsIds?.message}
                     withAsterisk
                     limit={20}
-                    description={"Which platforms do you own this game on?"}
+                    description={
+                        "You can search for a platform by typing it's name"
+                    }
                 />
                 <Button
                     type={"submit"}

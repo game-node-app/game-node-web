@@ -49,7 +49,11 @@ export default function App({
             new QueryClient({
                 defaultOptions: {
                     queries: {
-                        staleTime: 60 * 1000,
+                        refetchOnWindowFocus: false,
+                        refetchOnMount: true,
+                        refetchInterval: false,
+                        refetchIntervalInBackground: false,
+                        refetchOnReconnect: true,
                     },
                 },
             }),

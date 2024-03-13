@@ -33,6 +33,15 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
         },
     });
 
+    const canUpdate: boolean = useMemo(() => {
+        if (profile.data == undefined) return false;
+        if (profile.data.usernameLastUpdatedAt == undefined) return true;
+        const usernameUpdateDate = new Date(profile.data.usernameLastUpdatedAt);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(-30);
+        return usernameUpdateDate.getTime() >= thirtyDaysAgo.getTime();
+    }, [profile.data]);
+
     const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
         const formData = new FormData(evt.currentTarget);
@@ -43,6 +52,12 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
 
     return (
         <form className={"w-full h-full"} onSubmit={handleSubmit}>
+            {!canUpdate && (
+                <Text c={"red"}>
+                    You have updated your username in the last 30 days. Please
+                    try again later.
+                </Text>
+            )}
             {profileMutation.isError && (
                 <Text c={"red"}>{profileMutation.error.message}</Text>
             )}
@@ -62,7 +77,7 @@ const PreferencesUsernameChanger = ({ onClose }: Props) => {
                 <Button
                     loading={profileMutation.isPending}
                     type={"submit"}
-                    disabled={profileMutation.isPending}
+                    disabled={!canUpdate || profileMutation.isPending}
                 >
                     Submit
                 </Button>
