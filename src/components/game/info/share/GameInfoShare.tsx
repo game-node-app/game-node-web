@@ -113,16 +113,8 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
                         {shareMutation.error.message}
                     </Text>
                 )}
-                <DetailsBox
-                    enabled={canShare}
-                    title={"Preview"}
-                    stackProps={{ className: "" }}
-                >
-                    <GameInfoSharePreview
-                        gameId={gameId}
-                        watchFormValues={watch}
-                    />
-                </DetailsBox>
+
+                <GameInfoSharePreview gameId={gameId} watchFormValues={watch} />
 
                 <Group w={"100%"} className={"mt-4 mb-4"}>
                     <Chip {...registerChip("withRating")}>Rating</Chip>
