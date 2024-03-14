@@ -131,7 +131,6 @@ const Index = () => {
                             label={"Search for games"}
                             withButton
                             error={errors.query?.message}
-                            {...register("query")}
                             value={watch("query")}
                             onChange={(e) => {
                                 setValue("query", e.target.value);

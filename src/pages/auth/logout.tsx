@@ -3,17 +3,19 @@ import { useRouter } from "next/router";
 import Session from "supertokens-auth-react/recipe/session";
 import { useQueryClient } from "@tanstack/react-query";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { AuthService } from "@/wrapper/server";
 
 const Logout = () => {
     const queryClient = useQueryClient();
     const router = useRouter();
+
     useEffect(() => {
         let ignore = false;
         (async () => {
             if (ignore) return;
-            await Session.signOut();
-            await queryClient.invalidateQueries();
-            await router.push("/");
+            await AuthService.authControllerLogout();
+            queryClient.clear();
+            router.push("/search");
         })();
         return () => {
             ignore = true;

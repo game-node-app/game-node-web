@@ -26,28 +26,22 @@ const CollectionEntryAddOrUpdateModal = ({
     const userLibrary = useUserLibrary(userId);
 
     return (
-        <SessionAuth>
-            <Modal
-                opened={opened}
-                onClose={onClose}
-                title={"Add to your library"}
-                fullScreen={onMobile}
-                transitionProps={{ transition: "fade", duration: 200 }}
-            >
-                <Modal.Body>
-                    {userLibrary.data ? (
-                        <Container fluid h={"100%"} className={""}>
-                            <CollectionEntryAddOrUpdateForm
-                                gameId={id}
-                                onClose={onClose}
-                            />
-                        </Container>
-                    ) : (
-                        <LoginPromptCentered />
-                    )}
-                </Modal.Body>
-            </Modal>
-        </SessionAuth>
+        <Modal
+            opened={opened}
+            onClose={onClose}
+            title={"Add to your library"}
+            fullScreen={onMobile}
+            transitionProps={{ transition: "fade", duration: 200 }}
+        >
+            <Modal.Body>
+                <Container fluid h={"100%"} className={""}>
+                    <CollectionEntryAddOrUpdateForm
+                        gameId={id}
+                        onClose={onClose}
+                    />
+                </Container>
+            </Modal.Body>
+        </Modal>
     );
 };
 
