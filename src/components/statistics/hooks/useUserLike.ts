@@ -8,6 +8,7 @@ import {
     StatisticsWithStatus,
     useItemStatistics,
 } from "@/components/statistics/hooks/useItemStatistics";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface IToggleLikeProps {
     targetUserId: string | undefined;
@@ -29,6 +30,7 @@ export function useUserLike({
     targetUserId,
 }: IToggleLikeProps) {
     const queryClient = useQueryClient();
+    const userId = useUserId();
     const statisticsQuery = useItemStatistics(sourceId, sourceType);
     const statisticsQueryKey = statisticsQuery.queryKey;
     const isLiked = statisticsQuery.data?.isLiked || false;
@@ -39,6 +41,9 @@ export function useUserLike({
          * Do not catch errors here, they should be thrown for "onError"!
          */
         mutationFn: async () => {
+            if (!userId) {
+                throw new Error("User is not logged in!");
+            }
             const dto = {
                 sourceId: `${sourceId}`,
                 sourceType: sourceType as StatisticsActionDto.sourceType,

@@ -16,12 +16,14 @@ export const UserAvatarGroup = ({ userId, ...others }: IProps) => {
     return (
         <Link href={`/profile/${profileQuery.data?.userId}`}>
             <Group
-                wrap={"wrap"}
-                justify={"center"}
+                wrap={onMobile ? "nowrap" : "wrap"}
+                justify={onMobile ? "start" : "center"}
                 gap={onMobile ? undefined : 5}
             >
                 <UserAvatar {...others} userId={userId} />
-                <Text c={"white"}>{profileQuery.data?.username}</Text>
+                <Text c={"white"} lineClamp={2}>
+                    {profileQuery.data?.username}
+                </Text>
             </Group>
         </Link>
     );

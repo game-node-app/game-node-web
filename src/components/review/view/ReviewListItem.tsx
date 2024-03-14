@@ -39,7 +39,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
 
     const userId = useUserId();
     const profileUserId = review.profileUserId;
-    const isOwnReview = userId === profileUserId;
+    const isOwnReview = userId != undefined && userId === profileUserId;
 
     return (
         <Stack w={"100%"} align={"center"}>
@@ -67,10 +67,13 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                         lg: "center",
                     }}
                 >
-                    <UserAvatarGroup
-                        size={onMobile ? "lg" : "xl"}
-                        userId={profileUserId}
-                    />
+                    <Box className={"8/12"}>
+                        <UserAvatarGroup
+                            size={onMobile ? "lg" : "xl"}
+                            userId={profileUserId}
+                        />
+                    </Box>
+
                     {onMobile && (
                         <Rating
                             readOnly
@@ -94,7 +97,6 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                         )}
                         <Group>
                             <ReviewListItemLikes review={review} />
-
                             <ReviewListItemDropdown
                                 review={review}
                                 isOwnReview={isOwnReview}
