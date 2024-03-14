@@ -19,59 +19,71 @@ import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import GameInfoOwnedPlatforms from "@/components/game/info/GameInfoOwnedPlatforms";
 import GameNodeLogo from "@/components/general/GameNodeLogo";
+import { UseFormWatch } from "react-hook-form";
+import { ShareFormValues } from "@/components/game/info/share/GameInfoShare";
 
 interface SharePreviewProps {
     gameId: number;
-    withOwnedPlatforms?: boolean;
-    withUserScore?: boolean;
-    withShortReview?: boolean;
+    watchFormValues: UseFormWatch<ShareFormValues>;
 }
 
 export const GAME_INFO_SHARE_PREVIEW_ID = "game-info-preview-id";
 
 const GameInfoSharePreview = ({
     gameId,
-    withOwnedPlatforms = true,
-    withShortReview = false,
-    withUserScore = true,
+    watchFormValues,
 }: SharePreviewProps) => {
     const userId = useUserId();
     const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
     const game = gameQuery.data;
     const reviewQuery = useReviewForUserIdAndGameId(userId, gameId);
     const rating = reviewQuery.data?.rating ?? 0;
+    const {
+        transparentBackground,
+        withRating,
+        withOwnedPlatforms,
+        withDivider,
+    } = watchFormValues();
     return (
         <Paper
+            id={GAME_INFO_SHARE_PREVIEW_ID}
             w={"100%"}
             styles={{
                 root: {
-                    backgroundColor: "#1A1A1A",
+                    backgroundColor: transparentBackground
+                        ? "rgba(255,255,255,0)"
+                        : "#1A1A1A",
                 },
             }}
         >
-            <Stack id={GAME_INFO_SHARE_PREVIEW_ID} w={"100%"} align={"center"}>
+            <Stack w={"100%"} align={"center"}>
                 <Stack align={"center"} className={"w-full p-16 pb-2"}>
                     <GameFigureImage game={game} />
                     <Title size={"h4"} className={"text-center mt-4"}>
                         {game?.name}
                     </Title>
-                    <Rating
-                        readOnly
-                        value={rating}
-                        color={"#F15025"}
-                        size={"lg"}
-                    />
+                    {withRating && (
+                        <Rating
+                            readOnly
+                            value={rating}
+                            color={"#F15025"}
+                            size={"lg"}
+                        />
+                    )}
                 </Stack>
-                <Divider w={"100%"} />
-                <Stack align={"center"} className={"w-full"}>
-                    <Text>Played in</Text>
-                    <GameInfoOwnedPlatforms
-                        gameId={gameId}
-                        iconsProps={{
-                            w: 36,
-                        }}
-                    />
-                </Stack>
+                {withDivider && <Divider w={"100%"} />}
+                {withOwnedPlatforms && (
+                    <Stack align={"center"} className={"w-full"}>
+                        <Text>Played in</Text>
+                        <GameInfoOwnedPlatforms
+                            gameId={gameId}
+                            iconsProps={{
+                                w: 36,
+                            }}
+                            justify={"center"}
+                        />
+                    </Stack>
+                )}
                 <Flex justify={"center"} className={"mt-16 mb-8"}>
                     <GameNodeLogo className={"w-20 h-auto"} withBadge={false} />
                 </Flex>

@@ -12,7 +12,7 @@ const Logout = () => {
         (async () => {
             if (ignore) return;
             await Session.signOut();
-            await queryClient.invalidateQueries();
+            queryClient.clear();
             await router.push("/");
         })();
         return () => {

@@ -154,7 +154,12 @@ const GameInfoReviewEditorView = ({
                                 </ActionIcon>
                             </Tooltip>
                         )}
-                        <Button type={"submit"}>Submit</Button>
+                        <Button
+                            type={"submit"}
+                            loading={reviewMutation.isPending}
+                        >
+                            Submit
+                        </Button>
                     </Group>
                 </Group>
             </form>

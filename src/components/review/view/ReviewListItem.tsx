@@ -73,6 +73,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     />
                     {onMobile && (
                         <Rating
+                            readOnly
                             value={review.rating}
                             className={"mt-0 lg:mt-4"}
                         />
@@ -86,6 +87,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     <Group justify={onMobile ? "end" : "space-between"}>
                         {!onMobile && (
                             <Rating
+                                readOnly
                                 value={review.rating}
                                 className={"mt-0 lg:mt-4"}
                             />

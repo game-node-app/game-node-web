@@ -1,26 +1,6 @@
-import React, {
-    ComponentPropsWithoutRef,
-    MutableRefObject,
-    SetStateAction,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
-import {
-    Box,
-    BoxComponentProps,
-    Container,
-    Highlight,
-    Text,
-} from "@mantine/core";
-import {
-    Editor,
-    EditorContent,
-    generateHTML,
-    generateJSON,
-    useEditor,
-} from "@tiptap/react";
+import React, { useMemo, useRef } from "react";
+import { Box, BoxComponentProps } from "@mantine/core";
+import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
