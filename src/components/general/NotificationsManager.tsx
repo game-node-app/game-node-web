@@ -72,7 +72,10 @@ const NotificationsManager = () => {
                 const notifications: Notification[] = JSON.parse(message.data);
                 handleNotifications(notifications)
                     .then(() => {
-                        infiniteNotificationsQuery.invalidate();
+                        // Prevents unnecessary calls to notifications endpoint
+                        if (notifications.length > 0) {
+                            infiniteNotificationsQuery.invalidate();
+                        }
                     })
                     .catch(console.error);
             };

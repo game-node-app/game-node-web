@@ -44,7 +44,6 @@ const GameInfoPlatforms = ({
                 .map((platform) => platform?.abbreviation)
                 .filter((abbreviation) => abbreviation != undefined);
             try {
-                await sleep(10000);
                 return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(
                     {
                         platformAbbreviations: abbreviations,

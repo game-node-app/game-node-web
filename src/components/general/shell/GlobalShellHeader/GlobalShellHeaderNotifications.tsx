@@ -1,9 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
     ActionIcon,
     Box,
+    Button,
+    Center,
     Popover,
     ScrollArea,
+    Skeleton,
     Stack,
     Text,
 } from "@mantine/core";
@@ -18,10 +21,6 @@ import { useInfiniteAggregatedNotifications } from "@/components/notifications/h
 const GlobalShellHeaderNotifications = () => {
     const [isPopoverOpened, popoverUtils] = useDisclosure();
     const onMobile = useOnMobile();
-
-    const intersection = useIntersection({
-        threshold: 0.5,
-    });
 
     const { data, isLoading, isError, invalidate, isFetching, fetchNextPage } =
         useInfiniteAggregatedNotifications();
@@ -66,6 +65,16 @@ const GlobalShellHeaderNotifications = () => {
         );
     }, [data?.pages]);
 
+    const lastElement = data?.pages[data?.pages.length - 1];
+    const hasNextPage =
+        lastElement != undefined && lastElement.pagination.hasNextPage;
+
+    const buildNotificationsSkeletons = useCallback(() => {
+        return new Array(5).fill(0).map((v, i) => {
+            return <Skeleton key={i} className={"w-full h-20"} />;
+        });
+    }, []);
+
     const isEmpty =
         !isLoading && (aggregations == undefined || aggregations.length === 0);
 
@@ -81,20 +90,6 @@ const GlobalShellHeaderNotifications = () => {
         }
         return false;
     }, [aggregations]);
-
-    useEffect(() => {
-        const entry = intersection.entry;
-        if (!entry || !entry.isIntersecting || isFetching) {
-            return;
-        }
-
-        if (data && data.pages) {
-            const lastElement = data.pages[data.pages.length - 1];
-            if (lastElement && lastElement.pagination.hasNextPage) {
-                fetchNextPage();
-            }
-        }
-    }, [data, fetchNextPage, intersection.entry, isFetching]);
 
     return (
         <Popover
@@ -129,8 +124,6 @@ const GlobalShellHeaderNotifications = () => {
                                     className={"w-full h-full"}
                                     onClick={() => {
                                         popoverUtils.close();
-                                    }}
-                                    onMouseEnter={() => {
                                         if (
                                             notificationViewMutation.isPending ||
                                             isFetching ||
@@ -150,11 +143,20 @@ const GlobalShellHeaderNotifications = () => {
                                 </Box>
                             );
                         })}
+                        {isFetching && buildNotificationsSkeletons()}
                         {isEmpty && <Text>No notifications.</Text>}
-                        <div
-                            id="notifications-last-element-tracker"
-                            ref={intersection.ref}
-                        />
+                        {hasNextPage && (
+                            <Center>
+                                <Button
+                                    size={"md"}
+                                    onClick={() => {
+                                        fetchNextPage();
+                                    }}
+                                >
+                                    Show more
+                                </Button>
+                            </Center>
+                        )}
                     </Stack>
                 </ScrollArea.Autosize>
             </Popover.Dropdown>
