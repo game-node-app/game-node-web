@@ -6,6 +6,7 @@ import {
     Select,
     Stack,
     Tabs,
+    Text,
 } from "@mantine/core";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
@@ -138,7 +139,11 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
             });
 
         if (reviews == undefined || reviews.length === 0) {
-            return null;
+            return (
+                <Text className={"text-center"}>
+                    No reviews yet. Be the first one! 😉
+                </Text>
+            );
         }
 
         return reviews;

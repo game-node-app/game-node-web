@@ -25,6 +25,7 @@ import { useDisclosure } from "@mantine/hooks";
 import period = FindStatisticsTrendingReviewsDto.period;
 import { ParsedUrlQuery } from "querystring";
 import { DEFAULT_EXPLORE_TRENDING_GAMES_DTO } from "@/pages/explore";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
 
 export const DEFAULT_EXPLORE_SCREEN_PERIOD = period.MONTH.valueOf();
 
@@ -61,12 +62,6 @@ const SELECT_PERIOD_DATA: ComboboxItem[] = [
 ];
 
 type FilterFormValues = z.infer<typeof FilterFormSchema>;
-
-interface Props {
-    setTrendingGamesDto: Dispatch<
-        SetStateAction<FindStatisticsTrendingGamesDto>
-    >;
-}
 
 /**
  * PS: DO NOT use this as 'data' for the MultiSelect component. This is only for reference when building the JSX below.
@@ -125,8 +120,19 @@ export const exploreScreenDtoToSearchParams = (
     return params;
 };
 
-const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
+interface Props {
+    setTrendingGamesDto: Dispatch<
+        SetStateAction<FindStatisticsTrendingGamesDto>
+    >;
+    invalidateQuery: () => void;
+}
+
+const ExploreScreenFilters = ({
+    setTrendingGamesDto,
+    invalidateQuery,
+}: Props) => {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [drawerOpened, drawerUtils] = useDisclosure();
 
     const hasSetInitialUrlParams = useRef(false);
@@ -139,7 +145,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
             },
         });
 
-    const onSubmit = (data: FilterFormValues) => {
+    const onSubmit = async (data: FilterFormValues) => {
         const { period, ...criteria } = data;
         setTrendingGamesDto((previousState) => {
             const updatedState = {
@@ -157,6 +163,7 @@ const ExploreScreenFilters = ({ setTrendingGamesDto }: Props) => {
             );
             return updatedState;
         });
+        invalidateQuery();
         drawerUtils.close();
     };
 

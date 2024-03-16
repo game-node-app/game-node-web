@@ -1,12 +1,16 @@
 import {
     FindStatisticsTrendingGamesDto,
+    StatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
 import {
     keepPreviousData,
     useInfiniteQuery,
     useQuery,
+    useQueryClient,
 } from "@tanstack/react-query";
+import { ExtendedUseInfiniteQueryResult } from "@/util/types/ExtendedUseQueryResult";
+import { sleep } from "@/util/sleep";
 
 export interface InfiniteQueryTrendingGamesDto
     extends Omit<FindStatisticsTrendingGamesDto, "offset" | "search"> {}
@@ -14,31 +18,45 @@ export interface InfiniteQueryTrendingGamesDto
 export function useInfiniteTrendingGames(
     dto: InfiniteQueryTrendingGamesDto,
     enabled = true,
-) {
+): ExtendedUseInfiniteQueryResult<StatisticsPaginatedResponseDto> {
     const limitToUse = dto.limit || 20;
+    const queryClient = useQueryClient();
+    const queryKey = [
+        "statistics",
+        "trending",
+        "game",
+        "infinite",
+        limitToUse,
+        dto.period,
+        dto.criteria,
+    ];
+    const invalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey,
+        });
+        queryClient.resetQueries({
+            queryKey,
+        });
+    };
 
-    return useInfiniteQuery({
-        queryKey: [
-            "statistics",
-            "trending",
-            "game",
-            "infinite",
-            limitToUse,
-            dto.period,
-            dto.criteria,
-        ],
-        queryFn: ({ pageParam = 0 }) => {
-            return StatisticsService.statisticsControllerFindTrendingGames({
-                ...dto,
-                offset: pageParam,
-            });
-        },
-        getNextPageParam: (previousData, allData, lastPageParam) => {
-            return lastPageParam + limitToUse;
-        },
-        placeholderData: keepPreviousData,
-        initialPageParam: 0,
-        staleTime: Infinity,
-        enabled,
-    });
+    return {
+        ...useInfiniteQuery({
+            queryKey,
+            queryFn: async ({ pageParam = 0 }) => {
+                return StatisticsService.statisticsControllerFindTrendingGames({
+                    ...dto,
+                    offset: pageParam,
+                });
+            },
+            getNextPageParam: (previousData, allData, lastPageParam) => {
+                return lastPageParam + limitToUse;
+            },
+            placeholderData: keepPreviousData,
+            initialPageParam: 0,
+            staleTime: Infinity,
+            enabled,
+        }),
+        queryKey,
+        invalidate,
+    };
 }
