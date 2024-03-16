@@ -151,7 +151,16 @@ const Index = () => {
     }, []);
 
     useEffect(() => {
-        const canFetchNextPage = !isError && !isFetching && !isLoading;
+        const lastElement =
+            trendingGamesQuery.data?.pages[
+                trendingGamesQuery.data?.pages.length - 1
+            ];
+        const canFetchNextPage =
+            !isError &&
+            !isFetching &&
+            !isLoading &&
+            lastElement != undefined &&
+            lastElement.pagination.hasNextPage;
         if (canFetchNextPage && entry?.isIntersecting) {
             trendingGamesQuery.fetchNextPage({ cancelRefetch: false });
         }
