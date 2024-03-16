@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Library } from "@/wrapper/server";
 import {
     Accordion,
@@ -13,94 +13,103 @@ import classes from "@/components/library/view/library-view-navbar.module.css";
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
 import CollectionCreateOrUpdateModal from "@/components/collection/form/modal/CollectionCreateOrUpdateModal";
+import useUserId from "@/components/auth/hooks/useUserId";
 
 interface ILibraryViewSidebarCollectionsProps {
     library: Library | undefined;
 }
 
-function CollectionsAccordionControl({
-    children,
-    ...others
-}: AccordionControlProps) {
-    const [opened, { open, close }] = useDisclosure();
-    return (
-        <Center>
-            <CollectionCreateOrUpdateModal opened={opened} onClose={close} />
-            <Accordion.Control {...others} pr={0}>
-                {children}
-            </Accordion.Control>
-            <ActionIcon size="lg" variant="subtle" color="gray" onClick={open}>
-                <IconPlus size="1rem" />
-            </ActionIcon>
-        </Center>
-    );
-}
-
 const LibraryViewSidebarCollections = ({
     library,
 }: ILibraryViewSidebarCollectionsProps) => {
+    const [modalOpened, modalUtils] = useDisclosure();
+
+    const ownUserId = useUserId();
+
+    const buildCollectionsItems = useCallback(() => {
+        const userId = library?.userId;
+        return library?.collections.map((collection) => {
+            return (
+                <Link
+                    key={collection.id}
+                    href={`/library/${userId}/collection/${collection.id}`}
+                    className={classes.mainLink}
+                >
+                    <Text className="w-full" ta={"center"}>
+                        {collection.name}
+                    </Text>
+                </Link>
+            );
+        });
+    }, [library?.collections, library?.userId]);
+
+    const buildFeaturedCollectionsItems = useCallback(() => {
+        const userId = library?.userId;
+        const featuredCollections = library?.collections.filter(
+            (collection) => collection.isFeatured,
+        );
+        return featuredCollections?.map((collection) => {
+            return (
+                <Link
+                    key={collection.id}
+                    href={`/library/${userId}/collection/${collection.id}`}
+                    className={classes.mainLink}
+                >
+                    <Text className="w-full" ta={"center"}>
+                        {collection.name}
+                    </Text>
+                </Link>
+            );
+        });
+    }, [library?.collections, library?.userId]);
+
+    const isOwnLibrary = library != undefined && library.userId === ownUserId;
+
     if (!library || !library.collections || library.collections.length === 0) {
         // TODO: Add fallback component
         return null;
     }
 
-    const buildCollectionsItems = () => {
-        const userId = library.userId;
-        return library.collections.map((collection) => {
-            return (
-                <Link
-                    key={collection.id}
-                    href={`/library/${userId}/collection/${collection.id}`}
-                    className={classes.mainLink}
-                >
-                    <Text className="w-full" ta={"center"}>
-                        {collection.name}
-                    </Text>
-                </Link>
-            );
-        });
-    };
-
-    const buildFeaturedCollectionsItems = () => {
-        const userId = library.userId;
-        const featuredCollections = library.collections.filter(
-            (collection) => collection.isFeatured,
-        );
-        return featuredCollections.map((collection) => {
-            return (
-                <Link
-                    key={collection.id}
-                    href={`/library/${userId}/collection/${collection.id}`}
-                    className={classes.mainLink}
-                >
-                    <Text className="w-full" ta={"center"}>
-                        {collection.name}
-                    </Text>
-                </Link>
-            );
-        });
-    };
-
     return (
-        <>
-            <div className={classes.section}>
-                <Accordion variant={"default"} chevronPosition={"left"}>
-                    <Accordion.Item value={"collections"}>
-                        <CollectionsAccordionControl ta={"center"}>
-                            All Collections
-                        </CollectionsAccordionControl>
-                        <Accordion.Panel>
-                            <ScrollArea.Autosize mah={200}>
-                                {buildCollectionsItems()}
-                            </ScrollArea.Autosize>
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                </Accordion>
-            </div>
-            <div className={classes.section}>
-                {buildFeaturedCollectionsItems()}
-            </div>
-        </>
+        <div className={classes.section}>
+            <CollectionCreateOrUpdateModal
+                opened={modalOpened}
+                onClose={modalUtils.close}
+            />
+            <Accordion variant={"default"} chevronPosition={"left"}>
+                <Accordion.Item value={"collections"}>
+                    <Accordion.Control ta={"center"} pr={0}>
+                        All Collections
+                    </Accordion.Control>
+                    {isOwnLibrary && (
+                        <ActionIcon
+                            size="lg"
+                            variant="subtle"
+                            color="gray"
+                            onClick={modalUtils.open}
+                        >
+                            <IconPlus size="1rem" />
+                        </ActionIcon>
+                    )}
+
+                    <Accordion.Panel>
+                        <ScrollArea.Autosize mah={200}>
+                            {buildCollectionsItems()}
+                        </ScrollArea.Autosize>
+                    </Accordion.Panel>
+                </Accordion.Item>
+                <Accordion.Item value={"featured"}>
+                    <Accordion.Control ta={"center"}>
+                        Featured Collections
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <ScrollArea.Autosize mah={200}>
+                            {buildFeaturedCollectionsItems()}
+                        </ScrollArea.Autosize>
+                    </Accordion.Panel>
+                </Accordion.Item>
+            </Accordion>
+        </div>
     );
 };
 
