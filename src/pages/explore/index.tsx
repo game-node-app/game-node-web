@@ -38,66 +38,66 @@ export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto 
         period: DEFAULT_EXPLORE_SCREEN_PERIOD as period,
     };
 
-// export const getServerSideProps = async (context: NextPageContext) => {
-//     const query = context.query;
-//     const queryDto = exploreScreenUrlQueryToDto(query);
-//     const isDefaultDto =
-//         JSON.stringify(DEFAULT_EXPLORE_TRENDING_GAMES_DTO) ===
-//         JSON.stringify(queryDto);
-//     const queryClient = new QueryClient();
-//     let gameIds: number[] | undefined = undefined;
-//     /**
-//      * Only attempts to pre-fetch when the default page is loaded; Prevents hydration errors.
-//      */
-//     if (isDefaultDto) {
-//         await queryClient.prefetchInfiniteQuery({
-//             queryKey: [
-//                 "statistics",
-//                 "trending",
-//                 "game",
-//                 "infinite",
-//                 DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
-//                 DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
-//                 DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
-//             ],
-//             queryFn: async () => {
-//                 const response =
-//                     await StatisticsService.statisticsControllerFindTrendingGames(
-//                         DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-//                     );
-//                 if (response && response.data) {
-//                     gameIds = response.data.map((s) => s.gameId!);
-//                 }
-//                 return response;
-//             },
-//             initialPageParam: 0,
-//         });
-//
-//         if (gameIds) {
-//             const useGamesDto: GameRepositoryFindAllDto = {
-//                 gameIds: gameIds,
-//                 relations: {
-//                     cover: true,
-//                 },
-//             };
-//
-//             await queryClient.prefetchQuery({
-//                 queryKey: ["game", "all", useGamesDto],
-//                 queryFn: () => {
-//                     return GameRepositoryService.gameRepositoryControllerFindAllByIds(
-//                         useGamesDto,
-//                     );
-//                 },
-//             });
-//         }
-//     }
-//
-//     return {
-//         props: {
-//             dehydratedState: dehydrate(queryClient),
-//         },
-//     };
-// };
+export const getServerSideProps = async (context: NextPageContext) => {
+    const query = context.query;
+    const queryDto = exploreScreenUrlQueryToDto(query);
+    const isDefaultDto =
+        JSON.stringify(DEFAULT_EXPLORE_TRENDING_GAMES_DTO) ===
+        JSON.stringify(queryDto);
+    const queryClient = new QueryClient();
+    let gameIds: number[] | undefined = undefined;
+    /**
+     * Only attempts to pre-fetch when the default page is loaded; Prevents hydration errors.
+     */
+    if (isDefaultDto) {
+        await queryClient.prefetchInfiniteQuery({
+            queryKey: [
+                "statistics",
+                "trending",
+                "game",
+                "infinite",
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
+                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
+            ],
+            queryFn: async () => {
+                const response =
+                    await StatisticsService.statisticsControllerFindTrendingGames(
+                        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+                    );
+                if (response && response.data) {
+                    gameIds = response.data.map((s) => s.gameId!);
+                }
+                return response;
+            },
+            initialPageParam: 0,
+        });
+
+        if (gameIds) {
+            const useGamesDto: GameRepositoryFindAllDto = {
+                gameIds: gameIds,
+                relations: {
+                    cover: true,
+                },
+            };
+
+            await queryClient.prefetchQuery({
+                queryKey: ["game", "all", useGamesDto],
+                queryFn: () => {
+                    return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                        useGamesDto,
+                    );
+                },
+            });
+        }
+    }
+
+    return {
+        props: {
+            dehydratedState: dehydrate(queryClient),
+        },
+    };
+};
 
 const Index = () => {
     const { ref, entry } = useIntersection({
