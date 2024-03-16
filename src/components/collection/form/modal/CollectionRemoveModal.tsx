@@ -46,18 +46,18 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
         >
             <Modal.Body>
                 <Stack w={"100%"} justify={"center"}>
-                    <Text fz={"xl"}>
+                    <Text fz={"xl"} className={"text-center"}>
                         Are you sure you want to remove this collection and all
                         metadata associated with it?
                     </Text>
-                    <Text fw={"bold"}>
+                    <Text fw={"bold"} className={"text-center"}>
                         This will also remove all games from this collection. If
-                        the games don't exist in other collections, your reviews
-                        from them will also be removed.
+                        the games aren't available in other collections, your
+                        reviews from them will also be removed.
                     </Text>
                     <Group wrap={"nowrap"} justify={"center"}>
                         <Button onClick={onClose} color={"blue"}>
-                            No
+                            Go back
                         </Button>
                         <Button
                             onClick={() => {
@@ -66,7 +66,7 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
                             }}
                             color={"red"}
                         >
-                            Yes
+                            I'm sure
                         </Button>
                     </Group>
                 </Stack>

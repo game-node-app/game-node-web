@@ -14,6 +14,6 @@ const inputs = [
 for (const input of inputs) {
     OpenAPI.generate({
         ...input,
-        httpClient: "axios",
+        httpClient: "fetch",
     });
 }

@@ -50,11 +50,11 @@ export default function App({
                 defaultOptions: {
                     queries: {
                         refetchOnWindowFocus: false,
-                        refetchOnMount: true,
                         refetchInterval: false,
+                        refetchOnMount: false,
                         refetchIntervalInBackground: false,
-                        refetchOnReconnect: true,
-                        retry: false,
+                        refetchOnReconnect: false,
+                        staleTime: Infinity,
                     },
                 },
             }),

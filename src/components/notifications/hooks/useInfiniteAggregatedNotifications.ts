@@ -1,6 +1,5 @@
 import { ExtendedUseInfiniteQueryResult } from "@/util/types/ExtendedUseQueryResult";
 import {
-    NotificationAggregateDto,
     NotificationsService,
     PaginatedNotificationAggregationDto,
 } from "@/wrapper/server";
@@ -11,8 +10,10 @@ import {
 } from "@tanstack/react-query";
 import useUserId from "@/components/auth/hooks/useUserId";
 
+export const DEFAULT_NOTIFICATIONS_LIMIT = 10;
+
 export function useInfiniteAggregatedNotifications(
-    limit = 20,
+    limit = DEFAULT_NOTIFICATIONS_LIMIT,
 ): ExtendedUseInfiniteQueryResult<PaginatedNotificationAggregationDto> {
     const userId = useUserId();
     const queryClient = useQueryClient();

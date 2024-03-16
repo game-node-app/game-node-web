@@ -9,11 +9,15 @@ import { SearchGame } from "@/components/game/search/utils/types";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { Game } from "@/wrapper/server";
 
-interface IMetadataGridContentProps extends SimpleGridProps {
+interface IMetadataGridContentProps extends PropsWithChildren<SimpleGridProps> {
     items: TGameOrSearchGame[];
 }
 
-const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
+const GameViewContent = ({
+    items,
+    children,
+    ...others
+}: IMetadataGridContentProps) => {
     const onMobile = useOnMobile();
     const { layout } = useContext(GameViewContext);
     const columns = useMemo(() => {
@@ -46,6 +50,7 @@ const GameViewContent = ({ items, ...others }: IMetadataGridContentProps) => {
             {...others}
         >
             {columns}
+            {children}
         </SimpleGrid>
     );
 };

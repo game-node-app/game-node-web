@@ -46,13 +46,13 @@ const LibraryView = ({ children, userId, collectionId }: ILibraryViewProps) => {
             )}
             <Grid columns={12} w={"100%"} h={"100%"}>
                 <Grid.Col
-                    span={{ base: 0, lg: 2 }}
+                    span={{ base: 0, lg: 3 }}
                     display={onMobile ? "none" : undefined}
                 >
                     <LibraryViewSidebar userId={userId} />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 12, lg: 10 }} h={"100%"}>
+                <Grid.Col span={{ base: 12, lg: 9 }} h={"100%"}>
                     {children}
                 </Grid.Col>
             </Grid>

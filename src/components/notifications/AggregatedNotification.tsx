@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { NotificationAggregateDto } from "@/wrapper/server";
 import ReviewAggregatedNotification from "@/components/notifications/ReviewAggregatedNotification";
 import FollowerAggregatedNotification from "@/components/notifications/FollowerAggregatedNotification";
@@ -12,7 +12,7 @@ export interface AggregatedNotificationProps {
 const AggregatedNotification = ({
     aggregatedNotification,
 }: AggregatedNotificationProps) => {
-    return useMemo(() => {
+    const notification = useMemo(() => {
         switch (aggregatedNotification.sourceType) {
             case sourceType.REVIEW:
                 return (
@@ -32,6 +32,7 @@ const AggregatedNotification = ({
 
         return null;
     }, [aggregatedNotification]);
+    return notification;
 };
 
 export default AggregatedNotification;
