@@ -2,14 +2,12 @@ import React, { useEffect, useMemo } from "react";
 import {
     ActionIcon,
     Box,
-    Center,
     Popover,
     ScrollArea,
     Stack,
     Text,
 } from "@mantine/core";
-import { IconBell, IconBellFilled, IconBellPlus } from "@tabler/icons-react";
-import { useAggregatedNotifications } from "@/components/notifications/hooks/useAggregatedNotifications";
+import { IconBell, IconBellFilled } from "@tabler/icons-react";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import AggregatedNotification from "@/components/notifications/AggregatedNotification";
 import { useDisclosure, useIntersection } from "@mantine/hooks";
@@ -26,7 +24,12 @@ const GlobalShellHeaderNotifications = () => {
     });
 
     const { data, isLoading, isError, invalidate, isFetching, fetchNextPage } =
-        useInfiniteAggregatedNotifications(20);
+        useInfiniteAggregatedNotifications();
+
+    /**
+     * Notifications should be marked as viewed on hover for desktop, and when the popover is opened
+     * for mobile.
+     */
     const notificationViewMutation = useMutation({
         mutationFn: async (notifications: Notification[]) => {
             if (notifications == undefined || notifications.length === 0)
@@ -68,11 +71,6 @@ const GlobalShellHeaderNotifications = () => {
         return false;
     }, [aggregations]);
 
-    const tempAggregations = new Array(10)
-        .fill(0)
-        .map(() => aggregations)
-        .flatMap((arr) => arr);
-
     useEffect(() => {
         const entry = intersection.entry;
         if (!entry || !entry.isIntersecting || isFetching) {
@@ -86,6 +84,21 @@ const GlobalShellHeaderNotifications = () => {
             }
         }
     }, [data, fetchNextPage, intersection.entry, isFetching]);
+
+    /**
+     * Effect to mark notifications as seen when popover is open
+     */
+    useEffect(() => {
+        const hasAggregations =
+            aggregations != undefined && aggregations.length > 0;
+        if (hasAggregations && onMobile && isPopoverOpened) {
+            const lastLoadedAggregation =
+                aggregations[aggregations!.length - 1];
+            notificationViewMutation.mutate(
+                lastLoadedAggregation.notifications,
+            );
+        }
+    }, [onMobile, isPopoverOpened, aggregations, notificationViewMutation]);
 
     return (
         <Popover

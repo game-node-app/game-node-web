@@ -14,6 +14,7 @@ import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo"
 import { useGame } from "@/components/game/hooks/useGame";
 import { useQuery } from "@tanstack/react-query";
 import { GameRepositoryService } from "@/wrapper/server";
+import { sleep } from "@/util/sleep";
 
 interface IGameInfoPlatformsProps extends GroupProps {
     gameId: number | undefined;
@@ -37,12 +38,13 @@ const GameInfoPlatforms = ({
     const platforms = game?.platforms;
     const iconsQuery = useQuery({
         queryKey: ["game", "platform", "icon", platforms],
-        queryFn: () => {
+        queryFn: async () => {
             if (!platforms) return [];
             const abbreviations = platforms
                 .map((platform) => platform?.abbreviation)
                 .filter((abbreviation) => abbreviation != undefined);
             try {
+                await sleep(10000);
                 return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(
                     {
                         platformAbbreviations: abbreviations,
@@ -75,7 +77,8 @@ const GameInfoPlatforms = ({
         });
     }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
 
-    const isEmpty = icons == undefined || icons.length === 0;
+    const isEmpty =
+        !iconsQuery.isLoading && (icons == undefined || icons.length === 0);
     const platformInfo = getGamePlatformInfo(game);
     const platformsNames = platformInfo.platformsAbbreviations?.join(", ");
     return (
@@ -87,9 +90,6 @@ const GameInfoPlatforms = ({
                     wrap={"wrap"}
                     {...others}
                 >
-                    {iconsQuery.isLoading && (
-                        <Skeleton className={"w-10/12 lg:w-4/12 h-10"} />
-                    )}
                     {isEmpty && "Unknown"}
                     {icons}
                 </Group>

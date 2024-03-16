@@ -5,6 +5,7 @@ import {
     AccordionControlProps,
     ActionIcon,
     Center,
+    Group,
     ScrollArea,
     Text,
 } from "@mantine/core";
@@ -76,21 +77,27 @@ const LibraryViewSidebarCollections = ({
                 opened={modalOpened}
                 onClose={modalUtils.close}
             />
-            <Accordion variant={"default"} chevronPosition={"left"}>
-                <Accordion.Item value={"collections"}>
-                    <Accordion.Control ta={"center"} pr={0}>
-                        All Collections
-                    </Accordion.Control>
-                    {isOwnLibrary && (
-                        <ActionIcon
-                            size="lg"
-                            variant="subtle"
-                            color="gray"
-                            onClick={modalUtils.open}
-                        >
-                            <IconPlus size="1rem" />
-                        </ActionIcon>
-                    )}
+            <Accordion
+                variant={"default"}
+                defaultValue={"featured"}
+                chevronPosition={"left"}
+            >
+                <Accordion.Item value={"all"}>
+                    <Group wrap={"nowrap"} gap={0}>
+                        <Accordion.Control ta={"center"} pr={0}>
+                            All Collections
+                        </Accordion.Control>
+                        {isOwnLibrary && (
+                            <ActionIcon
+                                size="xl"
+                                variant="subtle"
+                                color="gray"
+                                onClick={modalUtils.open}
+                            >
+                                <IconPlus size="1rem" />
+                            </ActionIcon>
+                        )}
+                    </Group>
 
                     <Accordion.Panel>
                         <ScrollArea.Autosize mah={200}>

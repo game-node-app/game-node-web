@@ -12,6 +12,7 @@ const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 const targetSSEUrl = baseUrl + "/v1/notifications/stream";
 import category = Notification.category;
 import sourceType = Notification.sourceType;
+import { useInfiniteAggregatedNotifications } from "@/components/notifications/hooks/useInfiniteAggregatedNotifications";
 
 const handleNotifications = async (notificationsEntities: Notification[]) => {
     for (const notification of notificationsEntities) {
@@ -56,24 +57,33 @@ const handleNotifications = async (notificationsEntities: Notification[]) => {
 
 const NotificationsManager = () => {
     const userId = useUserId();
+    const infiniteNotificationsQuery = useInfiniteAggregatedNotifications();
     useEffect(() => {
-        if (!userId) return;
-        const eventSource = new ReconnectingEventSource(targetSSEUrl, {
-            withCredentials: true,
-            max_retry_time: 5000,
-        });
-        eventSource.onopen = (conn) => {
-            console.log("Connected to notifications SSE: ", conn);
-        };
-        eventSource.onmessage = (message) => {
-            const notifications: Notification[] = JSON.parse(message.data);
-            handleNotifications(notifications).then().catch(console.error);
-        };
+        let eventSource: ReconnectingEventSource;
+        if (userId) {
+            const eventSource = new ReconnectingEventSource(targetSSEUrl, {
+                withCredentials: true,
+                max_retry_time: 5000,
+            });
+            eventSource.onopen = (conn) => {
+                console.log("Connected to notifications SSE: ", conn);
+            };
+            eventSource.onmessage = (message) => {
+                const notifications: Notification[] = JSON.parse(message.data);
+                handleNotifications(notifications)
+                    .then(() => {
+                        infiniteNotificationsQuery.invalidate();
+                    })
+                    .catch(console.error);
+            };
+        }
 
         return () => {
-            eventSource.close();
+            if (eventSource) {
+                eventSource.close();
+            }
         };
-    }, [userId]);
+    }, [infiniteNotificationsQuery, userId]);
 
     return <Notifications />;
 };
