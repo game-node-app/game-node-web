@@ -37,6 +37,9 @@ export function useInfiniteAggregatedNotifications(
                 return lastPageParam + limit;
             },
             initialPageParam: 0,
+            refetchIntervalInBackground: true,
+            // 1 minute
+            refetchInterval: 60 * 1000,
         }),
         queryKey,
         invalidate,

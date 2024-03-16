@@ -33,7 +33,14 @@ const GlobalShellHeaderNotifications = () => {
     const notificationViewMutation = useMutation({
         mutationFn: async (notifications: Notification[]) => {
             if (notifications == undefined || notifications.length === 0)
-                return;
+                return false;
+
+            const hasUnreadNotifications = notifications.some(
+                (notification) => !notification.isViewed,
+            );
+            if (!hasUnreadNotifications) {
+                return false;
+            }
 
             for (const notification of notifications) {
                 await NotificationsService.notificationsControllerUpdateViewedStatus(
@@ -43,9 +50,13 @@ const GlobalShellHeaderNotifications = () => {
                     },
                 );
             }
+
+            return true;
         },
-        onSuccess: () => {
-            invalidate();
+        onSuccess: (shouldInvalidate) => {
+            if (shouldInvalidate) {
+                invalidate();
+            }
         },
     });
 
@@ -84,21 +95,6 @@ const GlobalShellHeaderNotifications = () => {
             }
         }
     }, [data, fetchNextPage, intersection.entry, isFetching]);
-
-    /**
-     * Effect to mark notifications as seen when popover is open
-     */
-    useEffect(() => {
-        const hasAggregations =
-            aggregations != undefined && aggregations.length > 0;
-        if (hasAggregations && onMobile && isPopoverOpened) {
-            const lastLoadedAggregation =
-                aggregations[aggregations!.length - 1];
-            notificationViewMutation.mutate(
-                lastLoadedAggregation.notifications,
-            );
-        }
-    }, [onMobile, isPopoverOpened, aggregations, notificationViewMutation]);
 
     return (
         <Popover
