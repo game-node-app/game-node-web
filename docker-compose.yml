@@ -13,11 +13,11 @@ services:
       NEXT_PUBLIC_SEARCH_URL: ${NEXT_PUBLIC_SEARCH_URL}
 
     networks:
-      - game_node_app
+      - game_node_app_public
 
 
 networks:
-  game_node_app:
+  game_node_app_public:
     external: true
 
 volumes:
