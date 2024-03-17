@@ -56,7 +56,6 @@ const GlobalShellHeaderNotifications = () => {
             return true;
         },
         onSuccess: (shouldInvalidate) => {
-            console.log(shouldInvalidate);
             if (shouldInvalidate) {
                 invalidate();
             }

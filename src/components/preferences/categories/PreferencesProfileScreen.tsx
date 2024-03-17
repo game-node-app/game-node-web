@@ -69,6 +69,7 @@ const PreferencesProfileScreen = () => {
                     <Modal
                         opened={usernameModalOpened}
                         onClose={usernameModalUtils.close}
+                        withCloseButton={false}
                         size={"xl"}
                     >
                         <Modal.Body>

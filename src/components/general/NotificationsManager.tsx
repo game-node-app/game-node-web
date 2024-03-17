@@ -58,35 +58,36 @@ const handleNotifications = async (notificationsEntities: Notification[]) => {
 const NotificationsManager = () => {
     const userId = useUserId();
     const infiniteNotificationsQuery = useInfiniteAggregatedNotifications();
-    useEffect(() => {
-        let eventSource: ReconnectingEventSource;
-        if (userId) {
-            const eventSource = new ReconnectingEventSource(targetSSEUrl, {
-                withCredentials: true,
-                max_retry_time: 5000,
-            });
-            eventSource.onopen = (conn) => {
-                console.log("Connected to notifications SSE: ", conn);
-            };
-            eventSource.onmessage = (message) => {
-                const notifications: Notification[] = JSON.parse(message.data);
-                handleNotifications(notifications)
-                    .then(() => {
-                        // Prevents unnecessary calls to notifications endpoint
-                        if (notifications.length > 0) {
-                            infiniteNotificationsQuery.invalidate();
-                        }
-                    })
-                    .catch(console.error);
-            };
-        }
-
-        return () => {
-            if (eventSource) {
-                eventSource.close();
-            }
-        };
-    }, [infiniteNotificationsQuery, userId]);
+    // TODO: Check if this is causing trouble
+    // useEffect(() => {
+    //     let eventSource: ReconnectingEventSource;
+    //     if (userId) {
+    //         const eventSource = new ReconnectingEventSource(targetSSEUrl, {
+    //             withCredentials: true,
+    //             max_retry_time: 5000,
+    //         });
+    //         eventSource.onopen = (conn) => {
+    //             console.log("Connected to notifications SSE: ", conn);
+    //         };
+    //         eventSource.onmessage = (message) => {
+    //             const notifications: Notification[] = JSON.parse(message.data);
+    //             handleNotifications(notifications)
+    //                 .then(() => {
+    //                     // Prevents unnecessary calls to notifications endpoint
+    //                     if (notifications.length > 0) {
+    //                         infiniteNotificationsQuery.invalidate();
+    //                     }
+    //                 })
+    //                 .catch(console.error);
+    //         };
+    //     }
+    //
+    //     return () => {
+    //         if (eventSource) {
+    //             eventSource.close();
+    //         }
+    //     };
+    // }, [infiniteNotificationsQuery, userId]);
 
     return <Notifications />;
 };
