@@ -128,7 +128,6 @@ const SearchBarWithSelect = ({
                                 )}
                             </Group>
                         }
-                        mr={"0.5rem"}
                     />
                 </Combobox.Target>
 

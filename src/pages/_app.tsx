@@ -28,6 +28,7 @@ import "@/components/globals.css";
 
 import { theme } from "@/util/theme";
 import NotificationsManager from "@/components/general/NotificationsManager";
+import MatomoTracker from "@/components/general/MatomoTracker";
 
 /**
  * Basic configuration for wrapper services
@@ -71,6 +72,7 @@ export default function App({
             <SuperTokensProvider>
                 <QueryClientProvider client={queryClient}>
                     <NotificationsManager />
+                    <MatomoTracker />
                     <GlobalAppShell>
                         <HydrationBoundary state={pageProps.dehydratedState}>
                             <RouterTransition />

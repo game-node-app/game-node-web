@@ -464,6 +464,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.7.2.tgz#2d4260033e199b3032a08b41348ac10de21c47e9"
   integrity sha512-RbhOOTCNoCrbfkRyoXODZp75MlpiHMgbE5MEBZAnnnLyQNgrigEj4p0lzsMDyc1zVsJDLrivB58tgg3emX0eEA==
 
+"@socialgouv/matomo-next@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@socialgouv/matomo-next/-/matomo-next-1.8.1.tgz#be686d2fdf5d451bd25f21a0e2effe1173a1196a"
+  integrity sha512-H6wm5zroqtBcsu1lWG78UQC6X7qj66jQD0o36GRiMSLrABCKP/QwbyLykc7Q0xlxsseJW1IWwSwbBa+9jr6f5Q==
+
 "@swc/helpers@0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.5.2.tgz#85ea0c76450b61ad7d10a37050289eded783c27d"
