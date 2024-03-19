@@ -58,7 +58,11 @@ const MatomoTracker = () => {
     }, [hasAcceptedCookies, showCookieConsentNotification]);
 
     useEffect(() => {
+        console.log("Checking if Matomo should be initialized");
         if (!IS_DEV_ENV && MATOMO_URL && MATOMO_SITE_ID) {
+            console.log(
+                `Matomo initialized! URL: ${MATOMO_URL} | SiteID: ${MATOMO_SITE_ID}`,
+            );
             init({
                 url: MATOMO_URL,
                 siteId: MATOMO_SITE_ID,
@@ -66,7 +70,6 @@ const MatomoTracker = () => {
         }
     }, []);
 
-    useEffect(() => {}, []);
     return <></>;
 };
 
