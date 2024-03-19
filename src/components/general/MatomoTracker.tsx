@@ -7,6 +7,7 @@ import Link from "next/link";
 
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID;
+const IS_DEV_ENV = process.env.NODE_ENV !== "production";
 
 const MatomoTracker = () => {
     const [hasAcceptedCookies, setHasAcceptedCookies] =
@@ -57,7 +58,7 @@ const MatomoTracker = () => {
     }, [hasAcceptedCookies, showCookieConsentNotification]);
 
     useEffect(() => {
-        if (MATOMO_URL && MATOMO_SITE_ID) {
+        if (!IS_DEV_ENV && MATOMO_URL && MATOMO_SITE_ID) {
             init({
                 url: MATOMO_URL,
                 siteId: MATOMO_SITE_ID,
