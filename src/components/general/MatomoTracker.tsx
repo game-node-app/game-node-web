@@ -59,6 +59,9 @@ const MatomoTracker = () => {
 
     useEffect(() => {
         console.log("Checking if Matomo should be initialized");
+        console.log(
+            `Conditional: ${!IS_DEV_ENV && MATOMO_URL && MATOMO_SITE_ID}`,
+        );
         if (!IS_DEV_ENV && MATOMO_URL && MATOMO_SITE_ID) {
             console.log(
                 `Matomo initialized! URL: ${MATOMO_URL} | SiteID: ${MATOMO_SITE_ID}`,
