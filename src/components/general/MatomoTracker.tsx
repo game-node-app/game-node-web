@@ -16,8 +16,6 @@ const MatomoTracker = () => {
             getInitialValueInEffect: false,
         });
 
-    console.log(hasAcceptedCookies);
-
     const showCookieConsentNotification = useCallback(() => {
         if (hasAcceptedCookies != undefined && hasAcceptedCookies) return;
         notifications.show({
@@ -55,13 +53,17 @@ const MatomoTracker = () => {
     useEffect(() => {
         if (!hasAcceptedCookies) {
             showCookieConsentNotification();
-        } else if (MATOMO_URL && MATOMO_SITE_ID) {
+        }
+    }, [hasAcceptedCookies, showCookieConsentNotification]);
+
+    useEffect(() => {
+        if (MATOMO_URL && MATOMO_SITE_ID) {
             init({
                 url: MATOMO_URL,
                 siteId: MATOMO_SITE_ID,
             });
         }
-    }, [hasAcceptedCookies, showCookieConsentNotification]);
+    }, []);
 
     useEffect(() => {}, []);
     return <></>;
