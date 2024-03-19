@@ -22,7 +22,10 @@ const UseReviewForUserIdAndGameId = (
                             gameId,
                         );
                     // No idea why this happens.
-                    if (typeof review === "string") {
+                    if (
+                        typeof review === "undefined" ||
+                        typeof review === "string"
+                    ) {
                         return null;
                     }
                     return review;

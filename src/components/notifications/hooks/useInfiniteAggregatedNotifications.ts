@@ -37,6 +37,8 @@ export function useInfiniteAggregatedNotifications(
                 return lastPageParam + limit;
             },
             initialPageParam: 0,
+            // Checks for updates every 60 seconds
+            staleTime: 60000,
         }),
         queryKey,
         invalidate,

@@ -23,6 +23,17 @@ export const frontendConfig = () => {
                         ThirdPartyPasswordlessReact.Discord.init(),
                     ],
                 },
+                onHandleEvent: (context) => {
+                    // Sends user to /wizard/init on sign-up
+                    if (context.action === "SUCCESS") {
+                        if (
+                            context.isNewRecipeUser &&
+                            context.user.loginMethods.length === 1
+                        ) {
+                            Router.push("/wizard/init");
+                        }
+                    }
+                },
             }),
             SessionReact.init(),
         ],

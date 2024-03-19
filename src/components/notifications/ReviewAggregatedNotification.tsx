@@ -1,9 +1,12 @@
 import { useMemo } from "react";
-import { AggregatedNotificationProps } from "@/components/notifications/AggregatedNotification";
+import {
+    AggregatedNotificationContentProps,
+    AggregatedNotificationProps,
+} from "@/components/notifications/AggregatedNotification";
 import { useReview } from "@/components/review/hooks/useReview";
 import { NotificationAggregateDto } from "@/wrapper/server";
 import getUniqueProfileNames from "@/components/notifications/utils/getUniqueProfileNames";
-import { Notification, Text } from "@mantine/core";
+import { Group, Notification, Text } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import Link from "next/link";
@@ -12,7 +15,7 @@ import { useGame } from "@/components/game/hooks/useGame";
 
 const ReviewAggregatedNotification = ({
     aggregatedNotification,
-}: AggregatedNotificationProps) => {
+}: AggregatedNotificationContentProps) => {
     const reviewQuery = useReview(aggregatedNotification.sourceId as string);
     const gameQuery = useGame(reviewQuery.data?.gameId, {});
 
@@ -36,17 +39,10 @@ const ReviewAggregatedNotification = ({
                         href={`/game/${reviewQuery.data?.gameId}`}
                         className={"w-full"}
                     >
-                        <Notification
-                            className={"w-full"}
-                            withCloseButton={false}
-                            icon={
-                                latestNotificationUserId && (
-                                    <UserAvatar
-                                        userId={latestNotificationUserId}
-                                    />
-                                )
-                            }
-                        >
+                        <Group wrap={"nowrap"} className={"w-full"}>
+                            {latestNotificationUserId && (
+                                <UserAvatar userId={latestNotificationUserId} />
+                            )}
                             <Text lineClamp={4}>
                                 <strong>{latestProfileNames}</strong>{" "}
                                 {hasMoreProfileNames && (
@@ -61,7 +57,7 @@ const ReviewAggregatedNotification = ({
                                 )}
                                 !
                             </Text>
-                        </Notification>
+                        </Group>
                     </Link>
                 );
             case category.COMMENT:
@@ -70,17 +66,10 @@ const ReviewAggregatedNotification = ({
                         href={`/game/${reviewQuery.data?.gameId}`}
                         className={"w-full"}
                     >
-                        <Notification
-                            className={"w-full"}
-                            withCloseButton={false}
-                            icon={
-                                latestNotificationUserId && (
-                                    <UserAvatar
-                                        userId={latestNotificationUserId}
-                                    />
-                                )
-                            }
-                        >
+                        <Group wrap={"nowrap"} className={"w-full"}>
+                            {latestNotificationUserId && (
+                                <UserAvatar userId={latestNotificationUserId} />
+                            )}
                             <Text lineClamp={4}>
                                 <strong>{latestProfileNames}</strong>{" "}
                                 {hasMoreProfileNames && (
@@ -95,7 +84,7 @@ const ReviewAggregatedNotification = ({
                                 )}
                                 !
                             </Text>
-                        </Notification>
+                        </Group>
                     </Link>
                 );
         }
