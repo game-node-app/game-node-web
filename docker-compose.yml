@@ -5,14 +5,10 @@ services:
 
     image: lamarcke/game-node-web:latest
 
+    # NEXT_PUBLIC_ variables can only be defined before build-time, so adding them here won't work.
+    # Use the .env.(environment) files.
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_DOMAIN_SERVER: ${NEXT_PUBLIC_DOMAIN_SERVER}
-      NEXT_PUBLIC_DOMAIN_WEBSITE: ${NEXT_PUBLIC_DOMAIN_WEBSITE}
-      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
-      NEXT_PUBLIC_SEARCH_URL: ${NEXT_PUBLIC_SEARCH_URL}
-      NEXT_PUBLIC_MATOMO_URL: ${NEXT_PUBLIC_MATOMO_URL}
-      NEXT_PUBLIC_MATOMO_SITE_ID: ${NEXT_PUBLIC_MATOMO_SITE_ID}
 
     networks:
       - game_node_app_public
