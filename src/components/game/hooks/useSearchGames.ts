@@ -24,7 +24,7 @@ export default function useSearchGames(
     return useQuery<GameSearchResponseDto, ApiError>({
         queryKey: ["game", "search", searchParameters],
         queryFn: async (ctx) => {
-            return SearchService.postSearch(parseDto(searchParameters));
+            return SearchService.postSearchGames(parseDto(searchParameters));
         },
         placeholderData: keepPreviousData,
         enabled: enabled,
