@@ -30,6 +30,11 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
 
     return (
         <Paper w={"100%"} h={"100%"}>
+            {game != undefined && (
+                <Head>
+                    <title>{game.name} - GameNode</title>
+                </Head>
+            )}
             <Stack>
                 <Grid
                     columns={12}

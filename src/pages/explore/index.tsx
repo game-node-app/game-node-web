@@ -104,12 +104,16 @@ const Index = () => {
         threshold: 1,
     });
     const [scroll, scrollTo] = useWindowScroll();
-
+    const [hasLoadedQueryParams, setHasLoadedQueryParams] =
+        useState<boolean>(false);
     const [trendingGamesDto, setTrendingGamesDto] = useState(
         DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
     );
 
-    const trendingGamesQuery = useInfiniteTrendingGames(trendingGamesDto);
+    const trendingGamesQuery = useInfiniteTrendingGames(
+        trendingGamesDto,
+        hasLoadedQueryParams,
+    );
 
     const gamesIds = useMemo(() => {
         if (trendingGamesQuery.isError || trendingGamesQuery.data == undefined)
@@ -166,9 +170,7 @@ const Index = () => {
         }
     }, [entry, isError, isFetching, isLoading, trendingGamesQuery]);
 
-    if (isLoading) {
-        return <CenteredLoading />;
-    } else if (isError) {
+    if (isError) {
         return (
             <CenteredErrorMessage
                 message={"Error while trying to fetch games"}
@@ -181,6 +183,8 @@ const Index = () => {
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
                     <ExploreScreenFilters
+                        hasLoadedQueryParams={hasLoadedQueryParams}
+                        setHasLoadedQueryParams={setHasLoadedQueryParams}
                         setTrendingGamesDto={setTrendingGamesDto}
                         invalidateQuery={trendingGamesQuery.invalidate}
                     />

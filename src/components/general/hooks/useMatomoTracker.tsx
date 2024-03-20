@@ -1,15 +1,15 @@
+import { useLocalStorage } from "@mantine/hooks";
 import React, { useCallback, useEffect } from "react";
-import { init } from "@socialgouv/matomo-next";
-import { useLocalStorage, useSessionStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Button, Flex, Group, Stack, Text } from "@mantine/core";
 import Link from "next/link";
+import { init } from "@socialgouv/matomo-next";
 
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID;
 const IS_DEV_ENV = process.env.NODE_ENV !== "production";
 
-const MatomoTracker = () => {
+export function useMatomoTracker() {
     const [hasAcceptedCookies, setHasAcceptedCookies] =
         useLocalStorage<boolean>({
             key: "cookie-consent",
@@ -69,8 +69,4 @@ const MatomoTracker = () => {
             });
         }
     }, []);
-
-    return <></>;
-};
-
-export default MatomoTracker;
+}
