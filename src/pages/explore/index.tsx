@@ -164,6 +164,7 @@ const Index = () => {
             !isFetching &&
             !isLoading &&
             lastElement != undefined &&
+            lastElement.data.length > 0 &&
             lastElement.pagination.hasNextPage;
         if (canFetchNextPage && entry?.isIntersecting) {
             trendingGamesQuery.fetchNextPage({ cancelRefetch: false });

@@ -105,7 +105,7 @@ const CollectionView = ({
             {collection && profile && (
                 <Head>
                     <title>
-                        {profile.username} - {collection.name} - GameNode
+                        {`${profile.username} - ${collection.name} - GameNode`}
                     </title>
                 </Head>
             )}
