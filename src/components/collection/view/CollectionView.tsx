@@ -30,6 +30,8 @@ import CollectionEntriesMoveModal from "@/components/collection/collection-entry
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useGames } from "@/components/game/hooks/useGames";
 import CollectionRemoveModal from "@/components/collection/form/modal/CollectionRemoveModal";
+import Head from "next/head";
+import useUserProfile from "@/components/profile/hooks/useUserProfile";
 
 interface ICollectionViewProps {
     libraryUserId: string;
@@ -65,7 +67,7 @@ const CollectionView = ({
         },
     });
 
-    const currentUserId = useUserId();
+    const userId = useUserId();
 
     const formPage = watch("page");
 
@@ -80,7 +82,7 @@ const CollectionView = ({
 
     const collectionQuery = useCollection(collectionId);
     const collection = collectionQuery.data;
-    const isOwnCollection = libraryUserId === currentUserId;
+    const isOwnCollection = libraryUserId === userId;
     const collectionEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
         offset: requestParams.offset,
@@ -90,6 +92,8 @@ const CollectionView = ({
             platforms: true,
         },
     });
+    const profileQuery = useUserProfile(userId);
+    const profile = profileQuery.data;
 
     if (collectionQuery.isError || collectionEntriesQuery.isError) {
         return (
@@ -98,6 +102,13 @@ const CollectionView = ({
     }
     return (
         <Container fluid p={0} h={"100%"}>
+            {collection && profile && (
+                <Head>
+                    <title>
+                        {`${profile.username} - ${collection.name} - GameNode`}
+                    </title>
+                </Head>
+            )}
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
                 <Group className="w-[calc(100%-2rem)] mt-8 flex-nowrap justify-between">
                     <CollectionCreateOrUpdateModal

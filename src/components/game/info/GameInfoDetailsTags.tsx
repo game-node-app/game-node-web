@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { ReactElement, ReactNode, useMemo } from "react";
 import { Game } from "@/wrapper/server";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
 import { getGameThemes } from "@/components/game/util/getGameThemes";
@@ -9,19 +9,61 @@ import { shuffleArray } from "@/util/shuffleArray";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { useGame } from "@/components/game/hooks/useGame";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import Link from "next/link";
 
-const getCombinedTags = (game?: Game) => {
-    if (!game) return undefined;
-    const genres = getGameGenres(game);
-    const themes = getGameThemes(game);
-    const modes = getGameModes(game)?.map((mode) => mode.name);
-    const perspectives = getGamePerspectives(game)?.map(
-        (perspective) => perspective.name,
+interface TagBuilderElement {
+    id: number;
+    category: string;
+    name: string;
+}
+
+const getGameTags = (game?: Game): TagBuilderElement[] => {
+    if (!game) return [];
+    const tagsElements: any[] = [];
+
+    const genres = game?.genres;
+    const themes = game?.themes;
+    const modes = game?.gameModes;
+    const perspectives = game?.playerPerspectives;
+
+    tagsElements.push(
+        genres?.map((genre): TagBuilderElement => {
+            return {
+                category: "genres",
+                name: genre.name!,
+                id: genre.id,
+            };
+        }),
     );
-    const tags = [genres, themes, modes, perspectives];
-    const flatTags = tags.flat();
-    const filteredTags = flatTags.filter((item) => item != undefined);
-    return filteredTags;
+    tagsElements.push(
+        themes?.map(
+            (theme): TagBuilderElement => ({
+                category: "themes",
+                id: theme.id,
+                name: theme.name!,
+            }),
+        ),
+    );
+    tagsElements.push(
+        modes?.map(
+            (mode): TagBuilderElement => ({
+                category: "gameModes",
+                id: mode.id,
+                name: mode.name!,
+            }),
+        ),
+    );
+    tagsElements.push(
+        perspectives?.map(
+            (perspective): TagBuilderElement => ({
+                category: "playerPerspectives",
+                id: perspective.id,
+                name: perspective.name!,
+            }),
+        ),
+    );
+
+    return tagsElements.flat();
 };
 
 interface IProps {
@@ -42,19 +84,32 @@ const GameInfoDetailsTags = ({ gameId }: IProps) => {
         },
     });
     const game = gameQuery.data;
-    const tags = useMemo(() => getCombinedTags(game), [game]);
-    const hasTags = tags != undefined && tags.length > 0;
+
+    const badges: ReactNode[] = useMemo(() => {
+        const tags = getGameTags(game);
+        console.log(tags);
+
+        return tags
+            .filter((tag) => tag != undefined)
+            .map((tag) => {
+                return (
+                    <Link
+                        key={tag.category}
+                        href={`/explore?${tag.category}=${tag.id}`}
+                    >
+                        <Badge>{tag.name}</Badge>
+                    </Link>
+                );
+            });
+    }, [game]);
+
     return (
         <DetailsBox withBorder withDimmedTitle title={"Tags"}>
             <Group justify={"start"} gap={10}>
                 {gameQuery.isLoading && (
                     <Skeleton className={"w-10/12 lg:w-4/12 h-4"}></Skeleton>
                 )}
-                {hasTags &&
-                    tags?.map((tag, index) => {
-                        if (!tag) return null;
-                        return <Badge key={index}>{tag}</Badge>;
-                    })}
+                {badges}
             </Group>
         </DetailsBox>
     );

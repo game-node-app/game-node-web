@@ -90,7 +90,7 @@ export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
         DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
     );
     for (const [k, v] of Object.entries(query)) {
-        if (k !== "period" && typeof v === "string") {
+        if (k !== "period" && typeof v === "string" && v.length > 0) {
             if (v.includes(",")) {
                 //@ts-ignore
                 dto.criteria[k] = v.split(",");
@@ -98,7 +98,7 @@ export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
                 //@ts-ignore
                 dto.criteria[k] = [v];
             }
-        } else if (typeof v === "string") {
+        } else if (typeof v === "string" && v.length > 0) {
             // @ts-ignore
             dto[k] = v;
         }
@@ -124,18 +124,21 @@ interface Props {
     setTrendingGamesDto: Dispatch<
         SetStateAction<FindStatisticsTrendingGamesDto>
     >;
+    hasLoadedQueryParams: boolean;
+    setHasLoadedQueryParams: Dispatch<SetStateAction<boolean>>;
     invalidateQuery: () => void;
 }
 
 const ExploreScreenFilters = ({
     setTrendingGamesDto,
+    hasLoadedQueryParams,
+    setHasLoadedQueryParams,
     invalidateQuery,
 }: Props) => {
     const router = useRouter();
     const queryClient = useQueryClient();
     const [drawerOpened, drawerUtils] = useDisclosure();
 
-    const hasSetInitialUrlParams = useRef(false);
     const { handleSubmit, register, setValue, watch, formState } =
         useForm<FilterFormValues>({
             resolver: zodResolver(FilterFormSchema),
@@ -169,7 +172,7 @@ const ExploreScreenFilters = ({
 
     useEffect(() => {
         const query = router.query;
-        if (router.isReady && !hasSetInitialUrlParams.current) {
+        if (router.isReady && !hasLoadedQueryParams) {
             const dto = exploreScreenUrlQueryToDto(query);
             if (dto.criteria) {
                 for (const [k, v] of Object.entries(dto.criteria)) {
@@ -178,9 +181,16 @@ const ExploreScreenFilters = ({
             }
             setValue("period", dto.period);
             setTrendingGamesDto((prevState) => ({ ...prevState, ...dto }));
-            hasSetInitialUrlParams.current = true;
+            setHasLoadedQueryParams(true);
         }
-    }, [router.isReady, router.query, setTrendingGamesDto, setValue]);
+    }, [
+        hasLoadedQueryParams,
+        router.isReady,
+        router.query,
+        setHasLoadedQueryParams,
+        setTrendingGamesDto,
+        setValue,
+    ]);
 
     return (
         <Group justify={"space-between"} align={"center"} w={"100%"}>

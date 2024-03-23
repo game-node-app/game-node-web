@@ -18,6 +18,7 @@ import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView
 import { useUserView } from "@/components/statistics/hooks/useUserView";
 import sourceType = FindOneStatisticsDto.sourceType;
 import Head from "next/head";
+import { useGame } from "@/components/game/hooks/useGame";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const queryId = context.query.id;
@@ -79,12 +80,17 @@ const GameInfoPage = () => {
         }
     }, [id, router]);
 
-    if (!id) return null;
-
     const idAsNumber = parseInt(id as string, 10);
+
+    const gameQuery = useGame(idAsNumber, DEFAULT_GAME_INFO_VIEW_DTO);
 
     return (
         <Container fluid pos={"relative"} className="mb-12" mih={"100vh"} p={0}>
+            {gameQuery.data != undefined && (
+                <Head key={"game-title"}>
+                    <title>{`${gameQuery.data.name} - GameNode`}</title>
+                </Head>
+            )}
             <Container fluid mt={"30px"} p={0}>
                 <GameInfoView id={idAsNumber} />
             </Container>
