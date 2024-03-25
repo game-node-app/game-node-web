@@ -64,14 +64,6 @@ const GameInfoImageCarousel = ({
         return null;
     }
 
-    if (combinedImages == undefined || combinedImages.length === 0) {
-        return (
-            <Flex>
-                <Text>No images found.</Text>
-            </Flex>
-        );
-    }
-
     const buildSlides = () => {
         return combinedImages.map((url, index) => {
             const urlToUse = getSizedImageUrl(url, imageSize);

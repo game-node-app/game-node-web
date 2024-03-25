@@ -76,8 +76,7 @@ const GameInfoPlatforms = ({
         });
     }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
 
-    const isEmpty =
-        !iconsQuery.isLoading && (icons == undefined || icons.length === 0);
+    const isEmpty = icons == undefined || icons.length === 0;
     const platformInfo = getGamePlatformInfo(game);
     const platformsNames = platformInfo.platformsAbbreviations?.join(", ");
     return (
@@ -89,7 +88,7 @@ const GameInfoPlatforms = ({
                     wrap={"wrap"}
                     {...others}
                 >
-                    {isEmpty && "Unknown"}
+                    {!iconsQuery.isLoading && isEmpty && "Unknown"}
                     {icons}
                 </Group>
             </Popover.Target>

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { CollectionEntry } from "@/wrapper/server";
 import { Container, Stack } from "@mantine/core";
 import GameView from "@/components/general/view/game/GameView";
-import GameSearchResultErrorMessage from "@/components/game/search/view/result/GameSearchResultErrorMessage";
+import GameSearchResultErrorMessage from "@/components/game/search/GameSearchResultErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { Box, Space } from "@mantine/core";
 import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";

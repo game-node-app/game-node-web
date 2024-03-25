@@ -174,13 +174,15 @@ const Index = () => {
     if (isError) {
         return (
             <CenteredErrorMessage
-                message={"Error while trying to fetch games"}
+                message={
+                    "Error while trying to fetch games. Please reload this page."
+                }
             />
         );
     }
 
     return (
-        <Stack className={"w-full"} align={"center"}>
+        <Stack className={"w-full mb-8"} align={"center"}>
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
                     <ExploreScreenFilters

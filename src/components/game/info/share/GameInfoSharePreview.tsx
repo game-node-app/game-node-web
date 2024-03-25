@@ -67,6 +67,7 @@ const GameInfoSharePreview = ({
                             readOnly
                             value={rating}
                             color={"#F15025"}
+                            fractions={2}
                             size={"lg"}
                         />
                     )}

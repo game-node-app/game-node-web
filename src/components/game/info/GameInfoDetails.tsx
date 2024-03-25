@@ -7,6 +7,7 @@ import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 import GameInfoDetailsDeveloperInfo from "@/components/game/info/GameInfoDetailsDeveloperInfo";
 import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
 import GameInfoScore from "@/components/game/info/GameInfoScore";
+import GameInfoPlaytime from "@/components/game/info/playtime/GameInfoPlaytime";
 
 interface IGameInfoDetailsProps {
     game: Game | undefined;
@@ -36,6 +37,7 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     />
                 </DetailsBox>
                 <GameInfoScore gameId={game.id} />
+                <GameInfoPlaytime gameId={game.id} />
             </SimpleGrid>
         </Stack>
     );
