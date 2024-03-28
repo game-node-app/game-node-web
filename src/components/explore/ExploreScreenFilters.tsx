@@ -24,8 +24,13 @@ import { IconAdjustments } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import period = FindStatisticsTrendingReviewsDto.period;
 import { ParsedUrlQuery } from "querystring";
-import { DEFAULT_EXPLORE_TRENDING_GAMES_DTO } from "@/pages/explore";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { GameResourceFilter } from "@/components/game/util/types";
+import {
+    DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+    exploreScreenDtoToSearchParams,
+    exploreScreenUrlQueryToDto,
+} from "@/components/explore/utils";
 
 export const DEFAULT_EXPLORE_SCREEN_PERIOD = period.MONTH.valueOf();
 
@@ -66,59 +71,24 @@ type FilterFormValues = z.infer<typeof FilterFormSchema>;
 /**
  * PS: DO NOT use this as 'data' for the MultiSelect component. This is only for reference when building the JSX below.
  */
-const resources: ComboboxItem[] = [
+const resources: GameResourceFilter[] = [
     {
         label: "Themes",
-        value: "themes",
+        resource: "themes",
     },
     {
         label: "Genres",
-        value: "genres",
+        resource: "genres",
     },
     {
         label: "Platforms",
-        value: "platforms",
+        resource: "platforms",
     },
     {
         label: "Modes",
-        value: "gameModes",
+        resource: "gameModes",
     },
 ];
-
-export const exploreScreenUrlQueryToDto = (query: ParsedUrlQuery) => {
-    const dto: FindStatisticsTrendingGamesDto = structuredClone(
-        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-    );
-    for (const [k, v] of Object.entries(query)) {
-        if (k !== "period" && typeof v === "string" && v.length > 0) {
-            if (v.includes(",")) {
-                //@ts-ignore
-                dto.criteria[k] = v.split(",");
-            } else {
-                //@ts-ignore
-                dto.criteria[k] = [v];
-            }
-        } else if (typeof v === "string" && v.length > 0) {
-            // @ts-ignore
-            dto[k] = v;
-        }
-    }
-    return dto;
-};
-
-export const exploreScreenDtoToSearchParams = (
-    dto: FindStatisticsTrendingGamesDto,
-) => {
-    const params = new URLSearchParams();
-    const { period, criteria } = dto;
-    params.set("period", period);
-    if (criteria) {
-        for (const [k, v] of Object.entries(criteria)) {
-            params.set(k, `${v}`);
-        }
-    }
-    return params;
-};
 
 interface Props {
     setTrendingGamesDto: Dispatch<
@@ -136,7 +106,6 @@ const ExploreScreenFilters = ({
     invalidateQuery,
 }: Props) => {
     const router = useRouter();
-    const queryClient = useQueryClient();
     const [drawerOpened, drawerUtils] = useDisclosure();
 
     const { handleSubmit, register, setValue, watch, formState } =
@@ -205,7 +174,7 @@ const ExploreScreenFilters = ({
                 >
                     <SimpleGrid cols={2}>
                         {resources.map((resourceReference) => {
-                            const valueName = resourceReference.value as any;
+                            const valueName = resourceReference.resource as any;
                             return (
                                 <ExploreScreenResourceSelector
                                     label={resourceReference.label}

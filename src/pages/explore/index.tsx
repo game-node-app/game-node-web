@@ -1,50 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-    ActionIcon,
-    Affix,
-    Group,
-    Skeleton,
-    Stack,
-    Transition,
-} from "@mantine/core";
+import { ActionIcon, Affix, Skeleton, Stack, Transition } from "@mantine/core";
 import { NextPageContext } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import {
-    FindStatisticsTrendingGamesDto,
     FindStatisticsTrendingReviewsDto,
     GameRepositoryFindAllDto,
     GameRepositoryService,
     GameStatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
-import ExploreScreenFilters, {
-    DEFAULT_EXPLORE_SCREEN_PERIOD,
-    exploreScreenUrlQueryToDto,
-} from "@/components/explore/ExploreScreenFilters";
-import period = FindStatisticsTrendingReviewsDto.period;
+import ExploreScreenFilters from "@/components/explore/ExploreScreenFilters";
 import { useIntersection, useWindowScroll } from "@mantine/hooks";
 import { useInfiniteTrendingGames } from "@/components/statistics/hooks/useInfiniteTrendingGames";
 import { useGames } from "@/components/game/hooks/useGames";
-import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import GameView from "@/components/general/view/game/GameView";
 import { IconArrowUp } from "@tabler/icons-react";
-
-export const DEFAULT_EXPLORE_RESULT_LIMIT = 20;
-
-export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
-    {
-        limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-        criteria: {},
-        period: DEFAULT_EXPLORE_SCREEN_PERIOD as period,
-    };
+import {
+    DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+    exploreScreenUrlQueryToDto,
+} from "@/components/explore/utils";
+import { jsonDeepEquals } from "@/util/jsonDeepEquals";
+import Head from "next/head";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const query = context.query;
     const queryDto = exploreScreenUrlQueryToDto(query);
-    const isDefaultDto =
-        JSON.stringify(DEFAULT_EXPLORE_TRENDING_GAMES_DTO) ===
-        JSON.stringify(queryDto);
+    const isDefaultDto = jsonDeepEquals(
+        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+        queryDto,
+    );
     const queryClient = new QueryClient();
     let gameIds: number[] | undefined = undefined;
     /**
@@ -186,8 +172,12 @@ const Index = () => {
 
     return (
         <Stack className={"w-full mb-8"} align={"center"}>
+            <Head>
+                <title>Explore - GameNode</title>
+            </Head>
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
+                    {isLoading && <CenteredLoading />}
                     <ExploreScreenFilters
                         hasLoadedQueryParams={hasLoadedQueryParams}
                         setHasLoadedQueryParams={setHasLoadedQueryParams}
