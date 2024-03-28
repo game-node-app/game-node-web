@@ -31,6 +31,7 @@ const ExploreScreenResourceSelector = ({ resourceName, ...others }: Props) => {
     return (
         <MultiSelect
             pos={"relative"}
+            placeholder={resourceQuery.isLoading ? "Loading..." : undefined}
             data={data}
             searchable
             clearable

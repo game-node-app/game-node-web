@@ -18,7 +18,7 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
         },
         enabled: !!gameId,
         staleTime: Infinity,
-        retry: 1,
+        retry: false,
     });
     const playtime = playtimeQuery.data;
     const times = [playtime?.timeMain, playtime?.timePlus, playtime?.time100];
@@ -30,12 +30,10 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
             title={"Playtime"}
             withBorder
             withDimmedTitle
-            enabled={
-                playtimeQuery.isLoading || (playtimeQuery.isSuccess && hasTimes)
-            }
             stackProps={{
                 gap: 1,
             }}
+            enabled={playtimeQuery.isLoading || playtimeQuery.isSuccess}
         >
             <Space h={"0.8rem"} />
             {playtimeQuery.isSuccess && hasTimes && (

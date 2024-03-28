@@ -91,19 +91,13 @@ const resources: GameResourceFilter[] = [
 ];
 
 interface Props {
-    setTrendingGamesDto: Dispatch<
-        SetStateAction<FindStatisticsTrendingGamesDto>
-    >;
+    onFilterChange: Dispatch<SetStateAction<FindStatisticsTrendingGamesDto>>;
     hasLoadedQueryParams: boolean;
-    setHasLoadedQueryParams: Dispatch<SetStateAction<boolean>>;
-    invalidateQuery: () => void;
 }
 
 const ExploreScreenFilters = ({
-    setTrendingGamesDto,
+    onFilterChange,
     hasLoadedQueryParams,
-    setHasLoadedQueryParams,
-    invalidateQuery,
 }: Props) => {
     const router = useRouter();
     const [drawerOpened, drawerUtils] = useDisclosure();
@@ -119,7 +113,7 @@ const ExploreScreenFilters = ({
 
     const onSubmit = async (data: FilterFormValues) => {
         const { period, ...criteria } = data;
-        setTrendingGamesDto((previousState) => {
+        onFilterChange((previousState) => {
             const updatedState = {
                 ...previousState,
                 period: period as period,
@@ -131,11 +125,10 @@ const ExploreScreenFilters = ({
                     query: searchParams.toString(),
                 },
                 undefined,
-                { shallow: true },
+                { shallow: false },
             );
             return updatedState;
         });
-        invalidateQuery();
         drawerUtils.close();
     };
 
@@ -149,15 +142,13 @@ const ExploreScreenFilters = ({
                 }
             }
             setValue("period", dto.period);
-            setTrendingGamesDto((prevState) => ({ ...prevState, ...dto }));
-            setHasLoadedQueryParams(true);
+            onFilterChange((prevState) => ({ ...prevState, ...dto }));
         }
     }, [
         hasLoadedQueryParams,
         router.isReady,
         router.query,
-        setHasLoadedQueryParams,
-        setTrendingGamesDto,
+        onFilterChange,
         setValue,
     ]);
 

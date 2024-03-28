@@ -91,7 +91,7 @@ const GameInfoOwnedPlatforms = ({
                     {iconsQuery.isLoading && (
                         <Skeleton className={"w-10/12 lg:w-4/12 h-10"} />
                     )}
-                    {isEmpty && "Unknown"}
+                    {isEmpty && "Not available"}
                     {icons}
                 </Group>
             </Popover.Target>

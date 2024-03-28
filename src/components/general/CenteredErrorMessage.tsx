@@ -1,12 +1,12 @@
-import { Center, Title } from "@mantine/core";
+import { Center, CenterProps, Title } from "@mantine/core";
 
-interface Props {
+interface Props extends CenterProps {
     message: string;
 }
 
-const CenteredErrorMessage = ({ message }: Props) => {
+const CenteredErrorMessage = ({ message, ...others }: Props) => {
     return (
-        <Center className={"w-full h-full"}>
+        <Center className={"w-full h-full"} {...others}>
             <Title c={"red"} size={"h4"} className={"text-center"}>
                 {message}
             </Title>

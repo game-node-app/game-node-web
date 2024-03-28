@@ -87,14 +87,13 @@ const GameInfoDetailsTags = ({ gameId }: IProps) => {
 
     const badges: ReactNode[] = useMemo(() => {
         const tags = getGameTags(game);
-        console.log(tags);
 
         return tags
             .filter((tag) => tag != undefined)
             .map((tag) => {
                 return (
                     <Link
-                        key={tag.category}
+                        key={`tag-${tag.category}-${tag.id}`}
                         href={`/explore?${tag.category}=${tag.id}`}
                     >
                         <Badge>{tag.name}</Badge>

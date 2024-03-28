@@ -18,24 +18,34 @@ const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
     });
     const involvedCompanies = game.data?.involvedCompanies;
     const developers = useMemo(() => {
-        if (involvedCompanies && involvedCompanies.length > 0) {
+        const hasDevelopers =
+            involvedCompanies != undefined &&
+            involvedCompanies.some((company) => company.developer);
+        if (hasDevelopers) {
             return involvedCompanies
                 .filter((ic) => ic.developer)
                 .map((ic) => ic.company);
         }
-        return undefined;
+        return null;
     }, [involvedCompanies]);
     const publishers = useMemo(() => {
-        if (involvedCompanies && involvedCompanies.length > 0) {
+        const hasPublishers =
+            involvedCompanies != undefined &&
+            involvedCompanies.some((company) => company.publisher);
+
+        if (hasPublishers) {
             return involvedCompanies
                 .filter((ic) => ic.publisher)
                 .map((ic) => ic.company);
         }
+        return null;
     }, [involvedCompanies]);
     const developersNames =
-        developers?.map((company) => company.name)?.join(", ") ?? "Unknown";
+        developers?.map((company) => company.name)?.join(", ") ??
+        "Not available";
     const publishersNames =
-        publishers?.map((company) => company.name).join(", ") ?? "Unknown";
+        publishers?.map((company) => company.name).join(", ") ??
+        "Not available";
 
     return (
         <>

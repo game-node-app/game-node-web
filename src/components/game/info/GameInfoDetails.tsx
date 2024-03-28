@@ -23,12 +23,12 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
             <SimpleGrid cols={{ base: 1, lg: 2 }}>
                 <DetailsBox withBorder withDimmedTitle title={"Launch date"}>
                     {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
-                        "Unknown"}
+                        "Not available"}
                 </DetailsBox>
                 <GameInfoDetailsDeveloperInfo gameId={game.id} />
                 <GameInfoDetailsTags gameId={game.id} />
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
-                    {game.summary ?? "Unknown"}
+                    {game.summary ?? "Not available"}
                 </DetailsBox>
                 <DetailsBox title={"Where to play"} withBorder withDimmedTitle>
                     <GameInfoPlatforms

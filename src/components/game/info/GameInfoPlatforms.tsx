@@ -88,7 +88,7 @@ const GameInfoPlatforms = ({
                     wrap={"wrap"}
                     {...others}
                 >
-                    {!iconsQuery.isLoading && isEmpty && "Unknown"}
+                    {!iconsQuery.isLoading && isEmpty && "Not available"}
                     {icons}
                 </Group>
             </Popover.Target>

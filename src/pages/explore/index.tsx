@@ -27,56 +27,47 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 export const getServerSideProps = async (context: NextPageContext) => {
     const query = context.query;
     const queryDto = exploreScreenUrlQueryToDto(query);
-    const isDefaultDto = jsonDeepEquals(
-        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-        queryDto,
-    );
     const queryClient = new QueryClient();
     let gameIds: number[] | undefined = undefined;
-    /**
-     * Only attempts to pre-fetch when the default page is loaded; Prevents hydration errors.
-     */
-    if (isDefaultDto) {
-        await queryClient.prefetchInfiniteQuery({
-            queryKey: [
-                "statistics",
-                "trending",
-                "game",
-                "infinite",
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
-            ],
-            queryFn: async () => {
-                const response =
-                    await StatisticsService.statisticsControllerFindTrendingGames(
-                        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-                    );
-                if (response && response.data) {
-                    gameIds = response.data.map((s) => s.gameId!);
-                }
-                return response;
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: [
+            "statistics",
+            "trending",
+            "game",
+            "infinite",
+            queryDto.limit,
+            queryDto.period,
+            queryDto.criteria,
+        ],
+        queryFn: async () => {
+            const response =
+                await StatisticsService.statisticsControllerFindTrendingGames(
+                    queryDto,
+                );
+            if (response && response.data) {
+                gameIds = response.data.map((s) => s.gameId!);
+            }
+            return response;
+        },
+        initialPageParam: 0,
+    });
+
+    if (gameIds) {
+        const useGamesDto: GameRepositoryFindAllDto = {
+            gameIds: gameIds,
+            relations: {
+                cover: true,
             },
-            initialPageParam: 0,
+        };
+
+        await queryClient.prefetchQuery({
+            queryKey: ["game", "all", useGamesDto],
+            queryFn: () => {
+                return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                    useGamesDto,
+                );
+            },
         });
-
-        if (gameIds) {
-            const useGamesDto: GameRepositoryFindAllDto = {
-                gameIds: gameIds,
-                relations: {
-                    cover: true,
-                },
-            };
-
-            await queryClient.prefetchQuery({
-                queryKey: ["game", "all", useGamesDto],
-                queryFn: () => {
-                    return GameRepositoryService.gameRepositoryControllerFindAllByIds(
-                        useGamesDto,
-                    );
-                },
-            });
-        }
     }
 
     return {
@@ -148,21 +139,31 @@ const Index = () => {
             trendingGamesQuery.data?.pages[
                 trendingGamesQuery.data?.pages.length - 1
             ];
-        const canFetchNextPage =
-            !isError &&
-            !isFetching &&
-            !isLoading &&
+
+        const hasNextPage =
             lastElement != undefined &&
             lastElement.data.length > 0 &&
             lastElement.pagination.hasNextPage;
-        if (canFetchNextPage && entry?.isIntersecting) {
+
+        const canFetchNextPage = !isFetching && !isLoading && hasNextPage;
+
+        // Minimum amount of time (ms) since document creation for
+        // intersection to be considered valid
+        const minimumIntersectionTime = 3000;
+
+        if (
+            canFetchNextPage &&
+            entry?.isIntersecting &&
+            entry.time > minimumIntersectionTime
+        ) {
             trendingGamesQuery.fetchNextPage({ cancelRefetch: false });
         }
-    }, [entry, isError, isFetching, isLoading, trendingGamesQuery]);
+    }, [entry, isFetching, isLoading, trendingGamesQuery]);
 
     if (isError) {
         return (
             <CenteredErrorMessage
+                mt={"2rem"}
                 message={
                     "Error while trying to fetch games. Please reload this page."
                 }
@@ -177,15 +178,16 @@ const Index = () => {
             </Head>
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
-                    {isLoading && <CenteredLoading />}
                     <ExploreScreenFilters
                         hasLoadedQueryParams={hasLoadedQueryParams}
-                        setHasLoadedQueryParams={setHasLoadedQueryParams}
-                        setTrendingGamesDto={setTrendingGamesDto}
-                        invalidateQuery={trendingGamesQuery.invalidate}
+                        onFilterChange={(stateAction) => {
+                            setTrendingGamesDto(stateAction);
+                            setHasLoadedQueryParams(true);
+                            trendingGamesQuery.invalidate();
+                        }}
                     />
                     <GameView.Content items={games!}>
-                        {isFetching && buildLoadingSkeletons()}
+                        {(isFetching || isLoading) && buildLoadingSkeletons()}
                     </GameView.Content>
                 </GameView>
 
