@@ -14,6 +14,7 @@ import {
     FindStatisticsTrendingReviewsDto,
     GameRepositoryFindAllDto,
     GameRepositoryService,
+    GameStatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
 import ExploreScreenFilters, {
@@ -119,7 +120,9 @@ const Index = () => {
         if (trendingGamesQuery.isError || trendingGamesQuery.data == undefined)
             return undefined;
         return trendingGamesQuery.data?.pages.flatMap(
-            (statisticsPaginatedResponse) => {
+            (
+                statisticsPaginatedResponse: GameStatisticsPaginatedResponseDto,
+            ) => {
                 return statisticsPaginatedResponse.data.map(
                     (statistics) => statistics.gameId!,
                 );

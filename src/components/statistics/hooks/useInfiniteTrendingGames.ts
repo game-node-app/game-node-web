@@ -1,6 +1,6 @@
 import {
     FindStatisticsTrendingGamesDto,
-    StatisticsPaginatedResponseDto,
+    GameStatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
 import {
@@ -18,7 +18,7 @@ export interface InfiniteQueryTrendingGamesDto
 export function useInfiniteTrendingGames(
     dto: InfiniteQueryTrendingGamesDto,
     enabled = true,
-): ExtendedUseInfiniteQueryResult<StatisticsPaginatedResponseDto> {
+): ExtendedUseInfiniteQueryResult<GameStatisticsPaginatedResponseDto> {
     const limitToUse = dto.limit || 20;
     const queryClient = useQueryClient();
     const queryKey = [

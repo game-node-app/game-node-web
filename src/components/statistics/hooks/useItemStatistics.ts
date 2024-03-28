@@ -1,18 +1,22 @@
 import {
     FindOneStatisticsDto,
-    Statistics,
+    GameStatistics,
+    ReviewStatistics,
     StatisticsService,
     StatisticsStatus,
 } from "@/wrapper/server";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
-export type StatisticsWithStatus = Statistics & StatisticsStatus;
+export type StatisticsWithStatus<T = any> = (T extends any
+    ? GameStatistics | ReviewStatistics
+    : T) &
+    StatisticsStatus;
 
-export function useItemStatistics(
+export function useItemStatistics<T = any>(
     sourceId: string | number,
     sourceType: FindOneStatisticsDto.sourceType,
-): ExtendedUseQueryResult<StatisticsWithStatus | null> {
+): ExtendedUseQueryResult<StatisticsWithStatus<T> | null> {
     const queryClient = useQueryClient();
     const queryKey = ["statistics", sourceType, sourceId];
     const invalidate = () => {
@@ -25,7 +29,7 @@ export function useItemStatistics(
     return {
         ...useQuery({
             queryKey,
-            queryFn: async (): Promise<StatisticsWithStatus | null> => {
+            queryFn: async (): Promise<StatisticsWithStatus<T> | null> => {
                 const statistics =
                     await StatisticsService.statisticsControllerFindOneBySourceIdAndType(
                         {
@@ -42,7 +46,7 @@ export function useItemStatistics(
                     return {
                         ...statistics,
                         ...statisticsStatus,
-                    } as any;
+                    } as StatisticsWithStatus<T>;
                 }
 
                 return null;

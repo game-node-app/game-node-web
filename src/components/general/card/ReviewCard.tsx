@@ -35,7 +35,11 @@ const ReviewCard = ({ reviewId }: IProps) => {
 
     if (reviewQuery.isLoading || gameQuery.isLoading) {
         return <Skeleton h={"100%"} />;
-    } else if (reviewQuery.data == undefined || gameQuery.data == undefined) {
+    } else if (
+        reviewQuery.data == undefined ||
+        reviewQuery.data.content == undefined ||
+        gameQuery.data == undefined
+    ) {
         return null;
     }
 

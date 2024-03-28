@@ -1,6 +1,5 @@
 import {
     FindStatisticsTrendingGamesDto,
-    Statistics,
     StatisticsService,
 } from "@/wrapper/server";
 import { useQuery } from "@tanstack/react-query";
