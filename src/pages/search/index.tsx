@@ -4,7 +4,7 @@ import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import GameSearchResultView from "@/components/game/search/view/result/GameSearchResultView";
+import GameSearchResultView from "@/components/game/search/GameSearchResultView";
 import { GameSearchRequestDto } from "@/components/game/search/utils/types";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import TrendingGamesList from "@/components/game/trending/TrendingGamesList";
@@ -18,8 +18,6 @@ const SearchFormSchema = z.object({
 });
 
 type TSearchFormValues = z.infer<typeof SearchFormSchema>;
-
-const ITEMS_PER_PAGE = 20;
 
 const DEFAULT_SEARCH_PARAMETERS: GameSearchRequestDto = {
     query: undefined,
@@ -51,7 +49,6 @@ const queryDtoToSearchParams = (dto: GameSearchRequestDto) => {
 const Index = () => {
     const {
         handleSubmit,
-        register,
         setValue,
         watch,
         formState: { errors },
@@ -83,7 +80,10 @@ const Index = () => {
         router.replace({
             query: searchParams.toString(),
         });
-        setSearchParameters(data);
+        setSearchParameters((previous) => ({
+            ...previous,
+            ...data,
+        }));
     };
 
     /**

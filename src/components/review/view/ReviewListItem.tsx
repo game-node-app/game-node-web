@@ -77,6 +77,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     {onMobile && (
                         <Rating
                             readOnly
+                            fractions={2}
                             value={review.rating}
                             className={"mt-0 lg:mt-4"}
                         />
