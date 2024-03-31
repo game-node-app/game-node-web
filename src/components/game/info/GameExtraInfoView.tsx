@@ -33,17 +33,6 @@ const DEFAULT_DLC_OF_GAMES_DTO = {
     },
 };
 
-export const DEFAULT_GAME_EXTRA_INFO_DTO = {
-    relations: {
-        dlcs: {
-            cover: true,
-        },
-        similarGames: {
-            cover: true,
-        },
-    },
-};
-
 const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
     const similarGamesQuery = useGame(id, DEFAULT_SIMILAR_GAMES_DTO);
     const dlcsGamesQuery = useGame(id, DEFAULT_DLCS_GAMES_DTO);

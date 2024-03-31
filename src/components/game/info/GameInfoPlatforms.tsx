@@ -34,20 +34,13 @@ const GameInfoPlatforms = ({
             platforms: true,
         },
     });
-    const game = gameQuery.data;
-    const platforms = game?.platforms;
     const iconsQuery = useQuery({
-        queryKey: ["game", "platform", "icon", platforms],
+        queryKey: ["game", "platform", "icon", gameId],
         queryFn: async () => {
-            if (!platforms) return [];
-            const abbreviations = platforms
-                .map((platform) => platform?.abbreviation)
-                .filter((abbreviation) => abbreviation != undefined);
+            if (!gameId) return null;
             try {
                 return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(
-                    {
-                        platformAbbreviations: abbreviations,
-                    },
+                    gameId,
                 );
             } catch (e) {
                 console.error(e);
@@ -77,7 +70,7 @@ const GameInfoPlatforms = ({
     }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
 
     const isEmpty = icons == undefined || icons.length === 0;
-    const platformInfo = getGamePlatformInfo(game);
+    const platformInfo = getGamePlatformInfo(gameQuery.data);
     const platformsNames = platformInfo.platformsAbbreviations?.join(", ");
     return (
         <Popover shadow={"md"}>
