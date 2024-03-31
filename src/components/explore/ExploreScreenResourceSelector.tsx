@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import {
     ComboboxItem,
+    LoadingOverlay,
     MultiSelect,
     MultiSelectProps,
     SelectProps,
@@ -27,7 +28,17 @@ const ExploreScreenResourceSelector = ({ resourceName, ...others }: Props) => {
             };
         });
     }, [resourceQuery.data]);
-    return <MultiSelect data={data} {...others} />;
+    return (
+        <MultiSelect
+            pos={"relative"}
+            placeholder={resourceQuery.isLoading ? "Loading..." : undefined}
+            data={data}
+            searchable
+            clearable
+            {...others}
+            maxValues={5}
+        ></MultiSelect>
+    );
 };
 
 export default ExploreScreenResourceSelector;

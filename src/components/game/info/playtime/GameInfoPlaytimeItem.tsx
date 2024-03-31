@@ -1,5 +1,5 @@
 import React from "react";
-import { Group, Stack, Text } from "@mantine/core";
+import { Group, Skeleton, Stack, Text } from "@mantine/core";
 
 interface Props {
     name: string;
@@ -9,9 +9,7 @@ interface Props {
 }
 
 const GameInfoPlaytimeItem = ({ name, value, isLoading }: Props) => {
-    if (!value) {
-        return null;
-    }
+    if (!value) return null;
     const valueHours = Math.ceil(value / 3600);
     return (
         <Group className={"flex-nowrap gap-0 w-full"}>

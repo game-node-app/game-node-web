@@ -9,43 +9,71 @@ interface IGameExtraInfoViewProps {
     id: number;
 }
 
-export const DEFAULT_GAME_EXTRA_INFO_DTO = {
+const DEFAULT_SIMILAR_GAMES_DTO = {
     relations: {
-        dlcs: {
-            cover: true,
-        },
         similarGames: {
             cover: true,
         },
     },
 };
 
+const DEFAULT_DLCS_GAMES_DTO = {
+    relations: {
+        dlcs: {
+            cover: true,
+        },
+    },
+};
+
+const DEFAULT_DLC_OF_GAMES_DTO = {
+    relations: {
+        dlcOf: {
+            cover: true,
+        },
+    },
+};
+
 const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
-    const gameQuery = useGame(id, DEFAULT_GAME_EXTRA_INFO_DTO);
+    const similarGamesQuery = useGame(id, DEFAULT_SIMILAR_GAMES_DTO);
+    const dlcsGamesQuery = useGame(id, DEFAULT_DLCS_GAMES_DTO);
+    const dlcsOfGamesQuery = useGame(id, DEFAULT_DLC_OF_GAMES_DTO);
+    const hasDlcsOf =
+        dlcsOfGamesQuery.data != undefined &&
+        dlcsOfGamesQuery.data.dlcOf != undefined &&
+        dlcsOfGamesQuery.data.dlcOf.length > 0;
     const hasDlcs =
-        gameQuery.data != undefined &&
-        gameQuery.data.dlcs != undefined &&
-        gameQuery.data.dlcs.length > 0;
+        dlcsGamesQuery.data != undefined &&
+        dlcsGamesQuery.data.dlcs != undefined &&
+        dlcsGamesQuery.data.dlcs.length > 0;
+
     const hasSimilarGames =
-        gameQuery.data != undefined &&
-        gameQuery.data.similarGames != undefined &&
-        gameQuery.data.similarGames.length > 0;
+        similarGamesQuery.data != undefined &&
+        similarGamesQuery.data.similarGames != undefined &&
+        similarGamesQuery.data.similarGames.length > 0;
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
+                <DetailsBox enabled={hasDlcsOf} title={"DLC of"}>
+                    <GameInfoCarousel
+                        games={dlcsOfGamesQuery.data?.dlcOf}
+                        isLoading={dlcsOfGamesQuery.isLoading}
+                        isError={dlcsOfGamesQuery.isError}
+                    />
+                </DetailsBox>
+                <Break />
                 <DetailsBox enabled={hasDlcs} title={"DLCs"}>
                     <GameInfoCarousel
-                        games={gameQuery.data?.dlcs}
-                        isLoading={gameQuery.isLoading}
-                        isError={gameQuery.isError}
+                        games={dlcsGamesQuery.data?.dlcs}
+                        isLoading={dlcsGamesQuery.isLoading}
+                        isError={dlcsGamesQuery.isError}
                     />
                 </DetailsBox>
                 <Break />
                 <DetailsBox enabled={hasSimilarGames} title={"Similar games"}>
                     <GameInfoCarousel
-                        games={gameQuery.data?.similarGames}
-                        isLoading={gameQuery.isLoading}
-                        isError={gameQuery.isError}
+                        games={similarGamesQuery.data?.similarGames}
+                        isLoading={similarGamesQuery.isLoading}
+                        isError={similarGamesQuery.isError}
                     />
                 </DetailsBox>
             </Flex>

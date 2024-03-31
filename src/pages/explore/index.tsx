@@ -1,96 +1,73 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-    ActionIcon,
-    Affix,
-    Group,
-    Skeleton,
-    Stack,
-    Transition,
-} from "@mantine/core";
+import { ActionIcon, Affix, Skeleton, Stack, Transition } from "@mantine/core";
 import { NextPageContext } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import {
-    FindStatisticsTrendingGamesDto,
     FindStatisticsTrendingReviewsDto,
     GameRepositoryFindAllDto,
     GameRepositoryService,
     GameStatisticsPaginatedResponseDto,
     StatisticsService,
 } from "@/wrapper/server";
-import ExploreScreenFilters, {
-    DEFAULT_EXPLORE_SCREEN_PERIOD,
-    exploreScreenUrlQueryToDto,
-} from "@/components/explore/ExploreScreenFilters";
-import period = FindStatisticsTrendingReviewsDto.period;
+import ExploreScreenFilters from "@/components/explore/ExploreScreenFilters";
 import { useIntersection, useWindowScroll } from "@mantine/hooks";
 import { useInfiniteTrendingGames } from "@/components/statistics/hooks/useInfiniteTrendingGames";
 import { useGames } from "@/components/game/hooks/useGames";
-import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import GameView from "@/components/general/view/game/GameView";
 import { IconArrowUp } from "@tabler/icons-react";
-
-export const DEFAULT_EXPLORE_RESULT_LIMIT = 20;
-
-export const DEFAULT_EXPLORE_TRENDING_GAMES_DTO: FindStatisticsTrendingGamesDto =
-    {
-        limit: DEFAULT_EXPLORE_RESULT_LIMIT,
-        criteria: {},
-        period: DEFAULT_EXPLORE_SCREEN_PERIOD as period,
-    };
+import {
+    DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
+    exploreScreenUrlQueryToDto,
+} from "@/components/explore/utils";
+import { jsonDeepEquals } from "@/util/jsonDeepEquals";
+import Head from "next/head";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 export const getServerSideProps = async (context: NextPageContext) => {
     const query = context.query;
     const queryDto = exploreScreenUrlQueryToDto(query);
-    const isDefaultDto =
-        JSON.stringify(DEFAULT_EXPLORE_TRENDING_GAMES_DTO) ===
-        JSON.stringify(queryDto);
     const queryClient = new QueryClient();
     let gameIds: number[] | undefined = undefined;
-    /**
-     * Only attempts to pre-fetch when the default page is loaded; Prevents hydration errors.
-     */
-    if (isDefaultDto) {
-        await queryClient.prefetchInfiniteQuery({
-            queryKey: [
-                "statistics",
-                "trending",
-                "game",
-                "infinite",
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.limit,
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.period,
-                DEFAULT_EXPLORE_TRENDING_GAMES_DTO.criteria,
-            ],
-            queryFn: async () => {
-                const response =
-                    await StatisticsService.statisticsControllerFindTrendingGames(
-                        DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
-                    );
-                if (response && response.data) {
-                    gameIds = response.data.map((s) => s.gameId!);
-                }
-                return response;
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: [
+            "statistics",
+            "trending",
+            "game",
+            "infinite",
+            queryDto.limit,
+            queryDto.period,
+            queryDto.criteria,
+        ],
+        queryFn: async () => {
+            const response =
+                await StatisticsService.statisticsControllerFindTrendingGames(
+                    queryDto,
+                );
+            if (response && response.data) {
+                gameIds = response.data.map((s) => s.gameId!);
+            }
+            return response;
+        },
+        initialPageParam: 0,
+    });
+
+    if (gameIds) {
+        const useGamesDto: GameRepositoryFindAllDto = {
+            gameIds: gameIds,
+            relations: {
+                cover: true,
             },
-            initialPageParam: 0,
+        };
+
+        await queryClient.prefetchQuery({
+            queryKey: ["game", "all", useGamesDto],
+            queryFn: () => {
+                return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                    useGamesDto,
+                );
+            },
         });
-
-        if (gameIds) {
-            const useGamesDto: GameRepositoryFindAllDto = {
-                gameIds: gameIds,
-                relations: {
-                    cover: true,
-                },
-            };
-
-            await queryClient.prefetchQuery({
-                queryKey: ["game", "all", useGamesDto],
-                queryFn: () => {
-                    return GameRepositoryService.gameRepositoryControllerFindAllByIds(
-                        useGamesDto,
-                    );
-                },
-            });
-        }
     }
 
     return {
@@ -162,21 +139,31 @@ const Index = () => {
             trendingGamesQuery.data?.pages[
                 trendingGamesQuery.data?.pages.length - 1
             ];
-        const canFetchNextPage =
-            !isError &&
-            !isFetching &&
-            !isLoading &&
+
+        const hasNextPage =
             lastElement != undefined &&
             lastElement.data.length > 0 &&
             lastElement.pagination.hasNextPage;
-        if (canFetchNextPage && entry?.isIntersecting) {
+
+        const canFetchNextPage = !isFetching && !isLoading && hasNextPage;
+
+        // Minimum amount of time (ms) since document creation for
+        // intersection to be considered valid
+        const minimumIntersectionTime = 3000;
+
+        if (
+            canFetchNextPage &&
+            entry?.isIntersecting &&
+            entry.time > minimumIntersectionTime
+        ) {
             trendingGamesQuery.fetchNextPage({ cancelRefetch: false });
         }
-    }, [entry, isError, isFetching, isLoading, trendingGamesQuery]);
+    }, [entry, isFetching, isLoading, trendingGamesQuery]);
 
     if (isError) {
         return (
             <CenteredErrorMessage
+                mt={"2rem"}
                 message={
                     "Error while trying to fetch games. Please reload this page."
                 }
@@ -186,16 +173,21 @@ const Index = () => {
 
     return (
         <Stack className={"w-full mb-8"} align={"center"}>
+            <Head>
+                <title>Explore - GameNode</title>
+            </Head>
             <Stack className={"w-full lg:w-10/12 "}>
                 <GameView layout={"grid"}>
                     <ExploreScreenFilters
                         hasLoadedQueryParams={hasLoadedQueryParams}
-                        setHasLoadedQueryParams={setHasLoadedQueryParams}
-                        setTrendingGamesDto={setTrendingGamesDto}
-                        invalidateQuery={trendingGamesQuery.invalidate}
+                        onFilterChange={(stateAction) => {
+                            setTrendingGamesDto(stateAction);
+                            setHasLoadedQueryParams(true);
+                            trendingGamesQuery.invalidate();
+                        }}
                     />
                     <GameView.Content items={games!}>
-                        {isFetching && buildLoadingSkeletons()}
+                        {(isFetching || isLoading) && buildLoadingSkeletons()}
                     </GameView.Content>
                 </GameView>
 
