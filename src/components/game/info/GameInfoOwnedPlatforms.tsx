@@ -41,11 +41,7 @@ const GameInfoOwnedPlatforms = ({
                 .map((platform) => platform?.abbreviation)
                 .filter((abbreviation) => abbreviation != undefined);
             try {
-                return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(
-                    {
-                        platformAbbreviations: abbreviations,
-                    },
-                );
+                return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(gameId);
             } catch (e) {
                 console.error(e);
                 return [];
