@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     Group,
     GroupProps,
@@ -13,7 +13,10 @@ import { getServerStoredIcon } from "@/util/getServerStoredImages";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
 import { useGame } from "@/components/game/hooks/useGame";
 import { useQuery } from "@tanstack/react-query";
-import { GameRepositoryService } from "@/wrapper/server";
+import {
+    CollectionsEntriesService,
+    GameRepositoryService,
+} from "@/wrapper/server";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 
 interface IGameInfoOwnedPlatformsProps extends GroupProps {
@@ -33,15 +36,16 @@ const GameInfoOwnedPlatforms = ({
             "game",
             "owned-platforms",
             "icon",
-            collectionEntry.data?.ownedPlatforms,
+            gameId,
+            collectionEntry.data?.id,
         ],
-        queryFn: () => {
-            if (!collectionEntry.data?.ownedPlatforms) return [];
-            const abbreviations = collectionEntry.data?.ownedPlatforms
-                .map((platform) => platform?.abbreviation)
-                .filter((abbreviation) => abbreviation != undefined);
+        queryFn: async () => {
+            if (!collectionEntry.data) return [];
+            if (!gameId) return [];
             try {
-                return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(gameId);
+                return await CollectionsEntriesService.collectionsEntriesControllerGetIconsForOwnedPlatforms(
+                    collectionEntry.data.id,
+                );
             } catch (e) {
                 console.error(e);
                 return [];
@@ -49,12 +53,15 @@ const GameInfoOwnedPlatforms = ({
         },
     });
 
+    const buildIconsSkeletons = useCallback(() => {
+        return new Array(4).fill(0).map((_, i) => {
+            return <Skeleton key={i} className={"h-[40px] w-[56px]"} />;
+        });
+    }, []);
+
     const icons = useMemo(() => {
         const icons = iconsQuery.data;
-        if (iconsQuery.isLoading)
-            return new Array(4).fill(0).map((_, i) => {
-                return <Skeleton key={i} className={"h-[40px] w-[56px]"} />;
-            });
+
         if (!icons) return null;
         return icons.map((icon) => {
             return (
@@ -84,15 +91,12 @@ const GameInfoOwnedPlatforms = ({
                     wrap={"wrap"}
                     {...others}
                 >
-                    {iconsQuery.isLoading && (
-                        <Skeleton className={"w-10/12 lg:w-4/12 h-10"} />
-                    )}
-                    {isEmpty && "Not available"}
-                    {icons}
+                    {!iconsQuery.isLoading && isEmpty && "Not available"}
+                    {iconsQuery.isLoading ? buildIconsSkeletons() : icons}
                 </Group>
             </Popover.Target>
             <Popover.Dropdown>
-                <Text fz={"sm"}>{platformsNames}</Text>
+                <Text fz={"sm"}>{platformsNames ?? "Not available"}</Text>
             </Popover.Dropdown>
         </Popover>
     );
