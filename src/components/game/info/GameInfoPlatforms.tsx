@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     Group,
     GroupProps,
@@ -18,14 +18,12 @@ import { sleep } from "@/util/sleep";
 
 interface IGameInfoPlatformsProps extends GroupProps {
     gameId: number | undefined;
-    ownedOnly?: boolean;
     iconsProps?: ImageProps;
 }
 
 const GameInfoPlatforms = ({
     gameId,
     iconsProps,
-    ownedOnly = false,
     ...others
 }: IGameInfoPlatformsProps) => {
     const onMobile = useOnMobile();
@@ -49,12 +47,14 @@ const GameInfoPlatforms = ({
         },
     });
 
+    const buildIconsSkeletons = useCallback(() => {
+        return new Array(4).fill(0).map((_, i) => {
+            return <Skeleton key={i} className={"h-[40px] w-[56px]"} />;
+        });
+    }, []);
+
     const icons = useMemo(() => {
         const icons = iconsQuery.data;
-        if (iconsQuery.isLoading)
-            return new Array(4).fill(0).map((_, i) => {
-                return <Skeleton key={i} className={"h-[40px] w-[56px]"} />;
-            });
         if (!icons) return null;
         return icons.map((icon) => {
             return (
@@ -67,7 +67,7 @@ const GameInfoPlatforms = ({
                 />
             );
         });
-    }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
+    }, [iconsProps, iconsQuery.data]);
 
     const isEmpty = icons == undefined || icons.length === 0;
     const platformInfo = getGamePlatformInfo(gameQuery.data);
@@ -81,12 +81,12 @@ const GameInfoPlatforms = ({
                     wrap={"wrap"}
                     {...others}
                 >
+                    {iconsQuery.isLoading ? buildIconsSkeletons() : icons}
                     {!iconsQuery.isLoading && isEmpty && "Not available"}
-                    {icons}
                 </Group>
             </Popover.Target>
             <Popover.Dropdown>
-                <Text fz={"sm"}>{platformsNames}</Text>
+                <Text fz={"sm"}>{platformsNames ?? "Not available"}</Text>
             </Popover.Dropdown>
         </Popover>
     );

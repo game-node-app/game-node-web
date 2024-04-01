@@ -8,13 +8,14 @@ import GameInfoDetailsDeveloperInfo from "@/components/game/info/GameInfoDetails
 import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
 import GameInfoScore from "@/components/game/info/GameInfoScore";
 import GameInfoPlaytime from "@/components/game/info/playtime/GameInfoPlaytime";
+import GameInfoExternalStores from "@/components/game/info/GameInfoExternalStores";
 
 interface IGameInfoDetailsProps {
     game: Game | undefined;
 }
 
 const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
-    if (!game || game == undefined) {
+    if (!game) {
         return null;
     }
 
@@ -27,14 +28,19 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                 </DetailsBox>
                 <GameInfoDetailsDeveloperInfo gameId={game.id} />
                 <GameInfoDetailsTags gameId={game.id} />
-                <DetailsBox withBorder withDimmedTitle title={"Summary"}>
-                    {game.summary ?? "Not available"}
-                </DetailsBox>
                 <DetailsBox title={"Where to play"} withBorder withDimmedTitle>
                     <GameInfoPlatforms
                         gameId={game.id}
                         className={"my-4 gap-5"}
                     />
+                </DetailsBox>
+                <DetailsBox title={"Where to buy"} withBorder withDimmedTitle>
+                    <GameInfoExternalStores
+                        gameId={game.id}
+                    ></GameInfoExternalStores>
+                </DetailsBox>
+                <DetailsBox withBorder withDimmedTitle title={"Summary"}>
+                    {game.summary ?? "Not available"}
                 </DetailsBox>
                 <GameInfoScore gameId={game.id} />
                 <GameInfoPlaytime gameId={game.id} />
