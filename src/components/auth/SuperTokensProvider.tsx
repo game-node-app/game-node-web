@@ -1,6 +1,8 @@
 import SuperTokensReact, { SuperTokensWrapper } from "supertokens-auth-react";
 import React from "react";
-import ThirdPartyPasswordlessReact from "supertokens-auth-react/recipe/thirdpartypasswordless";
+import ThirdPartyPasswordlessReact, {
+    GetRedirectionURLContext,
+} from "supertokens-auth-react/recipe/thirdpartypasswordless";
 import SessionReact from "supertokens-auth-react/recipe/session";
 import Router from "next/router";
 
@@ -13,6 +15,23 @@ export const frontendConfig = () => {
             apiBasePath: "/v1/auth",
             websiteBasePath: "/auth",
         },
+        getRedirectionURL: async (context: any) => {
+            if (context.action === "SUCCESS" && context.newSessionCreated) {
+                if (context.redirectToPath !== undefined) {
+                    // we are navigating back to where the user was before they authenticated
+                    return context.redirectToPath;
+                }
+                if (context.createdNewUser) {
+                    // user signed up
+                    return "/wizard/init";
+                } else {
+                    // user signed in
+                }
+                return "/";
+            }
+            return undefined;
+        },
+
         recipeList: [
             ThirdPartyPasswordlessReact.init({
                 contactMethod: "EMAIL",
@@ -22,17 +41,6 @@ export const frontendConfig = () => {
                         // ThirdPartyPasswordlessReact.Google.init(),
                         ThirdPartyPasswordlessReact.Discord.init(),
                     ],
-                },
-                onHandleEvent: (context) => {
-                    // Sends user to /wizard/init on sign-up
-                    if (context.action === "SUCCESS") {
-                        if (
-                            context.isNewRecipeUser &&
-                            context.user.loginMethods.length === 1
-                        ) {
-                            Router.push("/wizard/init");
-                        }
-                    }
                 },
             }),
             SessionReact.init(),
