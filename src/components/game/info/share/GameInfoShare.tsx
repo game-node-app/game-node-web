@@ -127,12 +127,13 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
         >
             <Stack w={"100%"} align={"center"}>
                 {!canShare && (
-                    <Text c={"red"} className={"mt-8 mb-8 text-center"}>
-                        It seems like your browser doesn't support this feature.
+                    <Text c={"red"} className={"mt-2 mb-2 text-center"}>
+                        It seems like your browser doesn't support direct share.
+                        You can still download the generated image.
                     </Text>
                 )}
                 {shareMutation.isError && (
-                    <Text c={"red"} className={"mt-8 mb-8 text-center"}>
+                    <Text c={"red"} className={"mt-2 mb-2 text-center"}>
                         {shareMutation.error.message}
                     </Text>
                 )}
@@ -163,7 +164,6 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
                         Share
                     </Button>
                     <ActionIcon
-                        disabled={!canShare}
                         loading={shareMutation.isPending}
                         onClick={() => {
                             shareMutation.mutate(true);

@@ -37,7 +37,8 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                 <DetailsBox title={"Where to buy"} withBorder withDimmedTitle>
                     <GameInfoExternalStores
                         gameId={game.id}
-                    ></GameInfoExternalStores>
+                        className={"my-4 gap-5"}
+                    />
                 </DetailsBox>
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
                     {game.summary ?? "Not available"}
