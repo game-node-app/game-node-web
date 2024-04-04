@@ -63,7 +63,7 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                         </Flex>
                     </Grid.Col>
 
-                    <Grid.Col span={{ xs: 12, lg: 9 }} className="mt-4">
+                    <Grid.Col span={{ base: 12, lg: 9 }} className="mt-4">
                         <GameInfoDetails game={game} />
                     </Grid.Col>
                 </Grid>

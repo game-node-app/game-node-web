@@ -20,8 +20,8 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
     }
 
     return (
-        <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
-            <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Stack align={"start"} justify={"start"} gap={"0.5rem"} w={"100%"}>
+            <SimpleGrid cols={{ base: 1, lg: 2 }} w={"100%"}>
                 <DetailsBox withBorder withDimmedTitle title={"Launch date"}>
                     {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
                         "Not available"}

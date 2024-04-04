@@ -91,13 +91,13 @@ const GameInfoPage = () => {
                     <title>{`${gameQuery.data.name} - GameNode`}</title>
                 </Head>
             )}
-            <Container fluid mt={"30px"} p={0}>
+            <Container fluid mt={"30px"} p={0} w={"100%"}>
                 <GameInfoView id={idAsNumber} />
             </Container>
-            <Container fluid mt={"30px"} p={0}>
+            <Container fluid mt={"30px"} p={0} w={"100%"}>
                 <GameInfoReviewView gameId={idAsNumber} />
             </Container>
-            <Container fluid mt={"30px"} p={0}>
+            <Container fluid mt={"30px"} p={0} w={"100%"}>
                 <GameExtraInfoView id={idAsNumber} />
             </Container>
         </Container>
