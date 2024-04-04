@@ -34,17 +34,6 @@ export const DEFAULT_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto = {
     limit: DEFAULT_LIMIT,
 };
 
-const PERIOD_SELECT_DATA: ComboboxItem[] = [
-    {
-        label: "Recent",
-        value: period.MONTH.valueOf(),
-    },
-    {
-        label: "All",
-        value: period.ALL.valueOf(),
-    },
-];
-
 const urlQueryToDto = (query: ParsedUrlQuery): TBasePaginationRequest => {
     const dto: FindStatisticsTrendingReviewsDto = structuredClone(
         DEFAULT_REVIEW_LIST_VIEW_DTO,

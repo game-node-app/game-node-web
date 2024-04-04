@@ -140,6 +140,7 @@ const GameInfoReviewEditorView = ({
                         <Rating
                             defaultValue={5}
                             value={rating}
+                            fractions={2}
                             onChange={(v) => setValue("rating", v)}
                         />
                         {reviewQuery.data != undefined && (
