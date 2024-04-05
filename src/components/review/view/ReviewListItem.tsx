@@ -84,7 +84,7 @@ const ReviewListItem = ({
                         groupProps={{
                             justify: onMobile ? "start" : "center",
                         }}
-                        withBreak
+                        withHorizontalBreak={!onMobile}
                     />
 
                     <Rating

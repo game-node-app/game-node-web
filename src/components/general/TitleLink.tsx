@@ -11,7 +11,7 @@ const TitleLink = ({ href, children, ...titleProps }: ITitleLinkProps) => {
         <Link href={href}>
             <Title
                 {...titleProps}
-                className={`underline decoration-dotted ${titleProps.className}`}
+                className={`underline ${titleProps.className}`}
             >
                 {children}
             </Title>
