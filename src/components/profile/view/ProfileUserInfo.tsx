@@ -24,6 +24,7 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import ProfileFollowActions from "@/components/profile/view/ProfileFollowActions";
 import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
 import useUserId from "@/components/auth/hooks/useUserId";
+import TitleLink from "@/components/general/TitleLink";
 
 const dateFormater = new Intl.DateTimeFormat();
 
@@ -71,39 +72,51 @@ const ProfileUserInfo = ({ userId }: Props) => {
                     <UserLevelInfo targetUserId={profileQuery.data?.userId} />
                 </Box>
                 <Stack className={"w-full h-full mt-8"}>
-                    <Link href={`/library/${profileQuery.data?.userId}`}>
-                        <Group className={"w-full justify-between px-4"}>
-                            <Title size={"h5"}>Games</Title>
-                            <Text>
-                                {collectionEntriesQuery.data?.pagination
-                                    .totalItems || 0}
-                            </Text>
-                        </Group>
-                    </Link>
+                    <Group className={"w-full justify-between px-4"}>
+                        <TitleLink
+                            href={`/library/${profileQuery.data?.userId}`}
+                            size={"h5"}
+                        >
+                            Games
+                        </TitleLink>
+                        <Text>
+                            {collectionEntriesQuery.data?.pagination
+                                .totalItems || 0}
+                        </Text>
+                    </Group>
                     <Divider />
                     <Group className={"w-full justify-between px-4"}>
-                        <Title size={"h5"}>Reviews</Title>
+                        <TitleLink
+                            href={`/profile/${userId}/reviews`}
+                            size={"h5"}
+                        >
+                            Reviews
+                        </TitleLink>
                         <Text>
                             {reviewsQuery.data?.pagination?.totalItems || 0}
                         </Text>
                     </Group>
                     <Divider />
-
                     <Group className={"w-full justify-between px-4"}>
-                        <Title size={"h5"}>Achievements</Title>
+                        <TitleLink href={`/achievements/${userId}`} size={"h5"}>
+                            Achievements
+                        </TitleLink>
                         <Text>
                             {obtainedAchievementsQuery.data?.length || 0}
                         </Text>
                     </Group>
                     <Divider />
-                    <Link href={`/library/${profileQuery.data?.userId}`}>
-                        <Group className={"w-full justify-between px-4"}>
-                            <Title size={"h5"}>Collections</Title>
-                            <Text>
-                                {libraryQuery.data?.collections.length || 0}
-                            </Text>
-                        </Group>
-                    </Link>
+                    <Group className={"w-full justify-between px-4"}>
+                        <TitleLink
+                            href={`/library/${profileQuery.data?.userId}`}
+                            size={"h5"}
+                        >
+                            Collections
+                        </TitleLink>
+                        <Text>
+                            {libraryQuery.data?.collections.length || 0}
+                        </Text>
+                    </Group>
                     <Divider />
                     <Group className={"w-full justify-between px-4"}>
                         <Title size={"h5"}>Followers</Title>
@@ -121,7 +134,7 @@ const ProfileUserInfo = ({ userId }: Props) => {
                 {featuredAchievement && (
                     <ObtainedAchievementItem
                         targetUserId={profileQuery.data.userId}
-                        obtainedAchievementId={featuredAchievement.id}
+                        achievementId={featuredAchievement.achievementId}
                     />
                 )}
                 <Text className={"mt-4"} fz={"0.8rem"} c={"dimmed"}>

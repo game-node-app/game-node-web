@@ -88,19 +88,29 @@ const CollectionView = ({
         collectionId,
         offset: requestParams.offset,
         limit: requestParams.limit,
-        gameRelations: {
+    });
+    const gamesIds =
+        collectionQuery.data?.entries.map((entry) => entry.gameId) || [];
+    const gamesQuery = useGames({
+        gameIds: gamesIds,
+        relations: {
             cover: true,
-            platforms: true,
         },
     });
+    const games = gamesQuery.data;
+
     const profileQuery = useUserProfile(userId);
     const profile = profileQuery.data;
 
-    if (collectionQuery.isError || collectionEntriesQuery.isError) {
-        return (
-            <Center>We couldn't fetch this resource. Please, try again.</Center>
-        );
-    }
+    const isLoading =
+        collectionQuery.isLoading ||
+        collectionEntriesQuery.isLoading ||
+        gamesQuery.isLoading;
+    const isError =
+        collectionQuery.isError ||
+        collectionEntriesQuery.isLoading ||
+        gamesQuery.isError;
+
     return (
         <Container fluid p={0} h={"100%"}>
             {collection && profile && (
@@ -174,10 +184,9 @@ const CollectionView = ({
                     variant={"dashed"}
                 />
                 <CollectionEntriesView
-                    isLoading={collectionEntriesQuery.isLoading}
-                    isError={collectionEntriesQuery.isError}
-                    isFetching={collectionEntriesQuery.isFetching}
-                    entries={collectionEntriesQuery.data?.data}
+                    isLoading={isLoading}
+                    isError={isError}
+                    games={games}
                     paginationInfo={collectionEntriesQuery.data?.pagination}
                     page={watch("page")}
                     onPaginationChange={(page) => {
