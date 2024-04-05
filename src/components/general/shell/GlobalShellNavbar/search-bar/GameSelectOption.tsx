@@ -10,27 +10,14 @@ interface ISearchBarSelectOptions {
     game: SearchGame;
 }
 
-const SearchBarSelectOption = ({ game }: ISearchBarSelectOptions) => {
+const GameSelectOption = ({ game }: ISearchBarSelectOptions) => {
     const platforms = getGamePlatformInfo(game);
     const platformsAbbreviations = platforms.platformsAbbreviations;
     return (
-        <Combobox.Option value={`${game.id}`}>
+        <Combobox.Option value={`${game.id}`} className={"w-full h-full"}>
             <Link href={`/game/${game.id}`} className={"w-full h-full"}>
                 <Group wrap={"nowrap"} w={"100%"} h={"100%"}>
-                    <Box
-                        w={{
-                            base: "25vw",
-                            lg: "7vw",
-                        }}
-                        miw={{
-                            base: "25vw",
-                            lg: "7vw",
-                        }}
-                        maw={{
-                            base: "25vw",
-                            lg: "7vw",
-                        }}
-                    >
+                    <Box w={"30%"} maw={"30%"} miw={"30%"}>
                         <GameFigureImage
                             href={`/game/${game.id}`}
                             game={game}
@@ -48,4 +35,4 @@ const SearchBarSelectOption = ({ game }: ISearchBarSelectOptions) => {
     );
 };
 
-export default SearchBarSelectOption;
+export default GameSelectOption;

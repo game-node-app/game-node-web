@@ -6,7 +6,6 @@ import useUserId from "@/components/auth/hooks/useUserId";
 export default function useUserProfile(
     userId: string | undefined,
 ): ExtendedUseQueryResult<Profile | undefined> {
-    const currentUserId = useUserId();
     const queryClient = useQueryClient();
     const queryKey = ["userProfile", userId];
     const invalidate = () => queryClient.invalidateQueries({ queryKey });
@@ -15,13 +14,10 @@ export default function useUserProfile(
             queryKey: queryKey,
             queryFn: async () => {
                 if (!userId) return null;
-                // if (currentUserId && currentUserId === userId) {
-                //     return ProfileService.profileControllerFindOwn();
-                // }
-
                 return ProfileService.profileControllerFindOneById(userId);
             },
             enabled: !!userId,
+            retry: 1,
         }),
         invalidate,
         queryKey,

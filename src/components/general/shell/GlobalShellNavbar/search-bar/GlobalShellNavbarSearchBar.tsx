@@ -1,5 +1,3 @@
-import React, { useMemo } from "react";
-
 import {
     Box,
     Button,
@@ -14,15 +12,13 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
-import {
-    IconClearAll,
-    IconLoader,
-    IconSearch,
-    IconX,
-} from "@tabler/icons-react";
-import SearchBarSelectOption from "@/components/general/input/SearchBar/SearchBarSelectOption";
+import { useSearchUsers } from "@/components/profile/hooks/useSearchUsers";
+import React, { ReactElement, useMemo } from "react";
+import GameSelectOption from "@/components/general/shell/GlobalShellNavbar/search-bar/GameSelectOption";
+import { IconLoader, IconSearch, IconX } from "@tabler/icons-react";
+import UserSelectOption from "@/components/general/shell/GlobalShellNavbar/search-bar/UserSelectOption";
 
-interface ISearchBarWithSelectProps extends TextInputProps {
+interface IUserGamesSearchBarWithSelectProps extends TextInputProps {
     withButton: boolean;
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,15 +30,15 @@ interface ISearchBarWithSelectProps extends TextInputProps {
     onClear: () => void;
 }
 
-const SearchBarWithSelect = ({
+const GlobalNavbarSearchBar = ({
     withButton,
     value,
     onOptionSubmit,
     onClear,
     ...others
-}: ISearchBarWithSelectProps) => {
+}: IUserGamesSearchBarWithSelectProps) => {
     const combobox = useCombobox();
-    const [debouncedQuery] = useDebouncedValue(value, 300);
+    const [debouncedQuery] = useDebouncedValue(value, 400);
     const isQueryEnabled =
         debouncedQuery != undefined && debouncedQuery.length > 2;
     const searchGamesQuery = useSearchGames(
@@ -52,20 +48,42 @@ const SearchBarWithSelect = ({
         },
         isQueryEnabled,
     );
+    const searchUsersQuery = useSearchUsers({
+        query: debouncedQuery,
+        limit: 5,
+    });
 
     // Who thought this was a good idea?
     // Oh, it was me...
-    const isResultEmpty =
+    const isGamesEmpty =
         searchGamesQuery.data == undefined ||
         searchGamesQuery.data.data == undefined ||
         searchGamesQuery.data.data.items == undefined;
+    const isUsersEmpty =
+        searchUsersQuery.data == undefined ||
+        searchUsersQuery.data.data == undefined ||
+        searchUsersQuery.data.data.items == undefined;
+
+    const isLoading = searchUsersQuery.isLoading || searchGamesQuery.isLoading;
+    const isError = searchGamesQuery.isError && searchUsersQuery.isError;
+    const isEmpty = isGamesEmpty && isUsersEmpty;
 
     const options = useMemo(() => {
-        if (isResultEmpty) return undefined;
-        return searchGamesQuery.data!.data!.items!.map((value) => {
-            return <SearchBarSelectOption key={value.id} game={value} />;
+        if (isEmpty) return undefined;
+        const options: ReactElement[] = [];
+        searchGamesQuery.data?.data?.items?.forEach((game) => {
+            options.push(<GameSelectOption key={game.id} game={game} />);
         });
-    }, [isResultEmpty, searchGamesQuery.data]);
+        searchUsersQuery.data?.data?.items?.forEach((user) => {
+            options.push(<UserSelectOption userId={user.userId!} />);
+        });
+
+        return options;
+    }, [
+        isEmpty,
+        searchGamesQuery.data?.data?.items,
+        searchUsersQuery.data?.data?.items,
+    ]);
 
     return (
         <Group
@@ -85,7 +103,7 @@ const SearchBarWithSelect = ({
                 <Combobox.Target>
                     <TextInput
                         {...others}
-                        placeholder={"Search for games"}
+                        placeholder={"Search for users or games"}
                         value={value ?? ""}
                         onClick={() => {
                             combobox.openDropdown();
@@ -135,12 +153,12 @@ const SearchBarWithSelect = ({
                     <Combobox.Options>
                         <ScrollArea.Autosize h={400}>
                             {options}
-                            {searchGamesQuery.isError && (
+                            {isError && (
                                 <Combobox.Empty>
                                     Failed to fetch results.
                                 </Combobox.Empty>
                             )}
-                            {!searchGamesQuery.isLoading && isResultEmpty && (
+                            {!isLoading && !isError && isEmpty && (
                                 <Combobox.Empty>No results.</Combobox.Empty>
                             )}
                         </ScrollArea.Autosize>
@@ -150,5 +168,4 @@ const SearchBarWithSelect = ({
         </Group>
     );
 };
-
-export default SearchBarWithSelect;
+export default GlobalNavbarSearchBar;

@@ -22,21 +22,22 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import period = FindStatisticsTrendingReviewsDto.period;
 
-interface IReviewListViewProps {
+interface IGameReviewListViewProps {
     gameId: number;
 }
 
 const DEFAULT_LIMIT = 7;
 
-export const DEFAULT_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto = {
-    period: period.MONTH,
-    offset: 0,
-    limit: DEFAULT_LIMIT,
-};
+export const DEFAULT_GAME_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto =
+    {
+        period: period.MONTH,
+        offset: 0,
+        limit: DEFAULT_LIMIT,
+    };
 
 const urlQueryToDto = (query: ParsedUrlQuery): TBasePaginationRequest => {
     const dto: FindStatisticsTrendingReviewsDto = structuredClone(
-        DEFAULT_REVIEW_LIST_VIEW_DTO,
+        DEFAULT_GAME_REVIEW_LIST_VIEW_DTO,
     );
     const { page } = query;
     if (page && typeof page === "string") {
@@ -58,16 +59,16 @@ const queryDtoToSearchParams = (dto: TBasePaginationRequest) => {
     return searchParams;
 };
 
-const ReviewListView = ({ gameId }: IReviewListViewProps) => {
+const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
     const onMobile = useOnMobile();
     const router = useRouter();
-    const userId = useUserId();
+    const ownUserId = useUserId();
     const hasSetInitialQueryParams = useRef(false);
     const [currentPeriod, setCurrentPeriod] = useState(period.MONTH.valueOf());
     const [offset, setOffset] = useState(0);
     const trendingReviewsDto = useMemo((): FindStatisticsTrendingReviewsDto => {
         return {
-            ...DEFAULT_REVIEW_LIST_VIEW_DTO,
+            ...DEFAULT_GAME_REVIEW_LIST_VIEW_DTO,
             offset: offset,
             gameId: gameId,
             period: currentPeriod as period,
@@ -104,24 +105,9 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     };
 
     const content = useMemo(() => {
-        if (isLoading) {
-            return <CenteredLoading />;
-        } else if (isError) {
-            return (
-                <CenteredErrorMessage
-                    message={"Failed to fetch reviews. Please try again."}
-                />
-            );
-        }
         const reviews = reviewsQuery.data
-            ?.filter(
-                (review) =>
-                    review != undefined && review.profileUserId !== userId,
-            )
-            .toSorted((a, b) => {
-                const random = Math.random();
-                if (random > 0.5) return 1;
-                return -1;
+            ?.filter((review) => {
+                return review.profileUserId !== ownUserId;
             })
             .map((review) => {
                 return <ReviewListItem key={review.id} review={review} />;
@@ -136,7 +122,17 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
         }
 
         return reviews;
-    }, [isError, isLoading, reviewsQuery.data, userId]);
+    }, [reviewsQuery.data, ownUserId]);
+
+    if (isLoading) {
+        return <CenteredLoading />;
+    } else if (isError) {
+        return (
+            <CenteredErrorMessage
+                message={"Failed to fetch reviews. Please try again."}
+            />
+        );
+    }
 
     return (
         <DetailsBox enabled={content != undefined} title={"Reviews"}>
@@ -171,4 +167,4 @@ const ReviewListView = ({ gameId }: IReviewListViewProps) => {
     );
 };
 
-export default ReviewListView;
+export default GameReviewListView;

@@ -8,13 +8,20 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import ReviewListItemLikes from "@/components/review/view/ReviewListItemLikes";
 import ReviewListItemDropdown from "@/components/review/view/ReviewListItemDropdown";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { useGame } from "@/components/game/hooks/useGame";
+import TextLink from "@/components/general/TextLink";
 
 interface IReviewListViewProps {
     review: Review;
+    withGameInfo?: boolean;
     onEditStart?: () => void;
 }
 
-const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
+const ReviewListItem = ({
+    review,
+    onEditStart,
+    withGameInfo,
+}: IReviewListViewProps) => {
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
     const contentToUse = useMemo(() => {
@@ -32,14 +39,17 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
             extensions: REVIEW_EDITOR_EXTENSIONS,
             content: contentToUse,
             editable: false,
-            injectCSS: true,
         },
         [contentToUse],
     );
 
     const userId = useUserId();
     const profileUserId = review.profileUserId;
+    const gameIdToUse = withGameInfo ? review.gameId : undefined;
     const isOwnReview = userId != undefined && userId === profileUserId;
+
+    // Will only be enabled if gameId is not undefined.
+    const gameQuery = useGame(gameIdToUse, {});
 
     return (
         <Stack w={"100%"} align={"center"}>
@@ -47,7 +57,6 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                 w={"100%"}
                 justify={"space-evenly"}
                 wrap={onMobile ? "wrap" : "nowrap"}
-                onClick={() => setIsReadMore(!isReadMore)}
             >
                 <Flex
                     direction={{
@@ -56,7 +65,7 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                     }}
                     w={{
                         base: "100%",
-                        lg: "fit-content",
+                        lg: "10%",
                     }}
                     justify={{
                         base: "space-between",
@@ -67,34 +76,40 @@ const ReviewListItem = ({ review, onEditStart }: IReviewListViewProps) => {
                         lg: "center",
                     }}
                 >
-                    <Box className={"8/12"}>
-                        <UserAvatarGroup
-                            size={onMobile ? "lg" : "xl"}
-                            userId={profileUserId}
-                        />
-                    </Box>
+                    <UserAvatarGroup
+                        avatarProps={{
+                            size: onMobile ? "lg" : "xl",
+                        }}
+                        userId={profileUserId}
+                        groupProps={{
+                            justify: onMobile ? "start" : "center",
+                        }}
+                        withBreak
+                    />
 
-                    {onMobile && (
-                        <Rating
-                            readOnly
-                            fractions={2}
-                            value={review.rating}
-                            className={"mt-0 lg:mt-4"}
-                        />
-                    )}
+                    <Rating
+                        readOnly
+                        fractions={2}
+                        value={review.rating}
+                        className={"mt-0 lg:mt-4"}
+                    />
                 </Flex>
                 <Stack className={"w-full"}>
                     <EditorContent
                         editor={nonEditableEditor}
                         className={"w-full"}
+                        onClick={() => setIsReadMore(!isReadMore)}
                     />
-                    <Group justify={onMobile ? "end" : "space-between"}>
-                        {!onMobile && (
-                            <Rating
-                                readOnly
-                                value={review.rating}
-                                className={"mt-0 lg:mt-4"}
-                            />
+                    <Group justify={withGameInfo ? "space-between" : "end"}>
+                        {withGameInfo && gameQuery.data != undefined && (
+                            <Box className={"w-6/12 lg:w-4/12"}>
+                                <TextLink
+                                    href={`/game/${gameQuery.data?.id}`}
+                                    c={"dimmed"}
+                                >
+                                    {gameQuery.data?.name}
+                                </TextLink>
+                            </Box>
                         )}
                         <Group>
                             <ReviewListItemLikes review={review} />

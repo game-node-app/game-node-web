@@ -3,15 +3,23 @@ import {
     GameSearchResponseDto,
 } from "@/components/game/search/utils/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { ApiError, SearchService } from "@/wrapper/search";
+import {
+    ApiError,
+    schema_GameSearchRequestDto,
+    SearchService,
+} from "@/wrapper/search";
 
 const parseDto = (dto: GameSearchRequestDto) => {
-    const parsedDto = structuredClone(dto);
-    if (typeof parsedDto.page === "string") {
-        parsedDto.page = parseInt(parsedDto.page, 10);
+    const parsedDto: schema_GameSearchRequestDto = {
+        page: 1,
+        limit: 20,
+        ...dto,
+    };
+    if (typeof dto.page === "string") {
+        parsedDto.page = parseInt(dto.page, 10);
     }
-    if (typeof parsedDto.limit === "string") {
-        parsedDto.limit = parseInt(parsedDto.limit, 10);
+    if (typeof dto.limit === "string") {
+        parsedDto.limit = parseInt(dto.limit, 10);
     }
 
     return parsedDto;
@@ -23,7 +31,7 @@ export default function useSearchGames(
 ) {
     return useQuery<GameSearchResponseDto, ApiError>({
         queryKey: ["game", "search", searchParameters],
-        queryFn: async (ctx) => {
+        queryFn: async () => {
             return SearchService.postSearchGames(parseDto(searchParameters));
         },
         placeholderData: keepPreviousData,
