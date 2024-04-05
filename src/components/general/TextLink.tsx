@@ -9,10 +9,7 @@ interface ITextLinkProps extends PropsWithChildren<TextProps> {
 const TextLink = ({ href, children, ...textProps }: ITextLinkProps) => {
     return (
         <Link href={href}>
-            <Text
-                {...textProps}
-                className={`underline decoration-dotted ${textProps.className}`}
-            >
+            <Text {...textProps} className={`underline ${textProps.className}`}>
                 {children}
             </Text>
         </Link>

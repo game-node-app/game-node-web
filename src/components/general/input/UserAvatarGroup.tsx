@@ -12,7 +12,7 @@ interface IProps extends AvatarProps {
     avatarProps?: AvatarProps;
     groupProps?: GroupProps;
     textProps?: TextProps;
-    withBreak?: boolean;
+    withHorizontalBreak?: boolean;
 }
 
 export const UserAvatarGroup = ({
@@ -20,7 +20,7 @@ export const UserAvatarGroup = ({
     avatarProps,
     groupProps,
     textProps,
-    withBreak,
+    withHorizontalBreak,
 }: IProps) => {
     const profileQuery = useUserProfile(userId);
     const onMobile = useOnMobile();
@@ -36,7 +36,7 @@ export const UserAvatarGroup = ({
                 {...groupProps}
             >
                 <UserAvatar {...avatarProps} userId={userId} />
-                {withBreak && <Break />}
+                {withHorizontalBreak && <Break />}
                 <Text
                     c={"white"}
                     lineClamp={2}
