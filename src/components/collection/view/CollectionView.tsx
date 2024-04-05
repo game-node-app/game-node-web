@@ -10,6 +10,7 @@ import {
     Stack,
     Text,
     Title,
+    Tooltip,
 } from "@mantine/core";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
 import { Collection } from "@/wrapper/server";
@@ -141,17 +142,29 @@ const CollectionView = ({
                     </Stack>
                     {isOwnCollection && (
                         <Group justify={"end"}>
-                            <ActionIcon
-                                onClick={() => createUpdateModalUtils.open()}
-                            >
-                                <IconDots size={"1.2rem"} />
-                            </ActionIcon>
-                            <ActionIcon onClick={() => moveModalUtils.open()}>
-                                <IconReplace size={"1.2rem"} />
-                            </ActionIcon>
-                            <ActionIcon onClick={() => removeModalUtils.open()}>
-                                <IconTrash size={"1.2rem"} />
-                            </ActionIcon>
+                            <Tooltip label={"Collection settings"}>
+                                <ActionIcon
+                                    onClick={() =>
+                                        createUpdateModalUtils.open()
+                                    }
+                                >
+                                    <IconDots size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={"Move games between collections"}>
+                                <ActionIcon
+                                    onClick={() => moveModalUtils.open()}
+                                >
+                                    <IconReplace size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={"Delete collection"}>
+                                <ActionIcon
+                                    onClick={() => removeModalUtils.open()}
+                                >
+                                    <IconTrash size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
                         </Group>
                     )}
                 </Group>

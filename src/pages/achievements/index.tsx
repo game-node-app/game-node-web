@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useRouter } from "next/router";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 const Index = () => {
     const userId = useUserId();
@@ -10,7 +11,7 @@ const Index = () => {
             router.push(`/achievements/${userId}`).then().catch();
         }
     }, [router, userId]);
-    return <div></div>;
+    return <CenteredLoading />;
 };
 
 export default Index;

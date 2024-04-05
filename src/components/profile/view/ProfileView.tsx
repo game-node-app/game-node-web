@@ -12,7 +12,7 @@ const ProfileView = ({ userId }: Props) => {
         <Flex justify={"center"} className={"mb-12 w-full justify-center"}>
             <Group
                 className={
-                    "w-full lg:w-10/12 h-full flex-wrap lg:!flex-nowrap items-start lg:mt-20"
+                    "w-full lg:w-10/12 h-full flex-wrap lg:!flex-nowrap items-start lg:mt-10"
                 }
             >
                 <Box className={"w-full lg:w-3/12"}>

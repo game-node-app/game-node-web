@@ -24,7 +24,7 @@ const PreferencesFeaturedAchievement = () => {
     const featuredAchievement = useMemo(() => {
         return achievements.data?.data.find((achievement) => {
             const obtainedAchievement = allObtainedAchievements.data?.find(
-                (oa) => oa.id === achievement.id,
+                (oa) => oa.achievementId === achievement.id,
             );
             return (
                 obtainedAchievement != undefined &&
@@ -36,9 +36,9 @@ const PreferencesFeaturedAchievement = () => {
     const featuredAchievementMutation = useMutation({
         mutationFn: async (achievementId: string) => {
             return AchievementsService.achievementsControllerUpdateFeaturedObtainedAchievement(
+                achievementId,
                 {
                     isFeatured: true,
-                    id: achievementId,
                 },
             );
         },
@@ -95,7 +95,7 @@ const PreferencesFeaturedAchievement = () => {
                                                 (achievement) => {
                                                     return (
                                                         achievement.id ===
-                                                        obtainedAchievement.id
+                                                        obtainedAchievement.achievementId
                                                     );
                                                 },
                                             );
