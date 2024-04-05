@@ -26,7 +26,7 @@ import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
 import useUserId from "@/components/auth/hooks/useUserId";
 import TitleLink from "@/components/general/TitleLink";
 
-const dateFormater = new Intl.DateTimeFormat();
+const dateFormatter = new Intl.DateTimeFormat();
 
 interface Props {
     userId: string;
@@ -139,7 +139,9 @@ const ProfileUserInfo = ({ userId }: Props) => {
                 )}
                 <Text className={"mt-4"} fz={"0.8rem"} c={"dimmed"}>
                     Joined at{" "}
-                    {dateFormater.format(new Date(profileQuery.data.createdAt))}
+                    {dateFormatter.format(
+                        new Date(profileQuery.data.createdAt),
+                    )}
                 </Text>
             </Stack>
         </Paper>
