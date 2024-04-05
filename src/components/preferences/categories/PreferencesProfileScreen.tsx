@@ -130,7 +130,7 @@ const PreferencesProfileScreen = () => {
                             return (
                                 <AchievementLogo
                                     key={achievement.id}
-                                    achievementId={achievement.id}
+                                    achievementId={achievement.achievementId}
                                 />
                             );
                         })}
