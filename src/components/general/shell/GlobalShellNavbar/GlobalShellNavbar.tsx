@@ -16,7 +16,8 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { ReactElement, useState } from "react";
-import SearchBarWithSelect from "@/components/general/input/SearchBar/SearchBarWithSelect";
+
+import GlobalNavbarSearchBar from "@/components/general/shell/GlobalShellNavbar/search-bar/GlobalShellNavbarSearchBar";
 
 interface NavbarItem {
     icon: (props: TablerIconsProps) => ReactElement;
@@ -28,10 +29,8 @@ const IN_DEVELOPMENT_URL = "/503";
 
 const links: NavbarItem[] = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
-    { icon: IconBulb, label: "Activity", href: IN_DEVELOPMENT_URL },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
-    // { icon: IconSettings, label: "Preferences", href: "/preferences" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {
@@ -81,7 +80,7 @@ export default function GlobalShellNavbar({
                 </div>
             )}
             <Box w={"100%"} my={"0.8rem"}>
-                <SearchBarWithSelect
+                <GlobalNavbarSearchBar
                     withButton={false}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

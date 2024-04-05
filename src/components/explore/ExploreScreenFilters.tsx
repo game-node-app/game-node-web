@@ -14,6 +14,7 @@ import {
     ComboboxItem,
     Drawer,
     Group,
+    LoadingOverlay,
     Select,
     SimpleGrid,
     Stack,
@@ -23,11 +24,8 @@ import { useRouter } from "next/router";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import period = FindStatisticsTrendingReviewsDto.period;
-import { ParsedUrlQuery } from "querystring";
-import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { GameResourceFilter } from "@/components/game/util/types";
 import {
-    DEFAULT_EXPLORE_TRENDING_GAMES_DTO,
     exploreScreenDtoToSearchParams,
     exploreScreenUrlQueryToDto,
 } from "@/components/explore/utils";
@@ -194,6 +192,7 @@ const ExploreScreenFilters = ({
             </ActionIcon>
             <Select
                 {...register("period")}
+                description={"Trending in"}
                 data={SELECT_PERIOD_DATA}
                 value={watch("period")}
                 allowDeselect={false}
@@ -202,7 +201,7 @@ const ExploreScreenFilters = ({
                     setValue("period", value);
                     onSubmit({ period: v as period });
                 }}
-            ></Select>
+            />
         </Group>
     );
 };

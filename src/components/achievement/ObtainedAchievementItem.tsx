@@ -4,16 +4,13 @@ import { useAchievements } from "@/components/achievement/hooks/useAchievements"
 
 interface Props {
     targetUserId: string;
-    obtainedAchievementId: string;
+    achievementId: string;
 }
 
-const ObtainedAchievementItem = ({
-    obtainedAchievementId,
-    targetUserId,
-}: Props) => {
+const ObtainedAchievementItem = ({ achievementId, targetUserId }: Props) => {
     const achievementsQuery = useAchievements({});
     const achievementEntity = achievementsQuery.data?.data.find(
-        (achievement) => achievement.id === obtainedAchievementId,
+        (achievement) => achievement.id === achievementId,
     );
     return (
         <AchievementItem

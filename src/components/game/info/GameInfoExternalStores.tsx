@@ -26,6 +26,7 @@ const GameInfoExternalStores = ({ gameId, iconsProps, ...others }: Props) => {
                 gameId,
             );
         },
+        retry: false,
     });
 
     const buildIconsSkeletons = useCallback(() => {

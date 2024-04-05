@@ -56,6 +56,7 @@ export default function App({
                         refetchIntervalInBackground: false,
                         refetchOnReconnect: false,
                         staleTime: Infinity,
+                        retry: 2,
                     },
                 },
             }),

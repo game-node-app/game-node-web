@@ -14,7 +14,6 @@ interface UseCollectionEntriesForCollectionIdProps {
     collectionId: string;
     limit?: number;
     offset?: number;
-    gameRelations?: Record<string, object | boolean>;
 }
 
 /**
@@ -29,20 +28,15 @@ export function useCollectionEntriesForCollectionId({
     collectionId,
     limit,
     offset,
-    gameRelations,
 }: UseCollectionEntriesForCollectionIdProps): ExtendedUseQueryResult<
     CollectionEntriesPaginatedResponseDto | undefined
 > {
     const queryClient = useQueryClient();
-    const queryKey = [
-        "collection-entries",
-        collectionId,
-        offset,
-        limit,
-        gameRelations,
-    ];
+    const queryKey = ["collection-entries", collectionId, offset, limit];
     const invalidate = () => {
-        return queryClient.invalidateQueries({ queryKey: [queryKey[0]] });
+        return queryClient.invalidateQueries({
+            queryKey: [queryKey.slice(0, 2)],
+        });
     };
     return {
         ...useQuery({
@@ -51,39 +45,11 @@ export function useCollectionEntriesForCollectionId({
                 if (!collectionId) {
                     return undefined;
                 }
-                const collectionEntriesQuery =
-                    await getCollectionEntriesByCollectionId(
-                        collectionId,
-                        offset,
-                        limit,
-                    );
-
-                if (
-                    collectionEntriesQuery &&
-                    collectionEntriesQuery.data &&
-                    collectionEntriesQuery.data.length > 0
-                ) {
-                    const gameIds = collectionEntriesQuery.data.map(
-                        (entry) => entry.gameId,
-                    );
-
-                    const gamesRequest =
-                        await GameRepositoryService.gameRepositoryControllerFindAllByIds(
-                            {
-                                gameIds: gameIds,
-                                relations: gameRelations,
-                            },
-                        );
-                    collectionEntriesQuery.data =
-                        collectionEntriesQuery.data.map((entry) => {
-                            // Associates game with current entry
-                            entry.game = gamesRequest.find(
-                                (game) => game.id === entry.gameId,
-                            )!;
-                            return entry;
-                        });
-                }
-                return collectionEntriesQuery;
+                return await getCollectionEntriesByCollectionId(
+                    collectionId,
+                    offset,
+                    limit,
+                );
             },
             enabled: !!collectionId,
             placeholderData: keepPreviousData,

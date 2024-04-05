@@ -10,6 +10,7 @@ import {
     Stack,
     Text,
     Title,
+    Tooltip,
 } from "@mantine/core";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
 import { Collection } from "@/wrapper/server";
@@ -87,19 +88,29 @@ const CollectionView = ({
         collectionId,
         offset: requestParams.offset,
         limit: requestParams.limit,
-        gameRelations: {
+    });
+    const gamesIds =
+        collectionQuery.data?.entries.map((entry) => entry.gameId) || [];
+    const gamesQuery = useGames({
+        gameIds: gamesIds,
+        relations: {
             cover: true,
-            platforms: true,
         },
     });
+    const games = gamesQuery.data;
+
     const profileQuery = useUserProfile(userId);
     const profile = profileQuery.data;
 
-    if (collectionQuery.isError || collectionEntriesQuery.isError) {
-        return (
-            <Center>We couldn't fetch this resource. Please, try again.</Center>
-        );
-    }
+    const isLoading =
+        collectionQuery.isLoading ||
+        collectionEntriesQuery.isLoading ||
+        gamesQuery.isLoading;
+    const isError =
+        collectionQuery.isError ||
+        collectionEntriesQuery.isLoading ||
+        gamesQuery.isError;
+
     return (
         <Container fluid p={0} h={"100%"}>
             {collection && profile && (
@@ -141,17 +152,29 @@ const CollectionView = ({
                     </Stack>
                     {isOwnCollection && (
                         <Group justify={"end"}>
-                            <ActionIcon
-                                onClick={() => createUpdateModalUtils.open()}
-                            >
-                                <IconDots size={"1.2rem"} />
-                            </ActionIcon>
-                            <ActionIcon onClick={() => moveModalUtils.open()}>
-                                <IconReplace size={"1.2rem"} />
-                            </ActionIcon>
-                            <ActionIcon onClick={() => removeModalUtils.open()}>
-                                <IconTrash size={"1.2rem"} />
-                            </ActionIcon>
+                            <Tooltip label={"Collection settings"}>
+                                <ActionIcon
+                                    onClick={() =>
+                                        createUpdateModalUtils.open()
+                                    }
+                                >
+                                    <IconDots size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={"Move games between collections"}>
+                                <ActionIcon
+                                    onClick={() => moveModalUtils.open()}
+                                >
+                                    <IconReplace size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={"Delete collection"}>
+                                <ActionIcon
+                                    onClick={() => removeModalUtils.open()}
+                                >
+                                    <IconTrash size={"1.2rem"} />
+                                </ActionIcon>
+                            </Tooltip>
                         </Group>
                     )}
                 </Group>
@@ -161,10 +184,9 @@ const CollectionView = ({
                     variant={"dashed"}
                 />
                 <CollectionEntriesView
-                    isLoading={collectionEntriesQuery.isLoading}
-                    isError={collectionEntriesQuery.isError}
-                    isFetching={collectionEntriesQuery.isFetching}
-                    entries={collectionEntriesQuery.data?.data}
+                    isLoading={isLoading}
+                    isError={isError}
+                    games={games}
                     paginationInfo={collectionEntriesQuery.data?.pagination}
                     page={watch("page")}
                     onPaginationChange={(page) => {

@@ -43,7 +43,9 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
                     </Box>
 
                     {isOwnUserId && (
-                        <Button className={""}>Redeem a code</Button>
+                        <Button className={""} disabled>
+                            Redeem a code
+                        </Button>
                     )}
                 </Group>
 

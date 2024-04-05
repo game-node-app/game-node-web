@@ -50,7 +50,10 @@ const ReviewListItemDropdown = ({
                         </Menu.Item>
                     </>
                 )}
-                <Menu.Item leftSection={<IconBan size={"1rem"} />}>
+                <Menu.Item
+                    leftSection={<IconBan size={"1rem"} />}
+                    disabled={true}
+                >
                     Report
                 </Menu.Item>
             </Menu.Dropdown>

@@ -16,24 +16,22 @@ const UserLevelInfo = ({ targetUserId }: Props) => {
         : 0;
     return (
         <Group w={"100%"}>
-            <Link href={`/profile/${targetUserId}`} className={"w-full"}>
-                <Stack w={"100%"} gap={2}>
-                    <Group justify={"space-between"} w={"100%"}>
-                        <Text fw={"bold"}>
-                            Level {userLevel?.currentLevel ?? 1}
-                        </Text>
-                        <Text>
-                            {userLevel?.currentLevelExp ?? 0} /{" "}
-                            {userLevel?.levelUpExpCost ?? 0} XP
-                        </Text>
-                    </Group>
-                    <Progress
-                        className={"w-full border-2 border-[#9A9A9A]"}
-                        size="lg"
-                        value={progress}
-                    />
-                </Stack>
-            </Link>
+            <Stack w={"100%"} gap={2}>
+                <Group justify={"space-between"} w={"100%"}>
+                    <Text fw={"bold"}>
+                        Level {userLevel?.currentLevel ?? 1}
+                    </Text>
+                    <Text>
+                        {userLevel?.currentLevelExp ?? 0} /{" "}
+                        {userLevel?.levelUpExpCost ?? 0} XP
+                    </Text>
+                </Group>
+                <Progress
+                    className={"w-full border-2 border-[#9A9A9A]"}
+                    size="lg"
+                    value={progress}
+                />
+            </Stack>
         </Group>
     );
 };

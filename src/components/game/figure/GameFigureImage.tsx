@@ -59,7 +59,7 @@ const GameFigureImage = ({
                     alt={"Game cover"}
                     onLoad={() => setShowSkeleton(false)}
                     onError={() => setShowSkeleton(false)}
-                    className="w-full h-auto"
+                    className="w-full h-auto max-h-full"
                     {...imageProps}
                 />
                 {children}

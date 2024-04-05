@@ -20,8 +20,8 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
     }
 
     return (
-        <Stack align={"start"} justify={"start"} gap={"0.5rem"}>
-            <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Stack align={"start"} justify={"start"} gap={"0.5rem"} w={"100%"}>
+            <SimpleGrid cols={{ base: 1, lg: 2 }} w={"100%"}>
                 <DetailsBox withBorder withDimmedTitle title={"Launch date"}>
                     {getLocalizedFirstReleaseDate(game.firstReleaseDate) ??
                         "Not available"}
@@ -37,7 +37,8 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                 <DetailsBox title={"Where to buy"} withBorder withDimmedTitle>
                     <GameInfoExternalStores
                         gameId={game.id}
-                    ></GameInfoExternalStores>
+                        className={"my-4 gap-5"}
+                    />
                 </DetailsBox>
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
                     {game.summary ?? "Not available"}
