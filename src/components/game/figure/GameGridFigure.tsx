@@ -3,7 +3,7 @@ import GameFigureImage, {
     IGameFigureProps,
 } from "@/components/game/figure/GameFigureImage";
 import { Badge } from "@mantine/core";
-import { getGameSpecialCategoryText } from "@/components/game/util/getGameSpecialCategoryText";
+import { getGameCategoryText } from "@/components/game/util/getGameCategoryText";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 
 interface IGameGridFigureProps {
@@ -13,7 +13,7 @@ interface IGameGridFigureProps {
 
 const GameGridFigure = ({ game, figureProps }: IGameGridFigureProps) => {
     const categoryText = useMemo(
-        () => getGameSpecialCategoryText(game?.category),
+        () => getGameCategoryText(game?.category),
         [game],
     );
     return (

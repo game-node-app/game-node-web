@@ -1,6 +1,6 @@
 import { Game } from "@/wrapper/server";
 
-export function getGameSpecialCategoryText(category?: number) {
+export function getGameCategoryText(category?: number) {
     const CATEGORY_TO_TEXT = {
         [Game.category._1.valueOf()]: "DLC",
         [Game.category._2.valueOf()]: "DLC",
