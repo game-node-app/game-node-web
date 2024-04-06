@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Flex, Paper, Stack, Text, Title } from "@mantine/core";
 
-const Index = () => {
+const Privacy = () => {
     return (
         <Container fluid p={0}>
             <Flex justify={"center"}>
@@ -77,4 +77,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Privacy;
