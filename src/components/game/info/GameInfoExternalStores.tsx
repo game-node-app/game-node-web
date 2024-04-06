@@ -41,7 +41,11 @@ const GameInfoExternalStores = ({ gameId, iconsProps, ...others }: Props) => {
             .map((externalStore) => {
                 if (externalStore.icon == undefined) return null;
                 return (
-                    <a key={externalStore.id} href={externalStore.url}>
+                    <a
+                        key={externalStore.id}
+                        href={externalStore.url}
+                        target={"_blank"}
+                    >
                         <Tooltip label={externalStore.storeName}>
                             <Image
                                 w={42}

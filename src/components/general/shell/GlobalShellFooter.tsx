@@ -14,17 +14,26 @@ import {
     IconBrandTwitter,
 } from "@tabler/icons-react";
 
-type IFooterLink = { href: string; label: string };
+type IFooterLink = { href: string; label: string; external?: boolean };
 
 const links: IFooterLink[] = [
     { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: "Privacy", href: "/privacy" },
+    {
+        label: "Donate",
+        href: "https://patreon.com/GameNodeApp",
+        external: true,
+    },
 ];
 
 const GlobalShellFooter = () => {
     const items = links.map((link) => {
         return (
-            <Link key={link.label} href={link.href}>
+            <Link
+                key={link.label}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+            >
                 <Text c="dimmed">{link.label}</Text>
             </Link>
         );
@@ -40,15 +49,30 @@ const GlobalShellFooter = () => {
                     {items}
                 </Group>
                 <Group gap="xs" justify="right" wrap={"nowrap"}>
-                    <ActionIcon size="lg" variant="default" radius="xl">
-                        <IconBrandGithub size="1.05rem" stroke={1.5} />
-                    </ActionIcon>
-                    <ActionIcon size="lg" variant="default" radius="xl">
-                        <IconBrandDiscord size="1.05rem" stroke={1.5} />
-                    </ActionIcon>
-                    <ActionIcon size="lg" variant="default" radius="xl">
-                        <IconBrandTwitter size="1.05rem" stroke={1.5} />
-                    </ActionIcon>
+                    <Link
+                        target={"_blank"}
+                        href={"https://github.com/game-node-app"}
+                    >
+                        <ActionIcon size="lg" variant="default" radius="xl">
+                            <IconBrandGithub size="1.05rem" stroke={1.5} />
+                        </ActionIcon>
+                    </Link>
+                    <Link
+                        target={"_blank"}
+                        href={"https://discord.gg/8cPtfHtk"}
+                    >
+                        <ActionIcon size="lg" variant="default" radius="xl">
+                            <IconBrandDiscord size="1.05rem" stroke={1.5} />
+                        </ActionIcon>
+                    </Link>
+                    <Link
+                        target={"_blank"}
+                        href={"https://twitter.com/gamenodeapp"}
+                    >
+                        <ActionIcon size="lg" variant="default" radius="xl">
+                            <IconBrandTwitter size="1.05rem" stroke={1.5} />
+                        </ActionIcon>
+                    </Link>
                 </Group>
             </Container>
         </footer>
