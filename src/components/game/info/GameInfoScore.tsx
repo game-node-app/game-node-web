@@ -43,7 +43,7 @@ const GameInfoScore = ({ gameId }: Props) => {
                 const percentage = (v / total) * 100;
                 const percentageToUse = Number.isNaN(percentage)
                     ? 0
-                    : percentage;
+                    : Math.trunc(percentage);
                 const lastElement = index + 1 === arr.length;
                 return (
                     <Stack
