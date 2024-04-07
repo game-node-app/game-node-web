@@ -12,7 +12,6 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import ProfileFollowActions from "@/components/profile/view/ProfileFollowActions";
 import useUserId from "@/components/auth/hooks/useUserId";
 import TitleLink from "@/components/general/TitleLink";
-import { useInfiniteFollowInfo } from "@/components/follow/hooks/useInfiniteFollowInfo";
 import { FollowInfoRequestDto } from "@/wrapper/server";
 import ProfileUserInfoFollowInfo from "@/components/profile/view/ProfileUserInfoFollowInfo";
 import criteria = FollowInfoRequestDto.criteria;
