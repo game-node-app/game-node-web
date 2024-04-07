@@ -1,30 +1,21 @@
-import React, { useMemo, useState } from "react";
-import {
-    Box,
-    Center,
-    Divider,
-    Group,
-    Overlay,
-    Paper,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import React, { useMemo } from "react";
+import { Box, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
 import useReviewsForUserId from "@/components/review/hooks/useReviewsForUserId";
-import Link from "next/link";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAllObtainedAchievements";
-import AchievementItem from "@/components/achievement/AchievementItem";
 import ObtainedAchievementItem from "@/components/achievement/ObtainedAchievementItem";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import ProfileFollowActions from "@/components/profile/view/ProfileFollowActions";
-import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
 import useUserId from "@/components/auth/hooks/useUserId";
 import TitleLink from "@/components/general/TitleLink";
+import { useInfiniteFollowInfo } from "@/components/follow/hooks/useInfiniteFollowInfo";
+import { FollowInfoRequestDto } from "@/wrapper/server";
+import ProfileUserInfoFollowInfo from "@/components/profile/view/ProfileUserInfoFollowInfo";
+import criteria = FollowInfoRequestDto.criteria;
 
 const dateFormatter = new Intl.DateTimeFormat();
 
@@ -37,7 +28,6 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const libraryQuery = useUserLibrary(profileQuery.data?.userId);
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId, 0, 1);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
-    const followersCountQuery = useFollowersCount(userId);
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
 
     const featuredAchievement = useMemo(() => {
@@ -118,10 +108,15 @@ const ProfileUserInfo = ({ userId }: Props) => {
                         </Text>
                     </Group>
                     <Divider />
-                    <Group className={"w-full justify-between px-4"}>
-                        <Title size={"h5"}>Followers</Title>
-                        <Text>{followersCountQuery.data}</Text>
-                    </Group>
+                    <ProfileUserInfoFollowInfo
+                        targetUserId={userId}
+                        criteria={criteria.FOLLOWERS}
+                    />
+                    <Divider />
+                    <ProfileUserInfoFollowInfo
+                        targetUserId={userId}
+                        criteria={criteria.FOLLOWING}
+                    />
                 </Stack>
                 {shouldShowFollowActions && (
                     <Box className={"w-full mt-6"}>
