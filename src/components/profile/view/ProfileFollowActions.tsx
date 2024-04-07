@@ -11,10 +11,6 @@ import {
     Text,
     Tooltip,
 } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
-import { useFollowersCount } from "@/components/follow/hooks/useFollowersCount";
-import { FollowService } from "@/wrapper/server";
-import { IconX } from "@tabler/icons-react";
 import UserFollowActions from "@/components/follow/input/UserFollowActions";
 
 interface Props {
