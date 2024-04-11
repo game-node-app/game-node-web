@@ -18,6 +18,7 @@ function replaceSize(url: string, newSize: string): string {
     const pattern =
         /(https:\/\/images\.igdb\.com\/igdb\/image\/upload\/t_)(\w+)(\/[a-zA-Z0-9]*\.jpg)/;
     const match = urlToUse.match(pattern);
+    console.log(url, newSize);
     if (match) {
         return `${match[1]}${newSize}${match[3]}`;
     } else {
