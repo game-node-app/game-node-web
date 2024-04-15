@@ -46,7 +46,7 @@ export function useUserLike({
             }
             const dto = {
                 sourceId: `${sourceId}`,
-                sourceType: sourceType as StatisticsActionDto.sourceType,
+                sourceType: sourceType,
                 targetUserId: targetUserId,
             };
 

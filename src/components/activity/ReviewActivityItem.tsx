@@ -1,14 +1,5 @@
 import React from "react";
-import {
-    ActionIcon,
-    Box,
-    Group,
-    Overlay,
-    Rating,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Box, Group, Overlay, Stack, Text, Title } from "@mantine/core";
 import { Activity } from "@/wrapper/server";
 import { useReview } from "@/components/review/hooks/useReview";
 import { useGame } from "@/components/game/hooks/useGame";
@@ -19,6 +10,8 @@ import {
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import { IconThumbUp } from "@tabler/icons-react";
+import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
+import GameRating from "@/components/general/input/GameRating";
 
 interface Props {
     activity: Activity;
@@ -77,14 +70,10 @@ const ReviewActivityItem = ({ activity }: Props) => {
                         }
                     >
                         <Stack className={"gap-5 py-4 items-end"}>
-                            <Rating
-                                readOnly
-                                fractions={2}
-                                value={reviewQuery.data?.rating}
-                            />
-                            <ActionIcon>
-                                <IconThumbUp />
-                            </ActionIcon>
+                            <GameRating value={reviewQuery.data?.rating} />
+                            <Group>
+                                <ActivityItemLikes activityId={activity.id} />
+                            </Group>
                         </Stack>
                     </Stack>
                 </Box>

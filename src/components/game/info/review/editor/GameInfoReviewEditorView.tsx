@@ -25,6 +25,7 @@ import { notifications } from "@mantine/notifications";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import { IconX } from "@tabler/icons-react";
+import GameRating from "@/components/general/input/GameRating";
 
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),
@@ -137,10 +138,10 @@ const GameInfoReviewEditorView = ({
                         {error?.message}
                     </Text>
                     <Group>
-                        <Rating
+                        <GameRating
+                            readOnly={false}
                             defaultValue={5}
                             value={rating}
-                            fractions={2}
                             onChange={(v) => setValue("rating", v)}
                         />
                         {reviewQuery.data != undefined && (

@@ -10,6 +10,7 @@ import ReviewListItemDropdown from "@/components/review/view/ReviewListItemDropd
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 import { useGame } from "@/components/game/hooks/useGame";
 import TextLink from "@/components/general/TextLink";
+import GameRating from "@/components/general/input/GameRating";
 
 interface IReviewListViewProps {
     review: Review;
@@ -87,9 +88,7 @@ const ReviewListItem = ({
                         withHorizontalBreak={!onMobile}
                     />
 
-                    <Rating
-                        readOnly
-                        fractions={2}
+                    <GameRating
                         value={review.rating}
                         className={"mt-0 lg:mt-4"}
                     />
