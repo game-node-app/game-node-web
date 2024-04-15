@@ -12,6 +12,7 @@ import { UserAvatar } from "@/components/general/input/UserAvatar";
 import { IconThumbUp } from "@tabler/icons-react";
 import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
 import GameRating from "@/components/general/input/GameRating";
+import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
 
 interface Props {
     activity: Activity;
@@ -48,7 +49,7 @@ const ReviewActivityItem = ({ activity }: Props) => {
                 }
             >
                 <Box className={"w-3/12 lg:w-1/12"}>
-                    <UserAvatar
+                    <UserAvatarWithUsername
                         userId={activity.profileUserId}
                         size={onMobile ? "lg" : "xl"}
                     />
@@ -69,8 +70,11 @@ const ReviewActivityItem = ({ activity }: Props) => {
                             "w-full h-full items-end justify-end lg:pe-5"
                         }
                     >
-                        <Stack className={"gap-5 py-4 items-end"}>
-                            <GameRating value={reviewQuery.data?.rating} />
+                        <Stack className={"gap-4 py-4 items-end"}>
+                            <GameRating
+                                value={reviewQuery.data?.rating}
+                                size={"md"}
+                            />
                             <Group>
                                 <ActivityItemLikes activityId={activity.id} />
                             </Group>

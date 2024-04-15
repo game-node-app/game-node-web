@@ -1,12 +1,7 @@
 import { Rating, RatingProps } from "@mantine/core";
 import React from "react";
 
-interface Props extends RatingProps {
-    /**
-     * Value is mandatory.
-     */
-    value: number;
-}
+interface Props extends RatingProps {}
 
 /**
  * Common rating component to be used by all "start" based rating screens. <br>
