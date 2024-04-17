@@ -141,12 +141,12 @@ const CollectionView = ({
                         <Title
                             size={"h3"}
                             className={
-                                "w-full break-all underline decoration-dotted decoration-2 decoration-stone-700"
+                                "w-full break-words underline decoration-dotted decoration-2 decoration-stone-700"
                             }
                         >
                             {collection?.name}
                         </Title>
-                        <Text c={"dimmed"} w={"100%"} className={"break-all"}>
+                        <Text c={"dimmed"} w={"100%"} className={"break-words"}>
                             {collectionQuery.data?.description}
                         </Text>
                     </Stack>
