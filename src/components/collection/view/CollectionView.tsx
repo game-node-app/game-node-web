@@ -108,7 +108,7 @@ const CollectionView = ({
         gamesQuery.isLoading;
     const isError =
         collectionQuery.isError ||
-        collectionEntriesQuery.isLoading ||
+        collectionEntriesQuery.isError ||
         gamesQuery.isError;
 
     return (
@@ -188,7 +188,7 @@ const CollectionView = ({
                     isError={isError}
                     games={games}
                     paginationInfo={collectionEntriesQuery.data?.pagination}
-                    page={watch("page")}
+                    page={formPage}
                     onPaginationChange={(page) => {
                         setValue("page", page);
                     }}
