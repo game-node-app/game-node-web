@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 
 const CreateCollectionFormSchema = z
     .object({
-        name: z.string().min(3).max(50),
+        name: z.string().min(3, "Collection must have a name.").max(50),
         description: z.string().optional(),
         isPublic: z.boolean().default(true),
         isFeatured: z.boolean().default(false),
@@ -125,7 +125,7 @@ const CollectionCreateOrUpdateForm = ({
                     error={formState.errors.isFeatured?.message}
                     label={"Featured collection"}
                     description={
-                        "If this collections is featured in your profile and library"
+                        "If this collections should be featured in your profile and library"
                     }
                     defaultChecked={false}
                     {...register("isFeatured")}

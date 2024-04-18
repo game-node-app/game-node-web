@@ -31,8 +31,6 @@ const ReviewActivityItem = ({ activity }: Props) => {
         gameQuery.data?.cover?.url,
         onMobile ? ImageSize.SCREENSHOT_MED : ImageSize.SCREENSHOT_BIG,
     );
-    console.log(imageUrl);
-    console.log(reviewQuery.data, gameQuery.data);
     return (
         <Box
             style={{

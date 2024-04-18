@@ -28,10 +28,18 @@ import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { useGames } from "@/components/game/hooks/useGames";
+import { useRouter } from "next/router";
 
 const CollectionEntriesMoveFormSchema = z.object({
-    gameIds: z.array(z.number()).min(1).default([]),
-    targetCollectionIds: z.array(z.string()),
+    gameIds: z
+        .array(z.number())
+        .min(1, "At least one game must be selected.")
+        .default([]),
+    targetCollectionIds: z.array(z.string(), {
+        required_error: "At least one collection must be selected",
+        invalid_type_error:
+            "Target collections returned as string. Please contact support.",
+    }),
 });
 
 type CollectionEntriesMoveFormValues = z.infer<
@@ -65,6 +73,7 @@ const CollectionEntriesMoveForm = ({
     collectionId,
     onClose,
 }: ICollectionEntriesMoveFormProps) => {
+    const router = useRouter();
     const { register, handleSubmit, setValue, watch, formState, setError } =
         useForm<CollectionEntriesMoveFormValues>({
             mode: "onSubmit",
@@ -121,16 +130,16 @@ const CollectionEntriesMoveForm = ({
             const relevantCollectionEntries =
                 collectionsEntriesQuery.data?.data.filter((entry) => {
                     return (
-                        entry.game != undefined &&
-                        gameIds.includes(entry.game.id)
+                        entry.gameId != undefined &&
+                        gameIds.includes(entry.gameId)
                     );
                 });
             if (
                 relevantCollectionEntries == undefined ||
                 relevantCollectionEntries.length === 0
             ) {
-                return Promise.reject(
-                    "Relevant collection entry filtering is failing. Contact support.",
+                throw new Error(
+                    "Relevant collection entry filtering is failing. Please contact support.",
                 );
             }
 
@@ -145,7 +154,7 @@ const CollectionEntriesMoveForm = ({
                             isFavorite: entry.isFavorite,
                             platformIds: ownedPlatformsIds as unknown as any,
                             collectionIds: targetCollectionsIds,
-                            gameId: entry.game.id,
+                            gameId: entry.gameId,
                         },
                     );
                 promises.push(replacePromise);
@@ -161,8 +170,27 @@ const CollectionEntriesMoveForm = ({
             });
             if (onClose) onClose();
         },
+        onError: (err) => {
+            console.error(err);
+            notifications.show({
+                message: err.message,
+                autoClose: 10000,
+                color: "red",
+            });
+        },
         onSettled: () => {
-            return collectionsEntriesQuery.invalidate();
+            /**
+             * This invalidation is not currently working. Status:
+             * https://github.com/game-node-app/game-node-web/issues/72
+             * TODO: Actually fix this.
+             */
+            gamesQuery.invalidate();
+            collectionsEntriesQuery.invalidate();
+
+            /**
+             * Yeah, this works.
+             */
+            router.reload();
         },
     });
 
@@ -202,7 +230,9 @@ const CollectionEntriesMoveForm = ({
                         setValue("targetCollectionIds", values);
                     }}
                 />
-                <Button type={"submit"}>Submit</Button>
+                <Button type={"submit"} loading={collectionsMutation.isPending}>
+                    Submit
+                </Button>
             </Stack>
         </form>
     );
