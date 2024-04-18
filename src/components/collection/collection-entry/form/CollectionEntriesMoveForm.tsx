@@ -27,6 +27,7 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
+import { useGames } from "@/components/game/hooks/useGames";
 
 const CollectionEntriesMoveFormSchema = z.object({
     gameIds: z.array(z.number()).min(1).default([]),
@@ -74,26 +75,28 @@ const CollectionEntriesMoveForm = ({
     const collectionsEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
     });
-    const gamesSelectOptions = useMemo<ComboboxItem[] | undefined>(():
-        | ComboboxItem[]
-        | undefined => {
-        if (
-            collectionsEntriesQuery.data == undefined ||
-            collectionsEntriesQuery.data.data == undefined ||
-            collectionsEntriesQuery.data.data.length === 0
-        ) {
+    const gameIds = collectionsEntriesQuery.data?.data.map(
+        (entry) => entry.gameId,
+    );
+    const gamesQuery = useGames({
+        gameIds: gameIds!,
+        relations: {
+            cover: true,
+        },
+    });
+    const gamesSelectOptions = useMemo(() => {
+        if (gamesQuery.data == undefined || gamesQuery.data.length === 0) {
             return undefined;
         }
-        return collectionsEntriesQuery.data.data.map((entry) => {
-            const game = entry.game;
+        return gamesQuery.data.map((game): ComboboxItem => {
             return {
                 value: `${game.id}`,
                 label: game.name,
             };
         });
-    }, [collectionsEntriesQuery.data]);
+    }, [gamesQuery.data]);
 
-    const collectionsSelectOptions = useMemo<ComboboxItem[] | undefined>(() => {
+    const collectionsSelectOptions = useMemo(() => {
         if (
             libraryQuery.data == undefined ||
             libraryQuery.data.collections == undefined ||
@@ -103,7 +106,7 @@ const CollectionEntriesMoveForm = ({
         }
         return libraryQuery.data.collections
             .filter((collection) => collection.id !== collectionId)
-            .map((collection) => {
+            .map((collection): ComboboxItem => {
                 return {
                     label: collection.name,
                     value: collection.id,
@@ -191,7 +194,7 @@ const CollectionEntriesMoveForm = ({
                     label={"Target collections"}
                     searchable
                     description={
-                        "Collections in which collection you want to insert these games"
+                        "Collections in which you want to insert these games"
                     }
                     error={formState.errors.targetCollectionIds?.message}
                     {...register("targetCollectionIds")}

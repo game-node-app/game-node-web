@@ -33,6 +33,7 @@ import { useGames } from "@/components/game/hooks/useGames";
 import CollectionRemoveModal from "@/components/collection/form/modal/CollectionRemoveModal";
 import Head from "next/head";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
+import CollectionViewActions from "@/components/collection/form/CollectionViewActions";
 
 interface ICollectionViewProps {
     libraryUserId: string;
@@ -56,10 +57,6 @@ const CollectionView = ({
     collectionId,
     libraryUserId,
 }: ICollectionViewProps) => {
-    const [createUpdateModalOpened, createUpdateModalUtils] = useDisclosure();
-    const [moveModalOpened, moveModalUtils] = useDisclosure();
-    const [removeModalOpened, removeModalUtils] = useDisclosure();
-
     const { register, watch, setValue } = useForm<CollectionViewFormValues>({
         mode: "onSubmit",
         resolver: zodResolver(CollectionViewFormSchema),
@@ -68,7 +65,7 @@ const CollectionView = ({
         },
     });
 
-    const userId = useUserId();
+    const ownUserId = useUserId();
 
     const formPage = watch("page");
 
@@ -83,7 +80,7 @@ const CollectionView = ({
 
     const collectionQuery = useCollection(collectionId);
     const collection = collectionQuery.data;
-    const isOwnCollection = libraryUserId === userId;
+    const isOwnCollection = libraryUserId === ownUserId;
     const collectionEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
         offset: requestParams.offset,
@@ -99,7 +96,7 @@ const CollectionView = ({
     });
     const games = gamesQuery.data;
 
-    const profileQuery = useUserProfile(userId);
+    const profileQuery = useUserProfile(ownUserId);
     const profile = profileQuery.data;
 
     const isLoading =
@@ -122,21 +119,6 @@ const CollectionView = ({
             )}
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
                 <Group className="w-[calc(100%-2rem)] mt-8 flex-nowrap justify-between">
-                    <CollectionCreateOrUpdateModal
-                        opened={createUpdateModalOpened}
-                        onClose={() => createUpdateModalUtils.close()}
-                        existingCollectionId={collectionId}
-                    />
-                    <CollectionEntriesMoveModal
-                        collectionId={collectionId}
-                        opened={moveModalOpened}
-                        onClose={moveModalUtils.close}
-                    />
-                    <CollectionRemoveModal
-                        collectionId={collectionId}
-                        opened={removeModalOpened}
-                        onClose={removeModalUtils.close}
-                    />
                     <Stack w={{ base: "70%", lg: "30%" }}>
                         <Title
                             size={"h3"}
@@ -151,31 +133,7 @@ const CollectionView = ({
                         </Text>
                     </Stack>
                     {isOwnCollection && (
-                        <Group justify={"end"}>
-                            <Tooltip label={"Collection settings"}>
-                                <ActionIcon
-                                    onClick={() =>
-                                        createUpdateModalUtils.open()
-                                    }
-                                >
-                                    <IconDots size={"1.2rem"} />
-                                </ActionIcon>
-                            </Tooltip>
-                            <Tooltip label={"Move games between collections"}>
-                                <ActionIcon
-                                    onClick={() => moveModalUtils.open()}
-                                >
-                                    <IconReplace size={"1.2rem"} />
-                                </ActionIcon>
-                            </Tooltip>
-                            <Tooltip label={"Delete collection"}>
-                                <ActionIcon
-                                    onClick={() => removeModalUtils.open()}
-                                >
-                                    <IconTrash size={"1.2rem"} />
-                                </ActionIcon>
-                            </Tooltip>
-                        </Group>
+                        <CollectionViewActions collectionId={collectionId} />
                     )}
                 </Group>
                 <Divider

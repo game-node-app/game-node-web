@@ -31,12 +31,12 @@ const CreateCollectionFormSchema = z
 type CreateCollectionFormValues = z.infer<typeof CreateCollectionFormSchema>;
 
 interface ICollectionCreateOrUpdateFormProps extends BaseModalChildrenProps {
-    existingCollectionId?: string;
+    collectionId?: string;
 }
 
 const CollectionCreateOrUpdateForm = ({
     onClose,
-    existingCollectionId,
+    collectionId,
 }: ICollectionCreateOrUpdateFormProps) => {
     const [requestError, setRequestError] = useState<string | undefined>(
         undefined,
@@ -45,7 +45,7 @@ const CollectionCreateOrUpdateForm = ({
     const userId = session.loading ? undefined : session.userId;
     const userLibraryQuery = useUserLibrary(userId);
 
-    const collectionQuery = useCollection(existingCollectionId);
+    const collectionQuery = useCollection(collectionId);
     const existingCollection = collectionQuery.data;
 
     const { setValue, watch, handleSubmit, register, formState } =

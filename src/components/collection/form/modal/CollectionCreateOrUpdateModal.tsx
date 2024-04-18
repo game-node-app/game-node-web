@@ -5,24 +5,27 @@ import { Modal } from "@mantine/core";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 
 interface ICreateCollectionModalProps extends BaseModalProps {
-    existingCollectionId?: string;
+    /**
+     * Existing collection id (for update actions)
+     */
+    collectionId?: string;
 }
 
 const CollectionCreateOrUpdateModal = ({
     opened,
     onClose,
-    existingCollectionId,
+    collectionId,
 }: ICreateCollectionModalProps) => {
     return (
         <Modal
-            title={`${existingCollectionId ? "Update" : "Create"} collection`}
+            title={`${collectionId ? "Update" : "Create"} collection`}
             withCloseButton
             opened={opened}
             onClose={() => onClose()}
         >
             <CollectionCreateOrUpdateForm
                 onClose={onClose}
-                existingCollectionId={existingCollectionId}
+                collectionId={collectionId}
             />
         </Modal>
     );
