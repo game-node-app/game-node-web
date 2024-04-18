@@ -32,23 +32,21 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
             enabled={playtimeQuery.isLoading || playtimeQuery.isSuccess}
         >
             <Space h={"0.8rem"} />
-            <>
-                <GameInfoPlaytimeItem
-                    name={"Main"}
-                    isLoading={playtimeQuery.isLoading}
-                    value={playtime?.timeMain}
-                />
-                <GameInfoPlaytimeItem
-                    name={"Main + Extras"}
-                    isLoading={playtimeQuery.isLoading}
-                    value={playtime?.timePlus}
-                />
-                <GameInfoPlaytimeItem
-                    name={"100%"}
-                    isLoading={playtimeQuery.isLoading}
-                    value={playtime?.time100}
-                />
-            </>
+            <GameInfoPlaytimeItem
+                name={"Main"}
+                isLoading={playtimeQuery.isLoading}
+                value={playtime?.timeMain}
+            />
+            <GameInfoPlaytimeItem
+                name={"Main + Extras"}
+                isLoading={playtimeQuery.isLoading}
+                value={playtime?.timePlus}
+            />
+            <GameInfoPlaytimeItem
+                name={"100%"}
+                isLoading={playtimeQuery.isLoading}
+                value={playtime?.time100}
+            />
             {playtimeQuery.isLoading && <CenteredLoading />}
             <Text className={"text-center text-xs mt-4"} c={"dimmed"}>
                 Data provided by <a href={"https://howlongtobeat.com"}>HLTB</a>
