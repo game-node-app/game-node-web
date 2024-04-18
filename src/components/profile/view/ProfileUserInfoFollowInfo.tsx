@@ -14,7 +14,6 @@ interface Props {
 const ProfileUserInfoFollowInfo = ({ targetUserId, criteria }: Props) => {
     const [modalOpened, modalUtils] = useDisclosure();
     const followInfoQuery = useInfiniteFollowInfo({
-        limit: 1,
         criteria,
         targetUserId,
     });

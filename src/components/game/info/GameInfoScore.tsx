@@ -15,6 +15,7 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { IconStar } from "@tabler/icons-react";
+import GameRating from "@/components/general/input/GameRating";
 
 interface ScoreDistribution {
     rating: number;
@@ -73,12 +74,7 @@ const GameInfoScore = ({ gameId }: Props) => {
             <Popover>
                 <Popover.Target>
                     <Center className={"mt-6 mb-6"}>
-                        <Rating
-                            value={score.data?.median}
-                            fractions={2}
-                            size={"lg"}
-                            readOnly
-                        />
+                        <GameRating value={score.data?.median} />
                     </Center>
                 </Popover.Target>
                 <Popover.Dropdown>

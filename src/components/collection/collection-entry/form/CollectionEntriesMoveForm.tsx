@@ -27,10 +27,19 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
+import { useGames } from "@/components/game/hooks/useGames";
+import { useRouter } from "next/router";
 
 const CollectionEntriesMoveFormSchema = z.object({
-    gameIds: z.array(z.number()).min(1).default([]),
-    targetCollectionIds: z.array(z.string()),
+    gameIds: z
+        .array(z.number())
+        .min(1, "At least one game must be selected.")
+        .default([]),
+    targetCollectionIds: z.array(z.string(), {
+        required_error: "At least one collection must be selected",
+        invalid_type_error:
+            "Target collections returned as string. Please contact support.",
+    }),
 });
 
 type CollectionEntriesMoveFormValues = z.infer<
@@ -64,6 +73,7 @@ const CollectionEntriesMoveForm = ({
     collectionId,
     onClose,
 }: ICollectionEntriesMoveFormProps) => {
+    const router = useRouter();
     const { register, handleSubmit, setValue, watch, formState, setError } =
         useForm<CollectionEntriesMoveFormValues>({
             mode: "onSubmit",
@@ -74,26 +84,28 @@ const CollectionEntriesMoveForm = ({
     const collectionsEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
     });
-    const gamesSelectOptions = useMemo<ComboboxItem[] | undefined>(():
-        | ComboboxItem[]
-        | undefined => {
-        if (
-            collectionsEntriesQuery.data == undefined ||
-            collectionsEntriesQuery.data.data == undefined ||
-            collectionsEntriesQuery.data.data.length === 0
-        ) {
+    const gameIds = collectionsEntriesQuery.data?.data.map(
+        (entry) => entry.gameId,
+    );
+    const gamesQuery = useGames({
+        gameIds: gameIds!,
+        relations: {
+            cover: true,
+        },
+    });
+    const gamesSelectOptions = useMemo(() => {
+        if (gamesQuery.data == undefined || gamesQuery.data.length === 0) {
             return undefined;
         }
-        return collectionsEntriesQuery.data.data.map((entry) => {
-            const game = entry.game;
+        return gamesQuery.data.map((game): ComboboxItem => {
             return {
                 value: `${game.id}`,
                 label: game.name,
             };
         });
-    }, [collectionsEntriesQuery.data]);
+    }, [gamesQuery.data]);
 
-    const collectionsSelectOptions = useMemo<ComboboxItem[] | undefined>(() => {
+    const collectionsSelectOptions = useMemo(() => {
         if (
             libraryQuery.data == undefined ||
             libraryQuery.data.collections == undefined ||
@@ -103,7 +115,7 @@ const CollectionEntriesMoveForm = ({
         }
         return libraryQuery.data.collections
             .filter((collection) => collection.id !== collectionId)
-            .map((collection) => {
+            .map((collection): ComboboxItem => {
                 return {
                     label: collection.name,
                     value: collection.id,
@@ -118,16 +130,16 @@ const CollectionEntriesMoveForm = ({
             const relevantCollectionEntries =
                 collectionsEntriesQuery.data?.data.filter((entry) => {
                     return (
-                        entry.game != undefined &&
-                        gameIds.includes(entry.game.id)
+                        entry.gameId != undefined &&
+                        gameIds.includes(entry.gameId)
                     );
                 });
             if (
                 relevantCollectionEntries == undefined ||
                 relevantCollectionEntries.length === 0
             ) {
-                return Promise.reject(
-                    "Relevant collection entry filtering is failing. Contact support.",
+                throw new Error(
+                    "Relevant collection entry filtering is failing. Please contact support.",
                 );
             }
 
@@ -142,7 +154,7 @@ const CollectionEntriesMoveForm = ({
                             isFavorite: entry.isFavorite,
                             platformIds: ownedPlatformsIds as unknown as any,
                             collectionIds: targetCollectionsIds,
-                            gameId: entry.game.id,
+                            gameId: entry.gameId,
                         },
                     );
                 promises.push(replacePromise);
@@ -158,8 +170,27 @@ const CollectionEntriesMoveForm = ({
             });
             if (onClose) onClose();
         },
+        onError: (err) => {
+            console.error(err);
+            notifications.show({
+                message: err.message,
+                autoClose: 10000,
+                color: "red",
+            });
+        },
         onSettled: () => {
-            return collectionsEntriesQuery.invalidate();
+            /**
+             * This invalidation is not currently working. Status:
+             * https://github.com/game-node-app/game-node-web/issues/72
+             * TODO: Actually fix this.
+             */
+            gamesQuery.invalidate();
+            collectionsEntriesQuery.invalidate();
+
+            /**
+             * Yeah, this works.
+             */
+            router.reload();
         },
     });
 
@@ -191,7 +222,7 @@ const CollectionEntriesMoveForm = ({
                     label={"Target collections"}
                     searchable
                     description={
-                        "Collections in which collection you want to insert these games"
+                        "Collections in which you want to insert these games"
                     }
                     error={formState.errors.targetCollectionIds?.message}
                     {...register("targetCollectionIds")}
@@ -199,7 +230,9 @@ const CollectionEntriesMoveForm = ({
                         setValue("targetCollectionIds", values);
                     }}
                 />
-                <Button type={"submit"}>Submit</Button>
+                <Button type={"submit"} loading={collectionsMutation.isPending}>
+                    Submit
+                </Button>
             </Stack>
         </form>
     );

@@ -3,8 +3,6 @@ import { ProfileAvatar } from "@/wrapper/server";
 import { getServerStoredUpload } from "@/util/getServerStoredImages";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 
-const placeholderAvatarImage = "https://i.imgur.com/fGxgcDF.png";
-
 interface UserAvatarProps extends AvatarProps {
     userId: string | undefined;
 }

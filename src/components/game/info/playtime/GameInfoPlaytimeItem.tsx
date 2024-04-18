@@ -9,8 +9,7 @@ interface Props {
 }
 
 const GameInfoPlaytimeItem = ({ name, value, isLoading }: Props) => {
-    if (!value) return null;
-    const valueHours = Math.ceil(value / 3600);
+    const valueHours = Math.ceil(value || 0 / 3600);
     return (
         <Group className={"flex-nowrap gap-0 w-full"}>
             <Stack

@@ -4,8 +4,7 @@ import {
     IconUser,
     IconCheckbox,
     IconRouteAltLeft,
-    TablerIconsProps,
-    IconSettings,
+    IconProps,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -15,12 +14,17 @@ import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import { ReactElement, useState } from "react";
+import {
+    ComponentPropsWithoutRef,
+    ExoticComponent,
+    PropsWithoutRef,
+    useState,
+} from "react";
 
 import GlobalNavbarSearchBar from "@/components/general/shell/GlobalShellNavbar/search-bar/GlobalShellNavbarSearchBar";
 
 interface NavbarItem {
-    icon: (props: TablerIconsProps) => ReactElement;
+    icon: ExoticComponent<PropsWithoutRef<IconProps>>;
     label: string;
     href: string;
 }

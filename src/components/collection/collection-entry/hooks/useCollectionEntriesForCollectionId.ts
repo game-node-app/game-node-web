@@ -3,10 +3,7 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import {
-    CollectionEntriesPaginatedResponseDto,
-    GameRepositoryService,
-} from "@/wrapper/server";
+import { CollectionEntriesPaginatedResponseDto } from "@/wrapper/server";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
@@ -34,8 +31,11 @@ export function useCollectionEntriesForCollectionId({
     const queryClient = useQueryClient();
     const queryKey = ["collection-entries", collectionId, offset, limit];
     const invalidate = () => {
-        return queryClient.invalidateQueries({
-            queryKey: [queryKey.slice(0, 2)],
+        queryClient.resetQueries({
+            queryKey: [queryKey[0]],
+        });
+        queryClient.invalidateQueries({
+            queryKey: [queryKey[0]],
         });
     };
     return {

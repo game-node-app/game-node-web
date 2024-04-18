@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 
 const CreateCollectionFormSchema = z
     .object({
-        name: z.string().min(3).max(50),
+        name: z.string().min(3, "Collection must have a name.").max(50),
         description: z.string().optional(),
         isPublic: z.boolean().default(true),
         isFeatured: z.boolean().default(false),
@@ -31,12 +31,12 @@ const CreateCollectionFormSchema = z
 type CreateCollectionFormValues = z.infer<typeof CreateCollectionFormSchema>;
 
 interface ICollectionCreateOrUpdateFormProps extends BaseModalChildrenProps {
-    existingCollectionId?: string;
+    collectionId?: string;
 }
 
 const CollectionCreateOrUpdateForm = ({
     onClose,
-    existingCollectionId,
+    collectionId,
 }: ICollectionCreateOrUpdateFormProps) => {
     const [requestError, setRequestError] = useState<string | undefined>(
         undefined,
@@ -45,7 +45,7 @@ const CollectionCreateOrUpdateForm = ({
     const userId = session.loading ? undefined : session.userId;
     const userLibraryQuery = useUserLibrary(userId);
 
-    const collectionQuery = useCollection(existingCollectionId);
+    const collectionQuery = useCollection(collectionId);
     const existingCollection = collectionQuery.data;
 
     const { setValue, watch, handleSubmit, register, formState } =
@@ -125,7 +125,7 @@ const CollectionCreateOrUpdateForm = ({
                     error={formState.errors.isFeatured?.message}
                     label={"Featured collection"}
                     description={
-                        "If this collections is featured in your profile and library"
+                        "If this collections should be featured in your profile and library"
                     }
                     defaultChecked={false}
                     {...register("isFeatured")}

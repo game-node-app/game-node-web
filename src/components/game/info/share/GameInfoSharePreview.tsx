@@ -21,6 +21,7 @@ import GameInfoOwnedPlatforms from "@/components/game/info/GameInfoOwnedPlatform
 import GameNodeLogo from "@/components/general/GameNodeLogo";
 import { UseFormWatch } from "react-hook-form";
 import { ShareFormValues } from "@/components/game/info/share/GameInfoShare";
+import GameRating from "@/components/general/input/GameRating";
 
 interface SharePreviewProps {
     gameId: number;
@@ -62,15 +63,7 @@ const GameInfoSharePreview = ({
                     <Title size={"h4"} className={"text-center mt-4"}>
                         {game?.name}
                     </Title>
-                    {withRating && (
-                        <Rating
-                            readOnly
-                            value={rating}
-                            color={"#F15025"}
-                            fractions={2}
-                            size={"lg"}
-                        />
-                    )}
+                    {withRating && <GameRating value={rating} />}
                 </Stack>
                 {withDivider && <Divider w={"100%"} />}
                 {withOwnedPlatforms && (

@@ -11,8 +11,6 @@ interface Props {
     targetUserId: string;
 }
 
-const DEFAULT_LIMIT = 10;
-
 const FollowInfoList = ({ criteria, targetUserId }: Props) => {
     const { entry, ref } = useIntersection({
         threshold: 1,
@@ -23,7 +21,6 @@ const FollowInfoList = ({ criteria, targetUserId }: Props) => {
         useInfiniteFollowInfo({
             criteria,
             targetUserId,
-            limit: 10,
             orderBy: {
                 createdAt: "DESC",
             },
