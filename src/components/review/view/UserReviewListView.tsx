@@ -140,14 +140,6 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
                     onPaginationChange={handlePagination}
                 />
             )}
-            <Group w={"100%"} justify={"center"}>
-                {!isEmpty && (
-                    <Pagination
-                        total={trendingReviewsPagination?.totalPages ?? 1}
-                        onChange={handlePagination}
-                    />
-                )}
-            </Group>
         </Stack>
     );
 };
