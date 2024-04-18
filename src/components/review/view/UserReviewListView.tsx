@@ -17,6 +17,7 @@ import { ParsedUrlQuery } from "querystring";
 import { TBasePaginationRequest } from "@/util/types/pagination";
 import period = FindStatisticsTrendingGamesDto.period;
 import { DetailsBox } from "@/components/general/DetailsBox";
+import GameView from "@/components/general/view/game/GameView";
 
 const DEFAULT_LIMIT = 7;
 
@@ -61,15 +62,16 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
     const ownUserId = useUserId();
     const hasSetInitialQueryParams = useRef(false);
 
-    const [offset, setOffset] = useState(0);
+    const [page, setPage] = useState(1);
 
     const trendingReviewsDto = useMemo((): FindStatisticsTrendingReviewsDto => {
+        const offset = (page - 1) * DEFAULT_LIMIT;
         return {
             ...DEFAULT_USER_REVIEW_LIST_VIEW_DTO,
             offset: offset,
             userId: userId,
         };
-    }, [offset, userId]);
+    }, [page, userId]);
     const trendingReviewsQuery = useTrendingReviews(trendingReviewsDto);
     const trendingReviewsPagination = trendingReviewsQuery.data?.pagination;
 
@@ -97,7 +99,7 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
                 shallow: true,
             },
         );
-        setOffset(offset);
+        setPage(page);
     };
 
     const items = useMemo(() => {
@@ -131,6 +133,13 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
             <Stack w={"100%"} align={"start"}>
                 {items}
             </Stack>
+            {!isEmpty && (
+                <GameView.Pagination
+                    page={page}
+                    paginationInfo={trendingReviewsQuery.data?.pagination}
+                    onPaginationChange={handlePagination}
+                />
+            )}
             <Group w={"100%"} justify={"center"}>
                 {!isEmpty && (
                     <Pagination
