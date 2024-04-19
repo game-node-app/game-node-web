@@ -20,14 +20,17 @@ const GameInfoPlaytimeItem = ({ name, value, isLoading }: Props) => {
             >
                 {name}
             </Stack>
-            <Stack
-                className={
-                    "items-center font-bold w-1/2 h-10 justify-center bg-[#F15025] border-[#2E2E2E] border-[1px] rounded-r"
-                }
-            >
-                {valueHours} Hours
-            </Stack>
-            {isLoading && <Skeleton className={"w-1/2 h-10"} />}
+            {isLoading ? (
+                <Skeleton className={"w-1/2 h-10"} />
+            ) : (
+                <Stack
+                    className={
+                        "items-center font-bold w-1/2 h-10 justify-center bg-[#F15025] border-[#2E2E2E] border-[1px] rounded-r"
+                    }
+                >
+                    {valueHours} Hours
+                </Stack>
+            )}
         </Group>
     );
 };
