@@ -1,6 +1,6 @@
 import React from "react";
 import ActivityFeedLayout from "@/components/activity/ActivityFeedLayout";
-import { Container, Text } from "@mantine/core";
+import { Box, Container, Paper, Stack, Text } from "@mantine/core";
 import { useInfiniteActivities } from "@/components/activity/hooks/useInfiniteActivities";
 import ActivityFeed from "@/components/activity/ActivityFeed";
 
@@ -11,9 +11,13 @@ const All = () => {
     });
     return (
         <Container fluid>
-            <ActivityFeedLayout currentTab={"all"}>
-                <ActivityFeed criteria={"all"} />
-            </ActivityFeedLayout>
+            <Stack className={"w-full items-center"}>
+                <Box className={"w-full lg:w-10/12"}>
+                    <ActivityFeedLayout currentTab={"all"}>
+                        <ActivityFeed criteria={"all"} />
+                    </ActivityFeedLayout>
+                </Box>
+            </Stack>
         </Container>
     );
 };

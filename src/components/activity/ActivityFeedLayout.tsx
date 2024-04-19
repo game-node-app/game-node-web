@@ -26,7 +26,7 @@ const ActivityFeedLayout = ({ children, currentTab }: Props) => {
                     </Link>
                 </Tabs.List>
             </Tabs>
-            <Box className={"mt-4"}>{children}</Box>
+            <Box>{children}</Box>
         </Stack>
     );
 };

@@ -6,6 +6,7 @@ import sourceType = StatisticsActionDto.sourceType;
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { redirectToAuth } from "supertokens-auth-react";
 import { IconThumbUp } from "@tabler/icons-react";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface Props {
     activityId: string;
@@ -19,24 +20,22 @@ const ActivityItemLikes = ({ activityId }: Props) => {
         sourceType: sourceType.ACTIVITY,
     });
     return (
-        <Group gap={"0.5rem"}>
-            <ActionIcon
-                onClick={async () => {
-                    if (!userId) {
-                        redirectToAuth();
-                        return;
-                    }
-                    toggleLike();
-                }}
-                variant={isLiked ? "filled" : "subtle"}
-                size={"xl"}
-                color={isLiked ? "brand" : "white"}
-                data-disabled={!userId}
-            >
-                <IconThumbUp />
-                <Text>{likesCount}</Text>
-            </ActionIcon>
-        </Group>
+        <ActionIcon
+            onClick={async () => {
+                if (!userId) {
+                    await redirectToAuth();
+                    return;
+                }
+                toggleLike();
+            }}
+            variant={isLiked ? "filled" : "default"}
+            size={"lg"}
+            color={isLiked ? "brand" : "white"}
+            data-disabled={!userId}
+        >
+            <IconThumbUp />
+            <Text>{likesCount}</Text>
+        </ActionIcon>
     );
 };
 

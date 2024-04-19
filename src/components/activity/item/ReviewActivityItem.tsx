@@ -13,6 +13,7 @@ import { IconThumbUp } from "@tabler/icons-react";
 import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
 import GameRating from "@/components/general/input/GameRating";
 import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
+import Link from "next/link";
 
 interface Props {
     activity: Activity;
@@ -31,6 +32,10 @@ const ReviewActivityItem = ({ activity }: Props) => {
         gameQuery.data?.cover?.url,
         onMobile ? ImageSize.SCREENSHOT_MED : ImageSize.SCREENSHOT_BIG,
     );
+    const reviewCreateDate = reviewQuery.data
+        ? new Date(reviewQuery.data.createdAt)
+        : new Date();
+
     return (
         <Box
             style={{
@@ -53,12 +58,15 @@ const ReviewActivityItem = ({ activity }: Props) => {
                     />
                 </Box>
                 <Box className={"w-3/12"}>
-                    <Stack w={"100%"}>
-                        <Title className={"text-sm"}>
-                            {gameQuery.data?.name}
-                        </Title>
-                        <Text c={"dimmed"} className={"text-xs"}>
-                            Reviewed
+                    <Stack gap={10}>
+                        <Link href={`/game/${gameQuery.data?.id}`}>
+                            <Title className={"text-sm lg:text-md"}>
+                                {gameQuery.data?.name}
+                            </Title>
+                        </Link>
+
+                        <Text fz={"sm"} c={"dimmed"}>
+                            Reviewed at {reviewCreateDate.toLocaleDateString()}
                         </Text>
                     </Stack>
                 </Box>
@@ -68,12 +76,12 @@ const ReviewActivityItem = ({ activity }: Props) => {
                             "w-full h-full items-end justify-end lg:pe-5"
                         }
                     >
-                        <Stack className={"gap-4 py-4 items-end"}>
+                        <Stack className={"gap-4 py-2 items-end"}>
                             <GameRating
                                 value={reviewQuery.data?.rating}
                                 size={"md"}
                             />
-                            <Group>
+                            <Group mt={"auto"}>
                                 <ActivityItemLikes activityId={activity.id} />
                             </Group>
                         </Stack>
