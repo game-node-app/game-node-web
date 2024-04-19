@@ -28,7 +28,7 @@ const GameInfoPlaytimeItem = ({ name, value, isLoading }: Props) => {
                         "items-center font-bold w-1/2 h-10 justify-center bg-[#F15025] border-[#2E2E2E] border-[1px] rounded-r"
                     }
                 >
-                    {valueHours} Hours
+                    {valueHours === 0 ? "Not Available" : `${valueHours} Hours`}
                 </Stack>
             )}
         </Group>
