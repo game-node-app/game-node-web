@@ -14,6 +14,7 @@ import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
 import GameRating from "@/components/general/input/GameRating";
 import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
 import Link from "next/link";
+import getTimeSinceString from "@/util/getTimeSinceString";
 
 interface Props {
     activity: Activity;
@@ -36,6 +37,8 @@ const ReviewActivityItem = ({ activity }: Props) => {
         ? new Date(reviewQuery.data.createdAt)
         : new Date();
 
+    const timeSince = getTimeSinceString(reviewCreateDate);
+
     return (
         <Box
             style={{
@@ -43,9 +46,9 @@ const ReviewActivityItem = ({ activity }: Props) => {
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
             }}
-            className={"relative w-full h-[120px] rounded-md"}
+            className={"relative w-full h-[160px] rounded-md"}
         >
-            <Overlay backgroundOpacity={0.6} className={"z-0"}></Overlay>
+            <Overlay backgroundOpacity={0.8} className={"z-0"}></Overlay>
             <Group
                 className={
                     "w-full h-full relative z-20 items-center px-3 flex-nowrap"
@@ -58,33 +61,33 @@ const ReviewActivityItem = ({ activity }: Props) => {
                     />
                 </Box>
                 <Box className={"w-3/12"}>
-                    <Stack gap={10}>
+                    <Stack gap={5}>
                         <Link href={`/game/${gameQuery.data?.id}`}>
                             <Title className={"text-sm lg:text-md"}>
                                 {gameQuery.data?.name}
                             </Title>
                         </Link>
-
-                        <Text fz={"sm"} c={"dimmed"}>
-                            Reviewed at {reviewCreateDate.toLocaleDateString()}
+                        <Text c={"dimmed"} fz={"sm"}>
+                            Reviewed
                         </Text>
                     </Stack>
                 </Box>
                 <Box className={"w-6/12 lg:w-3/12 ms-auto h-full"}>
                     <Stack
                         className={
-                            "w-full h-full items-end justify-end lg:pe-5"
+                            "w-full h-full items-end justify-between lg:pe-5 py-4"
                         }
                     >
-                        <Stack className={"gap-4 py-2 items-end"}>
-                            <GameRating
-                                value={reviewQuery.data?.rating}
-                                size={"md"}
-                            />
-                            <Group mt={"auto"}>
-                                <ActivityItemLikes activityId={activity.id} />
-                            </Group>
-                        </Stack>
+                        <Text c={"dimmed"} fz={"sm"}>
+                            {timeSince} ago
+                        </Text>
+                        <GameRating
+                            value={reviewQuery.data?.rating}
+                            size={"md"}
+                        />
+                        <Group>
+                            <ActivityItemLikes activityId={activity.id} />
+                        </Group>
                     </Stack>
                 </Box>
             </Group>

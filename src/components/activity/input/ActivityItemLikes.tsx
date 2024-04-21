@@ -28,7 +28,7 @@ const ActivityItemLikes = ({ activityId }: Props) => {
                 }
                 toggleLike();
             }}
-            variant={isLiked ? "filled" : "default"}
+            variant={isLiked ? "filled" : "transparent"}
             size={"lg"}
             color={isLiked ? "brand" : "white"}
             data-disabled={!userId}

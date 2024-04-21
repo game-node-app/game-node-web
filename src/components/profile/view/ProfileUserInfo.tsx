@@ -21,6 +21,7 @@ const dateFormatter = new Intl.DateTimeFormat();
 interface Props {
     userId: string;
 }
+
 const ProfileUserInfo = ({ userId }: Props) => {
     const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
