@@ -74,7 +74,7 @@ const GameInfoOwnedPlatforms = ({
                 />
             );
         });
-    }, [iconsProps, iconsQuery.data, iconsQuery.isLoading]);
+    }, [iconsProps, iconsQuery.data]);
 
     const isEmpty = icons == undefined || icons.length === 0;
     const platformsNames = collectionEntry.data?.ownedPlatforms
