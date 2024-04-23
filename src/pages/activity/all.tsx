@@ -10,15 +10,13 @@ const All = () => {
         criteria: "all",
     });
     return (
-        <Container fluid>
-            <Stack className={"w-full items-center"}>
-                <Box className={"w-full lg:w-10/12"}>
-                    <ActivityFeedLayout currentTab={"all"}>
-                        <ActivityFeed criteria={"all"} />
-                    </ActivityFeedLayout>
-                </Box>
-            </Stack>
-        </Container>
+        <Stack className={"w-full items-center"}>
+            <Box className={"w-full lg:w-10/12"}>
+                <ActivityFeedLayout currentTab={"all"}>
+                    <ActivityFeed criteria={"all"} />
+                </ActivityFeedLayout>
+            </Box>
+        </Stack>
     );
 };
 

@@ -15,6 +15,7 @@ import TitleLink from "@/components/general/TitleLink";
 import { FollowInfoRequestDto } from "@/wrapper/server";
 import ProfileUserInfoFollowInfo from "@/components/profile/view/ProfileUserInfoFollowInfo";
 import criteria = FollowInfoRequestDto.criteria;
+import { useLatestActivities } from "@/components/activity/hooks/useLatestActivities";
 
 const dateFormatter = new Intl.DateTimeFormat();
 
@@ -29,6 +30,7 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId, 0, 1);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
+    const activityQuery = useLatestActivities(userId, 0, 1);
 
     const featuredAchievement = useMemo(() => {
         if (obtainedAchievementsQuery.data == undefined) return null;

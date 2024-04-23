@@ -7,15 +7,13 @@ import ActivityFeed from "@/components/activity/ActivityFeed";
 const Following = () => {
     return (
         <SessionAuth>
-            <Container fluid>
-                <Stack className={"w-full items-center"}>
-                    <Box className={"w-full lg:w-10/12"}>
-                        <ActivityFeedLayout currentTab={"following"}>
-                            <ActivityFeed criteria={"following"} />
-                        </ActivityFeedLayout>
-                    </Box>
-                </Stack>
-            </Container>
+            <Stack className={"w-full items-center"}>
+                <Box className={"w-full lg:w-10/12"}>
+                    <ActivityFeedLayout currentTab={"following"}>
+                        <ActivityFeed criteria={"following"} />
+                    </ActivityFeedLayout>
+                </Box>
+            </Stack>
         </SessionAuth>
     );
 };

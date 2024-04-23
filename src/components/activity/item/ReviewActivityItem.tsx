@@ -15,6 +15,7 @@ import GameRating from "@/components/general/input/GameRating";
 import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
 import Link from "next/link";
 import getTimeSinceString from "@/util/getTimeSinceString";
+import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 
 interface Props {
     activity: Activity;
@@ -46,18 +47,27 @@ const ReviewActivityItem = ({ activity }: Props) => {
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
             }}
-            className={"relative w-full h-[160px] rounded-md"}
+            className={"relative w-full mih-[160px] rounded-md"}
         >
             <Overlay backgroundOpacity={0.8} className={"z-0"}></Overlay>
             <Group
                 className={
-                    "w-full h-full relative z-20 items-center px-3 flex-nowrap"
+                    "w-full h-full relative z-20 items-center flex-nowrap"
                 }
             >
-                <Box className={"w-3/12 lg:w-1/12"}>
-                    <UserAvatarWithUsername
+                <Box className={"w-3/12 lg:w-2/12"}>
+                    <UserAvatarGroup
                         userId={activity.profileUserId}
-                        size={onMobile ? "lg" : "xl"}
+                        groupProps={{
+                            wrap: "wrap",
+                            justify: "center",
+                            gap: onMobile ? 3 : 5,
+                        }}
+                        textProps={{
+                            className: "text-sm md:text-md",
+                        }}
+                        avatarProps={{ size: onMobile ? "lg" : "xl" }}
+                        withHorizontalBreak
                     />
                 </Box>
                 <Box className={"w-3/12"}>
@@ -67,7 +77,13 @@ const ReviewActivityItem = ({ activity }: Props) => {
                                 {gameQuery.data?.name}
                             </Title>
                         </Link>
-                        <Text c={"dimmed"} fz={"sm"}>
+                        <Text
+                            c={"dimmed"}
+                            fz={{
+                                base: "xs",
+                                md: "sm",
+                            }}
+                        >
                             Reviewed
                         </Text>
                     </Stack>
@@ -75,7 +91,7 @@ const ReviewActivityItem = ({ activity }: Props) => {
                 <Box className={"w-6/12 lg:w-3/12 ms-auto h-full"}>
                     <Stack
                         className={
-                            "w-full h-full items-end justify-between lg:pe-5 py-4"
+                            "w-full h-full items-end justify-between py-4 pe-2 lg:pe-3"
                         }
                     >
                         <Text c={"dimmed"} fz={"sm"}>

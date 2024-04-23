@@ -13,7 +13,7 @@ const GameRating = (props: Props) => {
     return (
         <Rating
             fractions={2}
-            size={"lg"}
+            size={"md"}
             readOnly
             color={"#F15025"}
             {...props}

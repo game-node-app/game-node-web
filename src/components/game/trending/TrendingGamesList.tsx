@@ -43,7 +43,13 @@ const TrendingGamesList = () => {
     }, []);
 
     return (
-        <DetailsBox enabled={!isEmpty} title={"Trending Games"}>
+        <DetailsBox
+            enabled={!isEmpty}
+            title={"Trending Games"}
+            stackProps={{
+                className: "",
+            }}
+        >
             <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
                 {isLoading && elementsSkeletons}
                 {gamesQuery.data?.map((game) => {

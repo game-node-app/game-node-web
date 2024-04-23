@@ -7,6 +7,7 @@ import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUse
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import Link from "next/link";
 import TextLink from "@/components/general/TextLink";
+import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 
 interface Props {
     activity: Activity;
@@ -25,16 +26,25 @@ const UserFollowActivityItem = ({ activity }: Props) => {
     if (!followerUserId || !followedUserId) return null;
 
     return (
-        <Paper className={"relative w-full h-[120px] rounded-md"}>
+        <Paper className={"relative w-full mih-[160px] rounded-md"}>
             <Group
                 className={
-                    "w-full h-full relative items-center px-3 flex-nowrap gap-4"
+                    "w-full h-full relative items-center flex-nowrap gap-4 my-5"
                 }
             >
-                <Box className={"w-3/12 lg:w-1/12"}>
-                    <UserAvatarWithUsername
-                        userId={followerUserId}
-                        size={onMobile ? "lg" : "xl"}
+                <Box className={"w-3/12 lg:w-2/12"}>
+                    <UserAvatarGroup
+                        userId={activity.profileUserId}
+                        groupProps={{
+                            wrap: "wrap",
+                            justify: "center",
+                            gap: onMobile ? 3 : 5,
+                        }}
+                        textProps={{
+                            className: "text-sm md:text-md",
+                        }}
+                        avatarProps={{ size: onMobile ? "lg" : "xl" }}
+                        withHorizontalBreak
                     />
                 </Box>
                 <Box className={"w-6/12 lg:w-6/12"}>
@@ -42,16 +52,25 @@ const UserFollowActivityItem = ({ activity }: Props) => {
                         <TextLink href={`/profile/${followerUserId}`} span>
                             {followerUserProfile.data?.username}
                         </TextLink>{" "}
-                        started following{" "}
+                        has started following{" "}
                         <TextLink href={`/profile/${followedUserId}`} span>
                             {followedUserProfile.data?.username}
                         </TextLink>
                     </Text>
                 </Box>
-                <Box className={"ms-auto w-3/12 lg:w-1/12 lg:me-8"}>
-                    <UserAvatarWithUsername
+                <Box className={"ms-auto w-3/12 lg:w-2/12"}>
+                    <UserAvatarGroup
                         userId={followedUserId}
-                        size={onMobile ? "lg" : "xl"}
+                        groupProps={{
+                            wrap: "wrap",
+                            justify: "center",
+                            gap: onMobile ? 3 : 5,
+                        }}
+                        textProps={{
+                            className: "text-sm md:text-md",
+                        }}
+                        avatarProps={{ size: onMobile ? "lg" : "xl" }}
+                        withHorizontalBreak
                     />
                 </Box>
             </Group>

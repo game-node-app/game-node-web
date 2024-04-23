@@ -21,15 +21,11 @@ const buildSkeletons = () => {
     return skeletons;
 };
 
-interface Props {
-    limit: number;
-}
-
-const TrendingReviewCarousel = ({ limit }: Props) => {
+const TrendingReviewCarousel = () => {
     const onMobile = useOnMobile();
     const trendingReviews = useTrendingReviews({
-        limit,
         offset: 0,
+        limit: 6,
         period: period.MONTH,
     });
     const isEmpty =
@@ -57,7 +53,12 @@ const TrendingReviewCarousel = ({ limit }: Props) => {
 
     return (
         !isEmpty && (
-            <DetailsBox title={"Trending Reviews"}>
+            <DetailsBox
+                title={"Trending Reviews"}
+                stackProps={{
+                    className: "",
+                }}
+            >
                 <Carousel
                     slideSize={{
                         base: "90%",
