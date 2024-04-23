@@ -28,7 +28,10 @@ const ProfileFavoriteGames = ({ userId, limit = 10 }: Props) => {
         },
     });
 
-    const isFailed =
+    const isLoading =
+        favoriteCollectionEntriesQuery.isLoading || gamesQuery.isLoading;
+
+    const isError =
         favoriteCollectionEntriesQuery.isError || gamesQuery.isError;
 
     const isEmpty =
@@ -37,7 +40,7 @@ const ProfileFavoriteGames = ({ userId, limit = 10 }: Props) => {
         gamesQuery.data == undefined ||
         gamesQuery.data.length === 0;
 
-    if (favoriteCollectionEntriesQuery.isLoading) {
+    if (isLoading) {
         return <CenteredLoading />;
     } else if (isEmpty) {
         return (
@@ -45,7 +48,7 @@ const ProfileFavoriteGames = ({ userId, limit = 10 }: Props) => {
                 message={"This user has no public favorite games."}
             />
         );
-    } else if (isFailed) {
+    } else if (isError) {
         return (
             <CenteredErrorMessage
                 message={"We couldn't fetch this data. Please try again."}

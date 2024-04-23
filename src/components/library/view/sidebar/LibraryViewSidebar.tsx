@@ -6,6 +6,7 @@ import { Box, Group, Space, Text, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { Collection } from "@/wrapper/server";
 import LibraryViewSidebarCollections from "@/components/library/view/sidebar/LibraryViewSidebarCollections";
+import useUserProfile from "@/components/profile/hooks/useUserProfile";
 
 interface ILibraryViewSidebarProps {
     userId: string | undefined;
@@ -20,12 +21,14 @@ const buildCollectionsItems = (collections: Collection[]) => {
 const LibraryViewSidebar = ({ userId }: ILibraryViewSidebarProps) => {
     const userLibraryQuery = useUserLibrary(userId);
     const userLibrary = userLibraryQuery.data;
+    const userProfileQuery = useUserProfile(userId);
+    const username = userProfileQuery.data?.username;
     return (
         <nav className={classes.navbar}>
             <div className={classes.section}>
                 <Link href={`/library/${userId}`} className={classes.mainLink}>
                     <Text className="w-full" ta={"center"}>
-                        Home
+                        {username}'s Library
                     </Text>
                 </Link>
             </div>

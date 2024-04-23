@@ -47,7 +47,6 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
                 isLoading={playtimeQuery.isLoading}
                 value={playtime?.time100}
             />
-            {playtimeQuery.isLoading && <CenteredLoading />}
             <Text className={"text-center text-xs mt-4"} c={"dimmed"}>
                 Data provided by <a href={"https://howlongtobeat.com"}>HLTB</a>
             </Text>

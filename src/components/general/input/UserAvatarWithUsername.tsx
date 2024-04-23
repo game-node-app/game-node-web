@@ -51,16 +51,16 @@ const UserAvatarWithUsername = ({ userId, ...avatarProps }: Props) => {
                             "linear-gradient(180deg, rgba(30,30,30,0.7973390039609594) 0%, rgba(30,30,30,0.772128919927346) 100%)"
                         }
                         backgroundOpacity={0.6}
-                        className={"z-10"}
+                        className={"z-10 rounded"}
                     />
                 )}
                 {overlayVisible && (
-                    <Box className={"w-12 z-20"} pos={"absolute"}>
+                    <Box className={"w-14 z-20"} pos={"absolute"}>
                         {profileQuery.isLoading && (
                             <Skeleton className={"h-4 w-full"} />
                         )}
                         {username && (
-                            <Text fz={"xs"} className={"w-full"} lineClamp={2}>
+                            <Text fz={"xs"} lineClamp={2}>
                                 {username}
                             </Text>
                         )}

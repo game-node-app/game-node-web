@@ -11,6 +11,8 @@ import TrendingGamesList from "@/components/game/trending/TrendingGamesList";
 import { ParsedUrlQuery } from "querystring";
 import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
 import { useRouter } from "next/router";
+import { DetailsBox } from "@/components/general/DetailsBox";
+import RecentActivitiesList from "@/components/activity/RecentActivitiesList";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -109,16 +111,10 @@ const Index = () => {
     }, [isQueryEnabled, query, router.isReady, setValue]);
 
     return (
-        <Container
-            fluid
-            mih={"100%"}
-            p={0}
-            pos={"relative"}
-            className="bg-mobile lg:bg-desktop bg-cover bg-fixed"
-        >
+        <Container fluid mih={"100%"} p={0} pos={"relative"} className="mb-12">
             <Stack align="center" justify="center" w={"100%"}>
                 <Box
-                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12 px-4`}
+                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12`}
                 >
                     <form
                         className="w-full h-full"
@@ -157,10 +153,20 @@ const Index = () => {
                             h={"100%"}
                             justify={"center"}
                             align={"center"}
+                            mt={"1rem"}
                         >
                             <TrendingGamesList />
                             <Space h={"1rem"} />
-                            <TrendingReviewCarousel limit={6} />
+                            <TrendingReviewCarousel />
+                            <Space h={"1rem"} />
+                            <DetailsBox
+                                title={"Recent Activity"}
+                                stackProps={{
+                                    className: "",
+                                }}
+                            >
+                                <RecentActivitiesList />
+                            </DetailsBox>
                         </Stack>
                     )}
                 </Box>

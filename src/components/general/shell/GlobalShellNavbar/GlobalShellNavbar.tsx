@@ -35,6 +35,7 @@ const links: NavbarItem[] = [
     { icon: IconRouteAltLeft, label: "Explore", href: "/explore" },
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
+    { icon: IconBulb, label: "Activity", href: "/activity" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {

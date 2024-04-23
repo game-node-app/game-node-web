@@ -7,7 +7,7 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import Break from "@/components/general/Break";
 
-interface IProps extends AvatarProps {
+interface IProps {
     userId: string;
     avatarProps?: AvatarProps;
     groupProps?: GroupProps;
@@ -27,12 +27,13 @@ export const UserAvatarGroup = ({
     return (
         <Link
             href={`/profile/${profileQuery.data?.userId}`}
-            className={"w-full"}
+            className={"w-full h-full"}
         >
             <Group
                 wrap={onMobile ? "nowrap" : "wrap"}
                 gap={onMobile ? undefined : 5}
                 w={"100%"}
+                h={"100%"}
                 {...groupProps}
             >
                 <UserAvatar {...avatarProps} userId={userId} />

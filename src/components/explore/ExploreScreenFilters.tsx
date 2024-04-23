@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import React, {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+} from "react";
 import { z } from "zod";
 import {
     FindStatisticsTrendingGamesDto,
@@ -130,7 +136,11 @@ const ExploreScreenFilters = ({
         drawerUtils.close();
     };
 
-    useEffect(() => {
+    /**
+     * useLayoutEffect executes BEFORE the screen is updated, so this avoids screen "blinks" when a screen is in
+     * an unfinished state
+     */
+    useLayoutEffect(() => {
         const query = router.query;
         if (router.isReady && !hasLoadedQueryParams) {
             const dto = exploreScreenUrlQueryToDto(query);
