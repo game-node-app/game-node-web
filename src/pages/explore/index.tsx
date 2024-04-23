@@ -130,7 +130,7 @@ const Index = () => {
 
     const buildLoadingSkeletons = useCallback(() => {
         return new Array(10).fill(0).map((v, i) => {
-            return <Skeleton key={i} className={"w-40 lg:w-48 h-60 mt-4"} />;
+            return <Skeleton key={i} className={"w-full h-60 mt-4"} />;
         });
     }, []);
 
