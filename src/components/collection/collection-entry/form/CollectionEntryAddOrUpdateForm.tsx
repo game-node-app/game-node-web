@@ -38,11 +38,17 @@ import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 const GameAddOrUpdateSchema = z.object({
     collectionIds: z
-        .array(z.string())
+        .array(z.string(), {
+            required_error: "Select at least one collection.",
+            invalid_type_error: "Select at least one collection.",
+        })
         .min(1, "Select at least one collection.")
         .default([]),
     platformsIds: z
-        .array(z.string())
+        .array(z.string(), {
+            invalid_type_error: "Select at least one platform.",
+            required_error: "Select at least one platform.",
+        })
         .min(1, "Select at least one platform.")
         .default([]),
 });
