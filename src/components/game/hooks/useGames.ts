@@ -11,7 +11,7 @@ export function useGames(
     keepPreviousData = false,
 ): ExtendedUseQueryResult<Game[]> {
     const queryClient = useQueryClient();
-    const queryKey = ["game", "all", dto];
+    const queryKey = ["game", "all", dto.gameIds, dto.relations];
     const invalidate = () =>
         queryClient.invalidateQueries({ queryKey: [queryKey[0], queryKey[1]] });
 
