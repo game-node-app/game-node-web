@@ -21,12 +21,19 @@ export function useGames(
         ...useQuery({
             queryKey: queryKey,
             queryFn: () => {
-                if (dto == undefined || dto.gameIds.length === 0) {
+                if (
+                    dto == undefined ||
+                    dto.gameIds == undefined ||
+                    dto.gameIds.length === 0
+                ) {
                     return null;
                 }
 
                 return GameRepositoryService.gameRepositoryControllerFindAllByIds(
-                    dto,
+                    {
+                        gameIds: dto.gameIds,
+                        relations: dto.relations,
+                    },
                 );
             },
             enabled: dto.gameIds && dto.gameIds.length > 0,
