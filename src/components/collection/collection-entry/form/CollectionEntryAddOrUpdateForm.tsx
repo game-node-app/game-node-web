@@ -164,6 +164,7 @@ const CollectionEntryAddOrUpdateForm = ({
         onSettled: () => {
             collectionEntryQuery.invalidate();
             queryClient.invalidateQueries(["review"]).then();
+            queryClient.invalidateQueries(["game", "all"]).then();
         },
         onSuccess: () => {
             notifications.show({
