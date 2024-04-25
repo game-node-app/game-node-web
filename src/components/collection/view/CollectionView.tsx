@@ -86,8 +86,10 @@ const CollectionView = ({
         offset: requestParams.offset,
         limit: requestParams.limit,
     });
-    const gamesIds =
-        collectionQuery.data?.entries.map((entry) => entry.gameId) || [];
+    console.log(collectionEntriesQuery.data);
+    const gamesIds = useMemo(() => {
+        return collectionEntriesQuery.data?.data.map((entry) => entry.gameId);
+    }, [collectionEntriesQuery.data]);
     const gamesQuery = useGames({
         gameIds: gamesIds,
         relations: {
