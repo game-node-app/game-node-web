@@ -91,7 +91,7 @@ const CollectionView = ({
         return collectionEntriesQuery.data?.data.map((entry) => entry.gameId);
     }, [collectionEntriesQuery.data]);
     const gamesQuery = useGames({
-        gameIds: gamesIds!,
+        gameIds: gamesIds,
         relations: {
             cover: true,
         },
