@@ -179,18 +179,8 @@ const CollectionEntriesMoveForm = ({
             });
         },
         onSettled: () => {
-            /**
-             * This invalidation is not currently working. Status:
-             * https://github.com/game-node-app/game-node-web/issues/72
-             * TODO: Actually fix this.
-             */
             gamesQuery.invalidate();
             collectionsEntriesQuery.invalidate();
-
-            /**
-             * Yeah, this works.
-             */
-            router.reload();
         },
     });
 
