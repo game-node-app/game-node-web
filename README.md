@@ -7,12 +7,12 @@ The repository for the web client of Game Node. This is our main site, the one y
 1. Install [Node.js](https://nodejs.org/en/download/)
 2. Install [Yarn](https://yarnpkg.com/en/docs/install)
 3. Run `yarn` in the root directory of the repository
-4. Run `yarn dev:all` to start the development server (and the typesafe-i18n server!)
+4. Run `yarn dev` to start the development server
 5. Check your instance at `http://localhost:3000`
 
 ### Setting up your environment
 1. Create a `.env.local` file at the root of the project
-2. Copy the contents of `.env.local.example`
+2. Copy the contents of `.env.local.example` to it
 3. **Alternatively**, just run `cp .env.local.example .env.local`  
 
 If you are developing **exclusively** for the web client, you don't need to host your own instance of GameNode. You can instead just point your local client to our server:
