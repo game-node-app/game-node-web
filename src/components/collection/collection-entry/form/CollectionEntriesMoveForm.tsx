@@ -1,11 +1,9 @@
 import React, { useMemo } from "react";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
-import { z, ZodError, ZodIssueCode } from "zod";
+import { z } from "zod";
 import {
-    ApiError,
     CancelablePromise,
     CollectionsEntriesService,
-    CreateCollectionEntryDto,
     Game,
     GamePlatform,
 } from "@/wrapper/server";
@@ -83,6 +81,9 @@ const CollectionEntriesMoveForm = ({
     const libraryQuery = useUserLibrary(userId);
     const collectionsEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
+        orderBy: {
+            createdAt: "DESC",
+        },
     });
     const gameIds = collectionsEntriesQuery.data?.data.map(
         (entry) => entry.gameId,
@@ -184,6 +185,28 @@ const CollectionEntriesMoveForm = ({
         },
     });
 
+    const targetCollectionIds = watch("targetCollectionIds");
+
+    const finishedGamesCollectionSelected = useMemo(() => {
+        const userCollections = libraryQuery.data?.collections;
+        if (
+            userCollections != undefined &&
+            targetCollectionIds != undefined &&
+            targetCollectionIds.length > 0
+        ) {
+            for (const collection of userCollections) {
+                if (
+                    collection.isFinished &&
+                    targetCollectionIds.includes(`${collection.id}`)
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }, [libraryQuery.data?.collections, targetCollectionIds]);
+
     return (
         <form
             className={"w-full h-full"}
@@ -194,7 +217,9 @@ const CollectionEntriesMoveForm = ({
                     w={"100%"}
                     data={gamesSelectOptions}
                     label={"Games to move"}
-                    description={"Select which games you want to move"}
+                    description={
+                        "Select which games you want to move. You can search by typing a game's name."
+                    }
                     searchable
                     {...register("gameIds")}
                     onChange={(values) => {
@@ -204,6 +229,9 @@ const CollectionEntriesMoveForm = ({
                         setValue("gameIds", valuesNumbers);
                     }}
                     error={formState.errors.gameIds?.message}
+                    placeholder={
+                        gamesQuery.isLoading ? "Loading..." : undefined
+                    }
                 />
                 <MultiSelect
                     mt={"1rem"}
@@ -212,14 +240,23 @@ const CollectionEntriesMoveForm = ({
                     label={"Target collections"}
                     searchable
                     description={
-                        "Collections in which you want to insert these games"
+                        "Collections in which you want to insert these games. You can search using a collection's name."
                     }
                     error={formState.errors.targetCollectionIds?.message}
                     {...register("targetCollectionIds")}
                     onChange={(values) => {
                         setValue("targetCollectionIds", values);
                     }}
+                    placeholder={
+                        gamesQuery.isLoading ? "Loading..." : undefined
+                    }
                 />
+                {finishedGamesCollectionSelected && (
+                    <Text c={"yellow"} fz={"sm"}>
+                        These games will be marked as "Finished" because a
+                        "Finished Games" collection has been selected.
+                    </Text>
+                )}
                 <Button type={"submit"} loading={collectionsMutation.isPending}>
                     Submit
                 </Button>

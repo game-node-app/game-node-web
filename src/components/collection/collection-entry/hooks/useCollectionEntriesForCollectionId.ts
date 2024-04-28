@@ -11,6 +11,7 @@ interface UseCollectionEntriesForCollectionIdProps {
     collectionId: string;
     limit?: number;
     offset?: number;
+    orderBy?: Record<string, any>;
 }
 
 /**
@@ -25,15 +26,19 @@ export function useCollectionEntriesForCollectionId({
     collectionId,
     limit,
     offset,
+    orderBy,
 }: UseCollectionEntriesForCollectionIdProps): ExtendedUseQueryResult<
     CollectionEntriesPaginatedResponseDto | undefined
 > {
     const queryClient = useQueryClient();
-    const queryKey = ["collection-entries", collectionId, offset, limit];
+    const queryKey = [
+        "collection-entries",
+        collectionId,
+        offset,
+        limit,
+        orderBy,
+    ];
     const invalidate = () => {
-        queryClient.resetQueries({
-            queryKey: [queryKey[0]],
-        });
         queryClient.invalidateQueries({
             queryKey: [queryKey[0]],
         });
@@ -49,10 +54,10 @@ export function useCollectionEntriesForCollectionId({
                     collectionId,
                     offset,
                     limit,
+                    orderBy,
                 );
             },
             enabled: !!collectionId,
-            placeholderData: keepPreviousData,
         }),
         queryKey,
         invalidate,

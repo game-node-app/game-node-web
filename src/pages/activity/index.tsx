@@ -20,9 +20,7 @@ const Index = () => {
     }, [router, session]);
     return (
         <Container fluid p={0}>
-            <ActivityFeedLayout currentTab={"all"}>
-                <CenteredLoading />
-            </ActivityFeedLayout>
+            <CenteredLoading />
         </Container>
     );
 };

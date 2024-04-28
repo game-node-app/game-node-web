@@ -3,7 +3,7 @@ import { Box, Container, Flex, Group, Stack } from "@mantine/core";
 import ProfileUserInfo from "@/components/profile/view/ProfileUserInfo";
 import ProfileFavoriteGames from "@/components/profile/view/ProfileFavoriteGames";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import RecentActivitiesList from "@/components/activity/RecentActivitiesList";
+import RecentActivityList from "@/components/activity/RecentActivityList";
 
 interface Props {
     userId: string;
@@ -32,10 +32,11 @@ const ProfileView = ({ userId }: Props) => {
                     <DetailsBox
                         title={"Recent Activity"}
                         stackProps={{
-                            className: "",
+                            className: "w-full lg:w-10/12",
+                            w: undefined,
                         }}
                     >
-                        <RecentActivitiesList userId={userId} />
+                        <RecentActivityList userId={userId} />
                     </DetailsBox>
                 </Stack>
             </Group>

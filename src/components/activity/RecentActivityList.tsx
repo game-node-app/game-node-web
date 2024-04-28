@@ -8,6 +8,7 @@ import { Stack } from "@mantine/core";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { Activity } from "@/wrapper/server";
 import type = Activity.type;
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 interface Props {
     userId?: string;
@@ -15,8 +16,13 @@ interface Props {
     offset?: number;
 }
 
-const RecentActivitiesList = ({ userId, offset = 0, limit = 5 }: Props) => {
+const RecentActivityList = ({ userId, offset = 0, limit = 5 }: Props) => {
     const activitiesQuery = useLatestActivities(userId, offset, limit);
+    const isEmpty =
+        !activitiesQuery.isLoading &&
+        activitiesQuery.isSuccess &&
+        (activitiesQuery.data == undefined ||
+            activitiesQuery.data.data.length === 0);
 
     const items = useMemo(() => {
         if (!activitiesQuery.data) return null;
@@ -51,8 +57,11 @@ const RecentActivitiesList = ({ userId, offset = 0, limit = 5 }: Props) => {
         <Stack className={"w-full h-full"}>
             {activitiesQuery.isLoading && <CenteredLoading />}
             {items}
+            {isEmpty && (
+                <CenteredErrorMessage message={"No recent activity to show."} />
+            )}
         </Stack>
     );
 };
 
-export default RecentActivitiesList;
+export default RecentActivityList;

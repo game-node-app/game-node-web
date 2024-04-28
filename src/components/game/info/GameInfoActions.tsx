@@ -104,7 +104,10 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
                     />
                 </Modal>
 
-                <Button onClick={addUpdateModalUtils.open}>
+                <Button
+                    onClick={addUpdateModalUtils.open}
+                    loading={collectionEntryQuery.isLoading}
+                >
                     {gameInLibrary ? "Update" : "Add to library"}
                 </Button>
 
