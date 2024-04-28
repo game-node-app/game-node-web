@@ -47,8 +47,7 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
             <Modal.Body>
                 <Stack w={"100%"} justify={"center"}>
                     <Text fz={"xl"} className={"text-center"}>
-                        Are you sure you want to remove this collection and all
-                        metadata associated with it?
+                        Are you sure you want to remove this collection?
                     </Text>
                     <Text fw={"bold"} className={"text-center"}>
                         This will also remove all games from this collection. If

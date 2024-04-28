@@ -12,28 +12,18 @@ export async function getServerSideProps(
     const query = ctx.query;
     const userId = query.userId as string;
     const queryClient = new QueryClient();
-    const promises: Promise<any>[] = [];
-    promises.push(
-        queryClient.prefetchQuery({
-            queryKey: ["userProfile", userId],
-            queryFn: () => {
-                return ProfileService.profileControllerFindOneById(userId);
-            },
-        }),
-    );
-    promises.push(
-        queryClient.prefetchQuery({
-            queryKey: ["collection", "entries", userId],
-            queryFn: async () => {
-                const collections =
-                    await CollectionsService.collectionsControllerFindAllByUserIdWithPermissions(
-                        userId,
-                    );
-                return collections.flatMap((collection) => collection.entries);
-            },
-        }),
-    );
-    await Promise.all(promises);
+
+    await queryClient.prefetchQuery({
+        queryKey: ["userProfile", userId],
+        queryFn: () => {
+            const profile = ProfileService.profileControllerFindOneById(userId);
+            if (!profile) {
+                return null;
+            }
+            return profile;
+        },
+    });
+
     return {
         props: {
             dehydratedState: dehydrate(queryClient),

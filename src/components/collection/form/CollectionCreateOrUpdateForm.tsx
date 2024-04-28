@@ -10,6 +10,7 @@ import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { ApiError, CollectionsService } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import { useMutation } from "@tanstack/react-query";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
 const CreateCollectionFormSchema = z
     .object({
@@ -17,16 +18,17 @@ const CreateCollectionFormSchema = z
         description: z.string().optional(),
         isPublic: z.boolean().default(true),
         isFeatured: z.boolean().default(false),
+        isFinished: z.boolean().default(false),
     })
-    .refine(
-        (data) => {
-            return !(data.isFeatured && !data.isPublic);
-        },
-        {
-            message: "Featured collections must be public",
-            path: ["isFeatured"],
-        },
-    );
+    .superRefine((data, ctx) => {
+        if (data.isFeatured && !data.isPublic) {
+            ctx.addIssue({
+                code: "custom",
+                path: ["isFeatured"],
+                message: "Featured collections must be public",
+            });
+        }
+    });
 
 type CreateCollectionFormValues = z.infer<typeof CreateCollectionFormSchema>;
 
@@ -38,9 +40,6 @@ const CollectionCreateOrUpdateForm = ({
     onClose,
     collectionId,
 }: ICollectionCreateOrUpdateFormProps) => {
-    const [requestError, setRequestError] = useState<string | undefined>(
-        undefined,
-    );
     const session = useSessionContext();
     const userId = session.loading ? undefined : session.userId;
     const userLibraryQuery = useUserLibrary(userId);
@@ -56,6 +55,33 @@ const CollectionCreateOrUpdateForm = ({
 
     const router = useRouter();
 
+    const collectionMutation = useMutation({
+        mutationFn: async (data: CreateCollectionFormValues) => {
+            if (existingCollection != undefined) {
+                await CollectionsService.collectionsControllerUpdate(
+                    existingCollection.id,
+                    data,
+                );
+                return;
+            }
+            await CollectionsService.collectionsControllerCreate(data);
+        },
+        onSuccess: () => {
+            if (onClose) {
+                onClose();
+            }
+        },
+        onSettled: () => {
+            userLibraryQuery.invalidate();
+            collectionQuery.invalidate();
+        },
+        onError: (error: ApiError) => {
+            if (error.status === 401) {
+                router.push("/auth");
+            }
+        },
+    });
+
     useEffect(() => {
         const possibleKeys = Object.keys(
             CreateCollectionFormSchema.innerType().shape,
@@ -69,48 +95,31 @@ const CollectionCreateOrUpdateForm = ({
         }
     }, [existingCollection, setValue]);
 
-    const collectionMutation = useMutation({
-        mutationFn: async (data: CreateCollectionFormValues) => {
-            if (existingCollection != undefined) {
-                await CollectionsService.collectionsControllerUpdate(
-                    existingCollection.id,
-                    data,
-                );
-                return;
-            }
-            await CollectionsService.collectionsControllerCreate(data);
-        },
-        onSuccess: () => {
-            userLibraryQuery.invalidate();
-            if (onClose) {
-                onClose();
-            }
-        },
-        onError: (error: ApiError) => {
-            if (error.status === 401) {
-                router.push("/auth");
-            }
-        },
-    });
-
     return (
         <form
             className="w-full h-full"
             onSubmit={handleSubmit((data) => collectionMutation.mutate(data))}
         >
             <Stack gap="lg">
+                {collectionMutation.isError && (
+                    <CenteredErrorMessage
+                        message={collectionMutation.error.message}
+                    />
+                )}
                 <TextInput
                     withAsterisk
                     label={"Collection name"}
                     placeholder={"🎮 Playing now"}
-                    {...register("name")}
                     error={formState.errors.name?.message}
+                    defaultValue={existingCollection?.name}
+                    {...register("name")}
                 />
                 <TextInput
                     label={"Description"}
                     placeholder={"Games I'm currently playing"}
-                    {...register("description")}
                     error={formState.errors.description?.message}
+                    defaultValue={existingCollection?.description}
+                    {...register("description")}
                 />
                 <Switch
                     error={formState.errors.isPublic?.message}
@@ -118,7 +127,7 @@ const CollectionCreateOrUpdateForm = ({
                     description={
                         "If this collections is visible to other users"
                     }
-                    defaultChecked={true}
+                    defaultChecked={existingCollection?.isPublic}
                     {...register("isPublic")}
                 />
                 <Switch
@@ -127,17 +136,28 @@ const CollectionCreateOrUpdateForm = ({
                     description={
                         "If this collections should be featured in your profile and library"
                     }
-                    defaultChecked={false}
+                    defaultChecked={existingCollection?.isFeatured}
                     {...register("isFeatured")}
                 />
-                <Button type="submit">
+                <Switch
+                    error={formState.errors.isFinished?.message}
+                    label={"Finished games collection"}
+                    description={
+                        "All games in this collection will be marked as 'Finished' when being added. Only affects new entries."
+                    }
+                    defaultChecked={existingCollection?.isFinished}
+                    {...register("isFinished")}
+                />
+                <Button
+                    type="submit"
+                    loading={
+                        collectionMutation.isPending ||
+                        collectionQuery.isLoading
+                    }
+                    disabled={collectionQuery.isLoading}
+                >
                     {existingCollection ? "Update" : "Create"}
                 </Button>
-                {collectionMutation.isError && (
-                    <Text c="red" mt="md">
-                        {collectionMutation.error.message}
-                    </Text>
-                )}
             </Stack>
         </form>
     );

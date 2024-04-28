@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     ActionIcon,
     Box,
@@ -7,6 +7,7 @@ import {
     Divider,
     Group,
     SimpleGrid,
+    Skeleton,
     Stack,
     Text,
     Title,
@@ -85,8 +86,10 @@ const CollectionView = ({
         collectionId,
         offset: requestParams.offset,
         limit: requestParams.limit,
+        orderBy: {
+            createdAt: "DESC",
+        },
     });
-    console.log(collectionEntriesQuery.data);
     const gamesIds = useMemo(() => {
         return collectionEntriesQuery.data?.data.map((entry) => entry.gameId);
     }, [collectionEntriesQuery.data]);
@@ -122,19 +125,20 @@ const CollectionView = ({
             <Stack w={"100%"} h={"100%"} gap={0} align={"center"}>
                 <Group className="w-[calc(100%-2rem)] mt-8 flex-nowrap justify-between">
                     <Stack w={{ base: "70%", lg: "30%" }}>
-                        <Title
-                            size={"h3"}
-                            className={
-                                "w-full break-words underline decoration-dotted decoration-2 decoration-stone-700"
-                            }
-                        >
+                        {isLoading && (
+                            <>
+                                <Skeleton className={"w-32 h-9"} />
+                                <Skeleton className={"w-48 h-6"} />
+                            </>
+                        )}
+                        <Title size={"h3"} className={"w-full break-words"}>
                             {collection?.name}
                         </Title>
                         <Text c={"dimmed"} w={"100%"} className={"break-words"}>
                             {collectionQuery.data?.description}
                         </Text>
                     </Stack>
-                    {isOwnCollection && (
+                    {!isError && !isLoading && isOwnCollection && (
                         <CollectionViewActions collectionId={collectionId} />
                     )}
                 </Group>

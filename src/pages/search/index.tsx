@@ -12,7 +12,7 @@ import { ParsedUrlQuery } from "querystring";
 import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewCarousel";
 import { useRouter } from "next/router";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import RecentActivitiesList from "@/components/activity/RecentActivitiesList";
+import RecentActivityList from "@/components/activity/RecentActivityList";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -165,7 +165,7 @@ const Index = () => {
                                     className: "",
                                 }}
                             >
-                                <RecentActivitiesList />
+                                <RecentActivityList />
                             </DetailsBox>
                         </Stack>
                     )}

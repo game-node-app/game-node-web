@@ -11,7 +11,7 @@ const All = () => {
     });
     return (
         <Stack className={"w-full items-center"}>
-            <Box className={"w-full lg:w-10/12"}>
+            <Box className={"w-full lg:w-8/12"}>
                 <ActivityFeedLayout currentTab={"all"}>
                     <ActivityFeed criteria={"all"} />
                 </ActivityFeedLayout>

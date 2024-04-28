@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { CollectionEntry, Game } from "@/wrapper/server";
-import { Stack } from "@mantine/core";
+import { Skeleton, Stack } from "@mantine/core";
 import GameView from "@/components/general/view/game/GameView";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { Box, Space } from "@mantine/core";
@@ -24,6 +24,12 @@ const CollectionEntriesView = ({
 }: ICollectionEntriesViewProps) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
 
+    const buildLoadingSkeletons = useCallback(() => {
+        return new Array(4).fill(0).map((_, i) => {
+            return <Skeleton key={i} className={"w-full h-60 mt-4"} />;
+        });
+    }, []);
+
     const render = () => {
         if (isError) {
             return (
@@ -31,9 +37,7 @@ const CollectionEntriesView = ({
                     message={"An error occurred. Please try again."}
                 />
             );
-        } else if (isLoading) {
-            return <CenteredLoading />;
-        } else if (games == undefined || games.length === 0) {
+        } else if (!isLoading && (games == undefined || games.length === 0)) {
             return (
                 <CenteredErrorMessage message={"This collection is empty."} />
             );
@@ -50,13 +54,17 @@ const CollectionEntriesView = ({
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
-                    <GameView.Content items={games} />
+                    <GameView.Content items={games!}>
+                        {isLoading && buildLoadingSkeletons()}
+                    </GameView.Content>
                     <Space h={"2rem"} />
-                    <GameView.Pagination
-                        page={page}
-                        paginationInfo={paginationInfo}
-                        onPaginationChange={onPaginationChange}
-                    />
+                    {!isLoading && !isError && (
+                        <GameView.Pagination
+                            page={page}
+                            paginationInfo={paginationInfo}
+                            onPaginationChange={onPaginationChange}
+                        />
+                    )}
                 </Stack>
             );
         }
