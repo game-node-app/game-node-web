@@ -136,11 +136,7 @@ const ExploreScreenFilters = ({
         drawerUtils.close();
     };
 
-    /**
-     * useLayoutEffect executes BEFORE the screen is updated, so this avoids screen "blinks" when a screen is in
-     * an unfinished state
-     */
-    useLayoutEffect(() => {
+    useEffect(() => {
         const query = router.query;
         if (router.isReady && !hasLoadedQueryParams) {
             const dto = exploreScreenUrlQueryToDto(query);
