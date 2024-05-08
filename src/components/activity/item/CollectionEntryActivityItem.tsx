@@ -19,6 +19,7 @@ import TextLink from "@/components/general/TextLink";
 import getTimeSinceString from "@/util/getTimeSinceString";
 import { UserAvatar } from "@/components/general/input/UserAvatar";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 
 interface Props {
     activity: Activity;
@@ -45,10 +46,6 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
         return null;
     }
 
-    const collectionEntryCreateDate = collectionEntryQuery.data
-        ? new Date(collectionEntryQuery.data.createdAt)
-        : new Date();
-    const timeSince = getTimeSinceString(collectionEntryCreateDate);
     return (
         <Box
             style={{
@@ -103,9 +100,9 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                             "w-full h-full items-end justify-between pe-2 lg:pe-3 py-4"
                         }
                     >
-                        <Text c={"dimmed"} fz={"sm"}>
-                            {timeSince} ago
-                        </Text>
+                        <ActivityCreateDate
+                            createdAtDate={activity.createdAt}
+                        />
                         <Link
                             href={`/library/${activity.profileUserId}/collection/${activity.collectionId}`}
                         >

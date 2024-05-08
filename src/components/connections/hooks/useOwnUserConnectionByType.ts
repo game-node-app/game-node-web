@@ -3,9 +3,9 @@ import { ConnectionsService } from "@/wrapper/server";
 import { ConnectionCreateDto } from "@/wrapper/server";
 import type = ConnectionCreateDto.type;
 
-export function useOwnUserConnection(type: type) {
+export function useOwnUserConnectionByType(type: type) {
     return useQuery({
-        queryKey: ["connections", type],
+        queryKey: ["connections", "own", type],
         queryFn: async () => {
             return ConnectionsService.connectionsControllerFindOwnByType(type);
         },

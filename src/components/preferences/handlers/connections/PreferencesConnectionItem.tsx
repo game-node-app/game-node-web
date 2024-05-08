@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
+import { UserConnection } from "@/wrapper/server";
+import type = UserConnection.type;
+import { useOwnUserConnectionByType } from "@/components/connections/hooks/useOwnUserConnectionByType";
+import { useDisclosure } from "@mantine/hooks";
 import { Group, Image, Paper, Stack, Switch, Text, Title } from "@mantine/core";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
-import { useOwnUserConnection } from "@/components/connections/hooks/useOwnUserConnection";
-import { useDisclosure } from "@mantine/hooks";
-import PreferencesConnectionSteamModal from "@/components/preferences/handlers/connections/steam/PreferencesConnectionSteamModal";
-import { ConnectionCreateDto } from "@/wrapper/server";
-import type = ConnectionCreateDto.type;
+import PreferencesConnectionModal from "@/components/preferences/handlers/connections/PreferencesConnectionModal";
 
-const PreferencesConnectionSteam = () => {
-    const userConnection = useOwnUserConnection(type.STEAM);
+interface Props {
+    type: type;
+}
+
+const PreferencesConnectionItem = ({ type }: Props) => {
+    const userConnection = useOwnUserConnectionByType(type);
     const [modalOpened, modalUtils] = useDisclosure();
+
     return (
         <Paper
             className={"rounded"}
@@ -19,21 +24,15 @@ const PreferencesConnectionSteam = () => {
                 },
             }}
         >
-            <PreferencesConnectionSteamModal
-                opened={modalOpened}
-                onClose={modalUtils.close}
-            />
-            <Group
-                className={"w-full h-full min-h-28 p-2 px-4"}
-                styles={{
-                    root: {
-                        backgroundColor: "rgb(255,0,0);",
-                    },
-                }}
-            >
+            <Group className={"w-full h-full min-h-28 p-2 px-4"}>
+                <PreferencesConnectionModal
+                    type={type}
+                    opened={modalOpened}
+                    onClose={modalUtils.close}
+                />
                 <Image
                     alt={"Steam icon"}
-                    src={getServerStoredIcon("steam")}
+                    src={getServerStoredIcon(type.valueOf())}
                     w={38}
                     h={38}
                 />
@@ -64,4 +63,4 @@ const PreferencesConnectionSteam = () => {
     );
 };
 
-export default PreferencesConnectionSteam;
+export default PreferencesConnectionItem;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Center, Pagination, PaginationProps } from "@mantine/core";
+import { Center, Group, Pagination, PaginationProps } from "@mantine/core";
 import { PaginationInfo } from "@/wrapper/server";
 import { TPaginationInfoDto } from "@/util/types/pagination";
 
@@ -17,7 +17,7 @@ const GameViewPagination = ({
     return (
         <Center w={"100%"}>
             <Pagination
-                value={page}
+                value={page || 1}
                 total={paginationInfo?.totalPages || 1}
                 onChange={onPaginationChange}
             />

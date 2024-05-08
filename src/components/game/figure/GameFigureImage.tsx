@@ -38,13 +38,7 @@ const GameFigureImage = ({
 }: IGameFigureProps) => {
     const coverUrl = getCoverUrl(game);
     const sizedCoverUrl = getSizedImageUrl(coverUrl, ImageSize.COVER_BIG);
-    const [showSkeleton, setShowSkeleton] = useState(true);
     const defaultHref = `/game/${game?.id}`;
-    useEffect(() => {
-        if (showSkeleton) {
-            setShowSkeleton(false);
-        }
-    }, [showSkeleton, game?.id]);
     return (
         <Link
             href={href ?? defaultHref}
@@ -52,13 +46,10 @@ const GameFigureImage = ({
             onClick={onClick}
         >
             <AspectRatio ratio={264 / 354} pos="relative" h={"100%"} w={"auto"}>
-                <Skeleton animate visible={showSkeleton} className={"z-10"} />
                 <Image
                     radius={"sm"}
                     src={sizedCoverUrl ?? "/img/game_placeholder.jpeg"}
                     alt={"Game cover"}
-                    onLoad={() => setShowSkeleton(false)}
-                    onError={() => setShowSkeleton(false)}
                     className="w-full h-auto max-h-full"
                     {...imageProps}
                 />

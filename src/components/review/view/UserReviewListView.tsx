@@ -46,7 +46,9 @@ const queryDtoToSearchParams = (dto: TBasePaginationRequest) => {
     const limitToUse = dto.limit || DEFAULT_LIMIT;
     if (dto.offset) {
         const offsetAsPage =
-            dto.offset > limitToUse ? Math.ceil(dto.offset / limitToUse) : 1;
+            dto.offset > limitToUse
+                ? Math.ceil((dto.offset + 1) / limitToUse)
+                : 1;
         searchParams.set("page", `${offsetAsPage}`);
     }
     return searchParams;
