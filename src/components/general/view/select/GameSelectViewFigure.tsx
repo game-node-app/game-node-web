@@ -13,15 +13,19 @@ export interface GameSelectViewFigureProps extends IGameFigureProps {
      */
     onSelected: (gameId: number) => void;
     onDeselected: (gameId: number) => void;
+    checkIsSelected: (gameId: number) => boolean;
 }
 
 const GameSelectViewFigure = ({
     game,
+    checkIsSelected,
     onSelected,
     onDeselected,
     ...figureProps
 }: GameSelectViewFigureProps) => {
-    const [isSelected, selectedUtils] = useDisclosure();
+    if (!game) return;
+
+    const isSelected = checkIsSelected(game.id!);
 
     return (
         <GameFigureImage
@@ -31,7 +35,6 @@ const GameSelectViewFigure = ({
                 evt.preventDefault();
                 if (!game || !game.id) return;
 
-                selectedUtils.toggle();
                 if (isSelected) {
                     onDeselected(game.id);
                 } else {

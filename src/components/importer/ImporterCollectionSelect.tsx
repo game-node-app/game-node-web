@@ -1,13 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ComboboxItem, Group, MultiSelect, Select, Text } from "@mantine/core";
+import {
+    ComboboxItem,
+    Group,
+    MultiSelect,
+    MultiSelectProps,
+    Select,
+    Text,
+} from "@mantine/core";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 
-interface Props {
+interface Props extends MultiSelectProps {
     userId: string | undefined;
     onChange: (values: string[]) => void;
 }
 
-const ImporterCollectionSelect = ({ userId, onChange }: Props) => {
+const ImporterCollectionSelect = ({ userId, onChange, ...others }: Props) => {
     const userLibraryQuery = useUserLibrary(userId);
     const collections = userLibraryQuery.data?.collections;
     const [
@@ -42,6 +49,7 @@ const ImporterCollectionSelect = ({ userId, onChange }: Props) => {
             clearable={false}
             searchable
             onChange={onChange}
+            {...others}
         />
     );
 };

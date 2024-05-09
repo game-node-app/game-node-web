@@ -21,8 +21,11 @@ const Index = () => {
 
     return (
         <Stack w={"100%"} justify={"center"} align={"center"}>
-            <Paper className={"w-full lg:w-10/12 min-h-screen p-2"}>
-                <Title size={"h3"}>Importer System</Title>
+            <Paper className={"w-full lg:w-10/12 mb-20 p-2"}>
+                <Title size={"h4"}>
+                    GAME <span className={"text-[#F15025]"}>IMPORTER</span>
+                </Title>
+
                 <Text>
                     The importer system helps you bring games from other
                     platforms to GameNode.

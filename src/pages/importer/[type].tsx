@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useImporterEntries } from "@/components/importer/hooks/useImporterEntries";
 import {
+    ActionIcon,
     Box,
     Button,
     Center,
@@ -10,6 +11,7 @@ import {
     Image,
     Paper,
     Skeleton,
+    Space,
     Stack,
     Text,
     Title,
@@ -24,8 +26,19 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { CollectionsEntriesService, GamePlatform } from "@/wrapper/server";
+import {
+    CollectionsEntriesService,
+    GamePlatform,
+    ImporterService,
+} from "@/wrapper/server";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
+import { notifications } from "@mantine/notifications";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
+import {
+    IconCheckbox,
+    IconSquareCheck,
+    IconSquareCheckFilled,
+} from "@tabler/icons-react";
 
 const ImporterFormSchema = z.object({
     selectedCollectionIds: z
@@ -37,9 +50,16 @@ const ImporterFormSchema = z.object({
 
 type ImporterFormValues = z.infer<typeof ImporterFormSchema>;
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 20;
 
-const PC_PLATFORM_ID = 6;
+const getPlatformIdForType = (type: string) => {
+    switch (type) {
+        case "steam":
+            return 6;
+        default:
+            return undefined;
+    }
+};
 
 function TypePage() {
     const router = useRouter();
@@ -51,7 +71,7 @@ function TypePage() {
 
     const { register, watch, handleSubmit, formState, setValue } =
         useForm<ImporterFormValues>({
-            mode: "onSubmit",
+            mode: "onBlur",
             resolver: zodResolver(ImporterFormSchema),
             defaultValues: {
                 page: 1,
@@ -90,12 +110,19 @@ function TypePage() {
     );
     const isLoading = importerEntriesQuery.isLoading || gamesQuery.isLoading;
     const isError = importerEntriesQuery.isError || gamesQuery.isError;
-    const isEmpty = isLoading || isError;
+    const isEmpty =
+        !isLoading &&
+        !isError &&
+        (importerEntriesQuery.data == undefined ||
+            importerEntriesQuery.data.data.length === 0);
 
     const error = importerEntriesQuery.error || gamesQuery.error;
 
+    const isAllGamesSelected =
+        gameIds != undefined && selectedGameIds.length === gameIds.length;
+
     const buildLoadingSkeletons = useCallback(() => {
-        return new Array(5).fill(0).map((v, i) => {
+        return new Array(10).fill(0).map((v, i) => {
             return <Skeleton key={i} className={"w-full h-60 mt-4"} />;
         });
     }, []);
@@ -126,16 +153,60 @@ function TypePage() {
             selectedCollectionIds,
             selectedGameIds,
         }: ImporterFormValues) => {
+            const importedGameIds: number[] = [];
             for (const selectedGameId of selectedGameIds) {
+                const platformId = getPlatformIdForType(type as string);
+                if (platformId == undefined) {
+                    throw new Error(
+                        "Invalid source type. Please contact support",
+                    );
+                }
+
+                const externalGame = importerEntriesQuery.data?.data.find(
+                    (externalGame) => {
+                        return externalGame.gameId === selectedGameId;
+                    },
+                );
+
+                if (!externalGame) {
+                    throw new Error(
+                        "Error while inserting game. Invalid external game ID. Please contact support.",
+                    );
+                }
+
                 await CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
                     {
                         gameId: selectedGameId,
                         collectionIds: selectedCollectionIds,
-                        platformIds: [PC_PLATFORM_ID],
+                        platformIds: [platformId],
                         isFavorite: false,
                     },
                 );
+                await ImporterService.importerControllerChangeStatus({
+                    externalGameId: externalGame.id,
+                    status: "processed",
+                });
+                importedGameIds.push(selectedGameId);
             }
+
+            return importedGameIds.length;
+        },
+        onSuccess: (importedGamesCount) => {
+            notifications.show({
+                color: "green",
+                message: `Successfully imported ${importedGamesCount} games to your library!`,
+            });
+            setValue("selectedGameIds", []);
+        },
+        onSettled: () => {
+            importerEntriesQuery.invalidate();
+            gamesQuery.invalidate();
+        },
+        onError: (err) => {
+            notifications.show({
+                color: "red",
+                message: `Error while importing games: ${err.message}`,
+            });
         },
     });
 
@@ -161,8 +232,6 @@ function TypePage() {
         userLibrary.data,
         selectedCollectionIds,
     ]);
-
-    console.log(hasSelectedFinishedGamesCollection);
 
     return (
         <Flex justify={"center"} mih={"100vh"} p={0} wrap={"wrap"}>
@@ -201,6 +270,10 @@ function TypePage() {
                                 onChange={(values) => {
                                     setValue("selectedCollectionIds", values);
                                 }}
+                                error={
+                                    formState.errors.selectedCollectionIds
+                                        ?.message
+                                }
                             />
                             {hasSelectedFinishedGamesCollection && (
                                 <Text className={"text-sm text-yellow-300"}>
@@ -215,15 +288,51 @@ function TypePage() {
                             <Button
                                 type={"submit"}
                                 loading={importMutation.isPending}
+                                disabled={isLoading || isError || isEmpty}
                             >
                                 Import
                             </Button>
                         </Center>
+                        {formState.errors.selectedGameIds != undefined && (
+                            <CenteredErrorMessage
+                                message={
+                                    formState.errors.selectedGameIds.message!
+                                }
+                            />
+                        )}
                     </Group>
                     <Stack w={"100%"} className={"mt-4"}>
+                        {isError && error && (
+                            <CenteredErrorMessage message={error.message} />
+                        )}
+                        {isEmpty && (
+                            <CenteredErrorMessage
+                                message={
+                                    "No items available for importing. Check if your library at the target platform is set to public."
+                                }
+                            />
+                        )}
                         <GameSelectView>
+                            {!isEmpty && (
+                                <GameSelectView.Actions
+                                    isAllGamesSelected={isAllGamesSelected}
+                                    onSelectAll={() => {
+                                        if (isAllGamesSelected) {
+                                            setValue("selectedGameIds", []);
+                                        } else if (gameIds) {
+                                            setValue(
+                                                "selectedGameIds",
+                                                gameIds,
+                                            );
+                                        }
+                                    }}
+                                />
+                            )}
                             <GameSelectView.Content
                                 items={gamesQuery.data!}
+                                checkIsSelected={(gameId) => {
+                                    return selectedGameIds.includes(gameId);
+                                }}
                                 onSelected={(gameId) =>
                                     handleSelection(gameId, "select")
                                 }
@@ -233,6 +342,7 @@ function TypePage() {
                             >
                                 {isLoading && buildLoadingSkeletons()}
                             </GameSelectView.Content>
+                            <Space h={"1.5rem"} />
                             {!isEmpty && (
                                 <GameSelectView.Pagination
                                     paginationInfo={

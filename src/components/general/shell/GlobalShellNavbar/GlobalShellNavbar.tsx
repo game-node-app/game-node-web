@@ -5,6 +5,8 @@ import {
     IconCheckbox,
     IconRouteAltLeft,
     IconProps,
+    IconHierarchy,
+    IconRefresh,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -36,6 +38,7 @@ const links: NavbarItem[] = [
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
+    { icon: IconRefresh, label: "Importer", href: "/importer" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {

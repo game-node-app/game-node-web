@@ -7,7 +7,7 @@ import GameSelectViewFigure, {
 
 type SelectedProps = Pick<
     GameSelectViewFigureProps,
-    "onSelected" | "onDeselected"
+    "onSelected" | "onDeselected" | "checkIsSelected"
 >;
 
 interface Props extends PropsWithChildren<SimpleGridProps & SelectedProps> {
@@ -17,6 +17,7 @@ interface Props extends PropsWithChildren<SimpleGridProps & SelectedProps> {
 const GameSelectViewContent = ({
     items,
     children,
+    checkIsSelected,
     onSelected,
     onDeselected,
     ...others
@@ -30,13 +31,14 @@ const GameSelectViewContent = ({
             return (
                 <GameSelectViewFigure
                     key={game.id!}
+                    checkIsSelected={checkIsSelected}
                     onSelected={onSelected}
                     onDeselected={onDeselected}
                     game={game}
                 />
             );
         });
-    }, [items, onDeselected, onSelected]);
+    }, [checkIsSelected, items, onDeselected, onSelected]);
 
     return (
         <SimpleGrid
