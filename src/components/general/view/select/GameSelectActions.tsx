@@ -13,7 +13,7 @@ const GameSelectActions = ({ onSelectAll, isAllGamesSelected }: Props) => {
             <Tooltip label={"Select all items"}>
                 <ActionIcon
                     size={"lg"}
-                    variant={"subtle"}
+                    variant={"transparent"}
                     onClick={onSelectAll}
                 >
                     {isAllGamesSelected ? (
