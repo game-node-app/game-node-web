@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useInfiniteActivities } from "@/components/activity/hooks/useInfiniteActivities";
 import { Skeleton, Stack } from "@mantine/core";
-import { Activity } from "@/wrapper/server";
-import type = Activity.type;
-import ReviewActivityItem from "@/components/activity/item/ReviewActivityItem";
-import CenteredLoading from "@/components/general/CenteredLoading";
-import CollectionEntryActivityItem from "@/components/activity/item/CollectionEntryActivityItem";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import UserFollowActivityItem from "@/components/activity/item/UserFollowActivityItem";
 import { useIntersection } from "@mantine/hooks";
 import ActivityList from "@/components/activity/ActivityList";
 

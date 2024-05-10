@@ -38,10 +38,7 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
                 />
             </AppShell.Header>
             <AppShell.Navbar>
-                <GlobalShellNavbar
-                    sidebarOpened={sidebarOpened}
-                    onClose={modalUtils.close}
-                />
+                <GlobalShellNavbar onClose={modalUtils.close} />
             </AppShell.Navbar>
 
             <AppShell.Main pos={"relative"}>{children}</AppShell.Main>

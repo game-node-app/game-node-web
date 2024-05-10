@@ -3,7 +3,6 @@ import { ActionIcon, Affix, Skeleton, Stack, Transition } from "@mantine/core";
 import { NextPageContext } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import {
-    FindStatisticsTrendingReviewsDto,
     GameRepositoryFindAllDto,
     GameRepositoryService,
     GameStatisticsPaginatedResponseDto,

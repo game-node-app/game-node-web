@@ -95,7 +95,7 @@ const PreferencesUsernameChanger = ({
                         <List.Item>Must be unique</List.Item>
                         <List.Item>Must have at least 5 characters</List.Item>
                         <List.Item>
-                            You can only change it after 30 days
+                            You can only change it again after 30 days
                         </List.Item>
                     </List>
                 </Stack>

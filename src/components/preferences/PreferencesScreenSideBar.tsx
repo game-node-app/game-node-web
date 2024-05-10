@@ -19,10 +19,10 @@ export const preferencesCategories: PreferencesCategory[] = [
         name: "Profile",
         activeCategoryName: "profile",
     },
-    // {
-    //     name: "Connections",
-    //     activeCategoryName: "connections",
-    // },
+    {
+        name: "Connections",
+        activeCategoryName: "connections",
+    },
     // {
     //     name: "Privacy",
     //     activeCategoryName: "privacy",

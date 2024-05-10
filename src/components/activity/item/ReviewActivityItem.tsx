@@ -16,6 +16,7 @@ import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUse
 import Link from "next/link";
 import getTimeSinceString from "@/util/getTimeSinceString";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 
 interface Props {
     activity: Activity;
@@ -34,11 +35,6 @@ const ReviewActivityItem = ({ activity }: Props) => {
         gameQuery.data?.cover?.url,
         onMobile ? ImageSize.SCREENSHOT_MED : ImageSize.SCREENSHOT_BIG,
     );
-    const reviewCreateDate = reviewQuery.data
-        ? new Date(reviewQuery.data.createdAt)
-        : new Date();
-
-    const timeSince = getTimeSinceString(reviewCreateDate);
 
     return (
         <Box
@@ -94,9 +90,9 @@ const ReviewActivityItem = ({ activity }: Props) => {
                             "w-full h-full items-end justify-between py-4 pe-2 lg:pe-3"
                         }
                     >
-                        <Text c={"dimmed"} fz={"sm"}>
-                            {timeSince} ago
-                        </Text>
+                        <ActivityCreateDate
+                            createdAtDate={activity.createdAt}
+                        />
                         <GameRating
                             value={reviewQuery.data?.rating}
                             size={"md"}

@@ -23,6 +23,7 @@ const PreferencesScreenSelector = ({ activeCategory, onChange }: Props) => {
             data={data}
             value={activeCategory}
             onChange={(item) => onChange(item as PreferencesActiveCategory)}
+            allowDeselect={false}
         />
     );
 };
