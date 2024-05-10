@@ -38,15 +38,13 @@ const links: NavbarItem[] = [
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
-    { icon: IconRefresh, label: "Importer", href: "/importer" },
+    // It's disabled during beta, if you are reading this you're cheating :p
+    // { icon: IconRefresh, label: "Importer", href: "/importer" },
 ];
 
-interface IGlobalShellNavbarProps extends BaseModalChildrenProps {
-    sidebarOpened: boolean;
-}
+interface IGlobalShellNavbarProps extends BaseModalChildrenProps {}
 
 export default function GlobalShellNavbar({
-    sidebarOpened,
     onClose,
 }: IGlobalShellNavbarProps) {
     const [query, setQuery] = useState<string>("");

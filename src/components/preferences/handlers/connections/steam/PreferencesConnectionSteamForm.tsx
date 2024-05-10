@@ -100,11 +100,12 @@ const PreferencesConnectionSteamForm = ({ onClose }: Props) => {
                     defaultValue={userConnection.data?.sourceUsername}
                     {...register("query")}
                 />
-                <Text className={"text-sm"} c={"dimmed"}>
-                    This connection can optionally be used in our importer
-                    system to help you import games from this store. This
-                    feature only works for public libraries.
-                </Text>
+                {/* It's disabled during beta, if you are reading this you're cheating :p */}
+                {/*<Text className={"text-sm"} c={"dimmed"}>*/}
+                {/*    This connection can optionally be used in our importer*/}
+                {/*    system to help you import games from this store. This*/}
+                {/*    feature only works for public libraries.*/}
+                {/*</Text>*/}
                 <Button
                     type={"submit"}
                     loading={connectionCreateMutation.isPending}
