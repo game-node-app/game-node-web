@@ -127,21 +127,13 @@ function TypePage() {
         });
     }, []);
 
-    const handleSelection = (gameId: number, action: "select" | "deselect") => {
+    const handleSelection = (gameId: number) => {
         const indexOfElement = selectedGameIds.indexOf(gameId);
+        const isAlreadyPresent = indexOfElement > -1;
 
-        if (action === "deselect") {
-            if (indexOfElement >= 0) {
-                const updatedArray = selectedGameIds.toSpliced(
-                    indexOfElement,
-                    1,
-                );
-                setValue("selectedGameIds", updatedArray);
-            }
-            return;
-        }
-        // Item is already present in "select" action
-        if (indexOfElement >= 0) {
+        if (isAlreadyPresent) {
+            const updatedArray = selectedGameIds.toSpliced(indexOfElement, 1);
+            setValue("selectedGameIds", updatedArray);
             return;
         }
 
@@ -333,12 +325,8 @@ function TypePage() {
                                 checkIsSelected={(gameId) => {
                                     return selectedGameIds.includes(gameId);
                                 }}
-                                onSelected={(gameId) =>
-                                    handleSelection(gameId, "select")
-                                }
-                                onDeselected={(gameId) => {
-                                    handleSelection(gameId, "deselect");
-                                }}
+                                onSelected={(gameId) => handleSelection(gameId)}
+                                excludeItemsInLibrary={true}
                             >
                                 {isLoading && buildLoadingSkeletons()}
                             </GameSelectView.Content>

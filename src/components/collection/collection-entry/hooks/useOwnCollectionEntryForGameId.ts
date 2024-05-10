@@ -29,6 +29,7 @@ export function useOwnCollectionEntryForGameId(
                     return null;
                 }
             },
+            enabled: gameId != undefined,
         }),
         queryKey,
         invalidate,
