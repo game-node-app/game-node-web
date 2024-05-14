@@ -7,7 +7,10 @@ import GameSelectViewFigure, {
 
 type SelectedProps = Pick<
     GameSelectViewFigureProps,
-    "onSelected" | "checkIsSelected" | "excludeItemsInLibrary"
+    | "onSelected"
+    | "checkIsSelected"
+    | "excludeItemsInLibrary"
+    | "onExcludedItemClick"
 >;
 
 interface Props extends PropsWithChildren<SimpleGridProps & SelectedProps> {
@@ -30,6 +33,7 @@ const GameSelectViewContent = ({
     checkIsSelected,
     onSelected,
     excludeItemsInLibrary,
+    onExcludedItemClick,
     ...others
 }: Props) => {
     const columns = useMemo(() => {
@@ -45,10 +49,17 @@ const GameSelectViewContent = ({
                     onSelected={onSelected}
                     game={game}
                     excludeItemsInLibrary={excludeItemsInLibrary}
+                    onExcludedItemClick={onExcludedItemClick}
                 />
             );
         });
-    }, [checkIsSelected, excludeItemsInLibrary, items, onSelected]);
+    }, [
+        checkIsSelected,
+        excludeItemsInLibrary,
+        items,
+        onExcludedItemClick,
+        onSelected,
+    ]);
 
     return (
         <SimpleGrid

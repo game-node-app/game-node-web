@@ -18,6 +18,11 @@ export interface GameSelectViewFigureProps extends IGameFigureProps {
      * If items already on user's library should not be available for selecting
      */
     excludeItemsInLibrary: boolean;
+    /**
+     * Function to execute when a excluded item is executed
+     * Depends on 'excludeItemsInLibrary' being true for current item.
+     */
+    onExcludedItemClick?: (gameId: number) => void;
 }
 
 const GameSelectViewFigure = ({
@@ -25,6 +30,7 @@ const GameSelectViewFigure = ({
     checkIsSelected,
     onSelected,
     excludeItemsInLibrary,
+    onExcludedItemClick,
     ...figureProps
 }: GameSelectViewFigureProps) => {
     /**
@@ -52,7 +58,14 @@ const GameSelectViewFigure = ({
             game={game}
             onClick={(evt) => {
                 evt.preventDefault();
-                if (!game || !game.id || isExcluded) return;
+                if (!game || !game.id) return;
+
+                if (isExcluded) {
+                    if (onExcludedItemClick) {
+                        onExcludedItemClick(game.id);
+                    }
+                    return;
+                }
 
                 onSelected(game.id);
             }}

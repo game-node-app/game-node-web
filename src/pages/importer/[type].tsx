@@ -127,6 +127,10 @@ function TypePage() {
         });
     }, []);
 
+    const resetSelectedGames = () => {
+        setValue("selectedGameIds", []);
+    };
+
     const handleSelection = (gameId: number) => {
         const indexOfElement = selectedGameIds.indexOf(gameId);
         const isAlreadyPresent = indexOfElement > -1;
@@ -139,6 +143,34 @@ function TypePage() {
 
         setValue("selectedGameIds", selectedGameIds.concat([gameId]));
     };
+
+    const removeExcludedItemMutation = useMutation({
+        mutationFn: async (gameId: number) => {
+            const externalGame = importerEntriesQuery.data?.data.find(
+                (externalGame) => {
+                    return externalGame.gameId === gameId;
+                },
+            );
+            console.log("exclude mutation called");
+
+            if (!externalGame) {
+                throw new Error(
+                    "Error while inserting game. Invalid external game ID. Please contact support.",
+                );
+            }
+
+            await ImporterService.importerControllerChangeStatus({
+                externalGameId: externalGame.id,
+                status: "ignored",
+            });
+
+            return gameId;
+        },
+        onSettled: () => {
+            importerEntriesQuery.invalidate();
+            gamesQuery.invalidate();
+        },
+    });
 
     const importMutation = useMutation({
         mutationFn: async ({
@@ -188,7 +220,7 @@ function TypePage() {
                 color: "green",
                 message: `Successfully imported ${importedGamesCount} games to your library!`,
             });
-            setValue("selectedGameIds", []);
+            resetSelectedGames();
         },
         onSettled: () => {
             importerEntriesQuery.invalidate();
@@ -310,7 +342,7 @@ function TypePage() {
                                     isAllGamesSelected={isAllGamesSelected}
                                     onSelectAll={() => {
                                         if (isAllGamesSelected) {
-                                            setValue("selectedGameIds", []);
+                                            resetSelectedGames();
                                         } else if (gameIds) {
                                             setValue(
                                                 "selectedGameIds",
@@ -327,6 +359,9 @@ function TypePage() {
                                 }}
                                 onSelected={(gameId) => handleSelection(gameId)}
                                 excludeItemsInLibrary={true}
+                                onExcludedItemClick={
+                                    removeExcludedItemMutation.mutate
+                                }
                             >
                                 {isLoading && buildLoadingSkeletons()}
                             </GameSelectView.Content>
@@ -339,6 +374,7 @@ function TypePage() {
                                     page={page}
                                     onPaginationChange={(selectedPage) => {
                                         setValue("page", selectedPage);
+                                        resetSelectedGames();
                                     }}
                                 />
                             )}
