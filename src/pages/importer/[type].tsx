@@ -151,7 +151,6 @@ function TypePage() {
                     return externalGame.gameId === gameId;
                 },
             );
-            console.log("exclude mutation called");
 
             if (!externalGame) {
                 throw new Error(
@@ -165,6 +164,12 @@ function TypePage() {
             });
 
             return gameId;
+        },
+        onSuccess: () => {
+            notifications.show({
+                color: "green",
+                message: `Successfully excluded item already in your library.`,
+            });
         },
         onSettled: () => {
             importerEntriesQuery.invalidate();
