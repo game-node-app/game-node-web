@@ -307,9 +307,9 @@ function TypePage() {
                             {hasSelectedFinishedGamesCollection && (
                                 <Text className={"text-sm text-yellow-300"}>
                                     Selected games will be marked as "Finished"
-                                    because a collection for finished games has
-                                    been selected. You can change the finish
-                                    date later.
+                                    because a collection for finished games is
+                                    being used. You can change the finish date
+                                    later.
                                 </Text>
                             )}
                         </Stack>
