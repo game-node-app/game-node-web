@@ -7,7 +7,7 @@ import { Box, Container, Paper } from "@mantine/core";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameReviewListView from "@/components/review/view/GameReviewListView";
+import GameInfoReviewList from "@/components/game/info/review/GameInfoReviewList";
 import UserReviewListView, {
     DEFAULT_USER_REVIEW_LIST_VIEW_DTO,
 } from "@/components/review/view/UserReviewListView";

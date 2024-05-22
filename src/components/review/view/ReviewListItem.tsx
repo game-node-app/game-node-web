@@ -5,12 +5,15 @@ import { Box, Divider, Flex, Group, Rating, Stack, Text } from "@mantine/core";
 import { Review } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
-import ReviewListItemLikes from "@/components/review/view/ReviewListItemLikes";
-import ReviewListItemDropdown from "@/components/review/view/ReviewListItemDropdown";
+import ReviewListItemLikeButton from "@/components/review/view/ReviewListItemLikeButton";
+import ReviewListItemDropdownButton from "@/components/review/view/ReviewListItemDropdownButton";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 import { useGame } from "@/components/game/hooks/useGame";
 import TextLink from "@/components/general/TextLink";
 import GameRating from "@/components/general/input/GameRating";
+import ReviewListItemCommentsButton from "@/components/review/view/ReviewListItemCommentsButton";
+import CommentsListView from "@/components/comment/view/CommentsListView";
+import ReviewListItemComments from "@/components/review/view/ReviewListItemComments";
 
 interface IReviewListViewProps {
     review: Review;
@@ -111,8 +114,12 @@ const ReviewListItem = ({
                             </Box>
                         )}
                         <Group>
-                            <ReviewListItemLikes review={review} />
-                            <ReviewListItemDropdown
+                            <ReviewListItemCommentsButton
+                                reviewId={review.id}
+                                onClick={() => {}}
+                            />
+                            <ReviewListItemLikeButton review={review} />
+                            <ReviewListItemDropdownButton
                                 review={review}
                                 isOwnReview={isOwnReview}
                                 onEditStart={onEditStart}
@@ -120,6 +127,9 @@ const ReviewListItem = ({
                         </Group>
                     </Group>
                 </Stack>
+            </Group>
+            <Group className={"w-10/12"}>
+                <ReviewListItemComments enabled={true} review={review} />
             </Group>
         </Stack>
     );

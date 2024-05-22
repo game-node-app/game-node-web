@@ -11,7 +11,7 @@ interface IReviewListItemDropdownProps {
     onEditStart?: () => void;
 }
 
-const ReviewListItemDropdown = ({
+const ReviewListItemDropdownButton = ({
     isOwnReview,
     review,
     onEditStart,
@@ -61,4 +61,4 @@ const ReviewListItemDropdown = ({
     );
 };
 
-export default ReviewListItemDropdown;
+export default ReviewListItemDropdownButton;

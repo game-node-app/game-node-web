@@ -22,7 +22,7 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import period = FindStatisticsTrendingReviewsDto.period;
 
-interface IGameReviewListViewProps {
+interface IGameInfoReviewListProps {
     gameId: number;
 }
 
@@ -59,7 +59,7 @@ const queryDtoToSearchParams = (dto: TBasePaginationRequest) => {
     return searchParams;
 };
 
-const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
+const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const onMobile = useOnMobile();
     const router = useRouter();
     const ownUserId = useUserId();
@@ -107,7 +107,8 @@ const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
     const content = useMemo(() => {
         const reviews = reviewsQuery.data
             ?.filter((review) => {
-                return review.profileUserId !== ownUserId;
+                // return review.profileUserId !== ownUserId;
+                return true;
             })
             .map((review) => {
                 return <ReviewListItem key={review.id} review={review} />;
@@ -167,4 +168,4 @@ const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
     );
 };
 
-export default GameReviewListView;
+export default GameInfoReviewList;

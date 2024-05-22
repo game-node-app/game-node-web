@@ -10,7 +10,7 @@ interface IReviewListLikesProps {
     review: Review;
 }
 
-const ReviewListItemLikes = ({ review }: IReviewListLikesProps) => {
+const ReviewListItemLikeButton = ({ review }: IReviewListLikesProps) => {
     const userId = useUserId();
     const [likesCount, isLiked, toggleUserLike] = useUserLike({
         sourceId: review.id,
@@ -40,4 +40,4 @@ const ReviewListItemLikes = ({ review }: IReviewListLikesProps) => {
     );
 };
 
-export default ReviewListItemLikes;
+export default ReviewListItemLikeButton;
