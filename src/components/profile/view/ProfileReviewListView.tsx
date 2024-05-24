@@ -64,8 +64,6 @@ const ProfileReviewListView = ({ userId }: IUserViewListView) => {
     const [offset, setOffset] = useState(0);
     const reviewsQuery = useReviewsForUserId(userId, offset, DEFAULT_LIMIT);
 
-    const reviewsIds = reviewsQuery.data?.data.map((s) => s.id!);
-
     const isEmpty =
         reviewsQuery.data == undefined || reviewsQuery.data.data.length === 0;
     const isLoading = reviewsQuery.isLoading;
