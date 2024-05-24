@@ -131,7 +131,7 @@ const ReviewListItem = ({
                     </Group>
                 </Stack>
             </Group>
-            <Group className={"w-full"} justify={"end"}>
+            <Group className={"w-full"} justify={"end"} wrap={"nowrap"}>
                 <Group className={"w-11/12 lg:10/12 lg:me-6"}>
                     <ReviewListItemComments
                         enabled={isCommentsOpen}

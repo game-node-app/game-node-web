@@ -16,11 +16,7 @@ const ReviewListItemComments = ({
 }: ReviewListItemCommentsProps) => {
     return (
         enabled && (
-            <Stack
-                className={
-                    "w-full h-full border-t-2 border-l-2 border-gray-600  pt-4 pl-4"
-                }
-            >
+            <Stack className={"w-full h-full"}>
                 <CommentsListView
                     enabled={enabled}
                     sourceId={review.id}
