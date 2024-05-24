@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { useRouter } from "next/router";
 import useUserId from "@/components/auth/hooks/useUserId";
@@ -18,20 +18,15 @@ import { TBasePaginationRequest } from "@/util/types/pagination";
 import period = FindStatisticsTrendingGamesDto.period;
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameView from "@/components/general/view/game/GameView";
+import useReviewsForUserId from "@/components/review/hooks/useReviewsForUserId";
 
 const DEFAULT_LIMIT = 7;
 
-export const DEFAULT_USER_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto =
-    {
-        period: period.ALL,
+const urlQueryToDto = (query: ParsedUrlQuery): TBasePaginationRequest => {
+    const dto: TBasePaginationRequest = {
         offset: 0,
         limit: DEFAULT_LIMIT,
     };
-
-const urlQueryToDto = (query: ParsedUrlQuery): TBasePaginationRequest => {
-    const dto: FindStatisticsTrendingReviewsDto = structuredClone(
-        DEFAULT_USER_REVIEW_LIST_VIEW_DTO,
-    );
     const { page } = query;
     if (page && typeof page === "string") {
         const pageInt = parseInt(page, 10);
@@ -58,7 +53,7 @@ interface IUserViewListView {
     userId: string;
 }
 
-const UserReviewListView = ({ userId }: IUserViewListView) => {
+const ProfileReviewListView = ({ userId }: IUserViewListView) => {
     const onMobile = useOnMobile();
     const router = useRouter();
     const ownUserId = useUserId();
@@ -66,32 +61,22 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
 
     const [page, setPage] = useState(1);
 
-    const trendingReviewsDto = useMemo((): FindStatisticsTrendingReviewsDto => {
-        const offset = (page - 1) * DEFAULT_LIMIT;
-        return {
-            ...DEFAULT_USER_REVIEW_LIST_VIEW_DTO,
-            offset: offset,
-            userId: userId,
-        };
-    }, [page, userId]);
-    const trendingReviewsQuery = useTrendingReviews(trendingReviewsDto);
-    const trendingReviewsPagination = trendingReviewsQuery.data?.pagination;
+    const [offset, setOffset] = useState(0);
+    const reviewsQuery = useReviewsForUserId(userId, offset, DEFAULT_LIMIT);
 
-    const reviewsIds = trendingReviewsQuery.data?.data.map((s) => s.reviewId!);
-    const reviewsQuery = useReviews(reviewsIds);
+    const reviewsIds = reviewsQuery.data?.data.map((s) => s.id!);
 
     const isEmpty =
-        reviewsQuery.data == undefined || reviewsQuery.data.length === 0;
-    const isLoading = trendingReviewsQuery.isLoading || reviewsQuery.isLoading;
-    const isError = trendingReviewsQuery.isError || reviewsQuery.isError;
+        reviewsQuery.data == undefined || reviewsQuery.data.data.length === 0;
+    const isLoading = reviewsQuery.isLoading;
+    const isError = reviewsQuery.isError;
 
     const handlePagination = (page: number) => {
         const offset = (page - 1) * DEFAULT_LIMIT;
-        const updatedDto: FindStatisticsTrendingReviewsDto = {
-            ...trendingReviewsDto,
+        const searchParams = queryDtoToSearchParams({
             offset,
-        };
-        const searchParams = queryDtoToSearchParams(updatedDto);
+            limit: DEFAULT_LIMIT,
+        });
         router.replace(
             {
                 query: searchParams.toString(),
@@ -105,12 +90,28 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
     };
 
     const items = useMemo(() => {
-        return reviewsQuery.data?.map((review) => {
+        return reviewsQuery.data?.data.map((review) => {
             return (
                 <ReviewListItem key={review.id} review={review} withGameInfo />
             );
         });
     }, [reviewsQuery.data]);
+
+    /**
+     * URL to pagination sync effect
+     */
+    useEffect(() => {
+        if (hasSetInitialQueryParams.current) {
+            return;
+        }
+
+        const dto = urlQueryToDto(router.query);
+        if (dto.offset) {
+            setOffset(dto.offset);
+        }
+
+        hasSetInitialQueryParams.current = true;
+    }, [router.query]);
 
     if (isLoading) {
         return <CenteredLoading />;
@@ -138,7 +139,7 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
             {!isEmpty && (
                 <GameView.Pagination
                     page={page}
-                    paginationInfo={trendingReviewsQuery.data?.pagination}
+                    paginationInfo={reviewsQuery.data?.pagination}
                     onPaginationChange={handlePagination}
                 />
             )}
@@ -146,4 +147,4 @@ const UserReviewListView = ({ userId }: IUserViewListView) => {
     );
 };
 
-export default UserReviewListView;
+export default ProfileReviewListView;
