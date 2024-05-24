@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 import { ActionIcon, Group, Text } from "@mantine/core";
-import { redirectToAuth } from "supertokens-auth-react";
-import { IconMessages, IconThumbUp } from "@tabler/icons-react";
+import { IconMessages } from "@tabler/icons-react";
 import { useComments } from "@/components/comment/hooks/useComments";
+import { FindAllCommentsDto } from "@/wrapper/server";
+import sourceType = FindAllCommentsDto.sourceType;
 
 interface ReviewListItemCommentsProps {
     reviewId: string;
@@ -17,12 +18,18 @@ const ReviewListItemCommentsButton = ({
         enabled: true,
         offset: 0,
         limit: 10,
-        sourceType: "review",
+        sourceType: sourceType.REVIEW,
         sourceId: reviewId,
+        orderBy: {
+            createdAt: "DESC",
+        },
     });
 
     const totalReviewsCount = useMemo(() => {
-        if (commentsQuery.data == undefined) {
+        if (
+            commentsQuery.data == undefined ||
+            commentsQuery.data.pagination == undefined
+        ) {
             return 0;
         }
 

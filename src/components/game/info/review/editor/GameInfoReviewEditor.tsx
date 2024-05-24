@@ -21,7 +21,7 @@ const GameInfoReviewEditor = ({
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const previousContent = useMemo(() => {
-        return reviewQuery.data?.content ?? "";
+        return reviewQuery.data?.content || "";
     }, [reviewQuery.data]);
 
     const editor = useEditor(
@@ -35,6 +35,8 @@ const GameInfoReviewEditor = ({
         },
         [previousContent],
     );
+
+    if (!editor) return null;
 
     return (
         <Box p={0} mx={0} w={"100%"}>

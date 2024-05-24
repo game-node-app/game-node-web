@@ -5,10 +5,12 @@ import { RichTextEditor } from "@mantine/tiptap";
 
 interface Props extends Partial<EditorOptions> {}
 
+export const COMMENT_EDITOR_EXTENSIONS = [StarterKit];
+
 const CommentEditor = ({ ...editorOptions }: Props) => {
     const editor = useEditor({
         ...editorOptions,
-        extensions: [StarterKit],
+        extensions: COMMENT_EDITOR_EXTENSIONS,
     });
 
     return (

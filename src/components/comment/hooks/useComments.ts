@@ -2,13 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 import {
     CommentService,
+    FindAllCommentsDto,
     FindCommentsPaginatedResponseDto,
 } from "@/wrapper/server";
 
-export interface UseCommentsProps {
+export interface UseCommentsProps extends FindAllCommentsDto {
     enabled: boolean;
-    sourceId: string;
-    sourceType: "review";
     offset?: number;
     limit?: number;
 }
@@ -19,9 +18,10 @@ export function useComments({
     sourceType,
     offset = 0,
     limit = 10,
+    orderBy,
 }: UseCommentsProps): ExtendedUseQueryResult<FindCommentsPaginatedResponseDto> {
     const queryClient = useQueryClient();
-    const queryKey = ["comments", sourceType, sourceId, offset, limit];
+    const queryKey = ["comments", sourceType, sourceId, offset, limit, orderBy];
 
     const invalidate = () => {
         queryClient.invalidateQueries({
@@ -32,14 +32,16 @@ export function useComments({
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                return CommentService.commentControllerFindAll(
+                return CommentService.commentControllerFindAll({
                     sourceId,
                     sourceType,
-                    offset,
+                    orderBy,
                     limit,
-                );
+                    offset,
+                });
             },
             enabled,
+            retry: 1,
         }),
         queryKey,
         invalidate,

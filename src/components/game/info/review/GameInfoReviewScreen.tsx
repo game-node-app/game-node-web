@@ -1,7 +1,5 @@
 import React from "react";
 
-// Tiptap styles
-import "@mantine/tiptap/styles.css";
 import { Paper, Stack } from "@mantine/core";
 import GameInfoReviewEditorView from "@/components/game/info/review/editor/GameInfoReviewEditorView";
 import GameInfoReviewList from "@/components/game/info/review/GameInfoReviewList";

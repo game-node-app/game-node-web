@@ -1,9 +1,9 @@
 import React from "react";
-import { UseCommentsProps } from "@/components/comment/hooks/useComments";
-import { Review } from "@/wrapper/server";
-import { Stack } from "@mantine/core";
+import { CreateCommentDto, FindAllCommentsDto, Review } from "@/wrapper/server";
+import { Space, Stack } from "@mantine/core";
 import CommentsListView from "@/components/comment/view/CommentsListView";
-import CommentEditor from "@/components/comment/editor/CommentEditor";
+import CommentEditorView from "@/components/comment/editor/CommentEditorView";
+import sourceType = FindAllCommentsDto.sourceType;
 
 interface ReviewListItemCommentsProps {
     enabled: boolean;
@@ -15,14 +15,27 @@ const ReviewListItemComments = ({
     enabled,
 }: ReviewListItemCommentsProps) => {
     return (
-        <Stack className={"w-full h-full"}>
-            <CommentsListView
-                enabled={true}
-                sourceId={review.id}
-                sourceType={"review"}
-            />
-            <CommentEditor />
-        </Stack>
+        enabled && (
+            <Stack
+                className={
+                    "w-full h-full border-t-2 border-l-2 border-gray-600  pt-4 pl-4"
+                }
+            >
+                <CommentsListView
+                    enabled={enabled}
+                    sourceId={review.id}
+                    sourceType={sourceType.REVIEW}
+                    orderBy={{
+                        createdAt: "DESC",
+                    }}
+                />
+                <Space h={"0.5rem"} />
+                <CommentEditorView
+                    sourceType={sourceType.REVIEW}
+                    sourceId={review.id}
+                />
+            </Stack>
+        )
     );
 };
 

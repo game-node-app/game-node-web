@@ -28,6 +28,7 @@ const ReviewListItem = ({
 }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
     const contentToUse = useMemo(() => {
         if (review != undefined && review.content != undefined) {
             if (review.content.length < 280 || isReadMore) {
@@ -116,7 +117,9 @@ const ReviewListItem = ({
                         <Group>
                             <ReviewListItemCommentsButton
                                 reviewId={review.id}
-                                onClick={() => {}}
+                                onClick={() => {
+                                    setIsCommentsOpen(!isCommentsOpen);
+                                }}
                             />
                             <ReviewListItemLikeButton review={review} />
                             <ReviewListItemDropdownButton
@@ -128,8 +131,13 @@ const ReviewListItem = ({
                     </Group>
                 </Stack>
             </Group>
-            <Group className={"w-10/12"}>
-                <ReviewListItemComments enabled={true} review={review} />
+            <Group className={"w-full"} justify={"end"}>
+                <Group className={"w-11/12 lg:10/12 lg:me-6"}>
+                    <ReviewListItemComments
+                        enabled={isCommentsOpen}
+                        review={review}
+                    />
+                </Group>
             </Group>
         </Stack>
     );
