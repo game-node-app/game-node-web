@@ -4,6 +4,7 @@ import { Space, Stack } from "@mantine/core";
 import CommentsListView from "@/components/comment/view/CommentsListView";
 import CommentEditorView from "@/components/comment/editor/CommentEditorView";
 import sourceType = FindAllCommentsDto.sourceType;
+import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 
 interface ReviewListItemCommentsProps {
     enabled: boolean;
@@ -15,23 +16,24 @@ const ReviewListItemComments = ({
     enabled,
 }: ReviewListItemCommentsProps) => {
     return (
-        enabled && (
-            <Stack className={"w-full h-full"}>
-                <CommentsListView
-                    enabled={enabled}
-                    sourceId={review.id}
-                    sourceType={sourceType.REVIEW}
-                    orderBy={{
-                        createdAt: "DESC",
-                    }}
-                />
-                <Space h={"0.5rem"} />
-                <CommentEditorView
-                    sourceType={sourceType.REVIEW}
-                    sourceId={review.id}
-                />
-            </Stack>
-        )
+        <Stack
+            className={`w-full h-full hidden data-[enabled=true]:flex`}
+            data-enabled={enabled ? "true" : "false"}
+        >
+            <CommentsListView
+                enabled={enabled}
+                sourceId={review.id}
+                sourceType={sourceType.REVIEW}
+                orderBy={{
+                    createdAt: "DESC",
+                }}
+            />
+            <Space h={"0.5rem"} />
+            <CommentEditorView
+                sourceType={sourceType.REVIEW}
+                sourceId={review.id}
+            />
+        </Stack>
     );
 };
 

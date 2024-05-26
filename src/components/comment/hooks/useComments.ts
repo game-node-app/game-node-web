@@ -7,13 +7,13 @@ import {
 } from "@/wrapper/server";
 
 export interface UseCommentsProps extends FindAllCommentsDto {
-    enabled: boolean;
+    enabled?: boolean;
     offset?: number;
     limit?: number;
 }
 
 export function useComments({
-    enabled,
+    enabled = true,
     sourceId,
     sourceType,
     offset = 0,

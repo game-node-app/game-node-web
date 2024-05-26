@@ -1,19 +1,23 @@
-import React, { ReactElement, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Box, Divider, Flex, Group, Rating, Stack, Text } from "@mantine/core";
-import { Review } from "@/wrapper/server";
+import { Box, Flex, Group, Stack } from "@mantine/core";
+import {
+    FindAllCommentsDto,
+    FindOneStatisticsDto,
+    Review,
+} from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
-import ReviewListItemLikeButton from "@/components/review/view/ReviewListItemLikeButton";
 import ReviewListItemDropdownButton from "@/components/review/view/ReviewListItemDropdownButton";
 import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 import { useGame } from "@/components/game/hooks/useGame";
 import TextLink from "@/components/general/TextLink";
 import GameRating from "@/components/general/input/GameRating";
-import ReviewListItemCommentsButton from "@/components/review/view/ReviewListItemCommentsButton";
-import CommentsListView from "@/components/comment/view/CommentsListView";
 import ReviewListItemComments from "@/components/review/view/ReviewListItemComments";
+import ItemLikesButton from "@/components/statistics/input/ItemLikesButton";
+import ItemCommentsButton from "@/components/comment/input/ItemCommentsButton";
+import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 
 interface IReviewListViewProps {
     review: Review;
@@ -115,24 +119,37 @@ const ReviewListItem = ({
                             </Box>
                         )}
                         <Group>
-                            <ReviewListItemCommentsButton
-                                reviewId={review.id}
+                            <ItemCommentsButton
                                 onClick={() => {
                                     setIsCommentsOpen(!isCommentsOpen);
                                 }}
+                                sourceId={review.id}
+                                sourceType={
+                                    FindAllCommentsDto.sourceType.REVIEW
+                                }
                             />
-                            <ReviewListItemLikeButton review={review} />
+                            <ItemLikesButton
+                                targetUserId={review.profileUserId}
+                                sourceId={review.id}
+                                sourceType={
+                                    FindOneStatisticsDto.sourceType.REVIEW
+                                }
+                            />
+
                             <ReviewListItemDropdownButton
                                 review={review}
-                                isOwnReview={isOwnReview}
                                 onEditStart={onEditStart}
                             />
                         </Group>
                     </Group>
                 </Stack>
             </Group>
-            <Group className={"w-full"} justify={"end"} wrap={"nowrap"}>
-                <Group className={"w-11/12 lg:10/12 lg:me-6"}>
+            <Group
+                className={"w-full"}
+                justify={onMobile ? "end" : "center"}
+                wrap={"nowrap"}
+            >
+                <Group className={"w-[95%]"}>
                     <ReviewListItemComments
                         enabled={isCommentsOpen}
                         review={review}

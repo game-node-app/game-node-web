@@ -1,41 +1,23 @@
 import React from "react";
-import useUserId from "@/components/auth/hooks/useUserId";
-import { useUserLike } from "@/components/statistics/hooks/useUserLike";
-import { StatisticsActionDto } from "@/wrapper/server";
-import sourceType = StatisticsActionDto.sourceType;
-import { ActionIcon, Group, Text } from "@mantine/core";
-import { redirectToAuth } from "supertokens-auth-react";
-import { IconThumbUp } from "@tabler/icons-react";
-import useOnMobile from "@/components/general/hooks/useOnMobile";
+import {
+    Activity,
+    FindOneStatisticsDto,
+    StatisticsActionDto,
+} from "@/wrapper/server";
+import ItemLikesButton from "@/components/statistics/input/ItemLikesButton";
+import sourceType = FindOneStatisticsDto.sourceType;
 
 interface Props {
-    activityId: string;
+    activity: Activity;
 }
 
-const ActivityItemLikes = ({ activityId }: Props) => {
-    const userId = useUserId();
-    const [likesCount, isLiked, toggleLike] = useUserLike({
-        sourceId: activityId,
-        targetUserId: userId,
-        sourceType: sourceType.ACTIVITY,
-    });
+const ActivityItemLikes = ({ activity }: Props) => {
     return (
-        <ActionIcon
-            onClick={async () => {
-                if (!userId) {
-                    await redirectToAuth();
-                    return;
-                }
-                toggleLike();
-            }}
-            variant={isLiked ? "filled" : "transparent"}
-            size={"lg"}
-            color={isLiked ? "brand" : "white"}
-            data-disabled={!userId}
-        >
-            <IconThumbUp />
-            <Text>{likesCount}</Text>
-        </ActionIcon>
+        <ItemLikesButton
+            targetUserId={activity.profileUserId}
+            sourceId={activity.id}
+            sourceType={sourceType.ACTIVITY}
+        />
     );
 };
 

@@ -107,8 +107,7 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const content = useMemo(() => {
         const reviews = reviewsQuery.data
             ?.filter((review) => {
-                // return review.profileUserId !== ownUserId;
-                return true;
+                return review.profileUserId !== ownUserId;
             })
             .map((review) => {
                 return <ReviewListItem key={review.id} review={review} />;
@@ -126,7 +125,7 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     }, [reviewsQuery.data, ownUserId]);
 
     if (isLoading) {
-        return <CenteredLoading />;
+        return <CenteredLoading className={"mt-6 mb-6"} />;
     } else if (isError) {
         return (
             <CenteredErrorMessage

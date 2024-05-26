@@ -111,7 +111,7 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                             </Title>
                         </Link>
                         <Group>
-                            <ActivityItemLikes activityId={activity.id} />
+                            <ActivityItemLikes activity={activity} />
                         </Group>
                     </Stack>
                 </Box>

@@ -10,7 +10,7 @@ import {
 } from "@/components/statistics/hooks/useItemStatistics";
 import useUserId from "@/components/auth/hooks/useUserId";
 
-interface IToggleLikeProps {
+export interface IToggleLikeProps {
     targetUserId: string | undefined;
     sourceId: string | number;
     sourceType: FindOneStatisticsDto.sourceType;

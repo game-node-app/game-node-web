@@ -4,60 +4,53 @@ import { ActionIcon, Menu } from "@mantine/core";
 import { Review } from "@/wrapper/server";
 import { useDisclosure } from "@mantine/hooks";
 import ReviewListItemRemoveModal from "@/components/review/view/ReviewListItemRemoveModal";
+import useUserId from "@/components/auth/hooks/useUserId";
+import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 
 interface IReviewListItemDropdownProps {
     review: Review;
-    isOwnReview: boolean;
     onEditStart?: () => void;
 }
 
 const ReviewListItemDropdownButton = ({
-    isOwnReview,
     review,
     onEditStart,
 }: IReviewListItemDropdownProps) => {
+    const ownUserId = useUserId();
+    const isOwnReview =
+        ownUserId != undefined && ownUserId === review.profileUserId;
+
     const [reviewRemoveModalOpened, reviewRemoveModalUtils] =
         useDisclosure(false);
+
     return (
-        <Menu shadow={"md"} width={200} position={"left"}>
+        <>
             <ReviewListItemRemoveModal
                 reviewId={review.id}
                 onClose={reviewRemoveModalUtils.close}
                 opened={reviewRemoveModalOpened}
             />
-            <Menu.Target>
-                <ActionIcon variant={"subtle"} c={"white"}>
-                    <IconDots />
-                </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-                <Menu.Label>Actions</Menu.Label>
+            <ItemDropdown>
                 {isOwnReview && (
                     <>
-                        <Menu.Item
-                            onClick={onEditStart}
-                            leftSection={<IconEdit size={"1rem"} />}
-                            disabled={!isOwnReview}
-                        >
-                            Edit
-                        </Menu.Item>
-                        <Menu.Item
-                            onClick={() => reviewRemoveModalUtils.open()}
-                            leftSection={<IconTrashOff size={"1rem"} />}
-                            disabled={!isOwnReview}
-                        >
-                            Remove
-                        </Menu.Item>
+                        <ItemDropdown.EditButton
+                            onClick={() => {
+                                if (onEditStart) {
+                                    onEditStart();
+                                }
+                            }}
+                            disabled={!onEditStart}
+                        />
+                        <ItemDropdown.RemoveButton
+                            onClick={() => {
+                                reviewRemoveModalUtils.open();
+                            }}
+                        />
                     </>
                 )}
-                <Menu.Item
-                    leftSection={<IconBan size={"1rem"} />}
-                    disabled={true}
-                >
-                    Report
-                </Menu.Item>
-            </Menu.Dropdown>
-        </Menu>
+                <ItemDropdown.ReportButton onClick={() => {}} disabled={true} />
+            </ItemDropdown>
+        </>
     );
 };
 
