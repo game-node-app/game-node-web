@@ -48,7 +48,8 @@ const CommentsListView = ({
         commentsQuery.data != undefined &&
         commentsQuery.data.pagination.hasNextPage;
 
-    const shouldShowPagination = offsetAsPage !== 1 || hasNextPage;
+    const shouldShowPagination =
+        commentsQuery.data != undefined && (offsetAsPage !== 1 || hasNextPage);
     return (
         <Stack className={"w-full h-full"}>
             {commentsQuery.isError && (
