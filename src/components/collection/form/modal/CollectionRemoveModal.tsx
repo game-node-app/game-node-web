@@ -65,7 +65,7 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
                             }}
                             color={"red"}
                         >
-                            I'm sure
+                            Confirm
                         </Button>
                     </Group>
                 </Stack>

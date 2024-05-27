@@ -98,7 +98,7 @@ const ReviewActivityItem = ({ activity }: Props) => {
                             size={"md"}
                         />
                         <Group>
-                            <ActivityItemLikes activityId={activity.id} />
+                            <ActivityItemLikes activity={activity} />
                         </Group>
                     </Stack>
                 </Box>

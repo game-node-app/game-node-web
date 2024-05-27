@@ -22,7 +22,7 @@ import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import period = FindStatisticsTrendingReviewsDto.period;
 
-interface IGameReviewListViewProps {
+interface IGameInfoReviewListProps {
     gameId: number;
 }
 
@@ -59,7 +59,7 @@ const queryDtoToSearchParams = (dto: TBasePaginationRequest) => {
     return searchParams;
 };
 
-const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
+const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const onMobile = useOnMobile();
     const router = useRouter();
     const ownUserId = useUserId();
@@ -125,7 +125,7 @@ const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
     }, [reviewsQuery.data, ownUserId]);
 
     if (isLoading) {
-        return <CenteredLoading />;
+        return <CenteredLoading className={"mt-6 mb-6"} />;
     } else if (isError) {
         return (
             <CenteredErrorMessage
@@ -167,4 +167,4 @@ const GameReviewListView = ({ gameId }: IGameReviewListViewProps) => {
     );
 };
 
-export default GameReviewListView;
+export default GameInfoReviewList;

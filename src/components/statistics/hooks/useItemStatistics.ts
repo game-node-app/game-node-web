@@ -1,4 +1,6 @@
 import {
+    ActivityStatistics,
+    CommentStatistics,
     FindOneStatisticsDto,
     GameStatistics,
     ReviewStatistics,
@@ -9,7 +11,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
 export type StatisticsWithStatus<T = any> = (T extends any
-    ? GameStatistics | ReviewStatistics
+    ? GameStatistics | ReviewStatistics | ActivityStatistics | CommentStatistics
     : T) &
     StatisticsStatus;
 

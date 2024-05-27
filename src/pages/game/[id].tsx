@@ -14,7 +14,7 @@ import {
     GameRepositoryService,
     StatisticsActionDto,
 } from "@/wrapper/server";
-import GameInfoReviewView from "@/components/game/info/review/GameInfoReviewView";
+import GameInfoReviewScreen from "@/components/game/info/review/GameInfoReviewScreen";
 import { useUserView } from "@/components/statistics/hooks/useUserView";
 import sourceType = FindOneStatisticsDto.sourceType;
 import Head from "next/head";
@@ -95,7 +95,7 @@ const GameInfoPage = () => {
                 <GameInfoView id={idAsNumber} />
             </Container>
             <Container fluid mt={"30px"} p={0} w={"100%"}>
-                <GameInfoReviewView gameId={idAsNumber} />
+                <GameInfoReviewScreen gameId={idAsNumber} />
             </Container>
             <Container fluid mt={"30px"} p={0} w={"100%"}>
                 <GameExtraInfoView id={idAsNumber} />

@@ -1,16 +1,11 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useTrendingReviews } from "@/components/statistics/hooks/useTrendingReviews";
-import { FindStatisticsTrendingReviewsDto } from "@/wrapper/server";
-import period = FindStatisticsTrendingReviewsDto.period;
-import { Box, Container, Paper } from "@mantine/core";
+import { Container, Paper } from "@mantine/core";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameReviewListView from "@/components/review/view/GameReviewListView";
-import UserReviewListView, {
-    DEFAULT_USER_REVIEW_LIST_VIEW_DTO,
-} from "@/components/review/view/UserReviewListView";
+
+import ProfileReviewListView from "@/components/profile/view/ProfileReviewListView";
 
 const Index = () => {
     const router = useRouter();
@@ -35,7 +30,7 @@ const Index = () => {
                 }}
             >
                 <DetailsBox title={`${username}'s Reviews`}>
-                    <UserReviewListView userId={userId as string} />
+                    <ProfileReviewListView userId={userId as string} />
                 </DetailsBox>
             </Paper>
         </Container>

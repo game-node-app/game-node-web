@@ -7,19 +7,33 @@ import GameSelectViewFigure, {
 
 type SelectedProps = Pick<
     GameSelectViewFigureProps,
-    "onSelected" | "onDeselected" | "checkIsSelected"
+    | "onSelected"
+    | "checkIsSelected"
+    | "excludeItemsInLibrary"
+    | "onExcludedItemClick"
 >;
 
 interface Props extends PropsWithChildren<SimpleGridProps & SelectedProps> {
     items: TGameOrSearchGame[];
 }
 
+/**
+ * Component similar to GameViewContent that allows users to select items on click.
+ * @param items
+ * @param children
+ * @param checkIsSelected
+ * @param onSelected
+ * @param excludeItemsInLibrary
+ * @param others
+ * @constructor
+ */
 const GameSelectViewContent = ({
     items,
     children,
     checkIsSelected,
     onSelected,
-    onDeselected,
+    excludeItemsInLibrary,
+    onExcludedItemClick,
     ...others
 }: Props) => {
     const columns = useMemo(() => {
@@ -33,16 +47,23 @@ const GameSelectViewContent = ({
                     key={game.id!}
                     checkIsSelected={checkIsSelected}
                     onSelected={onSelected}
-                    onDeselected={onDeselected}
                     game={game}
+                    excludeItemsInLibrary={excludeItemsInLibrary}
+                    onExcludedItemClick={onExcludedItemClick}
                 />
             );
         });
-    }, [checkIsSelected, items, onDeselected, onSelected]);
+    }, [
+        checkIsSelected,
+        excludeItemsInLibrary,
+        items,
+        onExcludedItemClick,
+        onSelected,
+    ]);
 
     return (
         <SimpleGrid
-            id={"game-view-content"}
+            id={"game-select-view-content"}
             cols={{
                 base: 2,
                 lg: 5,

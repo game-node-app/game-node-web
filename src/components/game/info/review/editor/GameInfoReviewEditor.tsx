@@ -21,11 +21,8 @@ const GameInfoReviewEditor = ({
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const previousContent = useMemo(() => {
-        if (reviewQuery.data != undefined) {
-            return reviewQuery.data.content;
-        }
-        return `<i>Write your review...</i>`;
-    }, [reviewQuery]);
+        return reviewQuery.data?.content || "";
+    }, [reviewQuery.data]);
 
     const editor = useEditor(
         {
@@ -33,11 +30,13 @@ const GameInfoReviewEditor = ({
             content: previousContent,
             onBlur: (e) => {
                 let html = e.editor.getHTML();
-                onBlur(html || "");
+                onBlur(html ?? "");
             },
         },
         [previousContent],
     );
+
+    if (!editor) return null;
 
     return (
         <Box p={0} mx={0} w={"100%"}>

@@ -127,26 +127,55 @@ function TypePage() {
         });
     }, []);
 
-    const handleSelection = (gameId: number, action: "select" | "deselect") => {
-        const indexOfElement = selectedGameIds.indexOf(gameId);
+    const resetSelectedGames = () => {
+        setValue("selectedGameIds", []);
+    };
 
-        if (action === "deselect") {
-            if (indexOfElement >= 0) {
-                const updatedArray = selectedGameIds.toSpliced(
-                    indexOfElement,
-                    1,
-                );
-                setValue("selectedGameIds", updatedArray);
-            }
-            return;
-        }
-        // Item is already present in "select" action
-        if (indexOfElement >= 0) {
+    const handleSelection = (gameId: number) => {
+        const indexOfElement = selectedGameIds.indexOf(gameId);
+        const isAlreadyPresent = indexOfElement > -1;
+
+        if (isAlreadyPresent) {
+            const updatedArray = selectedGameIds.toSpliced(indexOfElement, 1);
+            setValue("selectedGameIds", updatedArray);
             return;
         }
 
         setValue("selectedGameIds", selectedGameIds.concat([gameId]));
     };
+
+    const removeExcludedItemMutation = useMutation({
+        mutationFn: async (gameId: number) => {
+            const externalGame = importerEntriesQuery.data?.data.find(
+                (externalGame) => {
+                    return externalGame.gameId === gameId;
+                },
+            );
+
+            if (!externalGame) {
+                throw new Error(
+                    "Error while inserting game. Invalid external game ID. Please contact support.",
+                );
+            }
+
+            await ImporterService.importerControllerChangeStatus({
+                externalGameId: externalGame.id,
+                status: "ignored",
+            });
+
+            return gameId;
+        },
+        onSuccess: () => {
+            notifications.show({
+                color: "green",
+                message: `Successfully excluded item already in your library.`,
+            });
+        },
+        onSettled: () => {
+            importerEntriesQuery.invalidate();
+            gamesQuery.invalidate();
+        },
+    });
 
     const importMutation = useMutation({
         mutationFn: async ({
@@ -196,7 +225,7 @@ function TypePage() {
                 color: "green",
                 message: `Successfully imported ${importedGamesCount} games to your library!`,
             });
-            setValue("selectedGameIds", []);
+            resetSelectedGames();
         },
         onSettled: () => {
             importerEntriesQuery.invalidate();
@@ -278,9 +307,9 @@ function TypePage() {
                             {hasSelectedFinishedGamesCollection && (
                                 <Text className={"text-sm text-yellow-300"}>
                                     Selected games will be marked as "Finished"
-                                    because a collection for finished games has
-                                    been selected. You can change the finish
-                                    date later.
+                                    because a collection for finished games is
+                                    being used. You can change the finish date
+                                    later.
                                 </Text>
                             )}
                         </Stack>
@@ -318,7 +347,7 @@ function TypePage() {
                                     isAllGamesSelected={isAllGamesSelected}
                                     onSelectAll={() => {
                                         if (isAllGamesSelected) {
-                                            setValue("selectedGameIds", []);
+                                            resetSelectedGames();
                                         } else if (gameIds) {
                                             setValue(
                                                 "selectedGameIds",
@@ -333,12 +362,11 @@ function TypePage() {
                                 checkIsSelected={(gameId) => {
                                     return selectedGameIds.includes(gameId);
                                 }}
-                                onSelected={(gameId) =>
-                                    handleSelection(gameId, "select")
+                                onSelected={(gameId) => handleSelection(gameId)}
+                                excludeItemsInLibrary={true}
+                                onExcludedItemClick={
+                                    removeExcludedItemMutation.mutate
                                 }
-                                onDeselected={(gameId) => {
-                                    handleSelection(gameId, "deselect");
-                                }}
                             >
                                 {isLoading && buildLoadingSkeletons()}
                             </GameSelectView.Content>
@@ -351,6 +379,7 @@ function TypePage() {
                                     page={page}
                                     onPaginationChange={(selectedPage) => {
                                         setValue("page", selectedPage);
+                                        resetSelectedGames();
                                     }}
                                 />
                             )}

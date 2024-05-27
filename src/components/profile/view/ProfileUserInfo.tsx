@@ -30,7 +30,6 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId, 0, 1);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
-    const activityQuery = useLatestActivities(userId, 0, 1);
 
     const featuredAchievement = useMemo(() => {
         if (obtainedAchievementsQuery.data == undefined) return null;
