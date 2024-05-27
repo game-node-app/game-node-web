@@ -6,6 +6,10 @@ import {
     FindCommentsPaginatedResponseDto,
 } from "@/wrapper/server";
 
+const DEFAULT_USE_COMMENTS_ORDER_BY = {
+    createdAt: "DESC",
+};
+
 export interface UseCommentsProps extends FindAllCommentsDto {
     enabled?: boolean;
     offset?: number;
@@ -18,7 +22,7 @@ export function useComments({
     sourceType,
     offset = 0,
     limit = 10,
-    orderBy,
+    orderBy = DEFAULT_USE_COMMENTS_ORDER_BY,
 }: UseCommentsProps): ExtendedUseQueryResult<FindCommentsPaginatedResponseDto> {
     const queryClient = useQueryClient();
     const queryKey = ["comments", sourceType, sourceId, offset, limit, orderBy];

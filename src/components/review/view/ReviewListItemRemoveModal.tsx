@@ -33,7 +33,7 @@ const ReviewListItemRemoveModal = ({ reviewId, opened, onClose }: Props) => {
                         </Text>
                         <Group wrap={"nowrap"} justify={"center"}>
                             <Button onClick={onClose} color={"blue"}>
-                                No
+                                Go back
                             </Button>
                             <Button
                                 onClick={() => {
@@ -42,7 +42,7 @@ const ReviewListItemRemoveModal = ({ reviewId, opened, onClose }: Props) => {
                                 }}
                                 color={"red"}
                             >
-                                Yes
+                                Confirm
                             </Button>
                         </Group>
                     </Stack>

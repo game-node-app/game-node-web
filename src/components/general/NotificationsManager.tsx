@@ -56,9 +56,11 @@ const handleNotifications = async (notificationsEntities: Notification[]) => {
 };
 
 const NotificationsManager = () => {
-    const userId = useUserId();
-    const infiniteNotificationsQuery = useInfiniteAggregatedNotifications();
+    // const userId = useUserId();
+    // const infiniteNotificationsQuery = useInfiniteAggregatedNotifications();
     // TODO: Check if this is causing trouble
+    // Update: it was.
+    // TODO: Update this to use polling instead of SSE.
     // useEffect(() => {
     //     let eventSource: ReconnectingEventSource;
     //     if (userId) {

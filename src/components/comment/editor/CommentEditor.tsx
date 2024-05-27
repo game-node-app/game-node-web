@@ -8,10 +8,13 @@ interface Props extends Partial<EditorOptions> {}
 export const COMMENT_EDITOR_EXTENSIONS = [StarterKit];
 
 const CommentEditor = ({ ...editorOptions }: Props) => {
-    const editor = useEditor({
-        ...editorOptions,
-        extensions: COMMENT_EDITOR_EXTENSIONS,
-    });
+    const editor = useEditor(
+        {
+            ...editorOptions,
+            extensions: COMMENT_EDITOR_EXTENSIONS,
+        },
+        [editorOptions.content],
+    );
 
     return (
         <RichTextEditor editor={editor} className={"w-full h-full"}>
@@ -20,7 +23,6 @@ const CommentEditor = ({ ...editorOptions }: Props) => {
                     <RichTextEditor.ControlsGroup>
                         <RichTextEditor.Bold />
                         <RichTextEditor.Italic />
-                        <RichTextEditor.Link />
                     </RichTextEditor.ControlsGroup>
                 </BubbleMenu>
             )}

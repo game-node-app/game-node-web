@@ -144,12 +144,8 @@ const ReviewListItem = ({
                     </Group>
                 </Stack>
             </Group>
-            <Group
-                className={"w-full"}
-                justify={onMobile ? "end" : "center"}
-                wrap={"nowrap"}
-            >
-                <Group className={"w-[95%]"}>
+            <Group className={"w-full"} justify={"end"} wrap={"nowrap"}>
+                <Group className={"w-[95%] lg:w-[98%]"}>
                     <ReviewListItemComments
                         enabled={isCommentsOpen}
                         review={review}

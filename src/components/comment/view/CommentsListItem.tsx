@@ -11,9 +11,11 @@ import CommentsListItemActions from "@/components/comment/view/CommentsListItemA
 
 interface Props {
     comment: ReviewComment;
+    onEditStart: (commentId: string) => void;
+    editedCommentId?: string;
 }
 
-const CommentsListItem = ({ comment }: Props) => {
+const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
     const [isReadMore, setIsReadMore] = useState(false);
     const onMobile = useOnMobile();
     const contentToUse = useMemo(() => {
@@ -33,12 +35,19 @@ const CommentsListItem = ({ comment }: Props) => {
         [contentToUse],
     );
 
+    const isEditing =
+        editedCommentId != undefined && editedCommentId === comment.id;
+
     if (!nonEditableEditor) return;
 
     return (
         <Stack className={"w-full h-full"}>
             <Group className={"w-full h-full"} wrap={"nowrap"}>
-                <Divider orientation={"vertical"} />
+                <Divider
+                    orientation={"vertical"}
+                    color={isEditing ? "brand" : undefined}
+                    size={"sm"}
+                />
                 <Group w={"100%"} justify={"space-evenly"} wrap={"wrap"}>
                     <Group className={"w-full flex-nowrap justify-between"}>
                         <Flex
@@ -75,7 +84,10 @@ const CommentsListItem = ({ comment }: Props) => {
                         />
                     </Stack>
                     <Stack className={"w-full"}>
-                        <CommentsListItemActions comment={comment} />
+                        <CommentsListItemActions
+                            comment={comment}
+                            onEditStart={onEditStart}
+                        />
                     </Stack>
                 </Group>
             </Group>

@@ -1,24 +1,75 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
     useComments,
     UseCommentsProps,
 } from "@/components/comment/hooks/useComments";
-import { Paper, Stack } from "@mantine/core";
+import { Pagination, Paper, Stack } from "@mantine/core";
 import CommentsListItem from "@/components/comment/view/CommentsListItem";
+import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
+import CenteredLoading from "@/components/general/CenteredLoading";
+import GameViewPagination from "@/components/general/view/game/GameViewPagination";
 
-interface Props extends UseCommentsProps {}
+interface Props extends Omit<UseCommentsProps, "limit" | "offset"> {
+    onEditStart: (commentId: string) => void;
+    editedCommentId?: string;
+}
 
-const CommentsListView = ({ ...hookProps }: Props) => {
-    const commentsQuery = useComments(hookProps);
+const COMMENTS_LIST_VIEW_DEFAULT_LIMIT = 10;
+
+const CommentsListView = ({
+    onEditStart,
+    editedCommentId,
+    ...hookProps
+}: Props) => {
+    const [offset, setOffset] = useState(0);
+    const offsetAsPage =
+        offset >= COMMENTS_LIST_VIEW_DEFAULT_LIMIT
+            ? Math.ceil((offset + 1) / COMMENTS_LIST_VIEW_DEFAULT_LIMIT)
+            : 1;
+    const commentsQuery = useComments({
+        ...hookProps,
+        offset,
+        limit: COMMENTS_LIST_VIEW_DEFAULT_LIMIT,
+    });
     const items = useMemo(() => {
         return commentsQuery.data?.data.map((comment) => {
-            return <CommentsListItem key={comment.id} comment={comment} />;
+            return (
+                <CommentsListItem
+                    key={comment.id}
+                    comment={comment}
+                    onEditStart={onEditStart}
+                    editedCommentId={editedCommentId}
+                />
+            );
         });
-    }, [commentsQuery.data]);
+    }, [commentsQuery.data?.data, editedCommentId, onEditStart]);
+
+    const hasNextPage =
+        commentsQuery.data != undefined &&
+        commentsQuery.data.pagination.hasNextPage;
+
+    const shouldShowPagination = offsetAsPage !== 1 || hasNextPage;
     return (
-        <Paper className={"w-full h-full"}>
-            <Stack className={"w-full h-full"}>{items}</Stack>
-        </Paper>
+        <Stack className={"w-full h-full"}>
+            {commentsQuery.isError && (
+                <CenteredErrorMessage
+                    message={"Error while fetching comments. Please try again."}
+                />
+            )}
+            {commentsQuery.isLoading && <CenteredLoading />}
+            {items}
+            {shouldShowPagination && (
+                <GameViewPagination
+                    page={offsetAsPage}
+                    paginationInfo={commentsQuery.data?.pagination}
+                    onPaginationChange={(page) => {
+                        const pageAsOffset =
+                            COMMENTS_LIST_VIEW_DEFAULT_LIMIT * (page - 1);
+                        setOffset(pageAsOffset);
+                    }}
+                />
+            )}
+        </Stack>
     );
 };
 
