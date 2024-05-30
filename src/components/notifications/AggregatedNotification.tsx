@@ -2,9 +2,10 @@ import React, { useMemo } from "react";
 import { NotificationAggregateDto } from "@/wrapper/server";
 import ReviewAggregatedNotification from "@/components/notifications/ReviewAggregatedNotification";
 import FollowerAggregatedNotification from "@/components/notifications/FollowerAggregatedNotification";
+import { Notification } from "@mantine/core";
 import sourceType = NotificationAggregateDto.sourceType;
 import category = NotificationAggregateDto.category;
-import { Box, Notification } from "@mantine/core";
+import ImporterWatchAggregatedNotification from "@/components/notifications/ImporterWatchAggregatedNotification";
 
 export interface AggregatedNotificationProps {
     aggregatedNotification: NotificationAggregateDto;
@@ -37,6 +38,15 @@ const AggregatedNotification = ({
                         />
                     );
                 return null;
+            case NotificationAggregateDto.sourceType.IMPORTER:
+                if (aggregatedNotification.category === category.WATCH) {
+                    return (
+                        <ImporterWatchAggregatedNotification
+                            aggregatedNotification={aggregatedNotification}
+                        />
+                    );
+                }
+                break;
         }
 
         return null;

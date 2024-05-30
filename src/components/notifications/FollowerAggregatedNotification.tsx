@@ -28,7 +28,7 @@ const FollowerAggregatedNotification = ({
                     {followerUserId && <UserAvatar userId={followerUserId} />}
                     <Text>
                         <strong>{followerProfile?.username}</strong> has started
-                        following you!
+                        following you.
                     </Text>
                 </Group>
             </Link>

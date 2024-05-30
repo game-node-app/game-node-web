@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { CreateCommentDto, FindAllCommentsDto, Review } from "@/wrapper/server";
-import { Space, Stack } from "@mantine/core";
+import { Divider, Space, Stack } from "@mantine/core";
 import CommentsListView from "@/components/comment/view/CommentsListView";
 import CommentEditorView from "@/components/comment/editor/CommentEditorView";
 import sourceType = FindAllCommentsDto.sourceType;

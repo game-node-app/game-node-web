@@ -32,16 +32,22 @@ const CommentsListView = ({
         limit: COMMENTS_LIST_VIEW_DEFAULT_LIMIT,
     });
     const items = useMemo(() => {
-        return commentsQuery.data?.data.map((comment) => {
-            return (
-                <CommentsListItem
-                    key={comment.id}
-                    comment={comment}
-                    onEditStart={onEditStart}
-                    editedCommentId={editedCommentId}
-                />
-            );
-        });
+        return commentsQuery.data?.data
+            .toSorted((a, b) => {
+                const aCreateDate = new Date(a.createdAt);
+                const bCreateDate = new Date(b.createdAt);
+                return aCreateDate.getTime() - bCreateDate.getTime();
+            })
+            .map((comment) => {
+                return (
+                    <CommentsListItem
+                        key={comment.id}
+                        comment={comment}
+                        onEditStart={onEditStart}
+                        editedCommentId={editedCommentId}
+                    />
+                );
+            });
     }, [commentsQuery.data?.data, editedCommentId, onEditStart]);
 
     const hasNextPage =
