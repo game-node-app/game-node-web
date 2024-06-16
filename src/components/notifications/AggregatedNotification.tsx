@@ -38,7 +38,7 @@ const AggregatedNotification = ({
                         />
                     );
                 return null;
-            case NotificationAggregateDto.sourceType.IMPORTER:
+            case sourceType.IMPORTER:
                 if (aggregatedNotification.category === category.WATCH) {
                     return (
                         <ImporterWatchAggregatedNotification
@@ -46,7 +46,7 @@ const AggregatedNotification = ({
                         />
                     );
                 }
-                break;
+                return null;
         }
 
         return null;

@@ -4,15 +4,10 @@ import {
     notifications as notificationsManager,
 } from "@mantine/notifications";
 import { Notification } from "@/wrapper/server";
-import useUserId from "@/components/auth/hooks/useUserId";
-import ReconnectingEventSource from "reconnecting-eventsource";
 import { Text } from "@mantine/core";
 
-const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-const targetSSEUrl = baseUrl + "/v1/notifications/stream";
 import category = Notification.category;
 import sourceType = Notification.sourceType;
-import { useInfiniteAggregatedNotifications } from "@/components/notifications/hooks/useInfiniteAggregatedNotifications";
 
 const handleNotifications = async (notificationsEntities: Notification[]) => {
     for (const notification of notificationsEntities) {
@@ -49,7 +44,7 @@ const handleNotifications = async (notificationsEntities: Notification[]) => {
                     });
                 }
                 break;
-            case category.LAUNCH:
+            case category.WATCH:
                 break;
         }
     }
