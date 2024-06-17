@@ -1,13 +1,15 @@
 import { createTheme, DEFAULT_THEME, mergeMantineTheme } from "@mantine/core";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 
-const inter = Inter({
+const roboto = Roboto({
     subsets: ["latin"],
-    variable: "--font-inter",
+    variable: "--font-roboto",
+    style: ["normal", "italic"],
+    weight: ["300", "500", "700"],
 });
 
 const themeOverride = createTheme({
-    fontFamily: inter.style.fontFamily,
+    fontFamily: roboto.style.fontFamily,
     colors: {
         brand: [
             "#ffede5",

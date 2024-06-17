@@ -68,7 +68,9 @@ const ReviewActivityItem = ({ activity }: Props) => {
                 </Box>
                 <Box className={"w-3/12"}>
                     <Stack gap={5}>
-                        <Link href={`/game/${gameQuery.data?.id}`}>
+                        <Link
+                            href={`/game/${gameQuery.data?.id}?reviewId=${activity.reviewId}`}
+                        >
                             <Title className={"text-sm lg:text-md"}>
                                 {gameQuery.data?.name}
                             </Title>
@@ -93,10 +95,12 @@ const ReviewActivityItem = ({ activity }: Props) => {
                         <ActivityCreateDate
                             createdAtDate={activity.createdAt}
                         />
+
                         <GameRating
                             value={reviewQuery.data?.rating}
                             size={"md"}
                         />
+
                         <Group>
                             <ActivityItemLikes activity={activity} />
                         </Group>

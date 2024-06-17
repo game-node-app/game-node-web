@@ -5,19 +5,18 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
-import Filter from "bad-words";
+
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
     gameId: number;
     onBlur: (html: string) => void;
 }
 
-export const REVIEW_EDITOR_EXTENSIONS = [StarterKit];
+export const DEFAULT_REVIEW_EDITOR_EXTENSIONS = [StarterKit];
 
 const GameInfoReviewEditor = ({
     gameId,
     onBlur,
 }: IGameInfoReviewEditorProps) => {
-    const badWordsFilter = useRef(new Filter());
     const userId = useUserId();
     const reviewQuery = useReviewForUserId(userId, gameId);
     const previousContent = useMemo(() => {
@@ -26,7 +25,7 @@ const GameInfoReviewEditor = ({
 
     const editor = useEditor(
         {
-            extensions: REVIEW_EDITOR_EXTENSIONS,
+            extensions: DEFAULT_REVIEW_EDITOR_EXTENSIONS,
             content: previousContent,
             onBlur: (e) => {
                 let html = e.editor.getHTML();

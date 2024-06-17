@@ -52,7 +52,7 @@ export default function GlobalShellNavbar({
 
     const userRoles = useUserRoles();
 
-    const hasAdminProjectAccess = useMemo(() => {
+    const hasAdminRouteAccess = useMemo(() => {
         return userRoles.some((role) => {
             return [
                 EUserRoles.MOD.valueOf(),
@@ -112,10 +112,10 @@ export default function GlobalShellNavbar({
             <div className={classes.section}>
                 <div className={classes.mainLinks}>
                     {mainLinks}
-                    {hasAdminProjectAccess && (
+                    {hasAdminRouteAccess && (
                         <UnstyledButton className={classes.mainLink}>
                             <Link
-                                href={"https://admin.gamenode.app"}
+                                href={"/admin"}
                                 className={classes.mainLinkInner}
                                 onClick={onClose}
                             >

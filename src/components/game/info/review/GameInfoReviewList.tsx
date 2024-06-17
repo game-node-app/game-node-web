@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
+    Chip,
     ComboboxItem,
     Group,
     Pagination,
@@ -21,6 +22,7 @@ import { useReviews } from "@/components/review/hooks/useReviews";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import period = FindStatisticsTrendingReviewsDto.period;
+import Link from "next/link";
 
 interface IGameInfoReviewListProps {
     gameId: number;
@@ -62,6 +64,7 @@ const queryDtoToSearchParams = (dto: TBasePaginationRequest) => {
 const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const onMobile = useOnMobile();
     const router = useRouter();
+    const { reviewId } = router.query;
     const ownUserId = useUserId();
     const hasSetInitialQueryParams = useRef(false);
     const [currentPeriod, setCurrentPeriod] = useState(period.MONTH.valueOf());
@@ -71,9 +74,10 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
             ...DEFAULT_GAME_REVIEW_LIST_VIEW_DTO,
             offset: offset,
             gameId: gameId,
+            reviewId: reviewId as string,
             period: currentPeriod as period,
         };
-    }, [offset, gameId, currentPeriod]);
+    }, [offset, gameId, reviewId, currentPeriod]);
     const trendingReviewsQuery = useTrendingReviews(trendingReviewsDto);
     const trendingReviewsPagination = trendingReviewsQuery.data?.pagination;
 
@@ -124,6 +128,8 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
         return reviews;
     }, [reviewsQuery.data, ownUserId]);
 
+    console.log(GameInfoReviewList.name);
+
     if (isLoading) {
         return <CenteredLoading className={"mt-6 mb-6"} />;
     } else if (isError) {
@@ -152,6 +158,15 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
                             </Tabs.Tab>
                         </Tabs.List>
                     </Tabs>
+                    {reviewId && (
+                        <Group className={"w-full"}>
+                            <Link href={`/game/${gameId}`}>
+                                <Chip defaultChecked variant={"light"}>
+                                    Showing a single review
+                                </Chip>
+                            </Link>
+                        </Group>
+                    )}
                     {content}
                 </Stack>
                 <Group w={"100%"} justify={"center"}>

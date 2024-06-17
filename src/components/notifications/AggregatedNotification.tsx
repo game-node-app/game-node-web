@@ -6,6 +6,8 @@ import { Notification } from "@mantine/core";
 import sourceType = NotificationAggregateDto.sourceType;
 import category = NotificationAggregateDto.category;
 import ImporterWatchAggregatedNotification from "@/components/notifications/ImporterWatchAggregatedNotification";
+import ReportAggregatedNotification from "@/components/notifications/ReportAggregatedNotification";
+import ActivityAggregatedNotification from "@/components/notifications/ActivityAggregatedNotification";
 
 export interface AggregatedNotificationProps {
     aggregatedNotification: NotificationAggregateDto;
@@ -24,6 +26,12 @@ const AggregatedNotification = ({
 }: AggregatedNotificationProps) => {
     const notificationContent = useMemo(() => {
         switch (aggregatedNotification.sourceType) {
+            case NotificationAggregateDto.sourceType.ACTIVITY:
+                return (
+                    <ActivityAggregatedNotification
+                        aggregatedNotification={aggregatedNotification}
+                    />
+                );
             case sourceType.REVIEW:
                 return (
                     <ReviewAggregatedNotification
@@ -47,6 +55,12 @@ const AggregatedNotification = ({
                     );
                 }
                 return null;
+            case NotificationAggregateDto.sourceType.REPORT:
+                return (
+                    <ReportAggregatedNotification
+                        aggregatedNotification={aggregatedNotification}
+                    />
+                );
         }
 
         return null;

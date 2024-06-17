@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
+import { DEFAULT_REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
 import { Box, Flex, Group, Stack } from "@mantine/core";
 import {
     FindAllCommentsDto,
@@ -45,7 +45,7 @@ const ReviewListItem = ({
 
     const nonEditableEditor = useEditor(
         {
-            extensions: REVIEW_EDITOR_EXTENSIONS,
+            extensions: DEFAULT_REVIEW_EDITOR_EXTENSIONS,
             content: contentToUse,
             editable: false,
         },
