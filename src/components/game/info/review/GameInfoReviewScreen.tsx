@@ -6,16 +6,15 @@ import GameInfoReviewList from "@/components/game/info/review/GameInfoReviewList
 
 interface IGameInfoReviewViewProps {
     gameId: number;
-    reviewId?: string;
 }
 
-const GameInfoReviewScreen = ({ gameId, reviewId }: IGameInfoReviewViewProps) => {
+const GameInfoReviewScreen = ({ gameId }: IGameInfoReviewViewProps) => {
     if (!gameId) return null;
     return (
         <Paper w={"100%"} h={"100%"}>
             <Stack w={"100%"} h={"100%"} align={"center"}>
                 <GameInfoReviewEditorView gameId={gameId} />
-                <GameInfoReviewList gameId={gameId} reviewId={reviewId} />
+                <GameInfoReviewList gameId={gameId} />
             </Stack>
         </Paper>
     );

@@ -1,12 +1,15 @@
-import React, { useMemo } from "react";
-import { Stack, Text } from "@mantine/core";
+import React, { useMemo, useState } from "react";
+import { Button, Stack, Text } from "@mantine/core";
 import { useReports } from "@/components/report/hooks/useReports";
 import ModerationReportListItem from "@/components/admin/moderation/list/ModerationReportListItem";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 
+const DEFAULT_LIMIT = 10;
+
 const ModerationReportList = () => {
-    const reportsQuery = useReports();
+    const [limit, setLimit] = useState(DEFAULT_LIMIT);
+    const reportsQuery = useReports(0, limit);
     const items = useMemo(() => {
         if (reportsQuery.data == undefined) {
             return undefined;
@@ -28,6 +31,7 @@ const ModerationReportList = () => {
             );
         });
     }, [reportsQuery.data]);
+
     return (
         <Stack className={"w-full h-full gap-0.5 items-center"}>
             {reportsQuery.isLoading && <CenteredLoading className={"mt-8"} />}
@@ -44,6 +48,17 @@ const ModerationReportList = () => {
                 )}
 
             {items}
+            {reportsQuery.data?.pagination.hasNextPage && (
+                <Button
+                    className={"mt-3"}
+                    onClick={() => {
+                        setLimit(limit + DEFAULT_LIMIT);
+                    }}
+                    loading={reportsQuery.isLoading}
+                >
+                    Show more
+                </Button>
+            )}
         </Stack>
     );
 };
