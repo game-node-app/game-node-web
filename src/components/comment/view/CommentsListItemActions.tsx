@@ -1,5 +1,9 @@
 import React, { useMemo } from "react";
-import { CommentStatistics, FindOneStatisticsDto } from "@/wrapper/server";
+import {
+    CommentStatistics,
+    CreateReportRequestDto,
+    FindOneStatisticsDto,
+} from "@/wrapper/server";
 import { useItemStatistics } from "@/components/statistics/hooks/useItemStatistics";
 import { FindAllCommentsDto } from "@/wrapper/server";
 import { UserComment } from "@/components/comment/types";
@@ -11,6 +15,7 @@ import useUserId from "@/components/auth/hooks/useUserId";
 import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 import CommentsRemoveModal from "@/components/comment/view/CommentsRemoveModal";
 import { useDisclosure } from "@mantine/hooks";
+import ReportCreateFormModal from "@/components/report/modal/ReportCreateFormModal";
 
 interface Props {
     comment: UserComment;
@@ -27,7 +32,16 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
         return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
     }, [comment]);
 
+    const reportType = useMemo(() => {
+        if (comment.reviewId != undefined) {
+            return CreateReportRequestDto.sourceType.REVIEW_COMMENT;
+        }
+
+        return CreateReportRequestDto.sourceType.REVIEW_COMMENT;
+    }, [comment]);
+
     const [removeModalOpened, removeModalUtils] = useDisclosure();
+    const [reportModalOpened, reportModalUtils] = useDisclosure();
 
     const [likesCount, isLiked, toggleUserLike] = useUserLike({
         sourceId: comment.id,
@@ -44,6 +58,12 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
                 opened={removeModalOpened}
                 onClose={removeModalUtils.close}
                 comment={comment}
+            />
+            <ReportCreateFormModal
+                opened={reportModalOpened}
+                onClose={reportModalUtils.close}
+                sourceId={comment.id}
+                sourceType={reportType}
             />
             <ActionIcon
                 onClick={async () => {
@@ -63,7 +83,7 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
             </ActionIcon>
 
             <ItemDropdown>
-                {isOwnComment && (
+                {isOwnComment ? (
                     <>
                         <ItemDropdown.EditButton
                             onClick={() => {
@@ -78,8 +98,13 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
                             disabled={!isOwnComment}
                         />
                     </>
+                ) : (
+                    <ItemDropdown.ReportButton
+                        onClick={() => {
+                            reportModalUtils.open();
+                        }}
+                    />
                 )}
-                <ItemDropdown.ReportButton onClick={() => {}} disabled={true} />
             </ItemDropdown>
         </Group>
     );

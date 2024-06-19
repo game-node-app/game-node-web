@@ -34,7 +34,12 @@ const ModerationItemDetailsCommentContent = ({
 
     useEffect(() => {
         if (commentQuery.data != undefined && commentQuery.data.content) {
-            setContent(commentQuery.data.content.slice(0, 240));
+            const content = commentQuery.data.content;
+            if (content.length >= 240) {
+                setContent(content.slice(0, 240) + "...");
+            } else {
+                setContent(content);
+            }
         }
     }, [commentQuery.data]);
 

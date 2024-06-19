@@ -8,12 +8,13 @@ import Link from "next/link";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import ModerationItemDetailsReviewContent from "@/components/admin/moderation/details/ModerationItemDetailsReviewContent";
 import { useDisclosure } from "@mantine/hooks";
-import { HandleReportRequestDto } from "@/wrapper/server";
+import { FindAllCommentsDto, HandleReportRequestDto } from "@/wrapper/server";
 import ModerationReportHandleConfirmModal from "@/components/admin/moderation/modal/ModerationReportHandleConfirmModal";
 import action = HandleReportRequestDto.action;
 import { useUserRoles } from "@/components/auth/hooks/useUserRoles";
 import { EUserRoles } from "@/components/auth/roles";
 import ModerationReportIdentifier from "@/components/admin/moderation/list/ModerationReportIdentifier";
+import ModerationItemDetailsCommentContent from "@/components/admin/moderation/details/ModerationItemDetailsCommentContent";
 
 interface Props {
     reportId: number;
@@ -213,6 +214,14 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                     <Box className={"lg:w-8/12 h-[280px] lg:h-[240px]"}>
                         <ModerationItemDetailsReviewContent
                             reviewId={report.targetReviewId}
+                        />
+                    </Box>
+                )}
+                {report.targetReviewCommentId && (
+                    <Box className={"lg:w-8/12 h-[280px] lg:h-[240px]"}>
+                        <ModerationItemDetailsCommentContent
+                            commentId={report.targetReviewCommentId}
+                            commentType={FindAllCommentsDto.sourceType.REVIEW}
                         />
                     </Box>
                 )}

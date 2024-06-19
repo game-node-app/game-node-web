@@ -29,7 +29,12 @@ const ModerationItemDetailsReviewContent = ({ reviewId }: Props) => {
 
     useEffect(() => {
         if (reviewQuery.data != undefined && reviewQuery.data.content) {
-            setContent(reviewQuery.data.content.slice(0, 240));
+            const content = reviewQuery.data.content;
+            if (content.length >= 240) {
+                setContent(content.slice(0, 240) + "...");
+            } else {
+                setContent(content);
+            }
         }
     }, [reviewQuery.data]);
 
