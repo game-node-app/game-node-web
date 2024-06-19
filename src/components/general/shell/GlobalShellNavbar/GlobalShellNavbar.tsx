@@ -5,25 +5,21 @@ import {
     IconCheckbox,
     IconRouteAltLeft,
     IconProps,
-    IconHierarchy,
-    IconRefresh,
+    IconUserShield,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
-import { serverUrl } from "@/util/constants";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import Session, {
+    useSessionContext,
+} from "supertokens-auth-react/recipe/session";
 import classes from "./global-shell-navbar.module.css";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import GlobalShellNavbarCollections from "@/components/general/shell/GlobalShellNavbar/GlobalShellNavbarCollections";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
-import {
-    ComponentPropsWithoutRef,
-    ExoticComponent,
-    PropsWithoutRef,
-    useState,
-} from "react";
-
+import { ExoticComponent, PropsWithoutRef, useMemo, useState } from "react";
 import GlobalNavbarSearchBar from "@/components/general/shell/GlobalShellNavbar/search-bar/GlobalShellNavbarSearchBar";
+import { useUserRoles } from "@/components/auth/hooks/useUserRoles";
+import { EUserRoles } from "@/components/auth/roles";
 
 interface NavbarItem {
     icon: ExoticComponent<PropsWithoutRef<IconProps>>;
@@ -53,6 +49,17 @@ export default function GlobalShellNavbar({
     const userProfileQuery = useUserProfile(
         session.loading ? undefined : session.userId,
     );
+
+    const userRoles = useUserRoles();
+
+    const hasAdminRouteAccess = useMemo(() => {
+        return userRoles.some((role) => {
+            return [
+                EUserRoles.MOD.valueOf(),
+                EUserRoles.ADMIN.valueOf(),
+            ].includes(role);
+        });
+    }, [userRoles]);
 
     const userProfile = userProfileQuery.data;
 
@@ -103,7 +110,25 @@ export default function GlobalShellNavbar({
             </Box>
 
             <div className={classes.section}>
-                <div className={classes.mainLinks}>{mainLinks}</div>
+                <div className={classes.mainLinks}>
+                    {mainLinks}
+                    {hasAdminRouteAccess && (
+                        <UnstyledButton className={classes.mainLink}>
+                            <Link
+                                href={"/admin"}
+                                className={classes.mainLinkInner}
+                                onClick={onClose}
+                            >
+                                <IconUserShield
+                                    size={20}
+                                    className={classes.mainLinkIcon}
+                                    stroke={1.5}
+                                />
+                                <span>Admin</span>
+                            </Link>
+                        </UnstyledButton>
+                    )}
+                </div>
             </div>
             <GlobalShellNavbarCollections onClose={onClose} />
         </nav>

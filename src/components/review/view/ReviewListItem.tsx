@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Box, Flex, Group, Stack } from "@mantine/core";
+import { DEFAULT_REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
+import { Box, Flex, Group, Stack, Transition } from "@mantine/core";
 import {
     FindAllCommentsDto,
     FindOneStatisticsDto,
@@ -45,7 +45,7 @@ const ReviewListItem = ({
 
     const nonEditableEditor = useEditor(
         {
-            extensions: REVIEW_EDITOR_EXTENSIONS,
+            extensions: DEFAULT_REVIEW_EDITOR_EXTENSIONS,
             content: contentToUse,
             editable: false,
         },
@@ -66,6 +66,7 @@ const ReviewListItem = ({
                 w={"100%"}
                 justify={"space-evenly"}
                 wrap={onMobile ? "wrap" : "nowrap"}
+                align={"start"}
             >
                 <Flex
                     direction={{
@@ -107,6 +108,7 @@ const ReviewListItem = ({
                         className={"w-full"}
                         onClick={() => setIsReadMore(!isReadMore)}
                     />
+
                     <Group justify={withGameInfo ? "space-between" : "end"}>
                         {withGameInfo && gameQuery.data != undefined && (
                             <Box className={"w-6/12 lg:w-4/12"}>

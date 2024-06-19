@@ -31,7 +31,7 @@ interface IGameViewActionsProps {
 
 /**
  * Component that handles the library-related actions for a game.
- * The game add modal is handled here.
+ * The game add report is handled here.
  * @constructor
  */
 const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {

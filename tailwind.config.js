@@ -41,6 +41,7 @@ module.exports = {
                 xl: "var(--mantine-font-size-xl)",
             },
             colors: {
+                dimmed: "var(--mantine-color-dimmed)",
                 brand: [
                     "#ffede5",
                     "#ffd9cf",

@@ -21,7 +21,7 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
             footer={{ height: 60, offset: false }}
             navbar={{
                 width: 300,
-                breakpoint: "sm",
+                breakpoint: "xs",
                 collapsed: {
                     mobile: !sidebarOpened,
                     desktop: !sidebarOpened,

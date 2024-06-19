@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 import {
     CommentService,
@@ -46,6 +50,7 @@ export function useComments({
             },
             enabled,
             retry: 1,
+            placeholderData: keepPreviousData,
         }),
         queryKey,
         invalidate,

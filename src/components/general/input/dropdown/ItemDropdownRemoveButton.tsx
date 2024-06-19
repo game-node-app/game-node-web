@@ -8,6 +8,7 @@ interface Props extends ItemDropdownButtonProps {}
 const ItemDropdownRemoveButton = ({ onClick, disabled }: Props) => {
     return (
         <Menu.Item
+            c={"red"}
             onClick={onClick}
             leftSection={<IconTrashOff size={"1rem"} />}
             disabled={disabled}

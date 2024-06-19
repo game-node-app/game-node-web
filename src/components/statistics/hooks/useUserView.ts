@@ -11,7 +11,7 @@ export function useUserView(
     sourceId: string | number,
     sourceType: FindOneStatisticsDto.sourceType,
 ) {
-    const statisticsQuery = useItemStatistics(`${sourceId}`, sourceType);
+    const statisticsQuery = useItemStatistics(sourceId, sourceType);
     const viewsCount = statisticsQuery.data?.viewsCount || 0;
     const isViewed = statisticsQuery.data?.isViewed || false;
     /**
@@ -27,7 +27,7 @@ export function useUserView(
                 return;
             }
             await StatisticsQueueService.statisticsQueueControllerAddView({
-                sourceId: `${sourceId}`,
+                sourceId: sourceId,
                 sourceType: sourceType as StatisticsActionDto.sourceType,
             });
 

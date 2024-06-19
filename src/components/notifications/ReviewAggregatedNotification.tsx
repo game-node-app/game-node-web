@@ -57,7 +57,7 @@ const ReviewAggregatedNotification = ({
                             of <strong>{gameName}</strong>
                         </>
                     )}
-                    !
+                    .
                 </Text>
             </Group>
         </Link>

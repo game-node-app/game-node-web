@@ -1,13 +1,31 @@
 import React from "react";
-import { Center, CenterProps, Loader } from "@mantine/core";
+import {
+    Center,
+    CenterProps,
+    Loader,
+    Stack,
+    StackProps,
+    Text,
+} from "@mantine/core";
 
-interface Props extends CenterProps {}
+interface Props extends StackProps {
+    message?: string;
+}
 
 const CenteredLoading = (props: Props) => {
     return (
-        <Center w={"100%"} h={"100%"} {...props}>
+        <Stack
+            justify={"center"}
+            align={"center"}
+            w={"100%"}
+            h={"100%"}
+            gap={2}
+            {...props}
+        >
             <Loader variant="bars" />
-        </Center>
+            <div className={"w-full"}></div>
+            {props.message && <Text>{props.message}</Text>}
+        </Stack>
     );
 };
 

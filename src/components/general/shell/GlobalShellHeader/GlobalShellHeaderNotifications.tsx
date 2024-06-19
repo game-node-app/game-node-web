@@ -44,14 +44,14 @@ const GlobalShellHeaderNotifications = () => {
                 return false;
             }
 
-            for (const notification of notifications) {
-                await NotificationsService.notificationsControllerUpdateViewedStatus(
-                    notification.id,
-                    {
-                        isViewed: true,
-                    },
-                );
-            }
+            const ids = notifications.map((notification) => notification.id);
+
+            await NotificationsService.notificationsControllerUpdateViewedStatus(
+                {
+                    isViewed: true,
+                    notificationIds: ids,
+                },
+            );
 
             return true;
         },

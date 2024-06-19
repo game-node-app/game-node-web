@@ -2,9 +2,12 @@ import React, { useMemo } from "react";
 import { NotificationAggregateDto } from "@/wrapper/server";
 import ReviewAggregatedNotification from "@/components/notifications/ReviewAggregatedNotification";
 import FollowerAggregatedNotification from "@/components/notifications/FollowerAggregatedNotification";
+import { Notification } from "@mantine/core";
 import sourceType = NotificationAggregateDto.sourceType;
 import category = NotificationAggregateDto.category;
-import { Box, Notification } from "@mantine/core";
+import ImporterWatchAggregatedNotification from "@/components/notifications/ImporterWatchAggregatedNotification";
+import ReportAggregatedNotification from "@/components/notifications/ReportAggregatedNotification";
+import ActivityAggregatedNotification from "@/components/notifications/ActivityAggregatedNotification";
 
 export interface AggregatedNotificationProps {
     aggregatedNotification: NotificationAggregateDto;
@@ -23,6 +26,12 @@ const AggregatedNotification = ({
 }: AggregatedNotificationProps) => {
     const notificationContent = useMemo(() => {
         switch (aggregatedNotification.sourceType) {
+            case NotificationAggregateDto.sourceType.ACTIVITY:
+                return (
+                    <ActivityAggregatedNotification
+                        aggregatedNotification={aggregatedNotification}
+                    />
+                );
             case sourceType.REVIEW:
                 return (
                     <ReviewAggregatedNotification
@@ -37,6 +46,21 @@ const AggregatedNotification = ({
                         />
                     );
                 return null;
+            case sourceType.IMPORTER:
+                if (aggregatedNotification.category === category.WATCH) {
+                    return (
+                        <ImporterWatchAggregatedNotification
+                            aggregatedNotification={aggregatedNotification}
+                        />
+                    );
+                }
+                return null;
+            case NotificationAggregateDto.sourceType.REPORT:
+                return (
+                    <ReportAggregatedNotification
+                        aggregatedNotification={aggregatedNotification}
+                    />
+                );
         }
 
         return null;
