@@ -10,7 +10,7 @@ const AdminLayout = ({ children }: PropsWithChildren) => {
         <SessionAuthWithRoles roles={[EUserRoles.MOD, EUserRoles.ADMIN]}>
             <Stack className={"w-full h-full flex-wrap justify-start gap-1"}>
                 <AdminLayoutTabs />
-                <Group className={"w-full h-full items-start flex-nowrap"}>
+                <Group className={"w-full h-full items-start lg:flex-nowrap"}>
                     <Box className={"w-full lg:w-3/12"}>
                         <ModerationSidebar />
                     </Box>

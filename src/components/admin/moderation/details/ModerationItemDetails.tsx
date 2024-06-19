@@ -57,7 +57,7 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                 onClose={modalUtils.close}
             />
             <Group
-                className={"w-full flex-nowrap lg:px-12 justify-around mt-6"}
+                className={"w-full lg:flex-nowrap lg:px-12 justify-around mt-6"}
             >
                 <Paper
                     withBorder
@@ -153,7 +153,7 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                     withBorder
                     radius={"sm"}
                     className={
-                        "w-full lg:w-9/12 !bg-[#181818] h-[180px] mt-4 mb-4 relative"
+                        "w-full lg:w-9/12 !bg-[#181818] h-[200px] mt-4 mb-4 relative"
                     }
                 >
                     <Box className={"absolute ms-2 mt-2"}>
@@ -170,12 +170,12 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                     </Stack>
                 </Paper>
             )}
-            <Group className={"w-full lg:w-9/12 flex-nowrap"}>
+            <Group className={"w-full lg:w-9/12 lg:flex-nowrap"}>
                 <Paper
                     withBorder
                     radius={"sm"}
                     className={
-                        "w-full lg:w-5/12 !bg-[#181818] h-[280px] lg:h-[240px] relative"
+                        "w-full lg:w-5/12 !bg-[#181818] h-[280px] lg:h-[260px] relative"
                     }
                 >
                     <Box className={"absolute ms-2 mt-2"}>
@@ -211,14 +211,14 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                     </Stack>
                 </Paper>
                 {report.targetReviewId && (
-                    <Box className={"lg:w-8/12 h-[280px] lg:h-[240px]"}>
+                    <Box className={"lg:w-8/12 h-fit lg:h-[260px]"}>
                         <ModerationItemDetailsReviewContent
                             reviewId={report.targetReviewId}
                         />
                     </Box>
                 )}
                 {report.targetReviewCommentId && (
-                    <Box className={"lg:w-8/12 h-[280px] lg:h-[240px]"}>
+                    <Box className={"lg:w-8/12 h-fit lg:h-[260px]"}>
                         <ModerationItemDetailsCommentContent
                             commentId={report.targetReviewCommentId}
                             commentType={FindAllCommentsDto.sourceType.REVIEW}
