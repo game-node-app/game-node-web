@@ -1,11 +1,10 @@
 import React from "react";
-import { IconBan, IconDots, IconEdit, IconTrashOff } from "@tabler/icons-react";
-import { ActionIcon, Menu } from "@mantine/core";
-import { Review } from "@/wrapper/server";
+import { CreateReportRequestDto, Review } from "@/wrapper/server";
 import { useDisclosure } from "@mantine/hooks";
 import ReviewListItemRemoveModal from "@/components/review/view/ReviewListItemRemoveModal";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
+import ReportCreateFormModal from "@/components/report/modal/ReportCreateFormModal";
 
 interface IReviewListItemDropdownProps {
     review: Review;
@@ -20,8 +19,8 @@ const ReviewListItemDropdownButton = ({
     const isOwnReview =
         ownUserId != undefined && ownUserId === review.profileUserId;
 
-    const [reviewRemoveModalOpened, reviewRemoveModalUtils] =
-        useDisclosure(false);
+    const [reviewRemoveModalOpened, reviewRemoveModalUtils] = useDisclosure();
+    const [reportFormModalOpened, reportFormModalUtils] = useDisclosure();
 
     return (
         <>
@@ -30,8 +29,14 @@ const ReviewListItemDropdownButton = ({
                 onClose={reviewRemoveModalUtils.close}
                 opened={reviewRemoveModalOpened}
             />
+            <ReportCreateFormModal
+                opened={reportFormModalOpened}
+                onClose={reportFormModalUtils.close}
+                sourceId={review.id}
+                sourceType={CreateReportRequestDto.sourceType.REVIEW}
+            />
             <ItemDropdown>
-                {isOwnReview && (
+                {isOwnReview ? (
                     <>
                         <ItemDropdown.EditButton
                             onClick={() => {
@@ -47,8 +52,13 @@ const ReviewListItemDropdownButton = ({
                             }}
                         />
                     </>
+                ) : (
+                    <ItemDropdown.ReportButton
+                        onClick={() => {
+                            reportFormModalUtils.open();
+                        }}
+                    />
                 )}
-                <ItemDropdown.ReportButton onClick={() => {}} disabled={true} />
             </ItemDropdown>
         </>
     );

@@ -55,13 +55,22 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                 opened={modalOpened}
                 onClose={modalUtils.close}
             />
-            <Group className={"w-full lg:px-12 justify-around mt-6"}>
+            <Group
+                className={"w-full flex-nowrap lg:px-12 justify-around mt-6"}
+            >
                 <Paper
                     withBorder
                     radius={"sm"}
-                    className={"w-full lg:w-5/12 !bg-[#181818] h-[130px]"}
+                    className={
+                        "w-full lg:w-6/12 !bg-[#181818] h-[130px] relative"
+                    }
                 >
-                    <Group className={"w-full h-full flex-nowrap py-4 px-4"}>
+                    <Box className={"absolute ms-1 mt-1"}>
+                        <Text className={"text-sm text-dimmed"}>
+                            Report creator
+                        </Text>
+                    </Box>
+                    <Group className={"w-full h-full flex-nowrap py-4 px-4 "}>
                         <Box className={"w-6/12"}>
                             <UserAvatarGroup
                                 avatarProps={{

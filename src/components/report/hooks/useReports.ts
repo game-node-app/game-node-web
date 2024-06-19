@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 export function useReports(
     offset: number = 0,
     limit: number = 10,
+    includeClosed: boolean = false,
 ): ExtendedUseQueryResult<PaginatedReportResponseDto> {
     const queryClient = useQueryClient();
     const queryKey = ["reports", "all", offset, limit];
@@ -19,6 +20,7 @@ export function useReports(
             queryKey,
             queryFn: async () => {
                 return ReportService.reportControllerFindAllByLatest(
+                    includeClosed,
                     offset,
                     limit,
                 );

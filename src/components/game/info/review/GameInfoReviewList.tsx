@@ -128,8 +128,6 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
         return reviews;
     }, [reviewsQuery.data, ownUserId]);
 
-    console.log(GameInfoReviewList.name);
-
     if (isLoading) {
         return <CenteredLoading className={"mt-6 mb-6"} />;
     } else if (isError) {
