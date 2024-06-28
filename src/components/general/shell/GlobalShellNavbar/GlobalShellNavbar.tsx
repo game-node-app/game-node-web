@@ -1,4 +1,13 @@
-import { Box, TextInput, UnstyledButton } from "@mantine/core";
+import {
+    AppShell,
+    Box,
+    Group,
+    ScrollArea,
+    Stack,
+    Text,
+    TextInput,
+    UnstyledButton,
+} from "@mantine/core";
 import {
     IconBulb,
     IconUser,
@@ -6,6 +15,8 @@ import {
     IconRouteAltLeft,
     IconProps,
     IconUserShield,
+    IconSettings,
+    IconLogout,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -81,7 +92,7 @@ export default function GlobalShellNavbar({
     ));
 
     return (
-        <nav className={classes.navbar} style={undefined}>
+        <nav className={classes.navbar}>
             {isLoggedIn && userProfile && (
                 <div className={classes.section}>
                     <Link
@@ -131,6 +142,28 @@ export default function GlobalShellNavbar({
                 </div>
             </div>
             <GlobalShellNavbarCollections onClose={onClose} />
+            {isLoggedIn && (
+                <div
+                    className={`${classes.section} mt-auto mb-0 flex flex-col `}
+                >
+                    <Link href={"/preferences"} onClick={onClose}>
+                        <Group className={"gap-1 px-md"}>
+                            <IconSettings></IconSettings>
+                            <Text span>Settings</Text>
+                        </Group>
+                    </Link>
+                    <Link href={"/auth/logout"}>
+                        <Group
+                            className={
+                                "gap-1 w-full px-md py-sm mt-4 bg-[#F49898] text-white"
+                            }
+                        >
+                            <IconLogout />
+                            <Text span>Logout</Text>
+                        </Group>
+                    </Link>
+                </div>
+            )}
         </nav>
     );
 }

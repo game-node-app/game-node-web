@@ -39,12 +39,6 @@ export default function GlobalShellHeader({
                         </Link>
                     )}
                     {userId && <GlobalShellHeaderNotifications />}
-
-                    {userId && (
-                        <Link href={`/preferences`} className={"ms-auto"}>
-                            <IconSettings />
-                        </Link>
-                    )}
                 </Group>
             </Container>
         </header>
