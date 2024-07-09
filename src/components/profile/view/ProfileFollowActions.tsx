@@ -34,7 +34,7 @@ const ProfileFollowActions = ({
     const isFollowedBack = isFollowing && isBeingFollowed;
 
     return (
-        <Stack w={"100%"} align={"center"}>
+        <Stack className={"w-fit justify-center"}>
             <UserFollowActions targetUserId={targetUserId} />
             {isBeingFollowed && !isFollowedBack && (
                 <Text fz={"0.8rem"} c={"dimmed"}>
