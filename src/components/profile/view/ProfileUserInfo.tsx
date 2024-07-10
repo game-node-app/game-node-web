@@ -15,6 +15,7 @@ import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAl
 import ObtainedAchievementItem from "@/components/achievement/ObtainedAchievementItem";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ProfileFollowActions from "@/components/profile/view/ProfileFollowActions";
+import TextLink from "@/components/general/TextLink";
 
 const dateFormatter = new Intl.DateTimeFormat();
 
@@ -26,6 +27,8 @@ const ProfileUserInfo = ({ userId }: Props) => {
     const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
+
+    const isOwnProfile = ownUserId != undefined && ownUserId === userId;
 
     const featuredAchievement = useMemo(() => {
         if (obtainedAchievementsQuery.data == undefined) return null;
@@ -66,6 +69,12 @@ const ProfileUserInfo = ({ userId }: Props) => {
                 <Box className={"mt-4"}>
                     <ProfileFollowActions targetUserId={userId} />
                 </Box>
+
+                {isOwnProfile && (
+                    <TextLink href={"/preferences/profile"} className={"mt-6"}>
+                        Edit profile details
+                    </TextLink>
+                )}
 
                 <Text className={"mt-6"} fz={"0.8rem"} c={"dimmed"}>
                     Joined at{" "}

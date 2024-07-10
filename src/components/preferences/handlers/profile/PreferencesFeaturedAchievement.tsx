@@ -21,17 +21,17 @@ const PreferencesFeaturedAchievement = () => {
     });
 
     const allObtainedAchievements = useAllObtainedAchievements(userId);
-    const featuredAchievement = useMemo(() => {
-        return achievements.data?.data.find((achievement) => {
-            const obtainedAchievement = allObtainedAchievements.data?.find(
-                (oa) => oa.achievementId === achievement.id,
-            );
-            return (
-                obtainedAchievement != undefined &&
-                obtainedAchievement.isFeatured
-            );
-        });
-    }, [achievements.data?.data, allObtainedAchievements.data]);
+    const featuredAchievementQuery = useFeaturedObtainedAchievement(userId);
+    const featuredAchievement = featuredAchievementQuery.data;
+    const featuredAchievementReference = useMemo(() => {
+        if (achievements && featuredAchievement) {
+            return achievements.data?.data.find((achievement) => {
+                return achievement.id === featuredAchievement.achievementId;
+            });
+        }
+
+        return undefined;
+    }, [achievements, featuredAchievement]);
 
     const featuredAchievementMutation = useMutation({
         mutationFn: async (achievementId: string) => {
@@ -87,7 +87,7 @@ const PreferencesFeaturedAchievement = () => {
                     {allObtainedAchievements.data ? (
                         <Stack>
                             <Select
-                                defaultValue={featuredAchievement?.id}
+                                defaultValue={`${featuredAchievement?.id}`}
                                 data={allObtainedAchievements.data.map(
                                     (obtainedAchievement) => {
                                         const achievementEntity =
@@ -121,10 +121,10 @@ const PreferencesFeaturedAchievement = () => {
                 </Modal.Body>
             </Modal>
             <Link href={"#"} onClick={modalUtils.open}>
-                {featuredAchievement ? (
+                {featuredAchievementReference ? (
                     <AchievementItem
                         targetUserId={userId!}
-                        achievement={featuredAchievement}
+                        achievement={featuredAchievementReference}
                     />
                 ) : (
                     <AchievementItem

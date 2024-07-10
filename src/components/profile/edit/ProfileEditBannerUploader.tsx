@@ -1,35 +1,23 @@
 import React, { useState } from "react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
-import {
-    Box,
-    Button,
-    Group,
-    Image,
-    rem,
-    Slider,
-    Stack,
-    Stepper,
-    Text,
-} from "@mantine/core";
-import Cropper, { Area, Point } from "react-easy-crop";
-import ImageDropzone from "@/components/general/ImageDropzone";
+import Cropper, { Area } from "react-easy-crop";
 import { base64ToBlob, getCroppedImg } from "@/util/imageUtils";
+import ImageDropzone from "@/components/general/ImageDropzone";
+import { Button, Group, Slider, Stack, Stepper } from "@mantine/core";
+import { DetailsBox } from "@/components/general/DetailsBox";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
+import ProfileUserInfoWithBanner from "@/components/profile/view/ProfileUserInfoWithBanner";
 import { useMutation } from "@tanstack/react-query";
-import { ProfileService } from "@/wrapper/server";
+import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
+import type = UpdateProfileImageDto.type;
 
-interface Props extends BaseModalChildrenProps {}
-
-const PreferencesAvatarUploader = ({ onClose }: Props) => {
+const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
     const userId = useUserId();
-    const profile = useUserProfile(userId);
+    const profileQuery = useUserProfile(userId);
+
     const [uploadedFileSrc, setUploadedFileSrc] = useState<string>();
     const [finalImageSrc, setFinalImageSrc] = useState<string>();
-    const [dropZoneError, setDropZoneError] = useState<Error | undefined>(
-        undefined,
-    );
-
     /*
      * Cropper properties
      */
@@ -61,17 +49,19 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
         setCurrentStep(step);
     };
 
-    const profileAvatarMutation = useMutation({
+    const profileBannerMutation = useMutation({
         mutationFn: async () => {
             if (!finalImageSrc) {
                 throw new Error("Invalid image source");
             }
-            await ProfileService.profileControllerUpdate({
-                avatar: await base64ToBlob(finalImageSrc!),
+
+            await ProfileService.profileControllerUpdateImage({
+                file: await base64ToBlob(finalImageSrc),
+                type: type.BANNER,
             });
         },
         onSuccess: () => {
-            profile.invalidate();
+            profileQuery.invalidate();
             if (onClose) onClose();
         },
     });
@@ -81,7 +71,7 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
             handleStepClick(0);
             return;
         }
-        profileAvatarMutation.mutate();
+        profileBannerMutation.mutate();
     };
 
     const renderBasedOnStep = () => {
@@ -105,16 +95,16 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
                             image={uploadedFileSrc}
                             crop={crop}
                             zoom={zoom}
-                            aspect={1}
-                            cropShape="round"
-                            showGrid={false}
+                            aspect={16 / 9}
+                            cropShape="rect"
+                            showGrid={true}
                             onCropChange={setCrop}
                             onCropComplete={onCropComplete}
                             onZoomChange={setZoom}
                         />
                         <Slider
                             mt={350}
-                            min={1}
+                            min={0.1}
                             step={0.1}
                             max={2}
                             value={zoom}
@@ -136,7 +126,26 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
             case 2:
                 return (
                     <>
-                        <Image src={finalImageSrc} alt={"Your image result"} />
+                        <DetailsBox
+                            title={"Preview"}
+                            description={
+                                "How your new profile banner will look"
+                            }
+                            withBorder
+                        >
+                            <ProfileUserInfoWithBanner
+                                userId={userId!}
+                                customSources={{
+                                    banner: finalImageSrc!,
+                                }}
+                            />
+                            {/*<Stack className={"items-center w-full h-[400px]"}>*/}
+                            {/*    <BackgroundImage*/}
+                            {/*        src={finalImageSrc!}*/}
+                            {/*        className={"w-full h-full"}*/}
+                            {/*    />*/}
+                            {/*</Stack>*/}
+                        </DetailsBox>
                         <Group justify={"center"} mb={10}>
                             <Button
                                 variant={"default"}
@@ -165,9 +174,7 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
                 <Stepper.Step />
                 <Stepper.Step />
             </Stepper>
-            {profileAvatarMutation.isError && (
-                <Text c={"red"}>{profileAvatarMutation.error.message}</Text>
-            )}
+
             <Stack className={"w-full h-full relative"}>
                 {renderBasedOnStep()}
             </Stack>
@@ -175,4 +182,4 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
     );
 };
 
-export default PreferencesAvatarUploader;
+export default ProfileEditBannerUploader;

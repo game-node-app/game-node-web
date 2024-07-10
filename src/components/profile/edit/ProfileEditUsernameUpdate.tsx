@@ -29,7 +29,7 @@ interface Props extends BaseModalChildrenProps {
     onSkip?: () => void;
 }
 
-const PreferencesUsernameChanger = ({
+const ProfileEditUsernameUpdate = ({
     onClose,
     onSkip,
     withSkipButton = false,
@@ -126,4 +126,4 @@ const PreferencesUsernameChanger = ({
     );
 };
 
-export default PreferencesUsernameChanger;
+export default ProfileEditUsernameUpdate;
