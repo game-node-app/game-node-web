@@ -11,6 +11,7 @@ import ProfileUserInfoWithBanner from "@/components/profile/view/ProfileUserInfo
 import { useMutation } from "@tanstack/react-query";
 import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
 import type = UpdateProfileImageDto.type;
+import profileBanner from "@/components/profile/view/ProfileBanner";
 
 const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
     const userId = useUserId();
@@ -95,7 +96,7 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                             image={uploadedFileSrc}
                             crop={crop}
                             zoom={zoom}
-                            aspect={16 / 9}
+                            aspect={21 / 9}
                             cropShape="rect"
                             showGrid={true}
                             onCropChange={setCrop}
@@ -129,7 +130,7 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                         <DetailsBox
                             title={"Preview"}
                             description={
-                                "How your new profile banner will look"
+                                "Actual banner size may vary based on device size and model."
                             }
                             withBorder
                         >
@@ -139,12 +140,6 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                                     banner: finalImageSrc!,
                                 }}
                             />
-                            {/*<Stack className={"items-center w-full h-[400px]"}>*/}
-                            {/*    <BackgroundImage*/}
-                            {/*        src={finalImageSrc!}*/}
-                            {/*        className={"w-full h-full"}*/}
-                            {/*    />*/}
-                            {/*</Stack>*/}
                         </DetailsBox>
                         <Group justify={"center"} mb={10}>
                             <Button
@@ -153,7 +148,10 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                             >
                                 Go back
                             </Button>
-                            <Button onClick={() => handleImageUpload()}>
+                            <Button
+                                onClick={() => handleImageUpload()}
+                                loading={profileBannerMutation.isPending}
+                            >
                                 Confirm
                             </Button>
                         </Group>
