@@ -62,7 +62,7 @@ const ProfileUserInfoWithBanner = ({
     const [editAvatarModalOpen, editAvatarModalUtils] = useDisclosure();
 
     return (
-        <Stack className={"w-full h-full gap-0 mt-3 mb-12"}>
+        <Stack className={"w-full h-full gap-0"}>
             <Modal
                 opened={editUsernameModalOpen}
                 onClose={editUsernameModalUtils.close}
@@ -92,6 +92,7 @@ const ProfileUserInfoWithBanner = ({
                 customSource={customSources?.banner}
                 showEditButton={showEditButtons}
             />
+
             <Group
                 className={
                     "w-full justify-start items-start flex-wrap lg:flex-nowrap"
@@ -99,7 +100,7 @@ const ProfileUserInfoWithBanner = ({
             >
                 <Stack
                     className={
-                        "w-full lg:w-1/5 lg:min-w-52 h-full bg-[#161616] gap-0 relative"
+                        "w-full lg:w-1/5 lg:min-w-52 bg-[#161616] gap-0 relative"
                     }
                 >
                     <Stack className={"w-full items-center relative -top-20"}>

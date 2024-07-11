@@ -33,6 +33,10 @@ const ProfileFollowActions = ({
     const isBeingFollowed = targetToOwnFollowStatus.data?.isFollowing ?? false;
     const isFollowedBack = isFollowing && isBeingFollowed;
 
+    if (ownUserId != undefined && ownUserId === targetUserId) {
+        return null;
+    }
+
     return (
         <Stack className={"w-fit justify-center"}>
             <UserFollowActions targetUserId={targetUserId} />
