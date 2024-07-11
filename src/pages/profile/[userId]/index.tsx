@@ -50,7 +50,7 @@ const Index = () => {
 
     return (
         <Box className={"w-full h-full xl:flex xl:justify-center"}>
-            <Box className={"mt-3 mb-12 xl:max-w-screen-2xl"}>
+            <Box className={"mt-3 mb-12 xl:max-w-screen-xl"}>
                 <ProfileUserInfoWithBanner
                     userId={userIdString}
                     showEditButtons={isOwnProfile}
