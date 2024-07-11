@@ -44,6 +44,7 @@ interface ProfileUserInfoWithBannerProps extends PropsWithChildren {
  * @constructor
  * @param userId - target user id
  * @param showEditButtons - if edit buttons should be shown
+ * @param customSources
  * @param children - items to be rendered on the RIGHT side of the ProfileUserInfo component for desktop,
  * and BELOW it for mobile.
  */

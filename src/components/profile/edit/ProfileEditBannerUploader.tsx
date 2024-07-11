@@ -11,7 +11,7 @@ import ProfileUserInfoWithBanner from "@/components/profile/view/ProfileUserInfo
 import { useMutation } from "@tanstack/react-query";
 import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
 import type = UpdateProfileImageDto.type;
-import profileBanner from "@/components/profile/view/ProfileBanner";
+import { useDisclosure } from "@mantine/hooks";
 
 const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
     const userId = useUserId();
@@ -28,6 +28,8 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
      * Stepper
      */
     const [currentStep, setCurrentStep] = useState<number>(0);
+
+    const [previewModalOpened, previewModalUtils] = useDisclosure();
 
     const onCropComplete = async (_: Area, croppedAreaPixels: Area) => {
         const croppedImage = await getCroppedImg(
@@ -81,7 +83,7 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                 return (
                     <ImageDropzone
                         maxFiles={1}
-                        maxSize={2 * 1024 ** 2}
+                        maxSize={3 * 1024 ** 2}
                         onDrop={(files) => {
                             const fileString = URL.createObjectURL(files[0]);
                             setUploadedFileSrc(fileString);
