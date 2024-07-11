@@ -1,10 +1,8 @@
 import React from "react";
 import { FollowInfoRequestDto } from "@/wrapper/server";
 import { useDisclosure } from "@mantine/hooks";
-import { Group, Text, Title } from "@mantine/core";
 import { useInfiniteFollowInfo } from "@/components/follow/hooks/useInfiniteFollowInfo";
 import FollowInfoListModal from "@/components/follow/modal/FollowInfoListModal";
-import TitleLink from "@/components/general/TitleLink";
 import ProfileViewNavbarLink from "@/components/profile/view/ProfileViewNavbarLink";
 
 interface Props {
@@ -36,6 +34,7 @@ const ProfileNavbarFollowInfo = ({ targetUserId, criteria }: Props) => {
                     evt.preventDefault();
                     modalUtils.open();
                 }}
+                itemCount={totalItems}
             />
         </>
     );

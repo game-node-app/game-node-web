@@ -8,6 +8,7 @@ import useReviewsForUserId from "@/components/review/hooks/useReviewsForUserId";
 import ProfileNavbarFollowInfo from "@/components/profile/view/ProfileNavbarFollowInfo";
 import { FollowInfoRequestDto } from "@/wrapper/server";
 import criteria = FollowInfoRequestDto.criteria;
+import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAllObtainedAchievements";
 
 interface Props extends GroupProps {
     userId: string;
@@ -18,6 +19,7 @@ const ProfileViewNavbar = ({ userId, ...groupProps }: Props) => {
     const libraryQuery = useUserLibrary(profileQuery.data?.userId);
     const collectionEntriesQuery = useCollectionEntriesForUserId(userId, 0, 1);
     const reviewsQuery = useReviewsForUserId(userId, 0, 1);
+    const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
 
     return (
         <SimpleGrid
@@ -41,6 +43,11 @@ const ProfileViewNavbar = ({ userId, ...groupProps }: Props) => {
                 title={"Collections"}
                 itemCount={libraryQuery.data?.collections.length}
                 href={`/library/${userId}`}
+            />
+            <ProfileViewNavbarLink
+                title={"Achievements"}
+                href={`/achievements/${userId}`}
+                itemCount={obtainedAchievementsQuery.data?.length}
             />
             <ProfileNavbarFollowInfo
                 targetUserId={userId}
