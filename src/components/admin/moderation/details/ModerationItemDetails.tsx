@@ -15,6 +15,7 @@ import { useUserRoles } from "@/components/auth/hooks/useUserRoles";
 import { EUserRoles } from "@/components/auth/roles";
 import ModerationReportIdentifier from "@/components/admin/moderation/list/ModerationReportIdentifier";
 import ModerationItemDetailsCommentContent from "@/components/admin/moderation/details/ModerationItemDetailsCommentContent";
+import TextLink from "@/components/general/TextLink";
 
 interface Props {
     reportId: number;
@@ -98,54 +99,77 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                     radius={"sm"}
                     className={"w-full lg:w-6/12 !bg-[#181818] h-[130px]"}
                 >
-                    <Group
-                        className={
-                            "w-full h-full flex-nowrap justify-between items-center px-4"
-                        }
-                    >
-                        <Link
-                            href={""}
-                            onClick={(evt) => {
-                                evt.preventDefault();
-                                setHandleAction(action.DISCARD);
-                                modalUtils.open();
-                            }}
+                    {report.isClosed ? (
+                        <Stack
+                            className={
+                                "w-full h-full justify-center items-center gap-2"
+                            }
                         >
-                            <Text>Discard report</Text>
-                        </Link>
-                        <Link
-                            href={""}
-                            onClick={(evt) => {
-                                evt.preventDefault();
-                                setHandleAction(action.ALERT);
-                                modalUtils.open();
-                            }}
+                            <Text span>
+                                This report is closed. No further action needed.
+                            </Text>
+                            <Text span>
+                                Closing action:{" "}
+                                <strong>
+                                    {report.closeHandleAction?.toUpperCase()}
+                                </strong>
+                            </Text>
+                            <TextLink
+                                href={`/profile/${report.closeProfileUserId}`}
+                            >
+                                Visit report handler's profile
+                            </TextLink>
+                        </Stack>
+                    ) : (
+                        <Group
+                            className={
+                                "w-full h-full flex-nowrap justify-between items-center px-4"
+                            }
                         >
-                            <Text>Send alert</Text>
-                        </Link>
-                        <Link
-                            href={""}
-                            onClick={(evt) => {
-                                evt.preventDefault();
-                                setHandleAction(action.SUSPEND);
-                                modalUtils.open();
-                            }}
-                        >
-                            <Text>Suspend user</Text>
-                        </Link>
-                        {isAdmin && (
                             <Link
                                 href={""}
                                 onClick={(evt) => {
                                     evt.preventDefault();
-                                    setHandleAction(action.BAN);
+                                    setHandleAction(action.DISCARD);
                                     modalUtils.open();
                                 }}
                             >
-                                <Text>Ban user</Text>
+                                <Text>Discard report</Text>
                             </Link>
-                        )}
-                    </Group>
+                            <Link
+                                href={""}
+                                onClick={(evt) => {
+                                    evt.preventDefault();
+                                    setHandleAction(action.ALERT);
+                                    modalUtils.open();
+                                }}
+                            >
+                                <Text>Send alert</Text>
+                            </Link>
+                            <Link
+                                href={""}
+                                onClick={(evt) => {
+                                    evt.preventDefault();
+                                    setHandleAction(action.SUSPEND);
+                                    modalUtils.open();
+                                }}
+                            >
+                                <Text>Suspend user</Text>
+                            </Link>
+                            {isAdmin && (
+                                <Link
+                                    href={""}
+                                    onClick={(evt) => {
+                                        evt.preventDefault();
+                                        setHandleAction(action.BAN);
+                                        modalUtils.open();
+                                    }}
+                                >
+                                    <Text>Ban user</Text>
+                                </Link>
+                            )}
+                        </Group>
+                    )}
                 </Paper>
             </Group>
             {report.reason != undefined && (
@@ -210,21 +234,25 @@ const ModerationItemDetails = ({ reportId }: Props) => {
                         )}
                     </Stack>
                 </Paper>
-                {report.targetReviewId && (
-                    <Box className={"lg:w-8/12 h-fit lg:h-[260px]"}>
-                        <ModerationItemDetailsReviewContent
-                            reviewId={report.targetReviewId}
-                        />
-                    </Box>
-                )}
-                {report.targetReviewCommentId && (
-                    <Box className={"lg:w-8/12 h-fit lg:h-[260px]"}>
-                        <ModerationItemDetailsCommentContent
-                            commentId={report.targetReviewCommentId}
-                            commentType={FindAllCommentsDto.sourceType.REVIEW}
-                        />
-                    </Box>
-                )}
+                <div className={"w-full lg:w-8/12"}>
+                    {report.targetReviewId && (
+                        <Box className={"w-full h-fit lg:h-[260px]"}>
+                            <ModerationItemDetailsReviewContent
+                                reviewId={report.targetReviewId}
+                            />
+                        </Box>
+                    )}
+                    {report.targetReviewCommentId && (
+                        <Box className={"w-full h-fit lg:h-[260px]"}>
+                            <ModerationItemDetailsCommentContent
+                                commentId={report.targetReviewCommentId}
+                                commentType={
+                                    FindAllCommentsDto.sourceType.REVIEW
+                                }
+                            />
+                        </Box>
+                    )}
+                </div>
             </Group>
         </Stack>
     );

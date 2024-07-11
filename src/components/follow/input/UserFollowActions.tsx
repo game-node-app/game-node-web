@@ -48,10 +48,10 @@ const UserFollowActions = ({
         },
     });
 
-    if (!shouldShowFollowButton) return null;
+    // if (!shouldShowFollowButton) return null;
 
     return (
-        <Group wrap={"nowrap"}>
+        <Group className={"flex-nowrap w-fit"}>
             <Button
                 disabled={isFollowing}
                 loading={followMutation.isPending}

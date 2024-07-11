@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Title } from "@mantine/core";
-import PreferencesUsernameChanger from "@/components/preferences/handlers/PreferencesUsernameChanger";
+import ProfileEditUsernameUpdate from "@/components/profile/edit/ProfileEditUsernameUpdate";
 import { useRouter } from "next/router";
 
 const Username = () => {
@@ -10,7 +10,7 @@ const Username = () => {
             <Title size={"h3"} className={"text-center my-8"}>
                 How should we call you?
             </Title>
-            <PreferencesUsernameChanger
+            <ProfileEditUsernameUpdate
                 withSkipButton
                 onClose={() => {
                     router.push("/wizard/init/avatar");

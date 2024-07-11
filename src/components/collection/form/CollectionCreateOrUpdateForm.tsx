@@ -51,6 +51,9 @@ const CollectionCreateOrUpdateForm = ({
         useForm<CreateCollectionFormValues>({
             resolver: zodResolver(CreateCollectionFormSchema),
             mode: "onChange",
+            defaultValues: {
+                isPublic: true,
+            },
         });
 
     const router = useRouter();
@@ -127,7 +130,7 @@ const CollectionCreateOrUpdateForm = ({
                     description={
                         "If this collections is visible to other users"
                     }
-                    defaultChecked={existingCollection?.isPublic}
+                    defaultChecked={existingCollection?.isPublic ?? true}
                     {...register("isPublic")}
                 />
                 <Switch

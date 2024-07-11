@@ -1,7 +1,7 @@
 import { serverUrl } from "@/util/constants";
 
-export function getServerStoredUpload(filename: string) {
-    return `${serverUrl}/v1/public/uploads/${filename}`;
+export function getServerStoredUpload(filenameWithExtension: string) {
+    return `${serverUrl}/v1/public/uploads/${filenameWithExtension}`;
 }
 
 /**

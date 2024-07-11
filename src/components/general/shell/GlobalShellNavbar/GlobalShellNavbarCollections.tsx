@@ -55,7 +55,7 @@ const GlobalShellNavbarCollections = ({
     };
 
     return (
-        <div className={classes.section}>
+        <div className={`${classes.section} !border-b-0`}>
             <GlobalShellNavbarCollectionsHeader />
             <ScrollArea>
                 <Stack className={classes.collections} gap="xs">

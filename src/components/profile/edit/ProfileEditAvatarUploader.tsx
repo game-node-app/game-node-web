@@ -2,26 +2,28 @@ import React, { useState } from "react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import {
-    Box,
+    Avatar,
     Button,
     Group,
     Image,
-    rem,
     Slider,
     Stack,
     Stepper,
     Text,
 } from "@mantine/core";
-import Cropper, { Area, Point } from "react-easy-crop";
+import Cropper, { Area } from "react-easy-crop";
 import ImageDropzone from "@/components/general/ImageDropzone";
 import { base64ToBlob, getCroppedImg } from "@/util/imageUtils";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useMutation } from "@tanstack/react-query";
-import { ProfileService } from "@/wrapper/server";
+import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
+import type = UpdateProfileImageDto.type;
+import { DetailsBox } from "@/components/general/DetailsBox";
+import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
 
 interface Props extends BaseModalChildrenProps {}
 
-const PreferencesAvatarUploader = ({ onClose }: Props) => {
+const ProfileEditAvatarUploader = ({ onClose }: Props) => {
     const userId = useUserId();
     const profile = useUserProfile(userId);
     const [uploadedFileSrc, setUploadedFileSrc] = useState<string>();
@@ -66,8 +68,10 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
             if (!finalImageSrc) {
                 throw new Error("Invalid image source");
             }
-            await ProfileService.profileControllerUpdate({
-                avatar: await base64ToBlob(finalImageSrc!),
+
+            await ProfileService.profileControllerUpdateImage({
+                file: await base64ToBlob(finalImageSrc!),
+                type: type.AVATAR,
             });
         },
         onSuccess: () => {
@@ -136,7 +140,17 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
             case 2:
                 return (
                     <>
-                        <Image src={finalImageSrc} alt={"Your image result"} />
+                        <DetailsBox
+                            title={"Preview"}
+                            description={
+                                "How your new profile picture will look"
+                            }
+                            withBorder
+                        >
+                            <Stack className={"items-center"}>
+                                <Avatar src={finalImageSrc} size={"20rem"} />
+                            </Stack>
+                        </DetailsBox>
                         <Group justify={"center"} mb={10}>
                             <Button
                                 variant={"default"}
@@ -175,4 +189,4 @@ const PreferencesAvatarUploader = ({ onClose }: Props) => {
     );
 };
 
-export default PreferencesAvatarUploader;
+export default ProfileEditAvatarUploader;
