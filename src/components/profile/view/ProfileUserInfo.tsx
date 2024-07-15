@@ -21,9 +21,10 @@ const dateFormatter = new Intl.DateTimeFormat();
 
 interface Props {
     userId: string;
+    onEditClick?: () => void;
 }
 
-const ProfileUserInfo = ({ userId }: Props) => {
+const ProfileUserInfo = ({ userId, onEditClick }: Props) => {
     const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
     const obtainedAchievementsQuery = useAllObtainedAchievements(userId);
@@ -71,7 +72,16 @@ const ProfileUserInfo = ({ userId }: Props) => {
                 </Box>
 
                 {isOwnProfile && (
-                    <TextLink href={"/preferences/profile"} className={"mt-6"}>
+                    <TextLink
+                        linkProps={{
+                            onClick: (evt) => {
+                                evt.preventDefault();
+                                if (onEditClick) onEditClick();
+                            },
+                        }}
+                        href={"#"}
+                        className={"mt-6"}
+                    >
                         Edit profile details
                     </TextLink>
                 )}

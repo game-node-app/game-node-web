@@ -4,11 +4,17 @@ import Link from "next/link";
 
 interface ITextLinkProps extends PropsWithChildren<TextProps> {
     href: string;
+    linkProps?: React.HTMLProps<HTMLAnchorElement>;
 }
 
-const TextLink = ({ href, children, ...textProps }: ITextLinkProps) => {
+const TextLink = ({
+    href,
+    children,
+    linkProps,
+    ...textProps
+}: ITextLinkProps) => {
     return (
-        <Link href={href}>
+        <Link href={href} {...linkProps}>
             <Text {...textProps} className={`underline ${textProps.className}`}>
                 {children}
             </Text>

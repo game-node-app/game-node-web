@@ -44,17 +44,12 @@ const Index = () => {
 
     const ownUserId = useUserId();
 
-    const isOwnProfile = ownUserId != undefined && ownUserId === userIdString;
-
     const profileQuery = useUserProfile(userIdString);
 
     return (
         <Box className={"w-full h-full xl:flex xl:justify-center"}>
             <Box className={"mt-3 mb-12 xl:max-w-screen-xl"}>
-                <ProfileUserInfoWithBanner
-                    userId={userIdString}
-                    showEditButtons={isOwnProfile}
-                >
+                <ProfileUserInfoWithBanner userId={userIdString}>
                     <ProfileViewNavbar userId={userIdString} />
                     <Box className={"w-full mt-6 mb-4"}>
                         <ProfileFavoriteGames userId={userIdString} />

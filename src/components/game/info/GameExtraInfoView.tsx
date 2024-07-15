@@ -4,6 +4,7 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoCarousel from "@/components/game/info/carousel/GameInfoCarousel";
 import Break from "@/components/general/Break";
 import { useGame } from "@/components/game/hooks/useGame";
+import GameRelatedGamesCarousel from "@/components/game/info/GameRelatedGamesCarousel";
 
 interface IGameExtraInfoViewProps {
     id: number;
@@ -50,32 +51,35 @@ const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
         similarGamesQuery.data != undefined &&
         similarGamesQuery.data.similarGames != undefined &&
         similarGamesQuery.data.similarGames.length > 0;
+
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
-                <DetailsBox enabled={hasDlcsOf} title={"DLC of"}>
-                    <GameInfoCarousel
-                        games={dlcsOfGamesQuery.data?.dlcOf}
-                        isLoading={dlcsOfGamesQuery.isLoading}
-                        isError={dlcsOfGamesQuery.isError}
-                    />
-                </DetailsBox>
-                <Break />
-                <DetailsBox enabled={hasDlcs} title={"DLCs"}>
-                    <GameInfoCarousel
-                        games={dlcsGamesQuery.data?.dlcs}
-                        isLoading={dlcsGamesQuery.isLoading}
-                        isError={dlcsGamesQuery.isError}
-                    />
-                </DetailsBox>
-                <Break />
-                <DetailsBox enabled={hasSimilarGames} title={"Similar games"}>
-                    <GameInfoCarousel
-                        games={similarGamesQuery.data?.similarGames}
-                        isLoading={similarGamesQuery.isLoading}
-                        isError={similarGamesQuery.isError}
-                    />
-                </DetailsBox>
+                <GameRelatedGamesCarousel
+                    title={"Expansion of"}
+                    gameId={id}
+                    relationProperty={"dlcOf"}
+                />
+                <GameRelatedGamesCarousel
+                    title={"Expansions"}
+                    gameId={id}
+                    relationProperty={"expansionOf"}
+                />
+                <GameRelatedGamesCarousel
+                    title={"DLC of"}
+                    gameId={id}
+                    relationProperty={"dlcOf"}
+                />
+                <GameRelatedGamesCarousel
+                    title={"DLCs"}
+                    gameId={id}
+                    relationProperty={"dlcs"}
+                />
+                <GameRelatedGamesCarousel
+                    title={"Similar games"}
+                    gameId={id}
+                    relationProperty={"similarGames"}
+                />
             </Flex>
         </Paper>
     );

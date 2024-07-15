@@ -21,7 +21,6 @@ import { FindStatisticsTrendingReviewsDto } from "@/wrapper/server";
 import { useReviews } from "@/components/review/hooks/useReviews";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import period = FindStatisticsTrendingReviewsDto.period;
 import Link from "next/link";
 
 interface IGameInfoReviewListProps {
@@ -32,7 +31,6 @@ const DEFAULT_LIMIT = 7;
 
 export const DEFAULT_GAME_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto =
     {
-        period: period.MONTH,
         offset: 0,
         limit: DEFAULT_LIMIT,
     };
@@ -67,17 +65,15 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const { reviewId } = router.query;
     const ownUserId = useUserId();
     const hasSetInitialQueryParams = useRef(false);
-    const [currentPeriod, setCurrentPeriod] = useState(period.MONTH.valueOf());
     const [offset, setOffset] = useState(0);
     const trendingReviewsDto = useMemo((): FindStatisticsTrendingReviewsDto => {
         return {
             ...DEFAULT_GAME_REVIEW_LIST_VIEW_DTO,
             offset: offset,
             gameId: gameId,
-            reviewId: reviewId as string,
-            period: currentPeriod as period,
+            reviewId: reviewId as string | undefined,
         };
-    }, [offset, gameId, reviewId, currentPeriod]);
+    }, [offset, gameId, reviewId]);
     const trendingReviewsQuery = useTrendingReviews(trendingReviewsDto);
     const trendingReviewsPagination = trendingReviewsQuery.data?.pagination;
 
@@ -142,20 +138,6 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
         <DetailsBox enabled={content != undefined} title={"Reviews"}>
             <Stack w={"100%"} justify={"space-between"}>
                 <Stack w={"100%"} align={"start"}>
-                    <Tabs
-                        value={currentPeriod}
-                        onChange={(v) => setCurrentPeriod(v as period)}
-                        w={"100%"}
-                    >
-                        <Tabs.List grow={onMobile}>
-                            <Tabs.Tab value={period.MONTH.valueOf()}>
-                                Trending
-                            </Tabs.Tab>
-                            <Tabs.Tab value={period.ALL.valueOf()}>
-                                All
-                            </Tabs.Tab>
-                        </Tabs.List>
-                    </Tabs>
                     {reviewId && (
                         <Group className={"w-full"}>
                             <Link href={`/game/${gameId}`}>

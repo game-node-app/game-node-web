@@ -10,9 +10,7 @@ export default function AchievementsPage() {
     return (
         <Center>
             <Box className={"w-full lg:w-10/12 h-full lg:min-h-screen"}>
-                <AchievementsScreen
-                    targetUserId={targetUserId}
-                ></AchievementsScreen>
+                <AchievementsScreen targetUserId={targetUserId} />
             </Box>
         </Center>
     );

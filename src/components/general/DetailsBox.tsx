@@ -31,7 +31,8 @@ export const DetailsBox = ({
                         borderRadius: withBorder ? "6px" : undefined,
                     },
                 }}
-                className={`justify-start px-4 py-2`}
+                gap={"0.5rem"}
+                className={`justify-start px-4 py-2 `}
                 {...stackProps}
             >
                 <Text

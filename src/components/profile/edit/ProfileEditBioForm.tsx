@@ -15,7 +15,7 @@ const BioForm = z.object({
 
 type TBioForm = z.infer<typeof BioForm>;
 
-const PreferencesBioForm = () => {
+const ProfileEditBioForm = () => {
     const userId = useUserId();
     const profile = useUserProfile(userId);
     const { register, handleSubmit, formState, control } = useForm<TBioForm>({
@@ -39,9 +39,10 @@ const PreferencesBioForm = () => {
         <form
             onSubmit={handleSubmit((values) => profileMutation.mutate(values))}
         >
-            <Stack className={"w-full lg:w-2/5"}>
+            <Stack className={"w-full"}>
                 <Textarea
                     {...register("bio")}
+                    error={formState.errors.bio?.message}
                     defaultValue={profile.data?.bio}
                 ></Textarea>
                 {formState.dirtyFields.bio && (
@@ -54,4 +55,4 @@ const PreferencesBioForm = () => {
     );
 };
 
-export default PreferencesBioForm;
+export default ProfileEditBioForm;
