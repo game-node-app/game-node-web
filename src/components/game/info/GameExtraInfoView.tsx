@@ -35,23 +35,6 @@ const DEFAULT_DLC_OF_GAMES_DTO = {
 };
 
 const GameExtraInfoView = ({ id }: IGameExtraInfoViewProps) => {
-    const similarGamesQuery = useGame(id, DEFAULT_SIMILAR_GAMES_DTO);
-    const dlcsGamesQuery = useGame(id, DEFAULT_DLCS_GAMES_DTO);
-    const dlcsOfGamesQuery = useGame(id, DEFAULT_DLC_OF_GAMES_DTO);
-    const hasDlcsOf =
-        dlcsOfGamesQuery.data != undefined &&
-        dlcsOfGamesQuery.data.dlcOf != undefined &&
-        dlcsOfGamesQuery.data.dlcOf.length > 0;
-    const hasDlcs =
-        dlcsGamesQuery.data != undefined &&
-        dlcsGamesQuery.data.dlcs != undefined &&
-        dlcsGamesQuery.data.dlcs.length > 0;
-
-    const hasSimilarGames =
-        similarGamesQuery.data != undefined &&
-        similarGamesQuery.data.similarGames != undefined &&
-        similarGamesQuery.data.similarGames.length > 0;
-
     return (
         <Paper w={"100%"} h={"100%"} suppressHydrationWarning>
             <Flex w={"100%"} h={"100%"} wrap={"wrap"}>
