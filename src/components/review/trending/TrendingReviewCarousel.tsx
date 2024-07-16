@@ -5,8 +5,6 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import ReviewCard from "@/components/general/card/ReviewCard";
 import { useTrendingReviews } from "@/components/statistics/hooks/useTrendingReviews";
-import { FindStatisticsTrendingReviewsDto } from "@/wrapper/server";
-import period = FindStatisticsTrendingReviewsDto.period;
 
 const buildSkeletons = () => {
     const skeletons = [];
@@ -26,7 +24,6 @@ const TrendingReviewCarousel = () => {
     const trendingReviews = useTrendingReviews({
         offset: 0,
         limit: 6,
-        period: period.MONTH,
     });
     const isEmpty =
         trendingReviews.isError || trendingReviews.data?.data.length === 0;

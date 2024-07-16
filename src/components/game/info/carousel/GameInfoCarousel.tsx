@@ -31,7 +31,7 @@ const buildSkeletons = () => {
     for (let i = 0; i < 7; i++) {
         skeletons.push(
             <Carousel.Slide key={i}>
-                <Skeleton height={300} />
+                <Skeleton height={250} />
             </Carousel.Slide>,
         );
     }
@@ -67,7 +67,7 @@ const GameInfoCarousel = ({
                 base: "65%",
                 lg: "15%",
             }}
-            height={300}
+            height={"fit-content"}
             align="start"
             slideGap={{
                 base: "xs",

@@ -29,12 +29,12 @@ import ExploreScreenResourceSelector from "@/components/explore/ExploreScreenRes
 import { useRouter } from "next/router";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import period = FindStatisticsTrendingReviewsDto.period;
 import { GameResourceFilter } from "@/components/game/util/types";
 import {
     exploreScreenDtoToSearchParams,
     exploreScreenUrlQueryToDto,
 } from "@/components/explore/utils";
+import period = FindStatisticsTrendingGamesDto.period;
 
 export const DEFAULT_EXPLORE_SCREEN_PERIOD = period.MONTH.valueOf();
 
