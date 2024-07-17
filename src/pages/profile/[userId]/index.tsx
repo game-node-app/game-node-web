@@ -55,8 +55,8 @@ const Index = () => {
                     <Box className={"w-full mt-6 mb-4"}>
                         <ProfileFavoriteGames userId={userIdString} />
                     </Box>
-                    <Divider className={"w-full mt-6 mb-2"} label={"Stats"} />
-                    <ProfileStatsOverview userId={userIdString} />
+                    {/*<Divider className={"w-full mt-6 mb-2"} label={"Stats"} />*/}
+                    {/*<ProfileStatsOverview userId={userIdString} />*/}
                     <Divider
                         className={"w-full mt-6 mb-2"}
                         label={"Recent activity"}
