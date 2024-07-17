@@ -27,7 +27,7 @@ const ProfileViewNavbar = ({ userId, ...groupProps }: Props) => {
                 base: 3,
                 lg: 8,
             }}
-            className={"lg:gap-12"}
+            className={"lg:gap-16"}
         >
             <ProfileViewNavbarLink
                 title={"Games"}

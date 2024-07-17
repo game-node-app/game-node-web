@@ -6,7 +6,7 @@ const Index = () => {
     const router = useRouter();
     useEffect(() => {
         if (router.isReady) {
-            router.push("/preferences/profile");
+            router.push("/preferences/connections");
         }
     }, [router]);
     return <CenteredLoading />;

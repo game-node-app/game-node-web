@@ -7,7 +7,6 @@ import PreferencesScreenSideBar, {
 } from "@/components/preferences/PreferencesScreenSideBar";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import PreferencesScreenSelector from "@/components/preferences/PreferencesScreenSelector";
-import PreferencesProfileScreen from "@/components/preferences/categories/PreferencesProfileScreen";
 import { useRouter } from "next/router";
 import PreferencesConnectionsScreen from "@/components/preferences/categories/PreferencesConnectionsScreen";
 import CenteredLoading from "@/components/general/CenteredLoading";
@@ -27,8 +26,6 @@ const PreferencesScreen = ({ category }: Props) => {
 
     const render = () => {
         switch (category) {
-            case "profile":
-                return <PreferencesProfileScreen />;
             case "connections":
                 return <PreferencesConnectionsScreen />;
 

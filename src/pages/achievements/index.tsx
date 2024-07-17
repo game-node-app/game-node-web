@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useRouter } from "next/router";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { SessionAuth } from "supertokens-auth-react/recipe/session";
 
 const Index = () => {
     const userId = useUserId();
@@ -11,7 +12,11 @@ const Index = () => {
             router.push(`/achievements/${userId}`).then().catch();
         }
     }, [router, userId]);
-    return <CenteredLoading />;
+    return (
+        <SessionAuth>
+            <CenteredLoading />
+        </SessionAuth>
+    );
 };
 
 export default Index;

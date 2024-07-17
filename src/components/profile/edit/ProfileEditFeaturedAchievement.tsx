@@ -11,8 +11,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { AchievementDto, AchievementsService } from "@/wrapper/server";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
-const PreferencesFeaturedAchievement = () => {
+const ProfileEditFeaturedAchievement = () => {
     const [opened, modalUtils] = useDisclosure(false);
 
     const userId = useUserId();
@@ -77,7 +78,7 @@ const PreferencesFeaturedAchievement = () => {
     }
 
     return (
-        <Stack className={"w-full items-end"}>
+        <Stack className={"w-full"}>
             <Modal
                 opened={opened}
                 onClose={modalUtils.close}
@@ -121,7 +122,9 @@ const PreferencesFeaturedAchievement = () => {
                 </Modal.Body>
             </Modal>
             <Link href={"#"} onClick={modalUtils.open}>
-                {featuredAchievementReference ? (
+                {featuredAchievementQuery.isLoading && <CenteredLoading />}
+                {featuredAchievementQuery.isSuccess &&
+                featuredAchievementReference ? (
                     <AchievementItem
                         targetUserId={userId!}
                         achievement={featuredAchievementReference}
@@ -137,4 +140,4 @@ const PreferencesFeaturedAchievement = () => {
     );
 };
 
-export default PreferencesFeaturedAchievement;
+export default ProfileEditFeaturedAchievement;

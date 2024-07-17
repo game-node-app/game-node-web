@@ -14,6 +14,13 @@ export const GameViewContext = createContext<IGameViewContext>({
     layout: "grid",
 });
 
+/**
+ * Component responsible for rendering a list or grid of games.
+ * Related components should be used to provide the necessary functionality (e.g. layout selector, pagination).
+ * @param children
+ * @param layout
+ * @constructor
+ */
 const GameView = ({ children, layout = "grid" }: IGameViewProps) => {
     return (
         <GameViewContext.Provider value={{ layout: layout }}>

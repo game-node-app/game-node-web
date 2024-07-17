@@ -4,6 +4,7 @@ import {
     ActionIcon,
     AspectRatio,
     Box,
+    Button,
     Divider,
     Group,
     Modal,
@@ -22,19 +23,11 @@ import { IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditUsernameUpdate from "@/components/profile/edit/ProfileEditUsernameUpdate";
 import ProfileEditAvatarUploader from "@/components/profile/edit/ProfileEditAvatarUploader";
-
-/**
- * Allows a custom source to be passed to this component's images. For preview purposes only.
- */
-interface PreviewCustomSources {
-    avatar?: string;
-    banner?: string;
-}
+import ProfileEditForm from "@/components/profile/edit/ProfileEditForm";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface ProfileUserInfoWithBannerProps extends PropsWithChildren {
     userId: string;
-    showEditButtons?: boolean;
-    customSources?: PreviewCustomSources;
 }
 
 /**
@@ -51,47 +44,25 @@ interface ProfileUserInfoWithBannerProps extends PropsWithChildren {
 
 const ProfileUserInfoWithBanner = ({
     userId,
-    showEditButtons = false,
-    customSources,
     children,
 }: ProfileUserInfoWithBannerProps) => {
+    const onMobile = useOnMobile();
     const ownUserId = useUserId();
     const profileQuery = useUserProfile(userId);
 
-    const [editUsernameModalOpen, editUsernameModalUtils] = useDisclosure();
-    const [editAvatarModalOpen, editAvatarModalUtils] = useDisclosure();
+    const [editModalOpened, editModalUtils] = useDisclosure();
 
     return (
         <Stack className={"w-full h-full gap-0"}>
             <Modal
-                opened={editUsernameModalOpen}
-                onClose={editUsernameModalUtils.close}
-                size={"xl"}
-                title={"Update username"}
+                opened={editModalOpened}
+                onClose={editModalUtils.close}
+                title={"Edit profile"}
+                fullScreen={onMobile}
             >
-                <Modal.Body>
-                    <ProfileEditUsernameUpdate
-                        onClose={editUsernameModalUtils.close}
-                    />
-                </Modal.Body>
+                <ProfileEditForm userId={userId} />
             </Modal>
-            <Modal
-                opened={editAvatarModalOpen}
-                onClose={editAvatarModalUtils.close}
-                size={"xl"}
-                title={"Update profile picture"}
-            >
-                <Modal.Body>
-                    <ProfileEditAvatarUploader
-                        onClose={editAvatarModalUtils.close}
-                    />
-                </Modal.Body>
-            </Modal>
-            <ProfileBanner
-                userId={userId}
-                customSource={customSources?.banner}
-                showEditButton={showEditButtons}
-            />
+            <ProfileBanner userId={userId} />
 
             <Group
                 className={
@@ -100,7 +71,7 @@ const ProfileUserInfoWithBanner = ({
             >
                 <Stack
                     className={
-                        "w-full lg:w-1/5 lg:min-w-52 bg-[#161616] gap-0 relative"
+                        "w-full lg:w-1/4 lg:min-w-52 bg-[#161616] gap-0 relative"
                     }
                 >
                     <Stack className={"w-full items-center relative -top-20"}>
@@ -112,40 +83,24 @@ const ProfileUserInfoWithBanner = ({
                                 userId={userId}
                                 size={"10rem"}
                             />
-                            {showEditButtons && (
-                                <ActionIcon
-                                    size={"md"}
-                                    variant="default"
-                                    className={"absolute right-0 bottom-0 z-20"}
-                                    onClick={editAvatarModalUtils.open}
-                                >
-                                    <IconEdit />
-                                </ActionIcon>
-                            )}
                         </Box>
 
-                        <Group className={"items-center"}>
-                            <Text className={""}>
-                                {profileQuery.data?.username}
-                            </Text>
-                            {showEditButtons && (
-                                <ActionIcon
-                                    size={"md"}
-                                    variant="default"
-                                    onClick={editUsernameModalUtils.open}
-                                >
-                                    <IconEdit />
-                                </ActionIcon>
-                            )}
-                        </Group>
+                        <Text className={"text-center"}>
+                            {profileQuery.data?.username}
+                        </Text>
                     </Stack>
+
                     <Stack className={"w-full h-full relative -top-14"}>
-                        <ProfileUserInfo userId={userId} />
+                        <ProfileUserInfo
+                            userId={userId}
+                            onEditClick={editModalUtils.open}
+                        />
                     </Stack>
                 </Stack>
+
                 <Stack
                     className={
-                        "lg:items-start w-full lg:w-4/5 p-1 lg:p-3 lg:mt-4"
+                        "lg:items-start w-full lg:w-3/4 p-1 lg:p-3 lg:mt-4"
                     }
                 >
                     {children}

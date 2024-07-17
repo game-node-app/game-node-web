@@ -1,7 +1,7 @@
 import React from "react";
 import { ActionIcon, Box, Modal, Paper, Stack } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
-import { IconEditCircle } from "@tabler/icons-react";
+import { IconCameraPlus, IconEditCircle } from "@tabler/icons-react";
 import { getServerStoredUpload } from "@/util/getServerStoredImages";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditBannerUploader from "@/components/profile/edit/ProfileEditBannerUploader";
@@ -51,20 +51,17 @@ const ProfileBanner = ({
                     />
                 </Modal>
                 {showEditButton && (
-                    <Box
+                    <ActionIcon
+                        size={"xl"}
+                        radius="xl"
+                        variant={"default"}
+                        onClick={editBannerModalUtils.open}
                         className={
                             "absolute left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bottom-1/2"
                         }
                     >
-                        <ActionIcon
-                            size={"xl"}
-                            radius="xl"
-                            variant={"default"}
-                            onClick={editBannerModalUtils.open}
-                        >
-                            <IconEditCircle />
-                        </ActionIcon>
-                    </Box>
+                        <IconCameraPlus />
+                    </ActionIcon>
                 )}
             </Paper>
         </Box>

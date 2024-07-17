@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppShell, useMantineTheme } from "@mantine/core";
+import { AppShell, Box, useMantineTheme } from "@mantine/core";
 import GlobalShellHeader from "@/components/general/shell/GlobalShellHeader/GlobalShellHeader";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import GlobalShellFooter from "@/components/general/shell/GlobalShellFooter";
@@ -40,8 +40,15 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
             <AppShell.Navbar>
                 <GlobalShellNavbar onClose={modalUtils.close} />
             </AppShell.Navbar>
-
-            <AppShell.Main pos={"relative"}>{children}</AppShell.Main>
+            {/**
+             Remove 'ps=0' to make the sidebar push the main content to its right when opened
+             */}
+            <AppShell.Main
+                pos={"relative"}
+                className={"!ps-0 xl:flex xl:justify-center"}
+            >
+                <Box className={"w-full xl:max-w-screen-xl"}>{children}</Box>
+            </AppShell.Main>
             <AppShell.Footer pos={"static"}>
                 <GlobalShellFooter />
             </AppShell.Footer>

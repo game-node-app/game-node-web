@@ -2,7 +2,7 @@ import React from "react";
 import { ComboboxItem, Select } from "@mantine/core";
 import {
     PreferencesActiveCategory,
-    preferencesCategories,
+    PREFERENCES_SCREEN_CATEGORIES,
 } from "@/components/preferences/PreferencesScreenSideBar";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PreferencesScreenSelector = ({ activeCategory, onChange }: Props) => {
-    const data = preferencesCategories.map((item): ComboboxItem => {
+    const data = PREFERENCES_SCREEN_CATEGORIES.map((item): ComboboxItem => {
         return {
             label: item.name,
             value: item.activeCategoryName,

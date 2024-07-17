@@ -4,11 +4,17 @@ import Link from "next/link";
 
 interface ITitleLinkProps extends PropsWithChildren<TitleProps> {
     href: string;
+    linkProps?: React.HTMLProps<HTMLAnchorElement>;
 }
 
-const TitleLink = ({ href, children, ...titleProps }: ITitleLinkProps) => {
+const TitleLink = ({
+    href,
+    children,
+    linkProps,
+    ...titleProps
+}: ITitleLinkProps) => {
     return (
-        <Link href={href}>
+        <Link href={href} {...linkProps}>
             <Title
                 {...titleProps}
                 className={`underline ${titleProps.className}`}
