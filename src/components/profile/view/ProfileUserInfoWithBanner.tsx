@@ -21,8 +21,6 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import ProfileEditUsernameUpdate from "@/components/profile/edit/ProfileEditUsernameUpdate";
-import ProfileEditAvatarUploader from "@/components/profile/edit/ProfileEditAvatarUploader";
 import ProfileEditForm from "@/components/profile/edit/ProfileEditForm";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 
