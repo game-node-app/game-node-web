@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
 import type = UpdateProfileImageDto.type;
 import { useDisclosure } from "@mantine/hooks";
+import ProfileBanner from "@/components/profile/view/ProfileBanner";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
     const userId = useUserId();
@@ -127,6 +129,9 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                     </>
                 );
             case 2:
+                if (!finalImageSrc || !userId) {
+                    return <CenteredLoading />;
+                }
                 return (
                     <>
                         <DetailsBox
@@ -136,11 +141,9 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                             }
                             withBorder
                         >
-                            <ProfileUserInfoWithBanner
-                                userId={userId!}
-                                customSources={{
-                                    banner: finalImageSrc!,
-                                }}
+                            <ProfileBanner
+                                userId={userId}
+                                customSource={finalImageSrc}
                             />
                         </DetailsBox>
                         <Group justify={"center"} mb={10}>
