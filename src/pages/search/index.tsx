@@ -111,10 +111,10 @@ const Index = () => {
     }, [isQueryEnabled, query, router.isReady, setValue]);
 
     return (
-        <Container fluid mih={"100%"} p={0} pos={"relative"} className="mb-12">
+        <Container fluid mih={"100%"} pos={"relative"} className="mb-12">
             <Stack align="center" justify="center" w={"100%"}>
                 <Box
-                    className={`w-full flex justify-center h-full lg:w-5/6 mt-12`}
+                    className={`w-full flex justify-center h-full lg:max-w-screen-lg mt-12`}
                 >
                     <form
                         className="w-full h-full"
@@ -134,7 +134,11 @@ const Index = () => {
                         />
                     </form>
                 </Box>
-                <Box className={"w-full flex justify-center h-full lg:w-5/6"}>
+                <Box
+                    className={
+                        "w-full flex justify-center h-full lg:max-w-screen-lg"
+                    }
+                >
                     <GameSearchResultView
                         enabled={isQueryEnabled}
                         isError={searchQuery.isError}

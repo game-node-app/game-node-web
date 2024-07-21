@@ -63,10 +63,12 @@ const AchievementItem = ({ targetUserId, achievement }: Props) => {
                     </Text>
                 </Stack>
                 <Stack ml={"auto"} gap={0} justify={"center"} align={"center"}>
-                    <Title fz={"1.5rem"} className={"break-keep"}>
+                    <Title fz={"1.5rem"} className={"break-keep text-center"}>
                         {achievement.expGainAmount} XP
                     </Title>
-                    <Text fz={"0.5rem"}>{obtainedText}</Text>
+                    <Text fz={"0.5rem"} className={"text-center"}>
+                        {obtainedText}
+                    </Text>
                 </Stack>
             </Group>
         </Paper>

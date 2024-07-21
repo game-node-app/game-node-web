@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useAchievements } from "@/components/achievement/hooks/useAchievements";
-import { Center, Modal, Select, Stack, Text } from "@mantine/core";
+import { Center, Group, Modal, Select, Stack, Text } from "@mantine/core";
 import { useFeaturedObtainedAchievement } from "@/components/achievement/hooks/useFeaturedObtainedAchievement";
 import useUserId from "@/components/auth/hooks/useUserId";
 import AchievementItem from "@/components/achievement/AchievementItem";
@@ -74,7 +74,11 @@ const ProfileEditFeaturedAchievement = () => {
         achievements.data == undefined ||
         allObtainedAchievements.data == undefined
     ) {
-        return null;
+        return (
+            <Group>
+                <Text>No obtained achievement found.</Text>
+            </Group>
+        );
     }
 
     return (
