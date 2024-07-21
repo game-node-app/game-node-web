@@ -213,6 +213,7 @@ const Index = () => {
                 <ProfileStatsDistributionBarByType
                     userId={userId}
                     by={"platform"}
+                    orientation={onMobile ? "vertical" : "horizontal"}
                 />
             </DetailsBox>
             <DetailsBox

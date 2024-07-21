@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { ProfileMetricsService } from "@/wrapper/server";
 
-export type ProfileMetricsDistributionYearBy = "release_year" | "finish_year";
+export type ProfileMetricsDistributionYearBy =
+    | "release_year"
+    | "finish_year"
+    | "playtime";
 
 export function useProfileMetricsDistributionByYear(
     userId: string | undefined,

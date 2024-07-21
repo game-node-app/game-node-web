@@ -7,6 +7,7 @@ import {
 } from "@/components/profile/hooks/useProfileMetricsDistributionByYear";
 import { LineChart, LineChartSeries } from "@mantine/charts";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { ProfileMetricsYearDistributionItem } from "@/wrapper/server";
 
 interface Props {
     userId: string;
@@ -32,14 +33,17 @@ const FINISH_YEAR_SERIES: LineChartSeries[] = [
         color: "blue",
     },
     {
-        name: "totalEstimatedPlaytime",
-        label: "Estimated playtime (in hours)",
-        color: "grape",
-    },
-    {
         name: "reviewedCount",
         label: "Reviewed",
         color: "teal",
+    },
+];
+
+const PLAYTIME_SERIES: LineChartSeries[] = [
+    {
+        name: "count",
+        label: "Estimated playtime (in hours)*",
+        color: "grape",
     },
 ];
 
@@ -51,8 +55,8 @@ const ProfileStatsDistributionLineByYear = ({ userId }: Props) => {
         useProfileMetricsDistributionByYear(userId, "release_year");
     const metricsFinishYearDistributionQuery =
         useProfileMetricsDistributionByYear(userId, "finish_year");
-
-    const hasPlaytime = currentTab === "finish_year";
+    const metricsPlaytimeYearDistributionQuery =
+        useProfileMetricsDistributionByYear(userId, "playtime");
 
     return (
         <Stack>
@@ -68,6 +72,7 @@ const ProfileStatsDistributionLineByYear = ({ userId }: Props) => {
                 <Group className={"w-full justify-end gap-1 mb-2"}>
                     <Tabs.Tab value="finish_year">Finish Year</Tabs.Tab>
                     <Tabs.Tab value="release_year">Release year</Tabs.Tab>
+                    <Tabs.Tab value={"playtime"}>Playtime</Tabs.Tab>
                 </Group>
                 <Box className={"mt-4 w-full"}>
                     <Tabs.Panel value={"finish_year"}>
@@ -99,6 +104,28 @@ const ProfileStatsDistributionLineByYear = ({ userId }: Props) => {
                                         .distribution
                                 }
                                 series={RELEASE_YEAR_SERIES}
+                            />
+                        )}
+                    </Tabs.Panel>
+                    <Tabs.Panel value={"playtime"}>
+                        {metricsPlaytimeYearDistributionQuery.isLoading && (
+                            <CenteredLoading />
+                        )}
+                        {metricsPlaytimeYearDistributionQuery.data && (
+                            <LineChart
+                                h={300}
+                                data={metricsPlaytimeYearDistributionQuery.data.distribution.map(
+                                    (item) => {
+                                        return {
+                                            ...item,
+                                            // Converts minutes to hours
+                                            count: Math.ceil(item.count / 3600),
+                                        };
+                                    },
+                                )}
+                                dataKey={"year"}
+                                series={PLAYTIME_SERIES}
+                                xAxisLabel={"Finish year"}
                             />
                         )}
                     </Tabs.Panel>
