@@ -11,6 +11,7 @@ import {
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { BarChart } from "@mantine/charts";
 import { ProfileMetricsOverviewDto } from "@/wrapper/server";
+import TextLink from "@/components/general/TextLink";
 
 interface Props {
     userId: string;
@@ -31,7 +32,7 @@ const buildBarChartData = (data: ProfileMetricsOverviewDto) => {
     ];
 };
 
-const ProfileStatsOverview = ({ userId }: Props) => {
+const ProfileStatsSimpleOverview = ({ userId }: Props) => {
     const metricsOverviewQuery = useProfileMetricsOverview(userId);
 
     const playtimeValue =
@@ -40,18 +41,20 @@ const ProfileStatsOverview = ({ userId }: Props) => {
 
     return (
         <Group className={"w-full"}>
-            <Group className={"w-full justify-between"}>
+            <Group className={"w-full justify-between flex-nowrap"}>
                 <Stack className={"gap-1"}>
                     <Text className={"text-md text-center"}>
                         {metricsOverviewQuery.data?.totalGames}
                     </Text>
-                    <Text className={"text-sm text-dimmed"}>Total games</Text>
+                    <Text className={"text-sm text-dimmed text-center"}>
+                        Total games
+                    </Text>
                 </Stack>
                 <Stack className={"gap-1"}>
                     <Text className={"text-sm text-center"}>
                         {metricsOverviewQuery.data?.totalFinishedGames}
                     </Text>
-                    <Text className={"text-sm text-dimmed"}>
+                    <Text className={"text-sm text-dimmed text-center"}>
                         Finished games
                     </Text>
                 </Stack>
@@ -66,8 +69,8 @@ const ProfileStatsOverview = ({ userId }: Props) => {
                         shadow="md"
                     >
                         <Popover.Target>
-                            <Text className={"text-sm text-dimmed"}>
-                                Estimated playtime*
+                            <Text className={"text-sm text-dimmed text-center"}>
+                                Estimated playtime (in hours)*
                             </Text>
                         </Popover.Target>
                         <Popover.Dropdown>
@@ -119,8 +122,11 @@ const ProfileStatsOverview = ({ userId }: Props) => {
                     />
                 </Group>
             )}
+            <TextLink href={`/profile/${userId}/stats`} className={"mt-3"}>
+                Show more
+            </TextLink>
         </Group>
     );
 };
 
-export default ProfileStatsOverview;
+export default ProfileStatsSimpleOverview;

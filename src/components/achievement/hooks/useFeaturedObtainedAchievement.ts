@@ -19,13 +19,17 @@ export function useFeaturedObtainedAchievement(
             queryKey,
             queryFn: async () => {
                 if (!userId) {
-                    return undefined;
+                    return null;
                 }
 
                 const featuredAchivement =
                     await AchievementsService.achievementsControllerGetFeaturedAchievementForUserId(
                         userId,
                     );
+
+                if (!featuredAchivement) {
+                    return null;
+                }
 
                 return featuredAchivement;
             },

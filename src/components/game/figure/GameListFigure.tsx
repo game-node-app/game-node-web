@@ -18,7 +18,7 @@ import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalize
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { getGameGenres } from "@/components/game/util/getGameGenres";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
-import { getGameCategoryText } from "@/components/game/util/getGameCategoryText";
+import { getGameCategoryName } from "@/components/game/util/getGameCategoryName";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 
 interface IGameListFigureProps {
@@ -40,7 +40,7 @@ const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
     const categoryText = useMemo(
-        () => getGameCategoryText(game?.category),
+        () => getGameCategoryName(game?.category),
         [game.category],
     );
 

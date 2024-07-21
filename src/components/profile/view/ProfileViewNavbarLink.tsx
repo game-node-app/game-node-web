@@ -5,11 +5,13 @@ import Link from "next/link";
 interface Props extends ComponentPropsWithoutRef<typeof Link> {
     title: string;
     itemCount?: number;
+    showItemCount?: boolean;
 }
 
 const ProfileViewNavbarLink = ({
     title,
     itemCount = 0,
+    showItemCount = true,
     ...linkProps
 }: Props) => {
     return (
@@ -18,8 +20,12 @@ const ProfileViewNavbarLink = ({
             {...linkProps}
         >
             <Text className={"text-lg lg:text-xl text-center"}>{title}</Text>
-            <Divider className={"w-full"} />
-            <Text className={"text-sm text-dimmed"}>{itemCount}</Text>
+            {showItemCount && (
+                <>
+                    <Divider className={"w-full"} />
+                    <Text className={"text-sm text-dimmed"}>{itemCount}</Text>
+                </>
+            )}
         </Link>
     );
 };

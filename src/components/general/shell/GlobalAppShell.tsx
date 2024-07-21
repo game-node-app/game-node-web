@@ -41,11 +41,11 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
                 <GlobalShellNavbar onClose={modalUtils.close} />
             </AppShell.Navbar>
             {/**
-             Remove 'ps=0' to make the sidebar push the main content to its right when opened
+             Remove '!ps-2.5' to make the sidebar push the main content to its right when opened
              */}
             <AppShell.Main
                 pos={"relative"}
-                className={"!ps-0 xl:flex xl:justify-center"}
+                className={"!ps-2.5 xl:flex xl:justify-center"}
             >
                 <Box className={"w-full xl:max-w-screen-xl"}>{children}</Box>
             </AppShell.Main>

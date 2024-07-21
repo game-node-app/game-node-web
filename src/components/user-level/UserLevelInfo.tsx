@@ -18,9 +18,7 @@ const UserLevelInfo = ({ targetUserId }: Props) => {
         <Group w={"100%"}>
             <Stack w={"100%"} gap={2}>
                 <Group justify={"space-between"} w={"100%"}>
-                    <Text fw={"bold"}>
-                        Level {userLevel?.currentLevel ?? 1}
-                    </Text>
+                    <Text>Level {userLevel?.currentLevel ?? 1}</Text>
                     <Text>
                         {userLevel?.currentLevelExp ?? 0} /{" "}
                         {userLevel?.levelUpExpCost ?? 0} XP

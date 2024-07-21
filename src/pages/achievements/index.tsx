@@ -9,7 +9,7 @@ const Index = () => {
     const router = useRouter();
     useEffect(() => {
         if (router.isReady && userId) {
-            router.push(`/achievements/${userId}`).then().catch();
+            router.replace(`/achievements/${userId}`).then().catch();
         }
     }, [router, userId]);
     return (
