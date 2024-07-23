@@ -21,7 +21,7 @@ import ImporterCollectionSelect from "@/components/importer/ImporterCollectionSe
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useGames } from "@/components/game/hooks/useGames";
 import React, { useCallback, useEffect, useState } from "react";
-import GameSelectView from "@/components/general/view/select/GameSelectView";
+import GameSelectView from "@/components/game/view/select/GameSelectView";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

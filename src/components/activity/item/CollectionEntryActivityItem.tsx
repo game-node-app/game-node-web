@@ -8,17 +8,11 @@ import {
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
 import { Box, Group, Overlay, Stack, Text, Title } from "@mantine/core";
-import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
-import GameRating from "@/components/general/input/GameRating";
 import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
 import { useCollectionEntry } from "@/components/collection/collection-entry/hooks/useCollectionEntry";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import Link from "next/link";
-import TitleLink from "@/components/general/TitleLink";
-import TextLink from "@/components/general/TextLink";
-import getTimeSinceString from "@/util/getTimeSinceString";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 
 interface Props {

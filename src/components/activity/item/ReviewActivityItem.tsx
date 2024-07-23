@@ -8,14 +8,10 @@ import {
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
-import { IconThumbUp } from "@tabler/icons-react";
 import ActivityItemLikes from "@/components/activity/input/ActivityItemLikes";
 import GameRating from "@/components/general/input/GameRating";
-import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
 import Link from "next/link";
-import getTimeSinceString from "@/util/getTimeSinceString";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 
 interface Props {

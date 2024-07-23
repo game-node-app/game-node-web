@@ -4,7 +4,7 @@ import { useReview } from "@/components/review/hooks/useReview";
 import { NotificationAggregateDto } from "@/wrapper/server";
 import getUniqueProfileNames from "@/components/notifications/utils/getUniqueProfileNames";
 import { Group, Text } from "@mantine/core";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import Link from "next/link";
 import { useGame } from "@/components/game/hooks/useGame";
 import NotificationSkeleton from "@/components/notifications/NotificationSkeleton";

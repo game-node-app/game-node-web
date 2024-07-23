@@ -3,7 +3,7 @@ import { TGameOrSearchGame } from "@/components/game/util/types";
 import { SimpleGrid, SimpleGridProps } from "@mantine/core";
 import GameSelectViewFigure, {
     GameSelectViewFigureProps,
-} from "@/components/general/view/select/GameSelectViewFigure";
+} from "@/components/game/view/select/GameSelectViewFigure";
 
 type SelectedProps = Pick<
     GameSelectViewFigureProps,

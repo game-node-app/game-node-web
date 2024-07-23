@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import GameView from "@/components/general/view/game/GameView";
+import GameView from "@/components/game/view/GameView";
 import { Box, Container, Flex, Space, Stack } from "@mantine/core";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameViewLayoutSwitcher from "@/components/general/view/game/GameViewLayoutSwitcher";
-import { IGameViewPaginationProps } from "@/components/general/view/game/GameViewPagination";
+import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
+import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
 import { SearchGame } from "@/components/game/search/utils/types";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";

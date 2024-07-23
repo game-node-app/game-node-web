@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
-import GameSelectViewContent from "@/components/general/view/select/GameSelectViewContent";
-import GameViewPagination from "@/components/general/view/game/GameViewPagination";
-import GameSelectActions from "@/components/general/view/select/GameSelectActions";
+import GameSelectViewContent from "@/components/game/view/select/GameSelectViewContent";
+import GameViewPagination from "@/components/game/view/GameViewPagination";
+import GameSelectActions from "@/components/game/view/select/GameSelectActions";
 
 interface GameSelectViewProps extends PropsWithChildren {}
 

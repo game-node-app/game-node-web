@@ -4,7 +4,7 @@ import {
     AggregatedNotificationProps,
 } from "@/components/notifications/AggregatedNotification";
 import { Group, Notification, Text } from "@mantine/core";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import Link from "next/link";
 import useUserId from "@/components/auth/hooks/useUserId";
 

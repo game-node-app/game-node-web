@@ -7,7 +7,7 @@ import { Pagination, Paper, Stack } from "@mantine/core";
 import CommentsListItem from "@/components/comment/view/CommentsListItem";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameViewPagination from "@/components/general/view/game/GameViewPagination";
+import GameViewPagination from "@/components/game/view/GameViewPagination";
 
 interface Props extends Omit<UseCommentsProps, "limit" | "offset"> {
     onEditStart: (commentId: string) => void;

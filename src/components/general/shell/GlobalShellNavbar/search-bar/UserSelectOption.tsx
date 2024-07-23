@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Combobox, Group, Skeleton, Stack, Text } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import Link from "next/link";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 
 interface IProps {
     userId: string;

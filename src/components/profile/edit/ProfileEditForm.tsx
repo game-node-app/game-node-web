@@ -10,7 +10,7 @@ import {
     Text,
 } from "@mantine/core";
 import ProfileBanner from "@/components/profile/view/ProfileBanner";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import { IconCameraPlus, IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditAvatarUploader from "@/components/profile/edit/ProfileEditAvatarUploader";

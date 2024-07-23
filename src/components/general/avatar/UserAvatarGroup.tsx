@@ -1,7 +1,7 @@
 import { Profile } from "@/wrapper/server";
 import Link from "next/link";
 import { AvatarProps, Group, GroupProps, Text, TextProps } from "@mantine/core";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import React from "react";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import useOnMobile from "@/components/general/hooks/useOnMobile";

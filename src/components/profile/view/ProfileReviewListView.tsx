@@ -17,7 +17,7 @@ import { ParsedUrlQuery } from "querystring";
 import { TBasePaginationRequest } from "@/util/types/pagination";
 import period = FindStatisticsTrendingGamesDto.period;
 import { DetailsBox } from "@/components/general/DetailsBox";
-import GameView from "@/components/general/view/game/GameView";
+import GameView from "@/components/game/view/GameView";
 import useReviewsForUserId from "@/components/review/hooks/useReviewsForUserId";
 
 const DEFAULT_LIMIT = 7;

@@ -10,7 +10,7 @@ import {
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ReviewListItemDropdownButton from "@/components/review/view/ReviewListItemDropdownButton";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import { useGame } from "@/components/game/hooks/useGame";
 import TextLink from "@/components/general/TextLink";
 import GameRating from "@/components/general/input/GameRating";

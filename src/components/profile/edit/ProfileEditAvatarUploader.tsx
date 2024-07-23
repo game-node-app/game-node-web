@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ProfileService, UpdateProfileImageDto } from "@/wrapper/server";
 import type = UpdateProfileImageDto.type;
 import { DetailsBox } from "@/components/general/DetailsBox";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 
 interface Props extends BaseModalChildrenProps {}
 

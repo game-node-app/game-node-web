@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react";
 import { Box, Divider, SimpleGrid, SimpleGridProps } from "@mantine/core";
-import { GameViewContext } from "@/components/general/view/game/GameView";
+import { GameViewContext } from "@/components/game/view/GameView";
 import GameGridFigure from "@/components/game/figure/GameGridFigure";
 import GameListFigure from "@/components/game/figure/GameListFigure";
 import { TGameOrSearchGame } from "@/components/game/util/types";

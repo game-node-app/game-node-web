@@ -5,7 +5,7 @@ import {
     UnstyledButtonProps,
 } from "@mantine/core";
 import classes from "./UserButton.module.css";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { useQuery } from "@tanstack/react-query";
 import { CollectionsEntriesService } from "@/wrapper/server";
