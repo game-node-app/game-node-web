@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "@mantine/carousel";
 import { Game } from "@/wrapper/server";
-import GameGridFigure from "@/components/game/figure/GameGridFigure";
+import GameGridItem from "@/components/game/figure/GameGridItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { Flex, Skeleton, Text } from "@mantine/core";
 
@@ -18,7 +18,7 @@ const buildGamesFigures = (games: Game[] | undefined) => {
         if (index < 20) {
             return (
                 <Carousel.Slide key={similarGame.id}>
-                    <GameGridFigure game={similarGame} />
+                    <GameGridItem game={similarGame} withQuickAdd={false} />
                 </Carousel.Slide>
             );
         }

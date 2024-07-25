@@ -87,20 +87,24 @@ const Index = () => {
                         "w-full h-full flex-nowrap justify-between lg:justify-between items-center p-2 lg:p-8 "
                     }
                 >
-                    <Box className={"w-full lg:w-1/3"}>
+                    <Box
+                        className={
+                            "flex w-full justify-center lg:justify-start lg:w-1/3"
+                        }
+                    >
                         <UserAvatarWithLevelInfo userId={userId} />
                     </Box>
 
-                    <Group className={"w-1/3"}>
-                        {!onMobile && featuredAchievementQuery.data && (
+                    {!onMobile && featuredAchievementQuery.data && (
+                        <Group className={"w-1/3"}>
                             <ObtainedAchievementItem
                                 targetUserId={userId}
                                 achievementId={
                                     featuredAchievementQuery.data.achievementId
                                 }
                             />
-                        )}
-                    </Group>
+                        </Group>
+                    )}
                 </Group>
             </Paper>
             <SimpleGrid
@@ -216,6 +220,10 @@ const Index = () => {
                     <ProfileStatsDistributionRadarByType
                         userId={userId}
                         by={"genre"}
+                    />
+                    <ProfileStatsDistributionRadarByType
+                        userId={userId}
+                        by={"theme"}
                     />
                     <ProfileStatsDistributionRadarByType
                         userId={userId}

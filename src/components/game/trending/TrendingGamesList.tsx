@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { SimpleGrid, Skeleton } from "@mantine/core";
-import GameGridFigure from "@/components/game/figure/GameGridFigure";
+import GameGridItem from "@/components/game/figure/GameGridItem";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { useGames } from "@/components/game/hooks/useGames";
 import { useTrendingGames } from "@/components/statistics/hooks/useTrendingGames";
@@ -53,7 +53,7 @@ const TrendingGamesList = () => {
             <SimpleGrid cols={{ base: 3, lg: 6 }} h={"100%"} w={"100%"}>
                 {isLoading && elementsSkeletons}
                 {gamesQuery.data?.map((game) => {
-                    return <GameGridFigure key={game.id} game={game} />;
+                    return <GameGridItem key={game.id} game={game} />;
                 })}
             </SimpleGrid>
         </DetailsBox>

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Container, SimpleGrid } from "@mantine/core";
 import { useGames } from "@/components/game/hooks/useGames";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import GameGridFigure from "@/components/game/figure/GameGridFigure";
+import GameGridItem from "@/components/game/figure/GameGridItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
 import getFavoriteCollectionEntries from "@/components/collection/collection-entry/util/getFavoriteCollectionEntries";
@@ -58,7 +58,7 @@ const ProfileFavoriteGames = ({ userId, limit = 10 }: Props) => {
     return (
         <SimpleGrid cols={onMobile ? 3 : 5} w={"100%"}>
             {gamesQuery.data?.map((game) => {
-                return <GameGridFigure key={game.id} game={game} />;
+                return <GameGridItem key={game.id} game={game} />;
             })}
         </SimpleGrid>
     );

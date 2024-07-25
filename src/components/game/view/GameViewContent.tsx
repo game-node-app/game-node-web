@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useContext, useMemo } from "react";
 import { Box, Divider, SimpleGrid, SimpleGridProps } from "@mantine/core";
 import { GameViewContext } from "@/components/game/view/GameView";
-import GameGridFigure from "@/components/game/figure/GameGridFigure";
-import GameListFigure from "@/components/game/figure/GameListFigure";
+import GameGridItem from "@/components/game/figure/GameGridItem";
+import GameListItem from "@/components/game/figure/GameListItem";
 import { TGameOrSearchGame } from "@/components/game/util/types";
 import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { SearchGame } from "@/components/game/search/utils/types";
@@ -28,13 +28,13 @@ const GameViewContent = ({
             if (layout === "list") {
                 return (
                     <Box w={"100%"} key={item.id}>
-                        <GameListFigure game={item} />
+                        <GameListItem game={item} />
                         <Divider mt={"xs"} variant={"dashed"} />
                     </Box>
                 );
             }
 
-            return <GameGridFigure key={item.id} game={item} />;
+            return <GameGridItem key={item.id} game={item} />;
         });
     }, [items, layout]);
 

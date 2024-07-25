@@ -20,13 +20,23 @@ import { getGameGenres } from "@/components/game/util/getGameGenres";
 import { getGamePlatformInfo } from "@/components/game/util/getGamePlatformInfo";
 import { getGameCategoryName } from "@/components/game/util/getGameCategoryName";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
+import GameFigureWithQuickAdd from "@/components/game/figure/GameFigureWithQuickAdd";
 
 interface IGameListFigureProps {
     game: TGameOrSearchGame;
     figureProps?: Partial<IGameFigureProps>;
+    /**
+     * If quick add functionality should be enabled. Checks will still be performed to see if
+     * it's possible to show the game add modal.
+     */
+    withQuickAdd?: boolean;
 }
 
-const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
+const GameListItem = ({
+    game,
+    figureProps,
+    withQuickAdd = true,
+}: IGameListFigureProps) => {
     let name = game.name ?? "Unknown";
     const onMobile = useOnMobile();
     if (onMobile) {
@@ -44,6 +54,8 @@ const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
         [game.category],
     );
 
+    const Figure = withQuickAdd ? GameFigureWithQuickAdd : GameFigureImage;
+
     return (
         <Group
             justify={"center"}
@@ -53,7 +65,7 @@ const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
             wrap={"nowrap"}
         >
             <Box className="h-auto w-2/5 lg:w-1/6">
-                <GameFigureImage
+                <Figure
                     game={game}
                     href={`/game/${game.id}`}
                     imageProps={{
@@ -75,7 +87,7 @@ const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
                             {categoryText}
                         </Badge>
                     )}
-                </GameFigureImage>
+                </Figure>
             </Box>
             <Stack
                 h={"100%"}
@@ -114,4 +126,4 @@ const GameListFigure = ({ game, figureProps }: IGameListFigureProps) => {
     );
 };
 
-export default GameListFigure;
+export default GameListItem;

@@ -18,6 +18,7 @@ export interface IGameFigureProps extends PropsWithChildren {
     game: TGameOrSearchGame | undefined;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
     imageProps?: ImageProps;
+    linkProps?: React.HTMLProps<HTMLAnchorElement>;
     href?: string;
 }
 
@@ -32,6 +33,7 @@ export interface IGameFigureProps extends PropsWithChildren {
 const GameFigureImage = ({
     game,
     imageProps,
+    linkProps,
     href,
     onClick,
     children,
@@ -44,6 +46,7 @@ const GameFigureImage = ({
             href={href ?? defaultHref}
             className="w-full h-auto"
             onClick={onClick}
+            {...linkProps}
         >
             <AspectRatio ratio={264 / 354} pos="relative" h={"100%"} w={"auto"}>
                 <Image

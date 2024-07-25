@@ -26,7 +26,7 @@ const UserAvatarWithLevelInfo = ({
         <Link
             href={`/profile/${userId}`}
             className={
-                "flex flex-shrink-0 max-w-fit  items-center gap-5 justify-center flex-wrap lg:flex-nowrap lg:justify-start"
+                "flex flex-shrink-0 max-w-fit items-center gap-5 justify-center flex-wrap lg:flex-nowrap lg:justify-start"
             }
             onClick={(evt) => {
                 if (!enableLink) {
