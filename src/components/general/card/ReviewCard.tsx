@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Group, Overlay, Paper, Skeleton, Text } from "@mantine/core";
 import classes from "./ReviewCard.module.css";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { useReview } from "@/components/review/hooks/useReview";
 import { useGame } from "@/components/game/hooks/useGame";

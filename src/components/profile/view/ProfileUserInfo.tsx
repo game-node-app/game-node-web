@@ -8,7 +8,7 @@ import {
     Text,
 } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { useAllObtainedAchievements } from "@/components/achievement/hooks/useAllObtainedAchievements";

@@ -5,23 +5,32 @@ import GameFigureImage, {
 import { Badge } from "@mantine/core";
 import { getGameCategoryName } from "@/components/game/util/getGameCategoryName";
 import { TGameOrSearchGame } from "@/components/game/util/types";
+import GameFigureWithQuickAdd from "@/components/game/figure/GameFigureWithQuickAdd";
 
 interface IGameGridFigureProps {
     game: TGameOrSearchGame;
     figureProps?: Omit<Partial<IGameFigureProps>, "game">;
+    /**
+     * If quick add functionality should be enabled. Checks will still be performed to see if
+     * it's possible to show the game add modal.
+     */
+    withQuickAdd?: boolean;
 }
 
-const GameGridFigure = ({ game, figureProps }: IGameGridFigureProps) => {
+const GameGridItem = ({
+    game,
+    figureProps,
+    withQuickAdd = true,
+}: IGameGridFigureProps) => {
     const categoryText = useMemo(
         () => getGameCategoryName(game?.category),
         [game],
     );
+
+    const Figure = withQuickAdd ? GameFigureWithQuickAdd : GameFigureImage;
+
     return (
-        <GameFigureImage
-            {...figureProps}
-            game={game}
-            href={`/game/${game?.id}`}
-        >
+        <Figure {...figureProps} game={game} href={`/game/${game?.id}`}>
             {categoryText && (
                 <Badge
                     className={
@@ -31,8 +40,8 @@ const GameGridFigure = ({ game, figureProps }: IGameGridFigureProps) => {
                     {categoryText}
                 </Badge>
             )}
-        </GameFigureImage>
+        </Figure>
     );
 };
 
-export default GameGridFigure;
+export default GameGridItem;

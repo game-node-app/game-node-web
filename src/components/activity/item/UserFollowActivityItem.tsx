@@ -3,11 +3,9 @@ import { Activity } from "@/wrapper/server";
 import { useUserFollow } from "@/components/follow/hooks/useUserFollow";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import { Box, Group, Paper, Text, Title } from "@mantine/core";
-import UserAvatarWithUsername from "@/components/general/input/UserAvatarWithUsername";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import Link from "next/link";
 import TextLink from "@/components/general/TextLink";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 
 interface Props {
     activity: Activity;

@@ -5,7 +5,8 @@ export type ProfileMetricsDistributionTypeBy =
     | "genre"
     | "category"
     | "mode"
-    | "platform";
+    | "platform"
+    | "theme";
 
 export function useProfileMetricsDistributionByType(
     userId: string,

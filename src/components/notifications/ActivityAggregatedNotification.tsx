@@ -3,7 +3,7 @@ import { AggregatedNotificationContentProps } from "@/components/notifications/A
 import { Group, Text } from "@mantine/core";
 import getUniqueProfileNames from "@/components/notifications/utils/getUniqueProfileNames";
 import Link from "next/link";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 
 const ActivityAggregatedNotification = ({
     aggregatedNotification,

@@ -17,6 +17,7 @@ import { useAchievements } from "@/components/achievement/hooks/useAchievements"
 import AchievementItem from "@/components/achievement/AchievementItem";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import UserAvatarWithLevelInfo from "@/components/general/avatar/UserAvatarWithLevelInfo";
 
 interface Props {
     targetUserId: string;
@@ -38,8 +39,8 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
                     wrap={"nowrap"}
                     className={"justify-center lg:justify-between lg:mx-4"}
                 >
-                    <Box className={"w-5/12 lg:w-4/12"}>
-                        <UserLevelInfo targetUserId={targetUserId} />
+                    <Box className={"w-5/12 lg:w-8/12"}>
+                        <UserAvatarWithLevelInfo userId={targetUserId} />
                     </Box>
 
                     {isOwnUserId && (

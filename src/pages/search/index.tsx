@@ -13,6 +13,7 @@ import TrendingReviewCarousel from "@/components/review/trending/TrendingReviewC
 import { useRouter } from "next/router";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import RecentActivityList from "@/components/activity/RecentActivityList";
+import GameSearchTips from "@/components/game/search/GameSearchTips";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -114,7 +115,7 @@ const Index = () => {
         <Container fluid mih={"100%"} pos={"relative"} className="mb-12">
             <Stack align="center" justify="center" w={"100%"}>
                 <Box
-                    className={`w-full flex justify-center h-full lg:max-w-screen-lg mt-12`}
+                    className={`w-full flex justify-center h-full lg:max-w-screen-lg mt-12 flex-wrap`}
                 >
                     <form
                         className="w-full h-full"
@@ -133,6 +134,7 @@ const Index = () => {
                             }}
                         />
                     </form>
+                    <GameSearchTips className={"w-full mt-2"} />
                 </Box>
                 <Box
                     className={

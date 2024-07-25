@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import {
+    Box,
     Container,
     Group,
     Paper,
@@ -11,7 +12,7 @@ import {
     Title,
 } from "@mantine/core";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { useFeaturedObtainedAchievement } from "@/components/achievement/hooks/useFeaturedObtainedAchievement";
@@ -37,6 +38,7 @@ import { NextPageContext } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { ProfileMetricsService } from "@/wrapper/server";
 import Link from "next/link";
+import UserAvatarWithLevelInfo from "@/components/general/avatar/UserAvatarWithLevelInfo";
 
 const DateFormatter = new Intl.DateTimeFormat("en-us");
 
@@ -85,39 +87,24 @@ const Index = () => {
                         "w-full h-full flex-nowrap justify-between lg:justify-between items-center p-2 lg:p-8 "
                     }
                 >
-                    <Link
-                        href={`/profile/${userId}`}
+                    <Box
                         className={
-                            "flex flex-shrink-0 w-full items-center gap-5 lg:w-1/3 justify-center flex-wrap lg:flex-nowrap lg:justify-start"
+                            "flex w-full justify-center lg:justify-start lg:w-1/3"
                         }
                     >
-                        <UserAvatar userId={userId} size={"xl"} />
-                        <Stack className={"gap-3"}>
-                            <Text className={"text-lg font-bold"}>
-                                {profileQuery.data?.username}
-                            </Text>
-                            <UserLevelInfo targetUserId={userId} />
-                            {profileQuery.data && (
-                                <Text className={"text-sm text-dimmed"}>
-                                    Member since{" "}
-                                    {DateFormatter.format(
-                                        new Date(profileQuery.data.createdAt),
-                                    )}
-                                </Text>
-                            )}
-                        </Stack>
-                    </Link>
+                        <UserAvatarWithLevelInfo userId={userId} />
+                    </Box>
 
-                    <Group className={"w-1/3"}>
-                        {!onMobile && featuredAchievementQuery.data && (
+                    {!onMobile && featuredAchievementQuery.data && (
+                        <Group className={"w-1/3"}>
                             <ObtainedAchievementItem
                                 targetUserId={userId}
                                 achievementId={
                                     featuredAchievementQuery.data.achievementId
                                 }
                             />
-                        )}
-                    </Group>
+                        </Group>
+                    )}
                 </Group>
             </Paper>
             <SimpleGrid
@@ -213,6 +200,7 @@ const Index = () => {
                 <ProfileStatsDistributionBarByType
                     userId={userId}
                     by={"platform"}
+                    orientation={onMobile ? "vertical" : "horizontal"}
                 />
             </DetailsBox>
             <DetailsBox
@@ -232,6 +220,10 @@ const Index = () => {
                     <ProfileStatsDistributionRadarByType
                         userId={userId}
                         by={"genre"}
+                    />
+                    <ProfileStatsDistributionRadarByType
+                        userId={userId}
+                        by={"theme"}
                     />
                     <ProfileStatsDistributionRadarByType
                         userId={userId}

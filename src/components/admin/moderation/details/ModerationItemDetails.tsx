@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Box, Divider, Group, Paper, Stack, Text } from "@mantine/core";
 import { useReport } from "@/components/report/hooks/useReport";
-import { UserAvatarGroup } from "@/components/general/input/UserAvatarGroup";
+import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import reportCategoryToString from "@/components/report/util/reportCategoryToString";
 import Link from "next/link";

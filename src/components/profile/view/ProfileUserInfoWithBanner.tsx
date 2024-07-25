@@ -12,7 +12,7 @@ import {
     Stack,
     Text,
 } from "@mantine/core";
-import { UserAvatar } from "@/components/general/input/UserAvatar";
+import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import ProfileUserInfo from "@/components/profile/view/ProfileUserInfo";
 import ProfileViewNavbar from "@/components/profile/view/ProfileViewNavbar";
 import ProfileFavoriteGames from "@/components/profile/view/ProfileFavoriteGames";
