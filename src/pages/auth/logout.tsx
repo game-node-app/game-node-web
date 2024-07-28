@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import Session from "supertokens-auth-react/recipe/session";
+import Session, { signOut } from "supertokens-auth-react/recipe/session";
 import { useQueryClient } from "@tanstack/react-query";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import { AuthService } from "@/wrapper/server";
-import { signOut } from "supertokens-auth-react/recipe/thirdpartypasswordless";
 
 const Logout = () => {
     const queryClient = useQueryClient();

@@ -1,10 +1,9 @@
 import SuperTokensReact, { SuperTokensWrapper } from "supertokens-auth-react";
 import React from "react";
-import ThirdPartyPasswordlessReact, {
-    GetRedirectionURLContext,
-} from "supertokens-auth-react/recipe/thirdpartypasswordless";
-import SessionReact from "supertokens-auth-react/recipe/session";
+import Session from "supertokens-auth-react/recipe/session";
 import Router from "next/router";
+import Passwordless from "supertokens-auth-react/recipe/passwordless";
+import ThirdParty from "supertokens-auth-react/recipe/thirdparty";
 
 export const frontendConfig = () => {
     return {
@@ -33,17 +32,19 @@ export const frontendConfig = () => {
         },
 
         recipeList: [
-            ThirdPartyPasswordlessReact.init({
+            Passwordless.init({
                 contactMethod: "EMAIL",
-                signInUpFeature: {
+            }),
+            ThirdParty.init({
+                signInAndUpFeature: {
                     providers: [
                         // TODO: Enable once it's approved
                         // ThirdPartyPasswordlessReact.Google.init(),
-                        ThirdPartyPasswordlessReact.Discord.init(),
+                        ThirdParty.Discord.init(),
                     ],
                 },
             }),
-            SessionReact.init(),
+            Session.init(),
         ],
         windowHandler: (oI: any) => {
             return {
