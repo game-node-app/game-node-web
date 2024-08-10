@@ -21,10 +21,11 @@
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "^7.7.1",
     "@mantine/nprogress": "^7.7.1",
-    "@mantine/tiptap": "^7.7.1",
+
     "@socialgouv/matomo-next": "^1.8.1",
     "@tabler/icons-react": "^3.1.0",
     "@tanstack/react-query": "^5.29.0",
+    "@mantine/tiptap": "^7.7.1",
     "@tiptap/extension-link": "^2.2.6",
     "@tiptap/pm": "^2.2.6",
     "@tiptap/react": "^2.2.6",

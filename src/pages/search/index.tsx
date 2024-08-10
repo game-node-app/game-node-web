@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import RecentActivityList from "@/components/activity/RecentActivityList";
 import GameSearchTips from "@/components/game/search/GameSearchTips";
+import useUserId from "@/components/auth/hooks/useUserId";
+import RecommendationCarousel from "@/components/recommendation/carousel/RecommendationCarousel";
 
 const SearchFormSchema = z.object({
     query: z.string().min(3),
@@ -59,6 +61,8 @@ const Index = () => {
         resolver: zodResolver(SearchFormSchema),
         mode: "onBlur",
     });
+
+    const userId = useUserId();
 
     const router = useRouter();
     const query = router.query;
@@ -163,6 +167,15 @@ const Index = () => {
                         >
                             <TrendingGamesList />
                             <Space h={"1rem"} />
+                            {userId && (
+                                <RecommendationCarousel
+                                    criteria="finished"
+                                    stackProps={{
+                                        className: "",
+                                    }}
+                                />
+                            )}
+                            <Space h={"1rem"} />
                             <TrendingReviewCarousel />
                             <Space h={"1rem"} />
                             <DetailsBox
@@ -173,6 +186,23 @@ const Index = () => {
                             >
                                 <RecentActivityList />
                             </DetailsBox>
+                            <Space h="1rem" />
+                            {userId && (
+                                <>
+                                    <RecommendationCarousel
+                                        criteria="theme"
+                                        stackProps={{
+                                            className: "",
+                                        }}
+                                    />
+                                    <RecommendationCarousel
+                                        criteria="genre"
+                                        stackProps={{
+                                            className: "",
+                                        }}
+                                    />
+                                </>
+                            )}
                         </Stack>
                     )}
                 </Box>

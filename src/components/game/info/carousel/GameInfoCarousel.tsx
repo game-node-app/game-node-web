@@ -1,11 +1,11 @@
 import React from "react";
-import { Carousel } from "@mantine/carousel";
+import { Carousel, CarouselProps } from "@mantine/carousel";
 import { Game } from "@/wrapper/server";
 import GameGridItem from "@/components/game/figure/GameGridItem";
-import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { Flex, Skeleton, Text } from "@mantine/core";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
-interface IGameInfoCarouselProps {
+interface IGameInfoCarouselProps extends CarouselProps {
     isLoading: boolean;
     isError: boolean;
     games: Game[] | undefined;
@@ -14,11 +14,11 @@ interface IGameInfoCarouselProps {
 const buildGamesFigures = (games: Game[] | undefined) => {
     if (games == undefined || games.length === 0) return null;
 
-    return games.map((similarGame, index) => {
-        if (index < 20) {
+    return games.map((game, index) => {
+        if (index < 40) {
             return (
-                <Carousel.Slide key={similarGame.id}>
-                    <GameGridItem game={similarGame} withQuickAdd={false} />
+                <Carousel.Slide key={game.id} className={"w-full h-full"}>
+                    <GameGridItem game={game} withQuickAdd={false} />
                 </Carousel.Slide>
             );
         }
@@ -30,8 +30,8 @@ const buildSkeletons = () => {
     const skeletons = [];
     for (let i = 0; i < 7; i++) {
         skeletons.push(
-            <Carousel.Slide key={i}>
-                <Skeleton height={250} />
+            <Carousel.Slide key={i} className="w-full h-full">
+                <Skeleton height={230} />
             </Carousel.Slide>,
         );
     }
@@ -47,12 +47,7 @@ const buildErrorView = () => {
     );
 };
 
-const GameInfoCarousel = ({
-    games,
-    isLoading,
-    isError,
-}: IGameInfoCarouselProps) => {
-    const onMobile = useOnMobile();
+const GameInfoCarousel = ({ games, isLoading, isError, ...others }: IGameInfoCarouselProps) => {
     if (isError) {
         return buildErrorView();
     }
@@ -63,20 +58,16 @@ const GameInfoCarousel = ({
 
     return (
         <Carousel
-            slideSize={{
-                base: "65%",
-                lg: "15%",
-            }}
+            slideSize={"65%"}
             height={"fit-content"}
             align="start"
-            slideGap={{
-                base: "xs",
-                lg: "md",
-            }}
-            controlsOffset="xs"
+            slideGap={"xs"}
+            withControls={false}
+            withIndicators={false}
             dragFree
+            {...others}
         >
-            {isLoading ? buildSkeletons() : buildGamesFigures(games)}
+            {isLoading ? <CenteredLoading /> : buildGamesFigures(games)}
         </Carousel>
     );
 };
