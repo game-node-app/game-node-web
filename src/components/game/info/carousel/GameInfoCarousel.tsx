@@ -4,6 +4,7 @@ import { Game } from "@/wrapper/server";
 import GameGridItem from "@/components/game/figure/GameGridItem";
 import { Flex, Skeleton, Text } from "@mantine/core";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface IGameInfoCarouselProps extends CarouselProps {
     isLoading: boolean;
@@ -53,6 +54,8 @@ const GameInfoCarousel = ({
     isError,
     ...others
 }: IGameInfoCarouselProps) => {
+    const onMobile = useOnMobile();
+
     if (isError) {
         return buildErrorView();
     }
@@ -69,9 +72,11 @@ const GameInfoCarousel = ({
             }}
             height={"fit-content"}
             align="start"
-            slideGap={"xs"}
-            withControls={false}
-            withIndicators={false}
+            slideGap={{
+                base: "xs",
+                lg: "md",
+            }}
+            withControls={!onMobile}
             dragFree
             {...others}
         >
