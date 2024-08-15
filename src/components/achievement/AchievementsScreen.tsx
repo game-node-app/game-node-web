@@ -18,6 +18,9 @@ import AchievementItem from "@/components/achievement/AchievementItem";
 import UserLevelInfo from "@/components/user-level/UserLevelInfo";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import UserAvatarWithLevelInfo from "@/components/general/avatar/UserAvatarWithLevelInfo";
+import { useMutation } from "@tanstack/react-query";
+import RedeemAchievementCodeModal from "@/components/achievement/RedeemAchievementCodeModal";
+import { useDisclosure } from "@mantine/hooks";
 
 interface Props {
     targetUserId: string;
@@ -31,7 +34,11 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
     });
     const achievements = useAchievements(paginationData);
     const isOwnUserId = userId != undefined && userId === targetUserId;
+
+    const [redeemCodeModalOpened, redeemCodeModalUtils] = useDisclosure();
+
     if (!targetUserId) return null;
+
     return (
         <Paper className={"w-full h-full"}>
             <Stack w={"100%"} py={"3rem"} px={"2rem"}>
@@ -44,9 +51,18 @@ const AchievementsScreen = ({ targetUserId }: Props) => {
                     </Box>
 
                     {isOwnUserId && (
-                        <Button className={""} disabled>
-                            Redeem a code
-                        </Button>
+                        <>
+                            <RedeemAchievementCodeModal
+                                opened={redeemCodeModalOpened}
+                                onClose={redeemCodeModalUtils.close}
+                            />
+                            <Button
+                                className={""}
+                                onClick={redeemCodeModalUtils.open}
+                            >
+                                Redeem a code
+                            </Button>
+                        </>
                     )}
                 </Group>
 
