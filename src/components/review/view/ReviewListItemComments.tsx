@@ -15,12 +15,6 @@ const ReviewListItemComments = ({
     review,
     enabled,
 }: ReviewListItemCommentsProps) => {
-    const [editedCommentId, setEditedCommentId] = useState<string | undefined>(
-        undefined,
-    );
-
-    const editorContainerRef = useRef<HTMLDivElement>(null);
-
     return (
         <Stack
             className={`w-full h-full hidden data-[enabled=true]:flex`}
@@ -30,27 +24,11 @@ const ReviewListItemComments = ({
                 enabled={enabled}
                 sourceId={review.id}
                 sourceType={sourceType.REVIEW}
-                editedCommentId={editedCommentId}
-                onEditStart={(commentId) => {
-                    setEditedCommentId(commentId);
-                    if (editorContainerRef.current) {
-                        editorContainerRef.current.scrollIntoView({
-                            behavior: "smooth",
-                            inline: "nearest",
-                            block: "center",
-                        });
-                    }
-                }}
             />
             <Space h={"0.5rem"} />
             <CommentEditorView
-                commentId={editedCommentId}
                 sourceType={sourceType.REVIEW}
                 sourceId={review.id}
-                onCancel={() => {
-                    setEditedCommentId(undefined);
-                }}
-                editorContainerRef={editorContainerRef}
             />
         </Stack>
     );

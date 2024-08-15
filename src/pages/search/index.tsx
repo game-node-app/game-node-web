@@ -168,27 +168,13 @@ const Index = () => {
                             <TrendingGamesList />
                             <Space h={"1rem"} />
                             {userId && (
-                                <RecommendationCarousel
-                                    criteria="finished"
-                                    stackProps={{
-                                        className: "",
-                                    }}
-                                />
-                            )}
-                            <Space h={"1rem"} />
-                            <TrendingReviewCarousel />
-                            <Space h={"1rem"} />
-                            <DetailsBox
-                                title={"Recent Activity"}
-                                stackProps={{
-                                    className: "",
-                                }}
-                            >
-                                <RecentActivityList />
-                            </DetailsBox>
-                            <Space h="1rem" />
-                            {userId && (
                                 <>
+                                    <RecommendationCarousel
+                                        criteria="finished"
+                                        stackProps={{
+                                            className: "",
+                                        }}
+                                    />
                                     <RecommendationCarousel
                                         criteria="theme"
                                         stackProps={{
@@ -203,6 +189,17 @@ const Index = () => {
                                     />
                                 </>
                             )}
+                            <Space h={"1rem"} />
+                            <TrendingReviewCarousel />
+                            <Space h={"1rem"} />
+                            <DetailsBox
+                                title={"Recent Activity"}
+                                stackProps={{
+                                    className: "",
+                                }}
+                            >
+                                <RecentActivityList />
+                            </DetailsBox>
                         </Stack>
                     )}
                 </Box>

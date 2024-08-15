@@ -34,18 +34,19 @@ interface Props {
      * Ideally, should be cleared when 'onCancel' is called.
      */
     commentId?: string;
-    onCancel: () => void;
+    /**
+     * Triggered when the user clicks the cancel or finishes submitting with success.
+     */
+    onEditEnd?: () => void;
     sourceType: CreateCommentDto.sourceType;
     sourceId: string;
-    editorContainerRef?: RefObject<HTMLDivElement>;
 }
 
 const CommentEditorView = ({
     commentId,
     sourceType,
     sourceId,
-    onCancel,
-    editorContainerRef,
+    onEditEnd,
 }: Props) => {
     const queryClient = useQueryClient();
     const editorRef = useRef<Editor>();
@@ -59,7 +60,6 @@ const CommentEditorView = ({
     const clearEditor = () => {
         editorRef.current?.commands.clearContent();
         setShouldShowActionButtons(false);
-        onCancel();
     };
 
     const commentMutation = useMutation({
@@ -91,6 +91,7 @@ const CommentEditorView = ({
                 message: "Successfully submitted your comment!",
             });
             clearEditor();
+            if (onEditEnd) onEditEnd();
         },
     });
 
@@ -109,13 +110,8 @@ const CommentEditorView = ({
     }, [commentId, commentQuery.data, previousContent]);
 
     return (
-        <Stack className={"w-full h-full relative"} ref={editorContainerRef}>
+        <Stack className={"w-full h-full relative"}>
             <LoadingOverlay visible={commentQuery.isLoading} />
-            {isUpdateAction && (
-                <Text c={"dimmed"}>
-                    You are currently editing one of your previous comments.
-                </Text>
-            )}
             <CommentEditor
                 content={previousContent}
                 onUpdate={(props) => {
@@ -132,6 +128,7 @@ const CommentEditorView = ({
                         variant={"default"}
                         onClick={() => {
                             clearEditor();
+                            if (onEditEnd) onEditEnd();
                         }}
                     >
                         <IconX />
