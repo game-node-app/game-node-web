@@ -1,14 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import {
-    Chip,
-    ComboboxItem,
-    Group,
-    Pagination,
-    Select,
-    Stack,
-    Tabs,
-    Text,
-} from "@mantine/core";
+import { Chip, Group, Pagination, Stack, Text } from "@mantine/core";
 import ReviewListItem from "@/components/review/view/ReviewListItem";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { TBasePaginationRequest } from "@/util/types/pagination";
@@ -22,6 +13,7 @@ import { useReviews } from "@/components/review/hooks/useReviews";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import Link from "next/link";
+import period = FindStatisticsTrendingReviewsDto.period;
 
 interface IGameInfoReviewListProps {
     gameId: number;
@@ -31,6 +23,7 @@ const DEFAULT_LIMIT = 7;
 
 export const DEFAULT_GAME_REVIEW_LIST_VIEW_DTO: FindStatisticsTrendingReviewsDto =
     {
+        period: period.ALL,
         offset: 0,
         limit: DEFAULT_LIMIT,
     };

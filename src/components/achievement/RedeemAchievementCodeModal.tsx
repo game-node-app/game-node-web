@@ -33,6 +33,7 @@ const RedeemAchievementCodeModal = ({ opened, onClose }: Props) => {
                 color: "green",
             });
             onClose();
+            // TODO: Invalidate queries here
         },
     });
 
