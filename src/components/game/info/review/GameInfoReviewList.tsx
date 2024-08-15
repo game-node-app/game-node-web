@@ -85,6 +85,13 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
     const isLoading = trendingReviewsQuery.isLoading || reviewsQuery.isLoading;
     const isError = trendingReviewsQuery.isError || reviewsQuery.isError;
 
+    const shouldShowPagination =
+        (trendingReviewsQuery.data != undefined &&
+            trendingReviewsQuery.data.pagination.hasNextPage) ||
+        offset > 0;
+
+    console.log(shouldShowPagination);
+
     const handlePagination = (page: number) => {
         const offset = (page - 1) * DEFAULT_LIMIT;
         const updatedDto: FindStatisticsTrendingReviewsDto = {
@@ -149,14 +156,15 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
                     )}
                     {content}
                 </Stack>
-                <Group w={"100%"} justify={"center"}>
-                    {!isEmpty && (
+
+                {shouldShowPagination && (
+                    <Group w={"100%"} justify={"center"}>
                         <Pagination
                             total={trendingReviewsPagination?.totalPages ?? 1}
                             onChange={handlePagination}
                         />
-                    )}
-                </Group>
+                    </Group>
+                )}
             </Stack>
         </DetailsBox>
     );

@@ -42,54 +42,47 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
 
     return (
         <Stack className={"w-full h-full"}>
-            <Group className={"w-full h-full"} wrap={"nowrap"}>
-                <Divider
-                    orientation={"vertical"}
-                    color={isEditing ? "brand" : undefined}
-                    size={"sm"}
-                />
-                <Group w={"100%"} justify={"space-evenly"} wrap={"wrap"}>
-                    <Group className={"w-full flex-nowrap justify-between"}>
-                        <Flex
-                            justify={{
-                                base: "space-between",
-                                lg: "start",
+            <Group w={"100%"} justify={"space-evenly"} wrap={"wrap"}>
+                <Group className={"w-full flex-nowrap justify-between"}>
+                    <Flex
+                        justify={{
+                            base: "space-between",
+                            lg: "start",
+                        }}
+                        align={{
+                            base: "center",
+                            lg: "start",
+                        }}
+                    >
+                        <UserAvatarGroup
+                            avatarProps={{
+                                size: onMobile ? "lg" : "xl",
                             }}
-                            align={{
-                                base: "center",
-                                lg: "start",
-                            }}
-                        >
-                            <UserAvatarGroup
-                                avatarProps={{
-                                    size: onMobile ? "lg" : "xl",
-                                }}
-                                userId={comment.profileUserId}
-                                groupProps={{
-                                    gap: "md",
-                                }}
-                            />
-                        </Flex>
-
-                        <ActivityCreateDate createdAtDate={comment.createdAt} />
-                    </Group>
-
-                    <Stack className={"w-full"}>
-                        <EditorContent
-                            editor={nonEditableEditor}
-                            className={"w-full"}
-                            onClick={() => {
-                                setIsReadMore(!isReadMore);
+                            userId={comment.profileUserId}
+                            groupProps={{
+                                gap: "md",
                             }}
                         />
-                    </Stack>
-                    <Stack className={"w-full"}>
-                        <CommentsListItemActions
-                            comment={comment}
-                            onEditStart={onEditStart}
-                        />
-                    </Stack>
+                    </Flex>
+
+                    <ActivityCreateDate createdAtDate={comment.createdAt} />
                 </Group>
+
+                <Stack className={"w-full"}>
+                    <EditorContent
+                        editor={nonEditableEditor}
+                        className={"w-full"}
+                        onClick={() => {
+                            setIsReadMore(!isReadMore);
+                        }}
+                    />
+                </Stack>
+                <Stack className={"w-full"}>
+                    <CommentsListItemActions
+                        comment={comment}
+                        onEditStart={onEditStart}
+                    />
+                </Stack>
             </Group>
         </Stack>
     );

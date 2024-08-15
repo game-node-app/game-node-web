@@ -3,24 +3,28 @@ import {
     useComments,
     UseCommentsProps,
 } from "@/components/comment/hooks/useComments";
-import { Pagination, Paper, Stack } from "@mantine/core";
+import {
+    Divider,
+    Group,
+    LoadingOverlay,
+    Pagination,
+    Paper,
+    Stack,
+} from "@mantine/core";
 import CommentsListItem from "@/components/comment/view/CommentsListItem";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewPagination from "@/components/game/view/GameViewPagination";
+import CommentEditorView from "@/components/comment/editor/CommentEditorView";
 
-interface Props extends Omit<UseCommentsProps, "limit" | "offset"> {
-    onEditStart: (commentId: string) => void;
-    editedCommentId?: string;
-}
+interface Props extends Omit<UseCommentsProps, "limit" | "offset"> {}
 
 const COMMENTS_LIST_VIEW_DEFAULT_LIMIT = 10;
 
-const CommentsListView = ({
-    onEditStart,
-    editedCommentId,
-    ...hookProps
-}: Props) => {
+const CommentsListView = ({ ...hookProps }: Props) => {
+    const [editedCommentId, setEditedCommentId] = useState<string | undefined>(
+        undefined,
+    );
     const [offset, setOffset] = useState(0);
     const offsetAsPage =
         offset >= COMMENTS_LIST_VIEW_DEFAULT_LIMIT
@@ -39,16 +43,54 @@ const CommentsListView = ({
                 return aCreateDate.getTime() - bCreateDate.getTime();
             })
             .map((comment) => {
+                if (comment.id === editedCommentId) {
+                    return (
+                        <Group
+                            key={`editing-${comment.id}`}
+                            className={"w-full h-full"}
+                            wrap={"nowrap"}
+                        >
+                            <Divider
+                                orientation={"vertical"}
+                                color={"brand"}
+                                size={"sm"}
+                            />
+                            <CommentEditorView
+                                sourceType={hookProps.sourceType}
+                                sourceId={hookProps.sourceId}
+                                commentId={editedCommentId}
+                                onEditEnd={() => {
+                                    setEditedCommentId(undefined);
+                                }}
+                            />
+                        </Group>
+                    );
+                }
+
                 return (
-                    <CommentsListItem
+                    <Group
+                        className={"w-full h-full"}
+                        wrap={"nowrap"}
                         key={comment.id}
-                        comment={comment}
-                        onEditStart={onEditStart}
-                        editedCommentId={editedCommentId}
-                    />
+                    >
+                        <Divider orientation={"vertical"} size={"sm"} />
+                        <CommentsListItem
+                            key={comment.id}
+                            comment={comment}
+                            onEditStart={(commentId) =>
+                                setEditedCommentId(commentId)
+                            }
+                            editedCommentId={editedCommentId}
+                        />
+                    </Group>
                 );
             });
-    }, [commentsQuery.data?.data, editedCommentId, onEditStart]);
+    }, [
+        commentsQuery.data?.data,
+        editedCommentId,
+        hookProps.sourceId,
+        hookProps.sourceType,
+    ]);
 
     const hasNextPage =
         commentsQuery.data != undefined &&
@@ -57,13 +99,13 @@ const CommentsListView = ({
     const shouldShowPagination =
         commentsQuery.data != undefined && (offsetAsPage !== 1 || hasNextPage);
     return (
-        <Stack className={"w-full h-full"}>
+        <Stack className={"w-full h-full relative"}>
             {commentsQuery.isError && (
                 <CenteredErrorMessage
                     message={"Error while fetching comments. Please try again."}
                 />
             )}
-            {commentsQuery.isLoading && <CenteredLoading />}
+            <LoadingOverlay visible={commentsQuery.isLoading} />
             {items}
             {shouldShowPagination && (
                 <GameViewPagination
@@ -73,6 +115,7 @@ const CommentsListView = ({
                         const pageAsOffset =
                             COMMENTS_LIST_VIEW_DEFAULT_LIMIT * (page - 1);
                         setOffset(pageAsOffset);
+                        setEditedCommentId(undefined);
                     }}
                 />
             )}
