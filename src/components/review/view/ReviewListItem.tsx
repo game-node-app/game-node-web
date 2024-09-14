@@ -109,7 +109,9 @@ const ReviewListItem = ({
                         size={isScoreOnlyReview ? "lg" : "md"}
                     />
                 </Flex>
-                <Stack className={`w-full lg:mt-auto lg:justify-end`}>
+                <Stack
+                    className={`w-full lg:justify-end ${isScoreOnlyReview ? "lg:mt-auto" : ""}`}
+                >
                     {isScoreOnlyReview ? null : (
                         <EditorContent
                             editor={nonEditableEditor}
@@ -121,15 +123,12 @@ const ReviewListItem = ({
                     <Group justify={withGameInfo ? "space-between" : "end"}>
                         {withGameInfo && gameQuery.data != undefined && (
                             <Box className={"w-6/12 lg:w-4/12"}>
-                                <Text>
-                                    on
-                                    <TextLink
-                                        href={`/game/${gameQuery.data?.id}`}
-                                        c={"dimmed"}
-                                    >
-                                        {gameQuery.data?.name}
-                                    </TextLink>
-                                </Text>
+                                <TextLink
+                                    href={`/game/${gameQuery.data?.id}`}
+                                    c={"dimmed"}
+                                >
+                                    {gameQuery.data?.name}
+                                </TextLink>
                             </Box>
                         )}
                         <Group>
