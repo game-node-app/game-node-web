@@ -109,9 +109,21 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
             ?.filter((review) => {
                 return review.profileUserId !== ownUserId;
             })
+            // Give priority to reviews with content
+            .toSorted((a, b) => {
+                if (a.content == null) {
+                    return 1;
+                } else if (b.content == null) {
+                    return -1;
+                }
+
+                return 0;
+            })
             .map((review) => {
                 return <ReviewListItem key={review.id} review={review} />;
             });
+
+        debugger;
 
         if (reviews == undefined || reviews.length === 0) {
             return (
