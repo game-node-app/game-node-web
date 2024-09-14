@@ -5,13 +5,20 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
+import { Placeholder } from "@tiptap/extension-placeholder";
 
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
     gameId: number;
     onBlur: (html: string) => void;
 }
 
-export const DEFAULT_REVIEW_EDITOR_EXTENSIONS = [StarterKit];
+export const DEFAULT_REVIEW_EDITOR_EXTENSIONS = [
+    StarterKit,
+    Placeholder.configure({
+        placeholder:
+            "Review content. Leave empty to create a score-only review.",
+    }),
+];
 
 const GameInfoReviewEditor = ({
     gameId,

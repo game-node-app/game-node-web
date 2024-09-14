@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { DEFAULT_REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Box, Flex, Group, Stack, Transition } from "@mantine/core";
+import { Box, Flex, Group, Stack, Text, Transition } from "@mantine/core";
 import {
     FindAllCommentsDto,
     FindOneStatisticsDto,
@@ -55,6 +55,8 @@ const ReviewListItem = ({
     const userId = useUserId();
     const profileUserId = review.profileUserId;
     const gameIdToUse = withGameInfo ? review.gameId : undefined;
+
+    const isScoreOnlyReview = review.content == null;
     const isOwnReview = userId != undefined && userId === profileUserId;
 
     // Will only be enabled if gameId is not undefined.
@@ -71,15 +73,15 @@ const ReviewListItem = ({
                 <Flex
                     direction={{
                         base: "row",
-                        lg: "column",
+                        lg: isScoreOnlyReview ? "row" : "column",
                     }}
                     w={{
                         base: "100%",
-                        lg: "10%",
+                        lg: isScoreOnlyReview ? "25%" : "10%",
                     }}
                     justify={{
                         base: "space-between",
-                        lg: "center",
+                        lg: isScoreOnlyReview ? "space-between" : "center",
                     }}
                     align={{
                         base: "center",
@@ -99,25 +101,35 @@ const ReviewListItem = ({
 
                     <GameRating
                         value={review.rating}
-                        className={"mt-0 lg:mt-4"}
+                        className={
+                            isScoreOnlyReview
+                                ? "mt-0 lg:ms-8 lg:mb-4"
+                                : "mt-0 lg:mt-4"
+                        }
+                        size={isScoreOnlyReview ? "lg" : "md"}
                     />
                 </Flex>
-                <Stack className={"w-full"}>
-                    <EditorContent
-                        editor={nonEditableEditor}
-                        className={"w-full"}
-                        onClick={() => setIsReadMore(!isReadMore)}
-                    />
+                <Stack className={`w-full lg:mt-auto lg:justify-end`}>
+                    {isScoreOnlyReview ? null : (
+                        <EditorContent
+                            editor={nonEditableEditor}
+                            className={"w-full"}
+                            onClick={() => setIsReadMore(!isReadMore)}
+                        />
+                    )}
 
                     <Group justify={withGameInfo ? "space-between" : "end"}>
                         {withGameInfo && gameQuery.data != undefined && (
                             <Box className={"w-6/12 lg:w-4/12"}>
-                                <TextLink
-                                    href={`/game/${gameQuery.data?.id}`}
-                                    c={"dimmed"}
-                                >
-                                    {gameQuery.data?.name}
-                                </TextLink>
+                                <Text>
+                                    on
+                                    <TextLink
+                                        href={`/game/${gameQuery.data?.id}`}
+                                        c={"dimmed"}
+                                    >
+                                        {gameQuery.data?.name}
+                                    </TextLink>
+                                </Text>
                             </Box>
                         )}
                         <Group>
