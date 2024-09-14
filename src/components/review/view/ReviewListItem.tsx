@@ -109,7 +109,9 @@ const ReviewListItem = ({
                         size={isScoreOnlyReview ? "lg" : "md"}
                     />
                 </Flex>
-                <Stack className={`w-full lg:mt-auto lg:justify-end`}>
+                <Stack
+                    className={`w-full lg:justify-end ${isScoreOnlyReview ? "lg:mt-auto" : ""}`}
+                >
                     {isScoreOnlyReview ? null : (
                         <EditorContent
                             editor={nonEditableEditor}
