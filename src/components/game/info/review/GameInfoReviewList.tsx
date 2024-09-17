@@ -123,8 +123,6 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
                 return <ReviewListItem key={review.id} review={review} />;
             });
 
-        debugger;
-
         if (reviews == undefined || reviews.length === 0) {
             return (
                 <Text className={"text-center"}>

@@ -7,11 +7,13 @@ import { Box, Space } from "@mantine/core";
 import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
+import SelectWithOrdering from "@/components/general/input/select/SelectWithOrdering";
 
 interface ICollectionEntriesViewProps extends IGameViewPaginationProps {
     isLoading: boolean;
     isError: boolean;
     games: Game[] | undefined;
+    onChangeOrder: (value: string, order: "ASC" | "DESC") => void;
 }
 
 const CollectionEntriesView = ({
@@ -21,6 +23,7 @@ const CollectionEntriesView = ({
     paginationInfo,
     onPaginationChange,
     page,
+    onChangeOrder,
 }: ICollectionEntriesViewProps) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
 
@@ -44,13 +47,25 @@ const CollectionEntriesView = ({
         } else {
             return (
                 <Stack
-                    w={"100%"}
+                    className={"w-[calc(100%-2rem)]"}
                     justify={"space-between"}
                     h={"100%"}
                     mt={"md"}
                 >
-                    <Box className="w-full flex justify-end mb-8">
-                        <Box className={"!me-4"}>
+                    <Box className="w-full flex justify-between mb-8">
+                        <SelectWithOrdering
+                            description={"Order by"}
+                            data={[
+                                {
+                                    value: "addedDate",
+                                    label: "Added Date",
+                                },
+                                { value: "releaseDate", label: "Release Date" },
+                            ]}
+                            defaultValue={"addedDate"}
+                            onChange={onChangeOrder}
+                        />
+                        <Box>
                             <GameViewLayoutSwitcher setLayout={setLayout} />
                         </Box>
                     </Box>
