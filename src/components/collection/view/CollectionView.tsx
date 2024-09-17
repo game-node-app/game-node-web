@@ -35,6 +35,7 @@ import CollectionRemoveModal from "@/components/collection/form/modal/Collection
 import Head from "next/head";
 import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import CollectionViewActions from "@/components/collection/form/CollectionViewActions";
+import SelectWithOrdering from "@/components/general/input/select/SelectWithOrdering";
 
 interface ICollectionViewProps {
     libraryUserId: string;
@@ -43,6 +44,10 @@ interface ICollectionViewProps {
 
 const CollectionViewFormSchema = z.object({
     page: z.number().optional().default(1),
+    orderBy: z.object({
+        addedDate: z.literal("DESC").or(z.literal("ASC")).optional(),
+        releaseDate: z.literal("DESC").or(z.literal("ASC")).optional(),
+    }),
 });
 
 type CollectionViewFormValues = z.infer<typeof CollectionViewFormSchema>;
@@ -63,12 +68,16 @@ const CollectionView = ({
         resolver: zodResolver(CollectionViewFormSchema),
         defaultValues: {
             page: 1,
+            orderBy: {
+                addedDate: "DESC",
+            },
         },
     });
 
     const ownUserId = useUserId();
 
     const formPage = watch("page");
+    const orderBy = watch("orderBy");
 
     const requestParams = useMemo(() => {
         const page = formPage || 1;
@@ -86,9 +95,7 @@ const CollectionView = ({
         collectionId,
         offset: requestParams.offset,
         limit: requestParams.limit,
-        orderBy: {
-            createdAt: "DESC",
-        },
+        orderBy: orderBy,
     });
     const gamesIds = useMemo(() => {
         return collectionEntriesQuery.data?.data.map((entry) => entry.gameId);
@@ -112,6 +119,8 @@ const CollectionView = ({
         collectionQuery.isError ||
         collectionEntriesQuery.isError ||
         gamesQuery.isError;
+
+    console.log(orderBy);
 
     return (
         <Container fluid p={0} h={"100%"}>
@@ -155,6 +164,11 @@ const CollectionView = ({
                     page={formPage}
                     onPaginationChange={(page) => {
                         setValue("page", page);
+                    }}
+                    onChangeOrder={(value, order) => {
+                        setValue("orderBy", {
+                            [value]: order,
+                        });
                     }}
                 />
             </Stack>
