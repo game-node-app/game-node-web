@@ -1,13 +1,22 @@
-import React, { useMemo, useRef } from "react";
-import { Box, BoxComponentProps } from "@mantine/core";
-import { useEditor } from "@tiptap/react";
+import React, {
+    forwardRef,
+    MutableRefObject,
+    useEffect,
+    useMemo,
+    useRef,
+} from "react";
+import { Box, BoxComponentProps, Menu } from "@mantine/core";
+import { JSONContent, ReactRenderer, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { Placeholder } from "@tiptap/extension-placeholder";
+import getEditorMentionConfig from "@/components/general/editor/util/getEditorMentionConfig";
+import { Editor } from "@tiptap/core";
 
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
+    editorRef?: MutableRefObject<Editor | null>;
     gameId: number;
     onBlur: (html: string) => void;
 }
@@ -16,11 +25,13 @@ export const DEFAULT_REVIEW_EDITOR_EXTENSIONS = [
     StarterKit,
     Placeholder.configure({
         placeholder:
-            "Review content. Leave empty to create a score-only review.",
+            "Review content. Leave empty to create a score-only review. Use '@' to mention other users.",
     }),
+    getEditorMentionConfig(),
 ];
 
 const GameInfoReviewEditor = ({
+    editorRef,
     gameId,
     onBlur,
 }: IGameInfoReviewEditorProps) => {
@@ -41,6 +52,12 @@ const GameInfoReviewEditor = ({
         },
         [previousContent],
     );
+
+    useEffect(() => {
+        if (editor != null && editorRef) {
+            editorRef.current = editor;
+        }
+    }, [editor, editorRef]);
 
     if (!editor) return null;
 
