@@ -32,6 +32,8 @@ const ReviewAggregatedNotification = ({
                 return "liked your review";
             case category.COMMENT:
                 return "commented on your review";
+            case category.MENTION:
+                return "mentioned you on his review";
         }
     }, [aggregatedNotification.category]);
 
@@ -40,7 +42,10 @@ const ReviewAggregatedNotification = ({
     }
 
     return (
-        <Link href={`/game/${reviewQuery.data?.gameId}`} className={"w-full"}>
+        <Link
+            href={`/game/${reviewQuery.data?.gameId}?reviewId=${reviewQuery.data?.id}`}
+            className={"w-full"}
+        >
             <Group wrap={"nowrap"} className={"w-full"}>
                 {latestNotificationUserId && (
                     <UserAvatar userId={latestNotificationUserId} />
