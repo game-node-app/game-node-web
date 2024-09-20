@@ -608,6 +608,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-list-item/-/extension-list-item-2.2.6.tgz#0cc73fdc9c7d1861937c421863f0a6c99901a344"
   integrity sha512-3xig1q0jtOyV49TkAbvxBoOJdNypwq6vLYerfblhj6dK+hIIZUM33S+SmGl2+QaB25VwyeSHjiCvrJjB9PKWHQ==
 
+"@tiptap/extension-mention@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-mention/-/extension-mention-2.7.1.tgz#3ba6a43dd5f015ac3b861bc5c81746e665888f58"
+  integrity sha512-YuBvbxGTWCxTTNMotenYw43ajPCN0n0yNz+Q4z7fa7lWOEoiomLgU6plrRJDSsPPP6g7NxFoZLx+SXayP/DeyQ==
+
 "@tiptap/extension-ordered-list@^2.2.6":
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-ordered-list/-/extension-ordered-list-2.2.6.tgz#52ad568997064b2502b21bf40d83aeed5caaf2c7"
@@ -689,6 +694,11 @@
     "@tiptap/extension-paragraph" "^2.2.6"
     "@tiptap/extension-strike" "^2.2.6"
     "@tiptap/extension-text" "^2.2.6"
+
+"@tiptap/suggestion@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/suggestion/-/suggestion-2.7.1.tgz#93c47ff5c35f18d0012b9a279012ce669711c334"
+  integrity sha512-xyu4ua1xqbVgQlHWRxDGxYt3MzuuQ0vGkZhpPgte5CdOeEtEwICVrQp0rJPPxDu2vUupnHQ5EnP6I7VAl+YW9g==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"

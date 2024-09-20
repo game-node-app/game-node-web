@@ -26,6 +26,11 @@ import ReviewListItem from "@/components/review/view/ReviewListItem";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import { IconX } from "@tabler/icons-react";
 import GameRating from "@/components/general/input/GameRating";
+import { Editor } from "@tiptap/core";
+import { JSONContent } from "@tiptap/react";
+import getEditorMentions from "@/components/general/editor/util/getEditorMentions";
+
+const processMentions = (jsonContent: JSONContent) => {};
 
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),
@@ -46,6 +51,7 @@ interface IGameInfoReviewEditorViewProps {
 const GameInfoReviewEditorView = ({
     gameId,
 }: IGameInfoReviewEditorViewProps) => {
+    const editorRef = useRef<Editor | null>(null);
     const [isEditMode, setIsEditMode] = useState<boolean>(true);
     const hasSetEditMode = useRef<boolean>(false);
 
@@ -65,9 +71,13 @@ const GameInfoReviewEditorView = ({
 
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
+            const mentionedUserIds = getEditorMentions(
+                editorRef.current!.getJSON(),
+            );
             await ReviewsService.reviewsControllerCreateOrUpdate({
                 ...data,
                 gameId: gameId,
+                mentionedUserIds: mentionedUserIds,
             });
         },
         onSuccess: () => {
@@ -130,8 +140,12 @@ const GameInfoReviewEditorView = ({
         return (
             <form className={"w-full h-full"} onSubmit={handleSubmit(onSubmit)}>
                 <GameInfoReviewEditor
+                    editorRef={editorRef}
                     gameId={gameId}
-                    onBlur={(v) => setValue("content", v)}
+                    onBlur={(html) => {
+                        setValue("content", html);
+                        getEditorMentions(editorRef.current!.getJSON());
+                    }}
                 />
                 <Break />
                 <Group mt={"md"} justify={"space-between"}>
