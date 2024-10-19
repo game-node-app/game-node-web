@@ -123,7 +123,24 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
                 return <ReviewListItem key={review.id} review={review} />;
             });
 
-        if (reviews == undefined || reviews.length === 0) {
+        if (reviews == undefined) {
+            return (
+                <Text className={"text-center"}>
+                    No reviews yet. Be the first one! 😉
+                </Text>
+            );
+        } else if (
+            reviews.length === 0 &&
+            reviewsQuery.data?.some(
+                (review) => review.profileUserId === ownUserId,
+            )
+        ) {
+            return (
+                <Text className={"text-center"}>
+                    Other users' reviews will appear here.
+                </Text>
+            );
+        } else if (reviews.length === 0) {
             return (
                 <Text className={"text-center"}>
                     No reviews yet. Be the first one! 😉

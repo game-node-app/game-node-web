@@ -122,9 +122,6 @@ const ProfileStatsSimpleOverview = ({ userId }: Props) => {
                     />
                 </Group>
             )}
-            <TextLink href={`/profile/${userId}/stats`} className={"mt-3"}>
-                Show more
-            </TextLink>
         </Group>
     );
 };
