@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import type { ReviewComment } from "@/wrapper/server";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COMMENT_EDITOR_EXTENSIONS } from "@/components/comment/editor/CommentEditor";
-import { Box, Divider, Flex, Group, Stack } from "@mantine/core";
+import { Box, Divider, Flex, Group, Spoiler, Stack } from "@mantine/core";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import getTimeSinceString from "@/util/getTimeSinceString";
@@ -18,21 +18,14 @@ interface Props {
 const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
     const [isReadMore, setIsReadMore] = useState(false);
     const onMobile = useOnMobile();
-    const contentToUse = useMemo(() => {
-        if (!isReadMore && comment.content.length > 240) {
-            return comment.content.slice(0, 240) + "...";
-        }
-
-        return comment.content;
-    }, [comment.content, isReadMore]);
 
     const nonEditableEditor = useEditor(
         {
             extensions: COMMENT_EDITOR_EXTENSIONS,
             editable: false,
-            content: contentToUse,
+            content: comment?.content,
         },
-        [contentToUse],
+        [comment],
     );
 
     const isEditing =
@@ -69,13 +62,18 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
                 </Group>
 
                 <Stack className={"w-full"}>
-                    <EditorContent
-                        editor={nonEditableEditor}
-                        className={"w-full"}
-                        onClick={() => {
-                            setIsReadMore(!isReadMore);
-                        }}
-                    />
+                    <Spoiler
+                        hideLabel={"Show less"}
+                        showLabel={"Show more"}
+                        expanded={isReadMore}
+                        onExpandedChange={setIsReadMore}
+                        maxHeight={250}
+                    >
+                        <EditorContent
+                            editor={nonEditableEditor}
+                            className={"w-full"}
+                        />
+                    </Spoiler>
                 </Stack>
                 <Stack className={"w-full"}>
                     <CommentsListItemActions
