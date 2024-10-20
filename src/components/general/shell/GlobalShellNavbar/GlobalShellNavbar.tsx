@@ -49,9 +49,12 @@ const links: NavbarItem[] = [
     // { icon: IconRefresh, label: "Importer", href: "/importer" },
 ];
 
-interface IGlobalShellNavbarProps extends BaseModalChildrenProps {}
+interface IGlobalShellNavbarProps extends BaseModalChildrenProps {
+    onOpen: () => void;
+}
 
 export default function GlobalShellNavbar({
+    onOpen,
     onClose,
 }: IGlobalShellNavbarProps) {
     const [query, setQuery] = useState<string>("");
@@ -105,7 +108,6 @@ export default function GlobalShellNavbar({
             )}
             <Box w={"100%"} my={"0.8rem"}>
                 <GlobalNavbarSearchBar
-                    withButton={false}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onOptionSubmit={(value, options, combobox) => {
@@ -117,6 +119,7 @@ export default function GlobalShellNavbar({
                         if (onClose) onClose();
                     }}
                     onClear={() => setQuery("")}
+                    onHotkeyPress={onOpen}
                 />
             </Box>
 

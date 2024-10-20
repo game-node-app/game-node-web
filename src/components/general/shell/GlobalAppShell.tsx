@@ -11,7 +11,7 @@ import GlobalShellNavbar from "@/components/general/shell/GlobalShellNavbar/Glob
  * @constructor
  */
 const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
-    const [sidebarOpened, modalUtils] = useDisclosure(false);
+    const [sidebarOpened, sidebarOpenedUtils] = useDisclosure(false);
     return (
         <AppShell
             padding="xs"
@@ -34,11 +34,14 @@ const GlobalAppShell = ({ children }: { children: React.ReactNode }) => {
             <AppShell.Header>
                 <GlobalShellHeader
                     sidebarOpened={sidebarOpened}
-                    toggleSidebar={modalUtils.toggle}
+                    toggleSidebar={sidebarOpenedUtils.toggle}
                 />
             </AppShell.Header>
             <AppShell.Navbar>
-                <GlobalShellNavbar onClose={modalUtils.close} />
+                <GlobalShellNavbar
+                    onOpen={sidebarOpenedUtils.open}
+                    onClose={sidebarOpenedUtils.close}
+                />
             </AppShell.Navbar>
             {/**
              Remove '!ps-2.5' to make the sidebar push the main content to its right when opened

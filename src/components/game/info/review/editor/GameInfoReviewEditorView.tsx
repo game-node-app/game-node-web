@@ -30,8 +30,6 @@ import { Editor } from "@tiptap/core";
 import { JSONContent } from "@tiptap/react";
 import getEditorMentions from "@/components/general/editor/util/getEditorMentions";
 
-const processMentions = (jsonContent: JSONContent) => {};
-
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),
     content: z

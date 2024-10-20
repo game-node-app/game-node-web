@@ -1,7 +1,15 @@
 import React, { useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { DEFAULT_REVIEW_EDITOR_EXTENSIONS } from "@/components/game/info/review/editor/GameInfoReviewEditor";
-import { Box, Flex, Group, Stack, Text, Transition } from "@mantine/core";
+import {
+    Box,
+    Flex,
+    Group,
+    Spoiler,
+    Stack,
+    Text,
+    Transition,
+} from "@mantine/core";
 import {
     FindAllCommentsDto,
     FindOneStatisticsDto,
@@ -33,23 +41,14 @@ const ReviewListItem = ({
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
-    const contentToUse = useMemo(() => {
-        if (review != undefined && review.content != undefined) {
-            if (review.content.length < 280 || isReadMore) {
-                return review.content;
-            }
-            return review.content.slice(0, 280) + "...";
-        }
-        return undefined;
-    }, [isReadMore, review]);
 
     const nonEditableEditor = useEditor(
         {
             extensions: DEFAULT_REVIEW_EDITOR_EXTENSIONS,
-            content: contentToUse,
+            content: review?.content,
             editable: false,
         },
-        [contentToUse],
+        [review],
     );
 
     const userId = useUserId();
@@ -113,11 +112,18 @@ const ReviewListItem = ({
                     className={`w-full lg:justify-end ${isScoreOnlyReview ? "lg:mt-auto" : ""}`}
                 >
                     {isScoreOnlyReview ? null : (
-                        <EditorContent
-                            editor={nonEditableEditor}
-                            className={"w-full"}
-                            onClick={() => setIsReadMore(!isReadMore)}
-                        />
+                        <Spoiler
+                            hideLabel={"Show less"}
+                            showLabel={"Show more"}
+                            expanded={isReadMore}
+                            onExpandedChange={setIsReadMore}
+                            maxHeight={300}
+                        >
+                            <EditorContent
+                                editor={nonEditableEditor}
+                                className={"w-full"}
+                            />
+                        </Spoiler>
                     )}
 
                     <Group justify={withGameInfo ? "space-between" : "end"}>

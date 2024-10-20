@@ -28,10 +28,6 @@ const GlobalShellHeaderNotifications = () => {
     const { data, isLoading, isError, invalidate, isFetching, fetchNextPage } =
         useInfiniteAggregatedNotifications();
 
-    /**
-     * Notifications should be marked as viewed on hover for desktop, and when the popover is opened
-     * for mobile.
-     */
     const notificationViewMutation = useMutation({
         mutationFn: async (notifications: Notification[]) => {
             if (notifications == undefined || notifications.length === 0)
