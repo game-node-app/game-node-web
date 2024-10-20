@@ -4,22 +4,30 @@ import {
     Combobox,
     ComboboxOptionProps,
     ComboboxStore,
+    FocusTrap,
     Group,
+    Kbd,
     ScrollArea,
     TextInput,
     TextInputProps,
     useCombobox,
 } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import {
+    useClickOutside,
+    useDebouncedValue,
+    useDisclosure,
+    useFocusTrap,
+    useHotkeys,
+} from "@mantine/hooks";
 import useSearchGames from "@/components/game/hooks/useSearchGames";
 import { useSearchUsers } from "@/components/profile/hooks/useSearchUsers";
 import React, { ReactElement, useMemo } from "react";
 import GameSelectOption from "@/components/general/shell/GlobalShellNavbar/search-bar/GameSelectOption";
 import { IconLoader, IconSearch, IconX } from "@tabler/icons-react";
 import UserSelectOption from "@/components/general/shell/GlobalShellNavbar/search-bar/UserSelectOption";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
 interface IUserGamesSearchBarWithSelectProps extends TextInputProps {
-    withButton: boolean;
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onOptionSubmit: (
@@ -28,13 +36,14 @@ interface IUserGamesSearchBarWithSelectProps extends TextInputProps {
         combobox: ComboboxStore,
     ) => void;
     onClear: () => void;
+    onHotkeyPress: () => void;
 }
 
 const GlobalNavbarSearchBar = ({
-    withButton,
     value,
     onOptionSubmit,
     onClear,
+    onHotkeyPress,
     ...others
 }: IUserGamesSearchBarWithSelectProps) => {
     const combobox = useCombobox();
@@ -53,6 +62,23 @@ const GlobalNavbarSearchBar = ({
         limit: 5,
     });
 
+    const onMobile = useOnMobile();
+
+    const [focusActive, focusActiveUtils] = useDisclosure();
+    const searchBarClickOutsideRef = useClickOutside(() => {
+        focusActiveUtils.close();
+    });
+
+    useHotkeys([
+        [
+            "shift+F",
+            () => {
+                onHotkeyPress();
+                focusActiveUtils.open();
+            },
+        ],
+    ]);
+
     // Who thought this was a good idea?
     // Oh, it was me...
     const isGamesEmpty =
@@ -67,6 +93,7 @@ const GlobalNavbarSearchBar = ({
     const isLoading = searchUsersQuery.isLoading || searchGamesQuery.isLoading;
     const isError = searchGamesQuery.isError && searchUsersQuery.isError;
     const isEmpty = isGamesEmpty && isUsersEmpty;
+    const showHotkeyTip = value == undefined || value.length === 0;
 
     const options = useMemo(() => {
         if (isEmpty) return undefined;
@@ -92,6 +119,7 @@ const GlobalNavbarSearchBar = ({
             justify="center"
             align="start"
             gap={0}
+            ref={searchBarClickOutsideRef}
         >
             <Combobox
                 store={combobox}
@@ -100,54 +128,55 @@ const GlobalNavbarSearchBar = ({
                     onOptionSubmit(value, options, combobox)
                 }
             >
-                <Combobox.Target>
-                    <TextInput
-                        {...others}
-                        placeholder={"Search for users or games"}
-                        value={value ?? ""}
-                        onClick={() => {
-                            combobox.openDropdown();
-                        }}
-                        onFocus={() => {
-                            combobox.openDropdown();
-                        }}
-                        onBlur={() => {
-                            combobox.closeDropdown();
-                        }}
-                        classNames={{
-                            root: "!grow",
-                            input: withButton
-                                ? "!rounded-tr-none !rounded-br-none"
-                                : undefined,
-                        }}
-                        rightSection={
-                            <Group wrap={"nowrap"}>
-                                <Box w={"0.8rem"}>
-                                    {searchGamesQuery.isFetching && (
-                                        <IconLoader size={"0.8rem"} />
+                <FocusTrap active={focusActive}>
+                    <Combobox.Target>
+                        <TextInput
+                            {...others}
+                            placeholder={"Search for users or games"}
+                            value={value ?? ""}
+                            onClick={() => {
+                                combobox.openDropdown();
+                            }}
+                            onFocus={() => {
+                                combobox.openDropdown();
+                            }}
+                            onBlur={() => {
+                                combobox.closeDropdown();
+                            }}
+                            classNames={{
+                                root: "!grow",
+                            }}
+                            rightSection={
+                                <Group wrap={"nowrap"}>
+                                    {showHotkeyTip ? (
+                                        <Group wrap={"nowrap"} gap={3} mr={30}>
+                                            {!onMobile && (
+                                                <>
+                                                    <Kbd>&#8679;</Kbd> +{" "}
+                                                    <Kbd>F</Kbd>
+                                                </>
+                                            )}
+                                        </Group>
+                                    ) : (
+                                        <>
+                                            <Box w={"1rem"}>
+                                                {searchGamesQuery.isFetching && (
+                                                    <IconLoader size={"1rem"} />
+                                                )}
+                                            </Box>
+                                            <Box w={"1rem"} mr={25}>
+                                                <IconX
+                                                    size={"1rem"}
+                                                    onClick={onClear}
+                                                />
+                                            </Box>
+                                        </>
                                     )}
-                                </Box>
-                                <Box w={"1rem"} mr={25}>
-                                    {value != undefined && value.length > 0 && (
-                                        <IconX
-                                            size={"1rem"}
-                                            onClick={onClear}
-                                        />
-                                    )}
-                                </Box>
-
-                                {withButton && (
-                                    <Button
-                                        type="submit"
-                                        className="!rounded-tl-none !rounded-bl-none"
-                                    >
-                                        <IconSearch />
-                                    </Button>
-                                )}
-                            </Group>
-                        }
-                    />
-                </Combobox.Target>
+                                </Group>
+                            }
+                        />
+                    </Combobox.Target>
+                </FocusTrap>
 
                 <Combobox.Dropdown hidden={!isQueryEnabled}>
                     <Combobox.Options>

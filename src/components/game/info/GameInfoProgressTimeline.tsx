@@ -56,7 +56,7 @@ const GameInfoProgressTimeline = ({ gameId }: Props) => {
                     <Text c={"dimmed"}>Game reviewed</Text>
                     {isReviewed && (
                         <Text c={"dimmed"} fz={"xs"}>
-                            +125 XP
+                            +75 XP
                         </Text>
                     )}
                 </Timeline.Item>
@@ -64,7 +64,7 @@ const GameInfoProgressTimeline = ({ gameId }: Props) => {
                     <Text c={"dimmed"}>Game marked as finished</Text>
                     {isFinished && (
                         <Text c={"dimmed"} fz={"xs"}>
-                            +75 XP
+                            +30 XP
                         </Text>
                     )}
                 </Timeline.Item>
