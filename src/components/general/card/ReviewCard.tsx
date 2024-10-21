@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, Group, Overlay, Paper, Skeleton, Text } from "@mantine/core";
+import {
+    Box,
+    Button,
+    Group,
+    Overlay,
+    Paper,
+    Skeleton,
+    Text,
+} from "@mantine/core";
 import classes from "./ReviewCard.module.css";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
@@ -10,6 +18,7 @@ import {
     ImageSize,
 } from "@/components/game/util/getSizedImageUrl";
 import Link from "next/link";
+import GameRating from "@/components/general/input/GameRating";
 
 interface IProps {
     reviewId: string;
@@ -35,20 +44,18 @@ const ReviewCard = ({ reviewId }: IProps) => {
 
     if (reviewQuery.isLoading || gameQuery.isLoading) {
         return <Skeleton h={"100%"} />;
-    } else if (
-        reviewQuery.data == undefined ||
-        reviewQuery.data.content == undefined ||
-        gameQuery.data == undefined
-    ) {
+    } else if (reviewQuery.data == undefined || gameQuery.data == undefined) {
         return null;
     }
 
     const profileUserId = reviewQuery.data?.profileUserId;
 
-    const strippedContent = reviewQuery.data.content.replace(
-        /(<([^>]+)>)/gi,
-        "",
-    );
+    // Removes HTML tags from text
+    // const strippedContent = reviewQuery.data.content?.replace(
+    //     /(<([^>]+)>)/gi,
+    //     "",
+    // );
+    const strippedContent = undefined;
 
     const backgroundUrl = getSizedImageUrl(
         gameQuery.data.cover?.url,
@@ -67,9 +74,13 @@ const ReviewCard = ({ reviewId }: IProps) => {
             }
         >
             <Overlay color="#000" backgroundOpacity={0.7} className={"z-10"} />
-            <div className="z-20 relative">
-                <Group justify={"start"}>
-                    <UserAvatarGroup userId={profileUserId} />
+            <div className="z-20 relative w-full">
+                <Group className={"w-full justify-between"}>
+                    <Box className={"max-w-32"}>
+                        <UserAvatarGroup userId={profileUserId} />
+                    </Box>
+
+                    <GameRating value={reviewQuery.data.rating} />
                 </Group>
                 <Text lineClamp={onMobile ? 8 : 10} className={classes.title}>
                     {strippedContent}
