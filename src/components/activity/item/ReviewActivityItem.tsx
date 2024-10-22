@@ -92,10 +92,14 @@ const ReviewActivityItem = ({ activity }: Props) => {
                             createdAtDate={activity.createdAt}
                         />
 
-                        <GameRating
-                            value={reviewQuery.data?.rating}
-                            size={"md"}
-                        />
+                        <Link
+                            href={`/game/${gameQuery.data?.id}?reviewId=${activity.reviewId}`}
+                        >
+                            <GameRating
+                                value={reviewQuery.data?.rating}
+                                size={"md"}
+                            />
+                        </Link>
 
                         <Group>
                             <ActivityItemLikes activity={activity} />

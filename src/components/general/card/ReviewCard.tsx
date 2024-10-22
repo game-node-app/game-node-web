@@ -51,11 +51,10 @@ const ReviewCard = ({ reviewId }: IProps) => {
     const profileUserId = reviewQuery.data?.profileUserId;
 
     // Removes HTML tags from text
-    // const strippedContent = reviewQuery.data.content?.replace(
-    //     /(<([^>]+)>)/gi,
-    //     "",
-    // );
-    const strippedContent = undefined;
+    const strippedContent = reviewQuery.data.content?.replace(
+        /(<([^>]+)>)/gi,
+        "",
+    );
 
     const backgroundUrl = getSizedImageUrl(
         gameQuery.data.cover?.url,
@@ -75,13 +74,19 @@ const ReviewCard = ({ reviewId }: IProps) => {
         >
             <Overlay color="#000" backgroundOpacity={0.7} className={"z-10"} />
             <div className="z-20 relative w-full">
-                <Group className={"w-full justify-between"}>
-                    <Box className={"max-w-32"}>
-                        <UserAvatarGroup userId={profileUserId} />
+                <Group className={"w-full justify-between flex-nowrap"}>
+                    <Box className={"max-w-64"}>
+                        <UserAvatarGroup
+                            avatarProps={{
+                                size: "lg",
+                            }}
+                            userId={profileUserId}
+                        />
                     </Box>
 
-                    <GameRating value={reviewQuery.data.rating} />
+                    <GameRating value={reviewQuery.data.rating} size={"lg"} />
                 </Group>
+
                 <Text lineClamp={onMobile ? 8 : 10} className={classes.title}>
                     {strippedContent}
                 </Text>
