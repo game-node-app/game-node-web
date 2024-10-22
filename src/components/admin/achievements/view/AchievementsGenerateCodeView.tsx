@@ -63,8 +63,6 @@ const AchievementsGenerateCodeView = () => {
                     },
                 );
 
-            console.log("Generated achievement code: ", resp);
-
             setGeneratedAchievementCode(resp.code);
 
             return resp;

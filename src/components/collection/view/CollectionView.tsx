@@ -120,8 +120,6 @@ const CollectionView = ({
         collectionEntriesQuery.isError ||
         gamesQuery.isError;
 
-    console.log(orderBy);
-
     return (
         <Container fluid p={0} h={"100%"}>
             {collection && profile && (

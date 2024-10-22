@@ -44,15 +44,9 @@ const GameListItem = ({
             name = name.substring(0, 30) + "...";
         }
     }
-    const platformInfo = getGamePlatformInfo(game);
-    const platformsAbbreviations =
-        platformInfo.platformsAbbreviations?.join(", ");
+
     const genres = getGameGenres(game);
     const genreNames = genres?.join(", ");
-    const categoryText = useMemo(
-        () => getGameCategoryName(game?.category),
-        [game.category],
-    );
 
     const Figure = withQuickAdd ? GameFigureWithQuickAdd : GameFigureImage;
 
@@ -77,17 +71,7 @@ const GameListItem = ({
                         },
                     }}
                     {...figureProps}
-                >
-                    {categoryText && (
-                        <Badge
-                            className={
-                                "!absolute !w-fit !max-w-fit !max-h-fit !h-fit bg-gray-800 ml-1 mt-1"
-                            }
-                        >
-                            {categoryText}
-                        </Badge>
-                    )}
-                </Figure>
+                />
             </Box>
             <Stack
                 h={"100%"}

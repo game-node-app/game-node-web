@@ -83,8 +83,6 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
             trendingReviewsQuery.data.pagination.hasNextPage) ||
         offset > 0;
 
-    console.log(shouldShowPagination);
-
     const handlePagination = (page: number) => {
         const offset = (page - 1) * DEFAULT_LIMIT;
         const updatedDto: FindStatisticsTrendingReviewsDto = {

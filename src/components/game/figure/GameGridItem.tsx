@@ -22,26 +22,9 @@ const GameGridItem = ({
     figureProps,
     withQuickAdd = true,
 }: IGameGridFigureProps) => {
-    const categoryText = useMemo(
-        () => getGameCategoryName(game?.category),
-        [game],
-    );
-
     const Figure = withQuickAdd ? GameFigureWithQuickAdd : GameFigureImage;
 
-    return (
-        <Figure {...figureProps} game={game} href={`/game/${game?.id}`}>
-            {categoryText && (
-                <Badge
-                    className={
-                        "!absolute !w-fit !max-w-fit !max-h-fit !h-fit bg-gray-800 ml-1 mt-1"
-                    }
-                >
-                    {categoryText}
-                </Badge>
-            )}
-        </Figure>
-    );
+    return <Figure {...figureProps} game={game} href={`/game/${game?.id}`} />;
 };
 
 export default GameGridItem;

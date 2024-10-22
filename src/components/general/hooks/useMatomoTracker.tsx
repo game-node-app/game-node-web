@@ -29,8 +29,7 @@ export function useMatomoTracker() {
                 <Stack className={"w-full items-start"}>
                     <Text>
                         We use cookies and similar storage methods to keep track
-                        of your session and how you are using our website. We do
-                        not use third-party cookies.
+                        of your session and how you are using our website.
                     </Text>
                     <Flex className={"w-full justify-end"}>
                         <Group>
