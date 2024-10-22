@@ -16,8 +16,6 @@ export default function GlobalShellHeader({
     toggleSidebar,
 }: IGlobalShellHeaderProps) {
     const userId = useUserId();
-    const [preferencesModalOpened, preferencesModalUtils] =
-        useDisclosure(false);
     return (
         <header className="h-full">
             <Container
@@ -29,7 +27,7 @@ export default function GlobalShellHeader({
                     onClick={toggleSidebar}
                     size="sm"
                 />
-                <Link href={"/search"}>
+                <Link href={"/"}>
                     <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
                 </Link>
                 <Group className="ms-auto">
