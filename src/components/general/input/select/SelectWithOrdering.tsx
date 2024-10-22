@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Group, Select, SelectProps, Text } from "@mantine/core";
 import { IconSortAscending, IconSortDescending } from "@tabler/icons-react";
 
-interface Props extends Omit<SelectProps, "onChange" | "value"> {
+interface Props
+    extends Omit<SelectProps, "onChange" | "value" | "allowDeselect"> {
     defaultValue: string;
     onChange: (value: string, order: "ASC" | "DESC") => void;
 }
@@ -23,28 +24,31 @@ const SelectWithOrdering = ({
         "ASC" | "DESC"
     >("DESC");
 
+    console.log(internalSelectedItem, internalSelectedOrdering);
+
     return (
         <Select
             {...others}
+            value={internalSelectedItem}
             defaultValue={defaultValue}
-            allowDeselect={false}
             data={data}
+            // Necessary to trigger "onChange" when selecting the same option
+            allowDeselect={true}
             onChange={(v) => {
+                // v != null -> new value selected
                 if (v) {
                     // Only changes value when selecting another option
-                    if (v !== internalSelectedItem) {
-                        onChange(v, internalSelectedOrdering);
-                        setInternalSelectedItem(v);
-                        return;
-                    }
-
-                    const updatedOrdering =
-                        internalSelectedOrdering === "ASC" ? "DESC" : "ASC";
-
-                    setInternalSelectedOrdering(updatedOrdering);
-                    onChange(v, updatedOrdering);
+                    onChange(v, internalSelectedOrdering);
+                    setInternalSelectedItem(v);
                     return;
                 }
+
+                const updatedOrdering =
+                    internalSelectedOrdering === "ASC" ? "DESC" : "ASC";
+
+                setInternalSelectedOrdering(updatedOrdering);
+                onChange(internalSelectedItem, updatedOrdering);
+                return;
             }}
             renderOption={({ option, checked }) => {
                 return (

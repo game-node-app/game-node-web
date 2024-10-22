@@ -1,6 +1,7 @@
 import {
     AppShell,
     Box,
+    Divider,
     Group,
     ScrollArea,
     Stack,
@@ -17,6 +18,8 @@ import {
     IconUserShield,
     IconSettings,
     IconLogout,
+    IconHeart,
+    IconHeartFilled,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -145,28 +148,42 @@ export default function GlobalShellNavbar({
                 </div>
             </div>
             <GlobalShellNavbarCollections onClose={onClose} />
-            {isLoggedIn && (
-                <div
-                    className={`${classes.section} mt-auto mb-0 flex flex-col `}
-                >
+            <div className={`${classes.section} mt-auto mb-0 flex flex-col `}>
+                {isLoggedIn && (
                     <Link href={"/preferences"} onClick={onClose}>
-                        <Group className={"gap-1 px-md"}>
+                        <Group className={"gap-1 px-md py-sm"}>
                             <IconSettings></IconSettings>
                             <Text span>Settings</Text>
                         </Group>
                     </Link>
+                )}
+                <Link
+                    href={"https://patreon.com/GameNodeApp"}
+                    target={"_blank"}
+                    onClick={onClose}
+                >
+                    <Group
+                        className={
+                            "gap-1 w-full px-md py-sm bg-[#f96854] text-white"
+                        }
+                    >
+                        <IconHeartFilled />
+                        <Text span>Support us</Text>
+                    </Group>
+                </Link>
+                {isLoggedIn && (
                     <Link href={"/auth/logout"}>
                         <Group
                             className={
-                                "gap-1 w-full px-md py-sm mt-4 bg-[#F49898] text-white"
+                                "gap-1 w-full px-md py-sm bg-[#F49898] text-white"
                             }
                         >
                             <IconLogout />
                             <Text span>Logout</Text>
                         </Group>
                     </Link>
-                </div>
-            )}
+                )}
+            </div>
         </nav>
     );
 }

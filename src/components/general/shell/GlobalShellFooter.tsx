@@ -19,12 +19,7 @@ type IFooterLink = { href: string; label: string; external?: boolean };
 const links: IFooterLink[] = [
     { label: "About", href: "/about" },
     { label: "Privacy", href: "/privacy" },
-    { label: "Terms of Service", href: "/tos" },
-    {
-        label: "Donate",
-        href: "https://patreon.com/GameNodeApp",
-        external: true,
-    },
+    { label: "Terms", href: "/tos" },
 ];
 
 const GlobalShellFooter = () => {
