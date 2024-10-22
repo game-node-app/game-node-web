@@ -8,7 +8,7 @@ interface Props {
 
 export function useAchievements({ offset = 0, limit = 1000 }: Props) {
     return useQuery({
-        queryKey: ["achievements"],
+        queryKey: ["achievements", offset, limit],
         queryFn: () => {
             return AchievementsService.achievementsControllerGetAchievements(
                 offset,

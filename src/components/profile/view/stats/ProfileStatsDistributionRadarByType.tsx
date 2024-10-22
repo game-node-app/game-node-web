@@ -47,8 +47,6 @@ const ProfileStatsDistributionRadarByType = ({ userId, by }: Props) => {
 
     const data = metricsDistributionQuery.data;
 
-    console.log(data, data != undefined);
-
     return (
         <>
             {metricsDistributionQuery.isLoading && <CenteredLoading />}
