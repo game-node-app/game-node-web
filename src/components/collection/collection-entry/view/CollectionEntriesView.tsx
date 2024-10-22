@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { CollectionEntry, Game } from "@/wrapper/server";
-import { Skeleton, Stack } from "@mantine/core";
+import { Flex, Skeleton, Stack } from "@mantine/core";
 import GameView from "@/components/game/view/GameView";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import { Box, Space } from "@mantine/core";
@@ -53,21 +53,27 @@ const CollectionEntriesView = ({
                     mt={"md"}
                 >
                     <Box className="w-full flex justify-between mb-8">
-                        <SelectWithOrdering
-                            description={"Order by"}
-                            data={[
-                                {
-                                    value: "addedDate",
-                                    label: "Added Date",
-                                },
-                                { value: "releaseDate", label: "Release Date" },
-                            ]}
-                            defaultValue={"addedDate"}
-                            onChange={onChangeOrder}
-                        />
-                        <Box>
-                            <GameViewLayoutSwitcher setLayout={setLayout} />
+                        <Box className={"max-w-40"}>
+                            <SelectWithOrdering
+                                description={"Order by"}
+                                data={[
+                                    {
+                                        value: "addedDate",
+                                        label: "Added Date",
+                                    },
+                                    {
+                                        value: "releaseDate",
+                                        label: "Release Date",
+                                    },
+                                ]}
+                                defaultValue={"addedDate"}
+                                onChange={onChangeOrder}
+                            />
                         </Box>
+
+                        <Flex className={""}>
+                            <GameViewLayoutSwitcher setLayout={setLayout} />
+                        </Flex>
                     </Box>
                     <GameView.Content items={games!}>
                         {isLoading && buildLoadingSkeletons()}
