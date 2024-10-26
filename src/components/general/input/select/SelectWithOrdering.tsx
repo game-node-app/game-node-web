@@ -24,8 +24,6 @@ const SelectWithOrdering = ({
         "ASC" | "DESC"
     >("DESC");
 
-    console.log(internalSelectedItem, internalSelectedOrdering);
-
     return (
         <Select
             {...others}
