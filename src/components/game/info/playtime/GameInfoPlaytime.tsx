@@ -1,10 +1,10 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { SyncHltbService } from "@/wrapper/server";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoPlaytimeItem from "@/components/game/info/playtime/GameInfoPlaytimeItem";
 import { Space, Stack, Text } from "@mantine/core";
-import CenteredLoading from "@/components/general/CenteredLoading";
+import TextLink from "@/components/general/TextLink";
+import { PlaytimeService } from "@/wrapper/server";
 
 interface Props {
     gameId: number;
@@ -14,7 +14,7 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
     const playtimeQuery = useQuery({
         queryKey: ["game", "playtime", gameId],
         queryFn: () => {
-            return SyncHltbService.hltbControllerFindPlaytimeForGameId(gameId);
+            return PlaytimeService.playtimeControllerFindOneByGameId(gameId);
         },
         enabled: !!gameId,
         staleTime: Infinity,
@@ -23,7 +23,7 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
     const playtime = playtimeQuery.data;
     return (
         <DetailsBox
-            title={"Playtime"}
+            title={"Estimated playtime"}
             withBorder
             withDimmedTitle
             stackProps={{
@@ -48,7 +48,17 @@ const GameInfoPlaytime = ({ gameId }: Props) => {
                 value={playtime?.time100}
             />
             <Text className={"text-center text-xs mt-4"} c={"dimmed"}>
-                Data provided by <a href={"https://howlongtobeat.com"}>HLTB</a>
+                Data provided by{" "}
+                <TextLink
+                    fz={"sm"}
+                    span
+                    href={"https://howlongtobeat.com"}
+                    linkProps={{
+                        target: "_blank",
+                    }}
+                >
+                    HLTB
+                </TextLink>
             </Text>
         </DetailsBox>
     );

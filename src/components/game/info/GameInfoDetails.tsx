@@ -1,6 +1,6 @@
 import React from "react";
-import { Center, SimpleGrid, Stack } from "@mantine/core";
-import { Game, GameRepositoryFindOneDto } from "@/wrapper/server";
+import { SimpleGrid, Stack } from "@mantine/core";
+import { Game } from "@/wrapper/server";
 import { getLocalizedFirstReleaseDate } from "@/components/game/util/getLocalizedFirstReleaseDate";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
@@ -48,6 +48,7 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     <GameInfoProgressTimeline gameId={game.id} />
                 </DetailsBox>
                 <GameInfoScore gameId={game.id} />
+                <GameInfoPlaytime gameId={game.id} />
             </SimpleGrid>
         </Stack>
     );
