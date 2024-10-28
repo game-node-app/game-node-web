@@ -20,6 +20,7 @@ import {
     IconLogout,
     IconHeart,
     IconHeartFilled,
+    IconRefresh,
 } from "@tabler/icons-react";
 import { UserButton } from "@/components/general/input/UserButton/UserButton";
 import Link from "next/link";
@@ -48,8 +49,7 @@ const links: NavbarItem[] = [
     { icon: IconUser, label: "Library", href: "/library" },
     { icon: IconCheckbox, label: "Achievements", href: "/achievements" },
     { icon: IconBulb, label: "Activity", href: "/activity" },
-    // It's disabled during beta, if you are reading this you're cheating :p
-    // { icon: IconRefresh, label: "Importer", href: "/importer" },
+    { icon: IconRefresh, label: "Importer", href: "/importer" },
 ];
 
 interface IGlobalShellNavbarProps extends BaseModalChildrenProps {

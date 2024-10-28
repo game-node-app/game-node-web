@@ -1,9 +1,12 @@
 import React from "react";
 import { Badge, Group, Image } from "@mantine/core";
 interface GameNodeLogoProps extends React.ComponentPropsWithoutRef<"img"> {
-    withBadge?: boolean;
+    withBetaBadge?: boolean;
 }
-const GameNodeLogo = ({ withBadge = true, ...props }: GameNodeLogoProps) => {
+const GameNodeLogo = ({
+    withBetaBadge = true,
+    ...props
+}: GameNodeLogoProps) => {
     return (
         <Group gap={10}>
             <img
@@ -11,7 +14,7 @@ const GameNodeLogo = ({ withBadge = true, ...props }: GameNodeLogoProps) => {
                 {...props}
                 src={"/img/main-logo.png"}
             />
-            {withBadge && <Badge>BETA</Badge>}
+            {withBetaBadge && <Badge>BETA</Badge>}
         </Group>
     );
 };
