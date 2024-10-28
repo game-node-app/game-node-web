@@ -28,7 +28,10 @@ export default function GlobalShellHeader({
                     size="sm"
                 />
                 <Link href={"/"}>
-                    <GameNodeLogo className="ms-6 w-22 h-auto max-h-full" />
+                    <GameNodeLogo
+                        className="ms-6 w-22 h-auto max-h-full"
+                        withBetaBadge={false}
+                    />
                 </Link>
                 <Group className="ms-auto">
                     {!userId && (
