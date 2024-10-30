@@ -4,8 +4,11 @@ import Session from "supertokens-auth-react/recipe/session";
 import Router from "next/router";
 import Passwordless from "supertokens-auth-react/recipe/passwordless";
 import ThirdParty from "supertokens-auth-react/recipe/thirdparty";
+import { SuperTokensConfig } from "supertokens-auth-react/lib/build/types";
 
-export const frontendConfig = () => {
+const IS_DEV = process.env.NODE_ENV !== "production";
+
+export const frontendConfig = (): SuperTokensConfig => {
     return {
         appInfo: {
             appName: "GameNode",
@@ -44,7 +47,11 @@ export const frontendConfig = () => {
                     ],
                 },
             }),
-            Session.init(),
+            Session.init({
+                sessionTokenFrontendDomain: IS_DEV
+                    ? undefined
+                    : (process.env.NEXT_PUBLIC_SESSION_DOMAIN as string),
+            }),
         ],
         windowHandler: (oI: any) => {
             return {
