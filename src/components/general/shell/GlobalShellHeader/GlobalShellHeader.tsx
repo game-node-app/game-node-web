@@ -27,12 +27,12 @@ export default function GlobalShellHeader({
                     onClick={toggleSidebar}
                     size="sm"
                 />
-                <Link href={"/"}>
+                <a href={"/search"}>
                     <GameNodeLogo
                         className="ms-6 w-22 h-auto max-h-full"
                         withBetaBadge={false}
                     />
-                </Link>
+                </a>
                 <Group className="ms-auto">
                     {!userId && (
                         <Link href={"/auth"}>
