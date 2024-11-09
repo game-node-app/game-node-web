@@ -6,8 +6,6 @@ import Passwordless from "supertokens-auth-react/recipe/passwordless";
 import ThirdParty from "supertokens-auth-react/recipe/thirdparty";
 import { SuperTokensConfig } from "supertokens-auth-react/lib/build/types";
 
-const IS_DEV = process.env.NODE_ENV !== "production";
-
 export const frontendConfig = (): SuperTokensConfig => {
     return {
         appInfo: {
@@ -47,11 +45,7 @@ export const frontendConfig = (): SuperTokensConfig => {
                     ],
                 },
             }),
-            Session.init({
-                sessionTokenFrontendDomain: IS_DEV
-                    ? undefined
-                    : (process.env.NEXT_PUBLIC_SESSION_DOMAIN as string),
-            }),
+            Session.init(),
         ],
         windowHandler: (oI: any) => {
             return {
