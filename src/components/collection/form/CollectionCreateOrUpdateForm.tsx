@@ -11,6 +11,11 @@ import { ApiError, CollectionsService } from "@/wrapper/server";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import { useMutation } from "@tanstack/react-query";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 const CreateCollectionFormSchema = z
     .object({
@@ -72,6 +77,20 @@ const CollectionCreateOrUpdateForm = ({
         onSuccess: () => {
             if (onClose) {
                 onClose();
+            }
+
+            if (existingCollection) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Collection,
+                    EMatomoEventAction.Update,
+                    "Updated collection",
+                );
+            } else {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Collection,
+                    EMatomoEventAction.Create,
+                    "Created collection",
+                );
             }
         },
         onSettled: () => {

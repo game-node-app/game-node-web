@@ -1,24 +1,25 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import GameView from "@/components/game/view/GameView";
-import { Box, Container, Flex, Space, Stack, Text } from "@mantine/core";
+import { Box, Space, Stack } from "@mantine/core";
 import CenteredLoading from "@/components/general/CenteredLoading";
-import GameViewLayoutSwitcher from "@/components/game/view/GameViewLayoutSwitcher";
 import { IGameViewPaginationProps } from "@/components/game/view/GameViewPagination";
 import { SearchGame } from "@/components/game/search/utils/types";
-import useOnMobile from "@/components/general/hooks/useOnMobile";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import useUserId from "@/components/auth/hooks/useUserId";
+import { getErrorMessage } from "@/util/getErrorMessage";
+import { type ApiError } from "@/wrapper/search";
 
 interface ISearchResultScreenProps extends IGameViewPaginationProps {
     enabled: boolean;
     isLoading: boolean;
     isError: boolean;
+    error?: ApiError | null;
     results: SearchGame[] | undefined;
 }
 
 const GameSearchResultView = ({
     enabled,
     isError,
+    error,
     isLoading,
     results,
     paginationInfo,
@@ -31,12 +32,8 @@ const GameSearchResultView = ({
         if (!enabled) {
             return null;
         }
-        if (isError) {
-            return (
-                <CenteredErrorMessage
-                    message={"An error occurred. Please try again."}
-                />
-            );
+        if (isError && error) {
+            return <CenteredErrorMessage message={getErrorMessage(error)} />;
         } else if (isLoading) {
             return <CenteredLoading />;
         } else if (results == undefined || results.length === 0) {

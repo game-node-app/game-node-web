@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Box,
     Button,
     ComboboxItem,
     MultiSelect,
-    Select,
     Space,
     Title,
 } from "@mantine/core";
@@ -17,24 +16,23 @@ import {
     Collection,
     CollectionsEntriesService,
     GamePlatform,
-    GameRepositoryService,
 } from "@/wrapper/server";
 import { useGame } from "@/components/game/hooks/useGame";
-import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BaseModalChildrenProps } from "@/util/types/modal-props";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
-import {
-    SessionAuth,
-    useSessionContext,
-} from "supertokens-auth-react/recipe/session";
+import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useGamesResource } from "@/components/game/hooks/useGamesResource";
-import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 const GameAddOrUpdateSchema = z
     .object({
@@ -205,6 +203,21 @@ const CollectionEntryAddOrUpdateForm = ({
 
             if (onClose) {
                 onClose();
+            }
+
+            // Matomo
+            if (isUpdateAction) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.CollectionEntry,
+                    EMatomoEventAction.Update,
+                    "Updated game in one or more collection(s)",
+                );
+            } else {
+                trackMatomoEvent(
+                    EMatomoEventCategory.CollectionEntry,
+                    EMatomoEventAction.Create,
+                    "Added game in one or more collection(s)",
+                );
             }
         },
         onError: (err) => {

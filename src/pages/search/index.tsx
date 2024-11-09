@@ -148,6 +148,7 @@ const Index = () => {
                     <GameSearchResultView
                         enabled={isQueryEnabled}
                         isError={searchQuery.isError}
+                        error={searchQuery.error}
                         isLoading={searchQuery.isLoading}
                         results={searchQuery.data?.data?.items}
                         page={watch("page")}

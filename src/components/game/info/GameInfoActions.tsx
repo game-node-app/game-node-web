@@ -23,6 +23,11 @@ import CollectionEntryRemoveModal from "@/components/collection/collection-entry
 import GameInfoShare from "@/components/game/info/share/GameInfoShare";
 import useReviewForUserIdAndGameId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface IGameViewActionsProps {
     wrapperProps?: React.ComponentPropsWithoutRef<typeof Group>;
@@ -73,6 +78,19 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
 
         onSuccess: () => {
             collectionEntryQuery.invalidate();
+            if (gameInFavorites) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Favorites,
+                    EMatomoEventAction.Remove,
+                    "Game removed from favorites",
+                );
+            } else {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Favorites,
+                    EMatomoEventAction.Create,
+                    "Game added to favorites",
+                );
+            }
         },
     });
 

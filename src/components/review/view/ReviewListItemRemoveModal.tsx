@@ -5,6 +5,11 @@ import { BaseModalProps } from "@/util/types/modal-props";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { SessionAuth } from "supertokens-auth-react/recipe/session";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface Props extends BaseModalProps {
     reviewId: string;
@@ -21,6 +26,13 @@ const ReviewListItemRemoveModal = ({ reviewId, opened, onClose }: Props) => {
             if (userId) {
                 queryClient.invalidateQueries({ queryKey: ["review"] }).then();
             }
+        },
+        onSuccess: () => {
+            trackMatomoEvent(
+                EMatomoEventCategory.Review,
+                EMatomoEventAction.Remove,
+                "Removed a review",
+            );
         },
     });
     return (

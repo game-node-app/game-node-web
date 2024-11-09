@@ -39,6 +39,11 @@ import {
     IconSquareCheck,
     IconSquareCheckFilled,
 } from "@tabler/icons-react";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 const ImporterFormSchema = z.object({
     selectedCollectionIds: z
@@ -225,6 +230,11 @@ function TypePage() {
                 color: "green",
                 message: `Successfully imported ${importedGamesCount} games to your library!`,
             });
+            trackMatomoEvent(
+                EMatomoEventCategory.Importer,
+                EMatomoEventAction.Create,
+                `Imported ${importedGamesCount} games from source ${type}`,
+            );
             resetSelectedGames();
         },
         onSettled: () => {

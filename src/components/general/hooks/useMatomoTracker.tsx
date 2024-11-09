@@ -3,13 +3,19 @@ import React, { useCallback, useEffect } from "react";
 import { notifications } from "@mantine/notifications";
 import { Button, Flex, Group, Stack, Text } from "@mantine/core";
 import Link from "next/link";
-import { init } from "@socialgouv/matomo-next";
+import { init, push } from "@socialgouv/matomo-next";
+import useUserId from "@/components/auth/hooks/useUserId";
+import useUserProfile from "@/components/profile/hooks/useUserProfile";
 
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID;
 const IS_DEV_ENV = process.env.NODE_ENV !== "production";
 
 export function useMatomoTracker() {
+    const userId = useUserId();
+
+    const profileQuery = useUserProfile(userId);
+
     const [hasAcceptedCookies, setHasAcceptedCookies] =
         useLocalStorage<boolean>({
             key: "cookie-consent",
@@ -56,9 +62,10 @@ export function useMatomoTracker() {
         }
     }, [hasAcceptedCookies, showCookieConsentNotification]);
 
+    // Effect to trigger matomo initialization
     useEffect(() => {
         if (
-            !IS_DEV_ENV &&
+            // !IS_DEV_ENV &&
             MATOMO_URL != undefined &&
             MATOMO_SITE_ID != undefined
         ) {
@@ -68,4 +75,11 @@ export function useMatomoTracker() {
             });
         }
     }, []);
+
+    // Effect to sync userId with Matomo's user ID
+    useEffect(() => {
+        if (profileQuery.data) {
+            push(["setUserId", profileQuery.data.username]);
+        }
+    }, [profileQuery.data]);
 }
