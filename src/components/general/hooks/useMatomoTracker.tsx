@@ -65,7 +65,7 @@ export function useMatomoTracker() {
     // Effect to trigger matomo initialization
     useEffect(() => {
         if (
-            // !IS_DEV_ENV &&
+            !IS_DEV_ENV &&
             MATOMO_URL != undefined &&
             MATOMO_SITE_ID != undefined
         ) {
