@@ -8,6 +8,11 @@ import { useUserLibrary } from "@/components/library/hooks/useUserLibrary";
 import { useCollection } from "@/components/collection/hooks/useCollection";
 import { useCollectionEntriesForCollectionId } from "@/components/collection/collection-entry/hooks/useCollectionEntriesForCollectionId";
 import { useRouter } from "next/router";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface Props extends BaseModalProps {
     collectionId: string;
@@ -33,6 +38,11 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
             libraryQuery.invalidate();
         },
         onSuccess: () => {
+            trackMatomoEvent(
+                EMatomoEventCategory.Collection,
+                EMatomoEventAction.Remove,
+                "Removed collection",
+            );
             router.push(`/library/${userId}`);
         },
     });

@@ -24,6 +24,11 @@ import { useMutation } from "@tanstack/react-query";
 import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import { IconDownload } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface GameInfoShareProps extends BaseModalChildrenProps {
     gameId: number;
@@ -67,14 +72,6 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
 
     const shareMutation = useMutation({
         mutationFn: async (downloadOnly: boolean = false) => {
-            if (!canShare) {
-                console.error(
-                    "User's browser doesn't support the WebShare API.",
-                );
-                throw new Error(
-                    "Failed to generate final image: Browser not compatible.",
-                );
-            }
             const node = document.getElementById(GAME_INFO_SHARE_PREVIEW_ID);
             const blob = await toBlob(node!);
             if (!blob) {
@@ -89,6 +86,15 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
 
             if (downloadOnly) {
                 return downloadFile(file);
+            }
+
+            if (!canShare) {
+                console.error(
+                    "User's browser doesn't support the WebShare API.",
+                );
+                throw new Error(
+                    "Failed to generate final image: Browser not compatible.",
+                );
             }
 
             const toShare: ShareData = {
@@ -107,6 +113,14 @@ const GameInfoShare = ({ gameId, onClose }: GameInfoShareProps) => {
 
             throw new Error(
                 "Failed to generate final image: Browser not compatible",
+            );
+        },
+
+        onSuccess: () => {
+            trackMatomoEvent(
+                EMatomoEventCategory.Review,
+                EMatomoEventAction.Share,
+                "Shared generated review image with the game info share button",
             );
         },
     });

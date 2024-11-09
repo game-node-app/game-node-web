@@ -2,7 +2,6 @@ version: "3"
 
 services:
   web:
-
     image: lamarcke/game-node-web:latest
 
     # NEXT_PUBLIC_ variables can only be defined before build-time, so adding them here won't work.
@@ -17,9 +16,6 @@ services:
 networks:
   game_node_app_public:
     external: true
-
-volumes:
-  web:
 
 
 

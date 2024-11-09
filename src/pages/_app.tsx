@@ -32,6 +32,7 @@ import "@/components/globals.css";
 import { theme } from "@/util/theme";
 import NotificationsManager from "@/components/general/NotificationsManager";
 import { useMatomoTracker } from "@/components/general/hooks/useMatomoTracker";
+import MatomoWrapper from "@/components/general/MatomoWrapper";
 
 /**
  * Basic configuration for wrapper services
@@ -65,8 +66,6 @@ export default function App({
             }),
     );
 
-    useMatomoTracker();
-
     return (
         <MantineProvider theme={theme} forceColorScheme={"dark"}>
             <Head>
@@ -79,12 +78,16 @@ export default function App({
             <SuperTokensProvider>
                 <QueryClientProvider client={queryClient}>
                     <NotificationsManager />
-                    <GlobalAppShell>
-                        <HydrationBoundary state={pageProps.dehydratedState}>
-                            <RouterTransition />
-                            <Component {...pageProps} />
-                        </HydrationBoundary>
-                    </GlobalAppShell>
+                    <MatomoWrapper>
+                        <GlobalAppShell>
+                            <HydrationBoundary
+                                state={pageProps.dehydratedState}
+                            >
+                                <RouterTransition />
+                                <Component {...pageProps} />
+                            </HydrationBoundary>
+                        </GlobalAppShell>
+                    </MatomoWrapper>
                 </QueryClientProvider>
             </SuperTokensProvider>
         </MantineProvider>

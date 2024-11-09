@@ -4,8 +4,9 @@ import Session from "supertokens-auth-react/recipe/session";
 import Router from "next/router";
 import Passwordless from "supertokens-auth-react/recipe/passwordless";
 import ThirdParty from "supertokens-auth-react/recipe/thirdparty";
+import { SuperTokensConfig } from "supertokens-auth-react/lib/build/types";
 
-export const frontendConfig = () => {
+export const frontendConfig = (): SuperTokensConfig => {
     return {
         appInfo: {
             appName: "GameNode",

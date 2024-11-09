@@ -29,6 +29,11 @@ import GameRating from "@/components/general/input/GameRating";
 import { Editor } from "@tiptap/core";
 import { JSONContent } from "@tiptap/react";
 import getEditorMentions from "@/components/general/editor/util/getEditorMentions";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 const ReviewFormSchema = z.object({
     rating: z.number().min(0).max(5).default(5),
@@ -88,6 +93,19 @@ const GameInfoReviewEditorView = ({
                         : "Review created!",
                 color: "green",
             });
+            if (reviewQuery.data) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Review,
+                    EMatomoEventAction.Update,
+                    "Updated a review",
+                );
+            } else {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Review,
+                    EMatomoEventAction.Create,
+                    "Created a review",
+                );
+            }
         },
         onError: () => {
             notifications.show({

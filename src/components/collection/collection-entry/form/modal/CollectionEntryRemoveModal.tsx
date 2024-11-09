@@ -6,6 +6,11 @@ import { CollectionsEntriesService } from "@/wrapper/server";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import { SessionAuth } from "supertokens-auth-react/recipe/session";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface ICollectionEntryRemoveModalProps extends BaseModalProps {
     gameId: number;
@@ -27,6 +32,11 @@ const CollectionEntryRemoveModal = ({
         onSuccess: () => {
             collectionEntriesQuery.invalidate();
             queryClient.invalidateQueries({ queryKey: ["review", gameId] });
+            trackMatomoEvent(
+                EMatomoEventCategory.CollectionEntry,
+                EMatomoEventAction.Remove,
+                "Removed game from collection",
+            );
         },
     });
 

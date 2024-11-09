@@ -1,32 +1,23 @@
-import React, {
-    MutableRefObject,
-    RefObject,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     ActionIcon,
-    Box,
     Button,
     Group,
     LoadingOverlay,
     Stack,
-    Text,
 } from "@mantine/core";
 import CommentEditor from "@/components/comment/editor/CommentEditor";
 import { IconX } from "@tabler/icons-react";
 import { Editor } from "@tiptap/core";
-import {
-    useMutation,
-    UseMutationOptions,
-    useQueryClient,
-} from "@tanstack/react-query";
-import { CommentService } from "@/wrapper/server";
-import { CreateCommentDto } from "@/wrapper/server";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CommentService, CreateCommentDto } from "@/wrapper/server";
 import { notifications } from "@mantine/notifications";
 import { useComment } from "@/components/comment/hooks/useComment";
+import {
+    EMatomoEventAction,
+    EMatomoEventCategory,
+    trackMatomoEvent,
+} from "@/util/trackMatomoEvent";
 
 interface Props {
     /**
@@ -92,6 +83,30 @@ const CommentEditorView = ({
             });
             clearEditor();
             if (onEditEnd) onEditEnd();
+
+            // Matomo
+            if (commentId) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Comment,
+                    EMatomoEventAction.Create,
+                    "Updated a comment",
+                );
+                return;
+            }
+
+            if (sourceType === CreateCommentDto.sourceType.REVIEW) {
+                trackMatomoEvent(
+                    EMatomoEventCategory.Review,
+                    EMatomoEventAction.Comment,
+                    "Added comment to a review",
+                );
+            }
+
+            trackMatomoEvent(
+                EMatomoEventCategory.Comment,
+                EMatomoEventAction.Create,
+                "Created a comment",
+            );
         },
     });
 
