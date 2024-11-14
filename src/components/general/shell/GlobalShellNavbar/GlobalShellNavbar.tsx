@@ -1,4 +1,5 @@
 import {
+    Anchor,
     AppShell,
     Box,
     Divider,
@@ -131,8 +132,9 @@ export default function GlobalShellNavbar({
                     {mainLinks}
                     {hasAdminRouteAccess && (
                         <UnstyledButton className={classes.mainLink}>
-                            <Link
-                                href={"/admin"}
+                            <Anchor
+                                href={"https://admin.gamenode.app"}
+                                target={"_blank"}
                                 className={classes.mainLinkInner}
                                 onClick={onClose}
                             >
@@ -142,7 +144,7 @@ export default function GlobalShellNavbar({
                                     stroke={1.5}
                                 />
                                 <span>Admin</span>
-                            </Link>
+                            </Anchor>
                         </UnstyledButton>
                     )}
                 </div>
