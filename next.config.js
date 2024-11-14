@@ -6,7 +6,7 @@ const nextConfig = {
         return [
             {
                 source: "/admin",
-                destination: "/admin/moderation",
+                destination: "https://admin.gamenode.app",
                 permanent: true,
             },
         ];
