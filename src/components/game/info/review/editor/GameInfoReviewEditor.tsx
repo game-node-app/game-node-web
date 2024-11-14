@@ -12,7 +12,6 @@ import { RichTextEditor, RichTextEditorProps } from "@mantine/tiptap";
 import useReviewForUserId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import getEditorMentionConfig from "@/components/general/editor/util/getEditorMentionConfig";
 import { Editor } from "@tiptap/core";
 
 interface IGameInfoReviewEditorProps extends BoxComponentProps {
@@ -25,9 +24,8 @@ export const DEFAULT_REVIEW_EDITOR_EXTENSIONS = [
     StarterKit,
     Placeholder.configure({
         placeholder:
-            "Review content. Leave empty to create a score-only review. Use '@' to mention other users.",
+            "Review content. Leave empty to create a score-only review.",
     }),
-    getEditorMentionConfig(),
 ];
 
 const GameInfoReviewEditor = ({
