@@ -26,9 +26,6 @@ import ReviewListItem from "@/components/review/view/ReviewListItem";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
 import { IconX } from "@tabler/icons-react";
 import GameRating from "@/components/general/input/GameRating";
-import { Editor } from "@tiptap/core";
-import { JSONContent } from "@tiptap/react";
-import getEditorMentions from "@/components/general/editor/util/getEditorMentions";
 import {
     EMatomoEventAction,
     EMatomoEventCategory,
