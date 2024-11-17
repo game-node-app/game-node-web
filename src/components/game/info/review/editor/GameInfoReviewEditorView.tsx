@@ -54,7 +54,6 @@ interface IGameInfoReviewEditorViewProps {
 const GameInfoReviewEditorView = ({
     gameId,
 }: IGameInfoReviewEditorViewProps) => {
-    const editorRef = useRef<Editor | null>(null);
     const [isEditMode, setIsEditMode] = useState<boolean>(true);
     const hasSetEditMode = useRef<boolean>(false);
 
@@ -74,13 +73,9 @@ const GameInfoReviewEditorView = ({
 
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
-            const mentionedUserIds = getEditorMentions(
-                editorRef.current!.getJSON(),
-            );
             await ReviewsService.reviewsControllerCreateOrUpdate({
                 ...data,
                 gameId: gameId,
-                mentionedUserIds: mentionedUserIds,
             });
         },
         onSuccess: () => {
@@ -156,11 +151,9 @@ const GameInfoReviewEditorView = ({
         return (
             <form className={"w-full h-full"} onSubmit={handleSubmit(onSubmit)}>
                 <GameInfoReviewEditor
-                    editorRef={editorRef}
                     gameId={gameId}
                     onBlur={(html) => {
                         setValue("content", html);
-                        getEditorMentions(editorRef.current!.getJSON());
                     }}
                 />
                 <Break />
