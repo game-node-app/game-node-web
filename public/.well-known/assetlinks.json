@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "app.gamenode",
+    "sha256_cert_fingerprints": ["B1:30:B8:E2:F5:08:C1:88:C6:09:42:3D:B3:55:0A:CC:2F:F6:0F:5A:87:7E:61:C8:7C:E8:54:25:69:56:21:96"] }
+}]
