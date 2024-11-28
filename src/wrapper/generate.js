@@ -1,4 +1,4 @@
-const OpenAPI = require("openapi-typescript-codegen");
+const OpenAPI = require("@lamarcke/openapi-typescript-codegen");
 
 const inputs = [
     {
