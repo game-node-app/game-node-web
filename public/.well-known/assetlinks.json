@@ -1,5 +1,15 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target" : { "namespace": "android_app", "package_name": "app.gamenode",
-    "sha256_cert_fingerprints": ["B1:30:B8:E2:F5:08:C1:88:C6:09:42:3D:B3:55:0A:CC:2F:F6:0F:5A:87:7E:61:C8:7C:E8:54:25:69:56:21:96"] }
-}]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.gamenode",
+      "sha256_cert_fingerprints": [
+        "B1:30:B8:E2:F5:08:C1:88:C6:09:42:3D:B3:55:0A:CC:2F:F6:0F:5A:87:7E:61:C8:7C:E8:54:25:69:56:21:96",
+        "3E:AB:14:95:B2:1B:33:74:A8:2C:5F:26:EB:9E:F0:4C:74:88:CE:71:61:A2:6A:6C:AF:24:C5:34:A6:57:B1:C2"
+      ]
+    }
+  }
+]
