@@ -10,7 +10,7 @@ import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { Game } from "@/wrapper/server";
 
 interface IMetadataGridContentProps extends PropsWithChildren<SimpleGridProps> {
-    items: TGameOrSearchGame[];
+    items: TGameOrSearchGame[] | undefined;
 }
 
 const GameViewContent = ({
