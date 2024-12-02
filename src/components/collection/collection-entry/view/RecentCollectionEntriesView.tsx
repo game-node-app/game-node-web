@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import useCollectionEntriesForUserId from "@/components/collection/collection-entry/hooks/useCollectionEntriesForUserId";
 import GameView from "@/components/game/view/GameView";
 import { useGames } from "@/components/game/hooks/useGames";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 interface Props {
     userId: string;
@@ -32,6 +33,10 @@ const RecentCollectionEntriesView = ({
     });
 
     const games = gamesQuery.data;
+
+    if (gamesQuery.isLoading || collectionEntriesQuery.isLoading) {
+        return <CenteredLoading message={"Fetching games..."} />;
+    }
     return (
         <GameView layout={"grid"}>
             <GameView.Content items={games} />
