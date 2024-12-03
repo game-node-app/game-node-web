@@ -1,36 +1,43 @@
 import React, { useRef, useState } from "react";
 import { CreateCommentDto, FindAllCommentsDto, Review } from "@/wrapper/server";
-import { Divider, Space, Stack } from "@mantine/core";
+import { Divider, Modal, Space, Stack } from "@mantine/core";
 import CommentsListView from "@/components/comment/view/CommentsListView";
 import CommentEditorView from "@/components/comment/editor/CommentEditorView";
 import sourceType = FindAllCommentsDto.sourceType;
-import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
+import { BaseModalProps } from "@/util/types/modal-props";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
 
-interface ReviewListItemCommentsProps {
-    enabled: boolean;
+interface ReviewListItemCommentsProps extends BaseModalProps {
     review: Review;
 }
 
 const ReviewListItemComments = ({
     review,
-    enabled,
+    opened,
+    onClose,
 }: ReviewListItemCommentsProps) => {
+    const onMobile = useOnMobile();
+
     return (
-        <Stack
-            className={`w-full h-full hidden data-[enabled=true]:flex`}
-            data-enabled={enabled ? "true" : "false"}
+        <Modal
+            title={"Comments in this review"}
+            opened={opened}
+            onClose={onClose}
+            size={"xl"}
+            fullScreen={onMobile}
         >
-            <CommentsListView
-                enabled={enabled}
-                sourceId={review.id}
-                sourceType={sourceType.REVIEW}
-            />
-            <Space h={"0.5rem"} />
-            <CommentEditorView
-                sourceType={sourceType.REVIEW}
-                sourceId={review.id}
-            />
-        </Stack>
+            <Stack className={`w-full h-full`}>
+                <CommentsListView
+                    enabled={opened}
+                    sourceId={review.id}
+                    sourceType={sourceType.REVIEW}
+                />
+                <CommentEditorView
+                    sourceType={sourceType.REVIEW}
+                    sourceId={review.id}
+                />
+            </Stack>
+        </Modal>
     );
 };
 

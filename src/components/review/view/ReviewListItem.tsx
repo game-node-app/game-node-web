@@ -26,6 +26,7 @@ import ReviewListItemComments from "@/components/review/view/ReviewListItemComme
 import ItemLikesButton from "@/components/statistics/input/ItemLikesButton";
 import ItemCommentsButton from "@/components/comment/input/ItemCommentsButton";
 import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
+import { useDisclosure } from "@mantine/hooks";
 
 interface IReviewListViewProps {
     review: Review;
@@ -40,7 +41,7 @@ const ReviewListItem = ({
 }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
-    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [commentsModalOpened, commentsModalUtils] = useDisclosure();
 
     const nonEditableEditor = useEditor(
         {
@@ -140,7 +141,7 @@ const ReviewListItem = ({
                         <Group>
                             <ItemCommentsButton
                                 onClick={() => {
-                                    setIsCommentsOpen(!isCommentsOpen);
+                                    commentsModalUtils.open();
                                 }}
                                 sourceId={review.id}
                                 sourceType={
@@ -166,7 +167,8 @@ const ReviewListItem = ({
             <Group className={"w-full mb-4 "} wrap={"nowrap"}>
                 <Group className={"w-full lg:ms-6"}>
                     <ReviewListItemComments
-                        enabled={isCommentsOpen}
+                        opened={commentsModalOpened}
+                        onClose={commentsModalUtils.close}
                         review={review}
                     />
                 </Group>
