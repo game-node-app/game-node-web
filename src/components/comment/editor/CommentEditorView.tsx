@@ -45,12 +45,9 @@ const CommentEditorView = ({
     const [previousContent, setPreviousContent] = useState<string | undefined>(
         undefined,
     );
-    const [shouldShowActionButtons, setShouldShowActionButtons] =
-        useState<boolean>(false);
 
     const clearEditor = () => {
         editorRef.current?.commands.clearContent();
-        setShouldShowActionButtons(false);
     };
 
     const commentMutation = useMutation({
@@ -120,7 +117,6 @@ const CommentEditorView = ({
 
         if (commentId != undefined && commentQuery.data != undefined) {
             setPreviousContent(commentQuery.data.content);
-            setShouldShowActionButtons(true);
         }
     }, [commentId, commentQuery.data, previousContent]);
 
@@ -129,36 +125,31 @@ const CommentEditorView = ({
             <LoadingOverlay visible={commentQuery.isLoading} />
             <CommentEditor
                 content={previousContent}
-                onUpdate={(props) => {
-                    setShouldShowActionButtons(true);
-                }}
                 onCreate={(props) => {
                     editorRef.current = props.editor;
                 }}
             />
-            {shouldShowActionButtons && (
-                <Group className={"w-full justify-end"}>
-                    <ActionIcon
-                        size={"lg"}
-                        variant={"default"}
-                        onClick={() => {
-                            clearEditor();
-                            if (onEditEnd) onEditEnd();
-                        }}
-                    >
-                        <IconX />
-                    </ActionIcon>
-                    <Button
-                        type={"button"}
-                        loading={commentMutation.isPending}
-                        onClick={() => {
-                            commentMutation.mutate();
-                        }}
-                    >
-                        {isUpdateAction ? "Update" : "Submit"}
-                    </Button>
-                </Group>
-            )}
+            <Group className={"w-full justify-end"}>
+                <ActionIcon
+                    size={"lg"}
+                    variant={"default"}
+                    onClick={() => {
+                        clearEditor();
+                        if (onEditEnd) onEditEnd();
+                    }}
+                >
+                    <IconX />
+                </ActionIcon>
+                <Button
+                    type={"button"}
+                    loading={commentMutation.isPending}
+                    onClick={() => {
+                        commentMutation.mutate();
+                    }}
+                >
+                    {isUpdateAction ? "Update" : "Submit"}
+                </Button>
+            </Group>
         </Stack>
     );
 };

@@ -100,7 +100,7 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                         <Link
                             href={`/library/${activity.profileUserId}/collection/${activity.collectionId}`}
                         >
-                            <Title size={"h3"} lineClamp={onMobile ? 1 : 2}>
+                            <Title size={"h4"} lineClamp={2}>
                                 {collectionQuery.data?.name}
                             </Title>
                         </Link>
