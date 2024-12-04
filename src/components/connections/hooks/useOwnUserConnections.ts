@@ -8,7 +8,7 @@ export function useOwnUserConnections() {
     return useQuery({
         queryKey: ["connections", "own"],
         queryFn: async () => {
-            return ConnectionsService.connectionsControllerFindOwn();
+            return ConnectionsService.connectionsControllerFindOwnV1();
         },
         retry: 1,
     });

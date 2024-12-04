@@ -27,7 +27,7 @@ export function useAggregatedNotifications(
         ...useQuery({
             queryKey,
             queryFn: () => {
-                return NotificationsService.notificationsControllerFindAllAndAggregate(
+                return NotificationsService.notificationsControllerFindAllAndAggregateV1(
                     offset,
                     limit,
                 );

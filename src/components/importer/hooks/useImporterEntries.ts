@@ -41,7 +41,7 @@ export function useImporterEntries({
                 limit,
             ],
             queryFn: async () => {
-                return ImporterService.importerControllerFindUnprocessedEntries(
+                return ImporterService.importerControllerFindUnprocessedEntriesV1(
                     source,
                     limit,
                     offset,

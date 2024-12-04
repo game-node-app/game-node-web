@@ -5,7 +5,7 @@ export function useAvailableConnections() {
     return useQuery({
         queryKey: ["connections", "available"],
         queryFn: async () => {
-            return ConnectionsService.connectionsControllerFindAvailableConnections();
+            return ConnectionsService.connectionsControllerFindAvailableConnectionsV1();
         },
     });
 }

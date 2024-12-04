@@ -70,7 +70,7 @@ const GameInfoActions = ({ game, wrapperProps }: IGameViewActionsProps) => {
 
     const collectionEntryFavoriteMutation = useMutation({
         mutationFn: (gameId: number) => {
-            return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatus(
+            return CollectionsEntriesService.collectionsEntriesControllerChangeFavoriteStatusV1(
                 gameId,
                 { isFavorite: !gameInFavorites },
             );

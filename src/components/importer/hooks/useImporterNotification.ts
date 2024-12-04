@@ -5,7 +5,7 @@ export function useImporterNotification(notificationId: number) {
     return useQuery({
         queryKey: ["importer", "watch", "notification", notificationId],
         queryFn: async () => {
-            return ImporterWatchService.importerWatchControllerFindNotification(
+            return ImporterWatchService.importerWatchControllerFindNotificationV1(
                 notificationId,
             );
         },

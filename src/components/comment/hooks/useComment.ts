@@ -17,7 +17,7 @@ export function useComment(
                 return null;
             }
 
-            return CommentService.commentControllerFindOneById(
+            return CommentService.commentControllerFindOneByIdV1(
                 sourceType.valueOf(),
                 commentId,
             );

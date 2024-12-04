@@ -40,7 +40,7 @@ export function useComments({
         ...useQuery({
             queryKey,
             queryFn: async () => {
-                return CommentService.commentControllerFindAll({
+                return CommentService.commentControllerFindAllV1({
                     sourceId,
                     sourceType,
                     orderBy,

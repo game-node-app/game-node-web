@@ -11,7 +11,7 @@ export function useObtainedAchievement(
             if (!achievementId) {
                 return null;
             }
-            return AchievementsService.achievementsControllerGetObtainedAchievement(
+            return AchievementsService.achievementsControllerGetObtainedAchievementV1(
                 achievementId,
                 targetUserId,
             );

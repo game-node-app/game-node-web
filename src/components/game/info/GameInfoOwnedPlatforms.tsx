@@ -43,7 +43,7 @@ const GameInfoOwnedPlatforms = ({
             if (!collectionEntry.data) return [];
             if (!gameId) return [];
             try {
-                return await CollectionsEntriesService.collectionsEntriesControllerGetIconsForOwnedPlatforms(
+                return await CollectionsEntriesService.collectionsEntriesControllerGetIconsForOwnedPlatformsV1(
                     collectionEntry.data.id,
                 );
             } catch (e) {

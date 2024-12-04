@@ -56,13 +56,15 @@ export function useUserLike({
             };
 
             if (isLiked) {
-                StatisticsQueueService.statisticsQueueControllerRemoveLike(
+                StatisticsQueueService.statisticsQueueControllerRemoveLikeV1(
                     dto,
                 ).then();
                 return;
             }
 
-            StatisticsQueueService.statisticsQueueControllerAddLike(dto).then();
+            StatisticsQueueService.statisticsQueueControllerAddLikeV1(
+                dto,
+            ).then();
         },
 
         onSuccess: () => {

@@ -37,7 +37,7 @@ const GameInfoPlatforms = ({
         queryFn: async () => {
             if (!gameId) return null;
             try {
-                return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviations(
+                return GameRepositoryService.gameRepositoryControllerGetIconNamesForPlatformAbbreviationsV1(
                     gameId,
                 );
             } catch (e) {

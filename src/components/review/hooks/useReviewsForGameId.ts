@@ -19,7 +19,7 @@ export default function useReviewsForGameId(
                 if (gameId == undefined) return null;
 
                 try {
-                    return await ReviewsService.reviewsControllerFindAllByGameId(
+                    return await ReviewsService.reviewsControllerFindAllByGameIdV1(
                         gameId,
                         dto?.offset,
                         dto?.limit,

@@ -28,7 +28,7 @@ export function useInfiniteAggregatedNotifications(
         ...useInfiniteQuery({
             queryKey,
             queryFn: ({ pageParam = 0 }) => {
-                return NotificationsService.notificationsControllerFindAllAndAggregate(
+                return NotificationsService.notificationsControllerFindAllAndAggregateV1(
                     pageParam,
                 );
             },

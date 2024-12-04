@@ -8,7 +8,7 @@ export function useGamesResource<U extends keyof Game>(
     return useQuery({
         queryKey: ["game", "resource", resourceName],
         queryFn: () => {
-            return GameRepositoryService.gameRepositoryControllerGetResource(
+            return GameRepositoryService.gameRepositoryControllerGetResourceV1(
                 resourceName,
             );
         },

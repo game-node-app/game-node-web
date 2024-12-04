@@ -5,7 +5,7 @@ export function useUserLevel(targetUserId: string) {
     return useQuery({
         queryKey: ["user-level", targetUserId],
         queryFn: () => {
-            return LevelService.levelControllerFindOne(targetUserId);
+            return LevelService.levelControllerFindOneV1(targetUserId);
         },
         enabled: targetUserId != undefined,
     });

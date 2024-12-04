@@ -15,7 +15,7 @@ export function useProfileMetricsDistributionByType(
     return useQuery({
         queryKey: ["profile", "metrics", "distribution", "type", userId, by],
         queryFn: async () => {
-            return ProfileMetricsService.profileMetricsControllerGetTypeDistribution(
+            return ProfileMetricsService.profileMetricsControllerGetTypeDistributionV1(
                 userId,
                 by,
             );

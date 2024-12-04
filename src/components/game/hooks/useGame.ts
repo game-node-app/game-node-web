@@ -16,7 +16,7 @@ export function useGame(
                 return undefined;
             }
             const game =
-                await GameRepositoryService.gameRepositoryControllerFindOneById(
+                await GameRepositoryService.gameRepositoryControllerFindOneByIdV1(
                     id,
                     dto,
                 );

@@ -25,7 +25,7 @@ const CollectionEntryRemoveModal = ({
     const collectionEntriesQuery = useOwnCollectionEntryForGameId(gameId);
     const collectionEntryRemoveMutation = useMutation({
         mutationFn: (entryId: string) => {
-            return CollectionsEntriesService.collectionsEntriesControllerDeleteOwnEntry(
+            return CollectionsEntriesService.collectionsEntriesControllerDeleteOwnEntryV1(
                 entryId,
             );
         },

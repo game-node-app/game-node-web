@@ -29,7 +29,7 @@ export function useAllObtainedAchievements(
                     return null;
                 }
                 const achievements =
-                    await AchievementsService.achievementsControllerGetAllObtainedAchievements(
+                    await AchievementsService.achievementsControllerGetAllObtainedAchievementsV1(
                         targetUserId,
                     );
                 if (achievements == undefined || achievements.length === 0) {

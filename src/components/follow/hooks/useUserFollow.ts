@@ -9,7 +9,7 @@ export function useUserFollow(id: number) {
     return useQuery({
         queryKey: ["follow", "entity", id],
         queryFn: async () => {
-            return FollowService.followControllerGetUserFollowById(id);
+            return FollowService.followControllerGetUserFollowByIdV1(id);
         },
     });
 }

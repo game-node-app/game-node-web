@@ -29,7 +29,7 @@ export function useGames(
                     return null;
                 }
 
-                return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                return GameRepositoryService.gameRepositoryControllerFindAllByIdsV1(
                     {
                         gameIds: dto.gameIds,
                         relations: dto.relations,

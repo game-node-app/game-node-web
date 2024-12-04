@@ -32,7 +32,7 @@ const CommentsRemoveModal = ({ opened, onClose, comment }: Props) => {
 
     const commentRemoveMutation = useMutation<any, ApiError, any>({
         mutationFn: async (commentId: string) => {
-            return CommentService.commentControllerDelete(commentId, {
+            return CommentService.commentControllerDeleteV1(commentId, {
                 sourceType,
             });
         },

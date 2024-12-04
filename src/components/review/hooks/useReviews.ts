@@ -6,7 +6,7 @@ export function useReviews(reviewsIds: string[] | undefined) {
         queryKey: ["review", "all", reviewsIds],
         queryFn: async () => {
             if (reviewsIds == undefined) return null;
-            const all = await ReviewsService.reviewsControllerFindAllById({
+            const all = await ReviewsService.reviewsControllerFindAllByIdV1({
                 reviewsIds,
             });
             return all;

@@ -56,13 +56,13 @@ const CommentEditorView = ({
 
             const content = editorRef.current?.getHTML();
             if (commentId) {
-                return CommentService.commentControllerUpdate(commentId, {
+                return CommentService.commentControllerUpdateV1(commentId, {
                     sourceType,
                     content: content,
                 });
             }
 
-            return CommentService.commentControllerCreate({
+            return CommentService.commentControllerCreateV1({
                 sourceId,
                 sourceType,
                 content: content,

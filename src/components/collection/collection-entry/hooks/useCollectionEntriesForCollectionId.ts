@@ -3,7 +3,10 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { CollectionEntriesPaginatedResponseDto } from "@/wrapper/server";
+import {
+    CollectionEntriesPaginatedResponseDto,
+    FindCollectionEntriesOrderBy,
+} from "@/wrapper/server";
 import { getCollectionEntriesByCollectionId } from "@/components/collection/collection-entry/util/getCollectionEntriesByCollectionId";
 import { ExtendedUseQueryResult } from "@/util/types/ExtendedUseQueryResult";
 
@@ -11,7 +14,7 @@ interface UseCollectionEntriesForCollectionIdProps {
     collectionId: string;
     limit?: number;
     offset?: number;
-    orderBy?: Record<string, any>;
+    orderBy?: FindCollectionEntriesOrderBy;
 }
 
 /**

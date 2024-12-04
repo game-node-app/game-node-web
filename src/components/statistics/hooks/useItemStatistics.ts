@@ -33,7 +33,7 @@ export function useItemStatistics<T = any>(
             queryKey,
             queryFn: async (): Promise<StatisticsWithStatus<T> | null> => {
                 const statistics =
-                    await StatisticsService.statisticsControllerFindOneBySourceIdAndType(
+                    await StatisticsService.statisticsControllerFindOneBySourceIdAndTypeV1(
                         {
                             sourceId: sourceId as any,
                             sourceType: sourceType,
@@ -41,7 +41,7 @@ export function useItemStatistics<T = any>(
                     );
                 if (statistics) {
                     const statisticsStatus =
-                        await StatisticsService.statisticsControllerGetStatus(
+                        await StatisticsService.statisticsControllerGetStatusV1(
                             statistics.id,
                             sourceType,
                         );

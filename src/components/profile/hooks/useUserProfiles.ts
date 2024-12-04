@@ -5,7 +5,7 @@ export function useUserProfiles() {
     return useQuery({
         queryKey: ["userProfile", "all"],
         queryFn: async () => {
-            return ProfileService.profileControllerFindAll();
+            return ProfileService.profileControllerFindAllV1();
         },
         retry: 2,
     });
