@@ -25,16 +25,20 @@ interface Props {
 const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
     const ownUserId = useUserId();
     const statisticsType = useMemo(() => {
-        if (comment.reviewId != undefined) {
+        if (Object.hasOwn(comment, "reviewId")) {
             return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
+        } else if (Object.hasOwn(comment, "activityId")) {
+            return FindOneStatisticsDto.sourceType.ACTIVITY_COMMENT;
         }
 
         return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
     }, [comment]);
 
     const reportType = useMemo(() => {
-        if (comment.reviewId != undefined) {
+        if (Object.hasOwn(comment, "reviewId")) {
             return CreateReportRequestDto.sourceType.REVIEW_COMMENT;
+        } else if (Object.hasOwn(comment, "activityId")) {
+            return CreateReportRequestDto.sourceType.ACTIVITY_COMMENT;
         }
 
         return CreateReportRequestDto.sourceType.REVIEW_COMMENT;

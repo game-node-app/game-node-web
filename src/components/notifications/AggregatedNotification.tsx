@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import { NotificationAggregateDto } from "@/wrapper/server";
-import ReviewAggregatedNotification from "@/components/notifications/ReviewAggregatedNotification";
-import FollowerAggregatedNotification from "@/components/notifications/FollowerAggregatedNotification";
+import ReviewAggregatedNotification from "@/components/notifications/item/ReviewAggregatedNotification";
+import FollowerAggregatedNotification from "@/components/notifications/item/FollowerAggregatedNotification";
 import { Notification } from "@mantine/core";
 import sourceType = NotificationAggregateDto.sourceType;
 import category = NotificationAggregateDto.category;
-import ImporterWatchAggregatedNotification from "@/components/notifications/ImporterWatchAggregatedNotification";
-import ReportAggregatedNotification from "@/components/notifications/ReportAggregatedNotification";
-import ActivityAggregatedNotification from "@/components/notifications/ActivityAggregatedNotification";
+import ImporterWatchAggregatedNotification from "@/components/notifications/item/ImporterWatchAggregatedNotification";
+import ReportAggregatedNotification from "@/components/notifications/item/ReportAggregatedNotification";
+import ActivityAggregatedNotification from "@/components/notifications/item/ActivityAggregatedNotification";
 
 export interface AggregatedNotificationProps {
     aggregatedNotification: NotificationAggregateDto;
@@ -32,6 +32,7 @@ const AggregatedNotification = ({
                         aggregatedNotification={aggregatedNotification}
                     />
                 );
+
             case sourceType.REVIEW:
                 return (
                     <ReviewAggregatedNotification
