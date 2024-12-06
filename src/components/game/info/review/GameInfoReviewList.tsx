@@ -165,7 +165,7 @@ const GameInfoReviewList = ({ gameId }: IGameInfoReviewListProps) => {
                 <Stack w={"100%"} align={"start"}>
                     {reviewId && (
                         <Group className={"w-full"}>
-                            <Link href={`/game/${gameId}`}>
+                            <Link href={`/game/${gameId}`} shallow>
                                 <Chip defaultChecked variant={"light"}>
                                     Showing a single review
                                 </Chip>

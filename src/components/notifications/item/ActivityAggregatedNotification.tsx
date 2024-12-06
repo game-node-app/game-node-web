@@ -4,7 +4,7 @@ import { Group, Text } from "@mantine/core";
 import getUniqueProfileNames from "@/components/notifications/utils/getUniqueProfileNames";
 import Link from "next/link";
 import { UserAvatar } from "@/components/general/avatar/UserAvatar";
-import { Notification } from "@/wrapper/server";
+import { Notification, NotificationAggregateDto } from "@/wrapper/server";
 import category = Notification.category;
 
 const ActivityAggregatedNotification = ({
@@ -29,7 +29,7 @@ const ActivityAggregatedNotification = ({
     }, [aggregatedNotification.category]);
 
     return (
-        <Link href={"/activity"}>
+        <Link href={`/activity/detail/${aggregatedNotification.sourceId}`}>
             <Group className={"w-full flex-nowrap"}>
                 {latestNotificationUserId && (
                     <UserAvatar userId={latestNotificationUserId} />
@@ -37,7 +37,11 @@ const ActivityAggregatedNotification = ({
                 <Text lineClamp={4}>
                     <strong>{latestProfileNames}</strong>{" "}
                     {hasMoreProfileNames && (
-                        <>and {profileNames.length - 2} others</>
+                        <>
+                            and{" "}
+                            {profileNames.length - latestProfileNames.length}{" "}
+                            others
+                        </>
                     )}{" "}
                     {actionText}.
                 </Text>

@@ -31,6 +31,7 @@ interface Props {
     onEditEnd?: () => void;
     sourceType: CreateCommentDto.sourceType;
     sourceId: string;
+    childOf?: string;
 }
 
 const CommentEditorView = ({
@@ -38,6 +39,7 @@ const CommentEditorView = ({
     sourceType,
     sourceId,
     onEditEnd,
+    childOf,
 }: Props) => {
     const queryClient = useQueryClient();
     const editorRef = useRef<Editor>();
@@ -66,6 +68,7 @@ const CommentEditorView = ({
                 sourceId,
                 sourceType,
                 content: content,
+                childOf,
             });
         },
         onSettled: () => {

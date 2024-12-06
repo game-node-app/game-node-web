@@ -7,7 +7,7 @@ import {
 import { useItemStatistics } from "@/components/statistics/hooks/useItemStatistics";
 import { FindAllCommentsDto } from "@/wrapper/server";
 import { UserComment } from "@/components/comment/types";
-import { ActionIcon, Group, Text } from "@mantine/core";
+import { ActionIcon, Group, Modal, Stack, Text } from "@mantine/core";
 import { redirectToAuth } from "supertokens-auth-react";
 import { IconThumbUp } from "@tabler/icons-react";
 import { useUserLike } from "@/components/statistics/hooks/useUserLike";
@@ -16,6 +16,14 @@ import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 import CommentsRemoveModal from "@/components/comment/view/CommentsRemoveModal";
 import { useDisclosure } from "@mantine/hooks";
 import ReportCreateFormModal from "@/components/report/modal/ReportCreateFormModal";
+import ItemLikesButton from "@/components/statistics/input/ItemLikesButton";
+import ItemCommentsButton from "@/components/comment/input/ItemCommentsButton";
+import { getCommentSourceId } from "@/components/comment/util/getCommentSourceId";
+import { getCommentSourceType } from "@/components/comment/util/getCommentSourceType";
+import CommentsThreadListView from "@/components/comment/view/CommentsThreadListView";
+import CommentEditorView from "@/components/comment/editor/CommentEditorView";
+import useOnMobile from "@/components/general/hooks/useOnMobile";
+import CommentsThreadButton from "@/components/comment/input/CommentsThreadButton";
 
 interface Props {
     comment: UserComment;
@@ -24,6 +32,9 @@ interface Props {
 
 const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
     const ownUserId = useUserId();
+
+    const onMobile = useOnMobile();
+
     const statisticsType = useMemo(() => {
         if (Object.hasOwn(comment, "reviewId")) {
             return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
@@ -46,18 +57,37 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
 
     const [removeModalOpened, removeModalUtils] = useDisclosure();
     const [reportModalOpened, reportModalUtils] = useDisclosure();
+    const [commentThreadModalOpened, commentThreadModalUtils] = useDisclosure();
 
-    const [likesCount, isLiked, toggleUserLike] = useUserLike({
-        sourceId: comment.id,
-        sourceType: statisticsType,
-        targetUserId: comment.profileUserId,
-    });
+    const sourceId = useMemo(() => {
+        return getCommentSourceId(comment);
+    }, [comment]);
+
+    const sourceType = useMemo(() => {
+        return getCommentSourceType(comment);
+    }, [comment]);
 
     const isOwnComment =
         ownUserId != undefined && comment.profileUserId === ownUserId;
 
     return (
         <Group className={"w-full justify-end"}>
+            <Modal
+                title={"Responses to this comment"}
+                opened={commentThreadModalOpened}
+                onClose={commentThreadModalUtils.close}
+                fullScreen={onMobile}
+                size={"xl"}
+            >
+                <Stack className={"w-full h-full"}>
+                    <CommentsThreadListView comment={comment} />
+                    <CommentEditorView
+                        sourceType={sourceType}
+                        sourceId={sourceId}
+                        childOf={comment.id}
+                    />
+                </Stack>
+            </Modal>
             <CommentsRemoveModal
                 opened={removeModalOpened}
                 onClose={removeModalUtils.close}
@@ -69,22 +99,17 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
                 sourceId={comment.id}
                 sourceType={reportType}
             />
-            <ActionIcon
-                onClick={async () => {
-                    if (!ownUserId) {
-                        redirectToAuth();
-                        return;
-                    }
-                    toggleUserLike();
-                }}
-                variant={isLiked ? "filled" : "subtle"}
-                size={"xl"}
-                color={isLiked ? "brand" : "white"}
-                data-disabled={!ownUserId}
-            >
-                <IconThumbUp />
-                <Text>{likesCount}</Text>
-            </ActionIcon>
+
+            <CommentsThreadButton
+                comment={comment}
+                onClick={commentThreadModalUtils.open}
+            />
+
+            <ItemLikesButton
+                sourceId={comment.id}
+                sourceType={statisticsType}
+                targetUserId={comment.profileUserId}
+            />
 
             <ItemDropdown>
                 {isOwnComment ? (

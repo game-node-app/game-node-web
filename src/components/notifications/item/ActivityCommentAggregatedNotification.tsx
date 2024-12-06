@@ -1,21 +1,31 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { AggregatedNotificationContentProps } from "@/components/notifications/AggregatedNotification";
-import { useReview } from "@/components/review/hooks/useReview";
-import { NotificationAggregateDto } from "@/wrapper/server";
+import { useComment } from "@/components/comment/hooks/useComment";
+import {
+    ActivityComment,
+    FindAllCommentsDto,
+    Notification,
+    NotificationAggregateDto,
+} from "@/wrapper/server";
+import NotificationSkeleton from "@/components/notifications/NotificationSkeleton";
 import getUniqueProfileNames from "@/components/notifications/utils/getUniqueProfileNames";
+import category = NotificationAggregateDto.category;
 import { Group, Text } from "@mantine/core";
 import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import Link from "next/link";
-import { useGame } from "@/components/game/hooks/useGame";
-import NotificationSkeleton from "@/components/notifications/NotificationSkeleton";
-import category = NotificationAggregateDto.category;
-import sourceType = NotificationAggregateDto.sourceType;
+import useUserId from "@/components/auth/hooks/useUserId";
+import { useActivity } from "@/components/activity/hooks/useActivity";
 
-const ReviewAggregatedNotification = ({
+const ActivityCommentAggregatedNotification = ({
     aggregatedNotification,
 }: AggregatedNotificationContentProps) => {
-    const reviewQuery = useReview(aggregatedNotification.sourceId as string);
-    const gameQuery = useGame(reviewQuery.data?.gameId, {});
+    const userId = useUserId();
+    const commentQuery = useComment<ActivityComment>(
+        aggregatedNotification.sourceId as string,
+        FindAllCommentsDto.sourceType.ACTIVITY,
+    );
+
+    const activityQuery = useActivity(commentQuery.data?.activityId);
 
     const profileNames = useMemo(() => {
         return getUniqueProfileNames(aggregatedNotification.notifications);
@@ -25,26 +35,31 @@ const ReviewAggregatedNotification = ({
     const latestNotificationUserId = latestNotification.profileUserId;
     const latestProfileNames = profileNames.slice(0, 2).join(", ");
     const hasMoreProfileNames = profileNames.length > 2;
-    const gameName = gameQuery.data?.name;
+
+    const isOwnActivity = useMemo(() => {
+        return (
+            activityQuery.data != undefined &&
+            activityQuery.data.profileUserId === userId
+        );
+    }, [activityQuery.data, userId]);
 
     const actionText = useMemo(() => {
         switch (aggregatedNotification.category) {
             case category.LIKE:
-                return "liked your review";
+                return `liked your comment in ${isOwnActivity ? "your" : "an"} activity`;
             case category.COMMENT:
-                return "commented on your review";
-            case category.MENTION:
-                return "mentioned you in a review";
+                return `responded to your comment in ${isOwnActivity ? "your" : "an"} activity`;
         }
-    }, [aggregatedNotification.category]);
+    }, [aggregatedNotification.category, isOwnActivity]);
 
-    if (reviewQuery.isLoading || gameQuery.isLoading) {
+    if (commentQuery.isLoading || activityQuery.isLoading) {
         return <NotificationSkeleton />;
+    } else if (commentQuery.data == undefined) {
+        return null;
     }
-
     return (
-        <Link href={`/game/${reviewQuery.data?.gameId}`} className={"w-full"}>
-            <Group wrap={"nowrap"} className={"w-full"}>
+        <Link href={`/activity/detail/${commentQuery.data.activityId}`}>
+            <Group className={"w-full flex-nowrap"}>
                 {latestNotificationUserId && (
                     <UserAvatar userId={latestNotificationUserId} />
                 )}
@@ -57,18 +72,11 @@ const ReviewAggregatedNotification = ({
                             others
                         </>
                     )}{" "}
-                    {actionText}
-                    {gameName && (
-                        <>
-                            {" "}
-                            of <strong>{gameName}</strong>
-                        </>
-                    )}
-                    .
+                    {actionText}.
                 </Text>
             </Group>
         </Link>
     );
 };
 
-export default ReviewAggregatedNotification;
+export default ActivityCommentAggregatedNotification;

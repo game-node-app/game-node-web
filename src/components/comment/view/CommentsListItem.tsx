@@ -8,9 +8,10 @@ import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import getTimeSinceString from "@/util/getTimeSinceString";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import CommentsListItemActions from "@/components/comment/view/CommentsListItemActions";
+import { UserComment } from "../types";
 
 interface Props {
-    comment: ReviewComment;
+    comment: UserComment;
     onEditStart: (commentId: string) => void;
     editedCommentId?: string;
 }
@@ -27,9 +28,6 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
         },
         [comment],
     );
-
-    const isEditing =
-        editedCommentId != undefined && editedCommentId === comment.id;
 
     if (!nonEditableEditor) return;
 
@@ -49,7 +47,7 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
                     >
                         <UserAvatarGroup
                             avatarProps={{
-                                size: onMobile ? "lg" : "xl",
+                                size: "md",
                             }}
                             userId={comment.profileUserId}
                             groupProps={{
