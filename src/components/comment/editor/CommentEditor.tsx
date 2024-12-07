@@ -18,9 +18,12 @@ const CommentEditor = ({ ...editorOptions }: Props) => {
         {
             ...editorOptions,
             extensions: COMMENT_EDITOR_EXTENSIONS,
+            immediatelyRender: window != undefined,
         },
         [editorOptions.content],
     );
+
+    if (!editor) return null;
 
     return (
         <RichTextEditor editor={editor} className={"w-full h-full"}>

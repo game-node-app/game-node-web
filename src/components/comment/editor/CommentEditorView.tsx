@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
     ActionIcon,
+    Box,
     Button,
     Group,
     LoadingOverlay,
@@ -124,14 +125,17 @@ const CommentEditorView = ({
     }, [commentId, commentQuery.data, previousContent]);
 
     return (
-        <Stack className={"w-full h-full relative"}>
+        <Stack className={"w-full relative"}>
             <LoadingOverlay visible={commentQuery.isLoading} />
-            <CommentEditor
-                content={previousContent}
-                onCreate={(props) => {
-                    editorRef.current = props.editor;
-                }}
-            />
+            <Box className={"w-full"}>
+                <CommentEditor
+                    content={previousContent}
+                    onCreate={(props) => {
+                        editorRef.current = props.editor;
+                    }}
+                />
+            </Box>
+
             <Group className={"w-full justify-end"}>
                 <ActionIcon
                     size={"lg"}

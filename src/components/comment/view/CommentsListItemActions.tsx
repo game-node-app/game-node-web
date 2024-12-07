@@ -28,12 +28,15 @@ import CommentsThreadButton from "@/components/comment/input/CommentsThreadButto
 interface Props {
     comment: UserComment;
     onEditStart: (commentId: string) => void;
+    onCommentThreadClick: () => void;
 }
 
-const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
+const CommentsListItemActions = ({
+    comment,
+    onEditStart,
+    onCommentThreadClick,
+}: Props) => {
     const ownUserId = useUserId();
-
-    const onMobile = useOnMobile();
 
     const statisticsType = useMemo(() => {
         if (Object.hasOwn(comment, "reviewId")) {
@@ -57,37 +60,12 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
 
     const [removeModalOpened, removeModalUtils] = useDisclosure();
     const [reportModalOpened, reportModalUtils] = useDisclosure();
-    const [commentThreadModalOpened, commentThreadModalUtils] = useDisclosure();
-
-    const sourceId = useMemo(() => {
-        return getCommentSourceId(comment);
-    }, [comment]);
-
-    const sourceType = useMemo(() => {
-        return getCommentSourceType(comment);
-    }, [comment]);
 
     const isOwnComment =
         ownUserId != undefined && comment.profileUserId === ownUserId;
 
     return (
         <Group className={"w-full justify-end"}>
-            <Modal
-                title={"Responses to this comment"}
-                opened={commentThreadModalOpened}
-                onClose={commentThreadModalUtils.close}
-                fullScreen={onMobile}
-                size={"xl"}
-            >
-                <Stack className={"w-full h-full"}>
-                    <CommentsThreadListView comment={comment} />
-                    <CommentEditorView
-                        sourceType={sourceType}
-                        sourceId={sourceId}
-                        childOf={comment.id}
-                    />
-                </Stack>
-            </Modal>
             <CommentsRemoveModal
                 opened={removeModalOpened}
                 onClose={removeModalUtils.close}
@@ -102,7 +80,7 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
 
             <CommentsThreadButton
                 comment={comment}
-                onClick={commentThreadModalUtils.open}
+                onClick={onCommentThreadClick}
             />
 
             <ItemLikesButton
