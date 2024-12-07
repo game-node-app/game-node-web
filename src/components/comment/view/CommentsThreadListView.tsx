@@ -51,7 +51,7 @@ const CommentsThreadListView = ({ comment }: Props) => {
 
     return (
         <Stack className={"w-full h-full relative"}>
-            {items}
+            {slicedItems}
             {shouldShowPagination && (
                 <Pagination
                     total={items.length}

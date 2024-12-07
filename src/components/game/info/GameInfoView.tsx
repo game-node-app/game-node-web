@@ -11,6 +11,7 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import Break from "@/components/general/Break";
 import { useGame } from "@/components/game/hooks/useGame";
 import Head from "next/head";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryFindOneDto = {
     relations: {
@@ -27,6 +28,10 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
     const game = gameQuery.data;
 
     const onMobile = useOnMobile();
+
+    if (!game) {
+        return <CenteredLoading />;
+    }
 
     return (
         <Paper w={"100%"} h={"100%"}>

@@ -1,19 +1,9 @@
 import React, { useMemo, useState } from "react";
-import type { ReviewComment } from "@/wrapper/server";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COMMENT_EDITOR_EXTENSIONS } from "@/components/comment/editor/CommentEditor";
-import {
-    Box,
-    Collapse,
-    Divider,
-    Flex,
-    Group,
-    Spoiler,
-    Stack,
-} from "@mantine/core";
+import { Collapse, Flex, Group, Spoiler, Stack } from "@mantine/core";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
-import getTimeSinceString from "@/util/getTimeSinceString";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import CommentsListItemActions from "@/components/comment/view/CommentsListItemActions";
 import { UserComment } from "../types";
@@ -26,12 +16,10 @@ import { useDisclosure } from "@mantine/hooks";
 interface Props {
     comment: UserComment;
     onEditStart: (commentId: string) => void;
-    editedCommentId?: string;
 }
 
-const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
+const CommentsListItem = ({ comment, onEditStart }: Props) => {
     const [isReadMore, setIsReadMore] = useState(false);
-    const onMobile = useOnMobile();
 
     const nonEditableEditor = useEditor(
         {

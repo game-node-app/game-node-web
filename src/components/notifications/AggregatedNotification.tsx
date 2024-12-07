@@ -28,19 +28,18 @@ const AggregatedNotification = ({
 }: AggregatedNotificationProps) => {
     const notificationContent = useMemo(() => {
         switch (aggregatedNotification.sourceType) {
-            case NotificationAggregateDto.sourceType.ACTIVITY:
+            case sourceType.ACTIVITY:
                 return (
                     <ActivityAggregatedNotification
                         aggregatedNotification={aggregatedNotification}
                     />
                 );
-            case NotificationAggregateDto.sourceType.ACTIVITY_COMMENT:
+            case sourceType.ACTIVITY_COMMENT:
                 return (
                     <ActivityCommentAggregatedNotification
                         aggregatedNotification={aggregatedNotification}
                     />
                 );
-
             case sourceType.REVIEW:
                 return (
                     <ReviewAggregatedNotification
