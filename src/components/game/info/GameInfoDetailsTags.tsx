@@ -10,6 +10,7 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import { useGame } from "@/components/game/hooks/useGame";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import Link from "next/link";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
 
 interface TagBuilderElement {
     id: number;
@@ -76,16 +77,12 @@ interface IProps {
  * @constructor
  */
 const GameInfoDetailsTags = ({ gameId }: IProps) => {
-    const gameQuery = useGame(gameId, {
-        relations: {
-            genres: true,
-            gameModes: true,
-            themes: true,
-        },
-    });
+    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
     const game = gameQuery.data;
 
-    const badges: ReactNode[] = useMemo(() => {
+    const badges: ReactNode[] | null = useMemo(() => {
+        if (!game) return null;
+
         const tags = getGameTags(game);
 
         return tags

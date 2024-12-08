@@ -15,6 +15,7 @@ import { useGame } from "@/components/game/hooks/useGame";
 import { useQuery } from "@tanstack/react-query";
 import { GameRepositoryService } from "@/wrapper/server";
 import { sleep } from "@/util/sleep";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
 
 interface IGameInfoPlatformsProps extends GroupProps {
     gameId: number | undefined;
@@ -27,11 +28,7 @@ const GameInfoPlatforms = ({
     ...others
 }: IGameInfoPlatformsProps) => {
     const onMobile = useOnMobile();
-    const gameQuery = useGame(gameId, {
-        relations: {
-            platforms: true,
-        },
-    });
+    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
     const iconsQuery = useQuery({
         queryKey: ["game", "platform", "icon", gameId],
         queryFn: async () => {
