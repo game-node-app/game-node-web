@@ -45,6 +45,7 @@ const GameInfoSharePreview = ({
         withOwnedPlatforms,
         withDivider,
     } = watchFormValues();
+
     return (
         <Paper
             id={GAME_INFO_SHARE_PREVIEW_ID}
