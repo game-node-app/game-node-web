@@ -17,7 +17,7 @@ export function useCollection(
                     return null;
                 }
 
-                return CollectionsService.collectionsControllerFindOneByIdWithPermissions(
+                return CollectionsService.collectionsControllerFindOneByIdWithPermissionsV1(
                     collectionId,
                 );
             },

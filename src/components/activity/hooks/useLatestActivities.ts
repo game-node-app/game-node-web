@@ -9,7 +9,7 @@ export function useLatestActivities(
     return useQuery({
         queryKey: ["activities", "latest", userId, offset, limit],
         queryFn: async () => {
-            return ActivitiesService.activitiesRepositoryControllerFindLatest(
+            return ActivitiesService.activitiesRepositoryControllerFindLatestV1(
                 userId,
                 offset,
                 limit,

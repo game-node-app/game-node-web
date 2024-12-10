@@ -36,7 +36,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
             if (!idAsNumber) {
                 return undefined;
             }
-            return GameRepositoryService.gameRepositoryControllerFindOneById(
+            return GameRepositoryService.gameRepositoryControllerFindOneByIdV1(
                 idAsNumber,
                 dto,
             );

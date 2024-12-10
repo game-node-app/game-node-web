@@ -24,7 +24,7 @@ const ProfileEditBioForm = () => {
     });
     const profileMutation = useMutation({
         mutationFn: (values: TBioForm) => {
-            return ProfileService.profileControllerUpdate({
+            return ProfileService.profileControllerUpdateV1({
                 bio: values.bio,
             });
         },

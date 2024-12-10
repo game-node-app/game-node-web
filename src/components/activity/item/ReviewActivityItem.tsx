@@ -13,6 +13,7 @@ import GameRating from "@/components/general/input/GameRating";
 import Link from "next/link";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
+import ActivityItemComments from "@/components/activity/input/ActivityItemComments";
 
 interface Props {
     activity: Activity;
@@ -102,6 +103,7 @@ const ReviewActivityItem = ({ activity }: Props) => {
                         </Link>
 
                         <Group>
+                            <ActivityItemComments activity={activity} />
                             <ActivityItemLikes activity={activity} />
                         </Group>
                     </Stack>

@@ -70,7 +70,7 @@ const GameInfoReviewEditorView = ({
 
     const reviewMutation = useMutation({
         mutationFn: async (data: TReviewFormValues) => {
-            await ReviewsService.reviewsControllerCreateOrUpdate({
+            await ReviewsService.reviewsControllerCreateOrUpdateV1({
                 ...data,
                 gameId: gameId,
             });

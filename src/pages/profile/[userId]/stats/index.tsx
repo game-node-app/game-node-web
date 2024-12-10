@@ -50,7 +50,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
     await queryClient.prefetchQuery({
         queryKey: ["profile", "metrics", userId],
         queryFn: async () => {
-            return ProfileMetricsService.profileMetricsControllerGetStatsOverview(
+            return ProfileMetricsService.profileMetricsControllerGetStatsOverviewV1(
                 userId,
             );
         },

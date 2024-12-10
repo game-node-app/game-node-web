@@ -3,6 +3,7 @@ import { Game } from "@/wrapper/server";
 import { useGame } from "@/components/game/hooks/useGame";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import GameInfoCarousel from "@/components/game/info/carousel/GameInfoCarousel";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "./GameInfoView";
 
 interface GameRelatedGameCarouselProps {
     title: string;
@@ -10,22 +11,25 @@ interface GameRelatedGameCarouselProps {
     relationProperty: keyof Game;
 }
 
+/**
+ * Make sure the target relation (and the cover field) is added to DEFAULT_GAME_INFO_VIEW_DTO
+ * before using this.
+ * @param title
+ * @param gameId
+ * @param relationProperty
+ * @constructor
+ * @see DEFAULT_GAME_INFO_VIEW_DTO
+ */
 const GameRelatedGamesCarousel = ({
     title,
     gameId,
     relationProperty,
 }: GameRelatedGameCarouselProps) => {
-    const gameWithRelationsQuery = useGame(gameId, {
-        relations: {
-            [relationProperty]: {
-                cover: true,
-            },
-        },
-    });
+    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
 
-    const data = gameWithRelationsQuery.data;
+    const data = gameQuery.data;
     // Make sure to add runtime checks for an array of games too.
-    const relationData = gameWithRelationsQuery.data?.[relationProperty] as
+    const relationData = gameQuery.data?.[relationProperty] as
         | Game[]
         | undefined;
 
@@ -37,8 +41,8 @@ const GameRelatedGamesCarousel = ({
     return (
         <DetailsBox enabled={hasRelations} title={title}>
             <GameInfoCarousel
-                isLoading={gameWithRelationsQuery.isLoading}
-                isError={gameWithRelationsQuery.isError}
+                isLoading={gameQuery.isLoading}
+                isError={gameQuery.isError}
                 games={relationData || []}
             />
         </DetailsBox>

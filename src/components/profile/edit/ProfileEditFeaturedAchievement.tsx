@@ -36,7 +36,7 @@ const ProfileEditFeaturedAchievement = () => {
 
     const featuredAchievementMutation = useMutation({
         mutationFn: async (achievementId: string) => {
-            return AchievementsService.achievementsControllerUpdateFeaturedObtainedAchievement(
+            return AchievementsService.achievementsControllerUpdateFeaturedObtainedAchievementV1(
                 achievementId,
                 {
                     isFeatured: true,

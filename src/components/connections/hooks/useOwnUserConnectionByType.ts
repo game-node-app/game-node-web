@@ -7,7 +7,9 @@ export function useOwnUserConnectionByType(type: type) {
     return useQuery({
         queryKey: ["connections", "own", type],
         queryFn: async () => {
-            return ConnectionsService.connectionsControllerFindOwnByType(type);
+            return ConnectionsService.connectionsControllerFindOwnByTypeV1(
+                type,
+            );
         },
         retry: 1,
     });

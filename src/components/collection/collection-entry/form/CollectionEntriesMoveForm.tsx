@@ -82,7 +82,7 @@ const CollectionEntriesMoveForm = ({
     const collectionsEntriesQuery = useCollectionEntriesForCollectionId({
         collectionId,
         orderBy: {
-            createdAt: "DESC",
+            addedDate: "DESC",
         },
     });
     const gameIds = collectionsEntriesQuery.data?.data.map(
@@ -150,7 +150,7 @@ const CollectionEntriesMoveForm = ({
                     (platform) => platform.id,
                 );
                 const replacePromise =
-                    CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
+                    CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdateV1(
                         {
                             isFavorite: entry.isFavorite,
                             platformIds: ownedPlatformsIds as unknown as any,

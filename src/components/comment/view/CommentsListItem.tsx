@@ -1,35 +1,45 @@
 import React, { useMemo, useState } from "react";
-import type { ReviewComment } from "@/wrapper/server";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COMMENT_EDITOR_EXTENSIONS } from "@/components/comment/editor/CommentEditor";
-import { Box, Divider, Flex, Group, Spoiler, Stack } from "@mantine/core";
+import { Collapse, Flex, Group, Spoiler, Stack } from "@mantine/core";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
-import getTimeSinceString from "@/util/getTimeSinceString";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import CommentsListItemActions from "@/components/comment/view/CommentsListItemActions";
+import { UserComment } from "../types";
+import CommentsThreadListView from "@/components/comment/view/CommentsThreadListView";
+import CommentEditorView from "@/components/comment/editor/CommentEditorView";
+import { getCommentSourceId } from "@/components/comment/util/getCommentSourceId";
+import { getCommentSourceType } from "@/components/comment/util/getCommentSourceType";
+import { useDisclosure } from "@mantine/hooks";
 
 interface Props {
-    comment: ReviewComment;
+    comment: UserComment;
     onEditStart: (commentId: string) => void;
-    editedCommentId?: string;
 }
 
-const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
+const CommentsListItem = ({ comment, onEditStart }: Props) => {
     const [isReadMore, setIsReadMore] = useState(false);
-    const onMobile = useOnMobile();
 
     const nonEditableEditor = useEditor(
         {
             extensions: COMMENT_EDITOR_EXTENSIONS,
             editable: false,
             content: comment?.content,
+            immediatelyRender: window != undefined,
         },
         [comment],
     );
 
-    const isEditing =
-        editedCommentId != undefined && editedCommentId === comment.id;
+    const sourceId = useMemo(() => {
+        return getCommentSourceId(comment);
+    }, [comment]);
+
+    const sourceType = useMemo(() => {
+        return getCommentSourceType(comment);
+    }, [comment]);
+
+    const [commentThreadOpened, commentThreadUtils] = useDisclosure();
 
     if (!nonEditableEditor) return;
 
@@ -49,7 +59,7 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
                     >
                         <UserAvatarGroup
                             avatarProps={{
-                                size: onMobile ? "lg" : "xl",
+                                size: "md",
                             }}
                             userId={comment.profileUserId}
                             groupProps={{
@@ -79,9 +89,24 @@ const CommentsListItem = ({ comment, onEditStart, editedCommentId }: Props) => {
                     <CommentsListItemActions
                         comment={comment}
                         onEditStart={onEditStart}
+                        onCommentThreadClick={commentThreadUtils.toggle}
                     />
                 </Stack>
             </Group>
+            <Collapse
+                in={commentThreadOpened}
+                className={"flex w-full justify-end"}
+                transitionDuration={100}
+            >
+                <Stack className={"w-full h-full"}>
+                    <CommentsThreadListView comment={comment} />
+                    <CommentEditorView
+                        sourceType={sourceType}
+                        sourceId={sourceId}
+                        childOf={comment.id}
+                    />
+                </Stack>
+            </Collapse>
         </Stack>
     );
 };

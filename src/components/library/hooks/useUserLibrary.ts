@@ -23,7 +23,7 @@ export function useUserLibrary(
                 // if (currentUserId && currentUserId === userId) {
                 //     return LibrariesService.librariesControllerFindOwn();
                 // }
-                return LibrariesService.librariesControllerFindOneByIdWithPermissions(
+                return LibrariesService.librariesControllerFindOneByIdWithPermissionsV1(
                     userId,
                 );
             },

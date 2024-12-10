@@ -3,6 +3,7 @@ import useUserProfile from "@/components/profile/hooks/useUserProfile";
 import {
     ActionIcon,
     Box,
+    Center,
     Flex,
     Group,
     Modal,
@@ -59,17 +60,21 @@ const ProfileEditForm = ({ userId }: Props) => {
                             userId={userId}
                             size={"10rem"}
                         />
-                        <ActionIcon
-                            size={"lg"}
-                            radius={"xl"}
-                            variant="default"
+                        <Center
                             className={
                                 "absolute left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bottom-1/2 z-20"
                             }
-                            onClick={editAvatarModalUtils.open}
                         >
-                            <IconCameraPlus />
-                        </ActionIcon>
+                            <ActionIcon
+                                size={"lg"}
+                                radius={"xl"}
+                                variant="default"
+                                className={"z-20"}
+                                onClick={editAvatarModalUtils.open}
+                            >
+                                <IconCameraPlus />
+                            </ActionIcon>
+                        </Center>
                     </Box>
 
                     <Group className={"items-center"}>

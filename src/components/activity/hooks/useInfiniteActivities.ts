@@ -13,7 +13,7 @@ export function useInfiniteActivities({
     return useInfiniteQuery({
         queryKey: ["activities", criteria, limit],
         queryFn: async ({ pageParam }) => {
-            return ActivitiesFeedService.activitiesFeedControllerBuildActivitiesFeed(
+            return ActivitiesFeedService.activitiesFeedControllerBuildActivitiesFeedV1(
                 criteria,
                 pageParam,
                 limit,

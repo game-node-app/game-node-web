@@ -3,6 +3,7 @@ import {
     isGameObject,
     isGameSearchObject,
 } from "@/components/game/util/isGameObject";
+import { Game } from "@/wrapper/server";
 
 export interface IGamePlatformInfo {
     platformsIds: number[] | undefined;
@@ -11,7 +12,7 @@ export interface IGamePlatformInfo {
 }
 
 export function getGamePlatformInfo(
-    game: TGameOrSearchGame | undefined,
+    game: TGameOrSearchGame | null | undefined,
 ): IGamePlatformInfo {
     const platformInfo: IGamePlatformInfo = {
         platformsIds: undefined,

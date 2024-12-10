@@ -32,14 +32,14 @@ const UserFollowActions = ({
             if (action === "register") {
                 if (isFollowing) return;
 
-                await FollowService.followControllerRegisterFollow({
+                await FollowService.followControllerRegisterFollowV1({
                     followedUserId: targetUserId,
                 });
 
                 return;
             }
 
-            await FollowService.followControllerRemoveFollow({
+            await FollowService.followControllerRemoveFollowV1({
                 followedUserId: targetUserId,
             });
         },

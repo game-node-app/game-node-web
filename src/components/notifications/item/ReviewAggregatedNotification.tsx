@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useGame } from "@/components/game/hooks/useGame";
 import NotificationSkeleton from "@/components/notifications/NotificationSkeleton";
 import category = NotificationAggregateDto.category;
+import sourceType = NotificationAggregateDto.sourceType;
 
 const ReviewAggregatedNotification = ({
     aggregatedNotification,
@@ -33,7 +34,7 @@ const ReviewAggregatedNotification = ({
             case category.COMMENT:
                 return "commented on your review";
             case category.MENTION:
-                return "mentioned you on his review";
+                return "mentioned you in a review";
         }
     }, [aggregatedNotification.category]);
 
@@ -42,10 +43,7 @@ const ReviewAggregatedNotification = ({
     }
 
     return (
-        <Link
-            href={`/game/${reviewQuery.data?.gameId}?reviewId=${reviewQuery.data?.id}`}
-            className={"w-full"}
-        >
+        <Link href={`/game/${reviewQuery.data?.gameId}`} className={"w-full"}>
             <Group wrap={"nowrap"} className={"w-full"}>
                 {latestNotificationUserId && (
                     <UserAvatar userId={latestNotificationUserId} />
@@ -53,7 +51,11 @@ const ReviewAggregatedNotification = ({
                 <Text lineClamp={4}>
                     <strong>{latestProfileNames}</strong>{" "}
                     {hasMoreProfileNames && (
-                        <>and {profileNames.length - 2} others</>
+                        <>
+                            and{" "}
+                            {profileNames.length - latestProfileNames.length}{" "}
+                            others
+                        </>
                     )}{" "}
                     {actionText}
                     {gameName && (

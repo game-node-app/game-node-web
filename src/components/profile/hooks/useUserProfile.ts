@@ -14,7 +14,7 @@ export default function useUserProfile(
             queryKey: queryKey,
             queryFn: async () => {
                 if (!userId) return null;
-                return ProfileService.profileControllerFindOneById(userId);
+                return ProfileService.profileControllerFindOneByIdV1(userId);
             },
             enabled: !!userId,
             retry: 1,

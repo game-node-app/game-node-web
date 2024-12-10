@@ -11,10 +11,35 @@ import { DetailsBox } from "@/components/general/DetailsBox";
 import Break from "@/components/general/Break";
 import { useGame } from "@/components/game/hooks/useGame";
 import Head from "next/head";
+import CenteredLoading from "@/components/general/CenteredLoading";
 
 export const DEFAULT_GAME_INFO_VIEW_DTO: GameRepositoryFindOneDto = {
     relations: {
         cover: true,
+        genres: true,
+        themes: true,
+        gameModes: true,
+        artworks: true,
+        screenshots: true,
+        platforms: true,
+        involvedCompanies: {
+            company: true,
+        },
+        similarGames: {
+            cover: true,
+        },
+        dlcOf: {
+            cover: true,
+        },
+        dlcs: {
+            cover: true,
+        },
+        expansionOf: {
+            cover: true,
+        },
+        expansions: {
+            cover: true,
+        },
     },
 };
 
@@ -27,6 +52,10 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
     const game = gameQuery.data;
 
     const onMobile = useOnMobile();
+
+    if (!game) {
+        return <CenteredLoading />;
+    }
 
     return (
         <Paper w={"100%"} h={"100%"}>

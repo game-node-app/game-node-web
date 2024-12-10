@@ -163,7 +163,7 @@ function TypePage() {
                 );
             }
 
-            await ImporterService.importerControllerChangeStatus({
+            await ImporterService.importerControllerChangeStatusV1({
                 externalGameId: externalGame.id,
                 status: "ignored",
             });
@@ -208,7 +208,7 @@ function TypePage() {
                     );
                 }
 
-                await CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdate(
+                await CollectionsEntriesService.collectionsEntriesControllerCreateOrUpdateV1(
                     {
                         gameId: selectedGameId,
                         collectionIds: selectedCollectionIds,
@@ -216,7 +216,7 @@ function TypePage() {
                         isFavorite: false,
                     },
                 );
-                await ImporterService.importerControllerChangeStatus({
+                await ImporterService.importerControllerChangeStatusV1({
                     externalGameId: externalGame.id,
                     status: "processed",
                 });

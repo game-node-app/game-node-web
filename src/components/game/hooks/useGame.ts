@@ -8,20 +8,17 @@ import {
 export function useGame(
     id: number | undefined,
     dto: GameRepositoryFindOneDto,
-): UseQueryResult<Game | undefined> {
-    return useQuery<Game | undefined>({
+): UseQueryResult<Game | null> {
+    return useQuery<Game | null>({
         queryKey: ["game", id, dto],
-        queryFn: async (): Promise<Game | undefined> => {
+        queryFn: async () => {
             if (!id) {
-                return undefined;
+                return null;
             }
-            const game =
-                await GameRepositoryService.gameRepositoryControllerFindOneById(
-                    id,
-                    dto,
-                );
-
-            return game;
+            return GameRepositoryService.gameRepositoryControllerFindOneByIdV1(
+                id,
+                dto,
+            );
         },
         staleTime: 5 * 60 * 1000, // 5 minutes,
         enabled: !!id,

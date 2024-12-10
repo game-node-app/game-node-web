@@ -21,7 +21,7 @@ export function useFollowStatus(
             queryKey,
             queryFn: () => {
                 if (!followerUserId || !followedUserId) return null;
-                return FollowService.followControllerGetFollowerStatus(
+                return FollowService.followControllerGetFollowerStatusV1(
                     followerUserId,
                     followedUserId,
                 );

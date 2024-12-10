@@ -40,7 +40,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
         ],
         queryFn: async () => {
             const response =
-                await StatisticsService.statisticsControllerFindTrendingGames(
+                await StatisticsService.statisticsControllerFindTrendingGamesV1(
                     queryDto,
                 );
             if (response && response.data) {
@@ -62,7 +62,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
         await queryClient.prefetchQuery({
             queryKey: ["game", "all", useGamesDto],
             queryFn: () => {
-                return GameRepositoryService.gameRepositoryControllerFindAllByIds(
+                return GameRepositoryService.gameRepositoryControllerFindAllByIdsV1(
                     useGamesDto,
                 );
             },

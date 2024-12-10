@@ -1,6 +1,7 @@
 import {
     CollectionEntriesPaginatedResponseDto,
     CollectionsEntriesService,
+    FindCollectionEntriesOrderBy,
 } from "@/wrapper/server";
 
 /**
@@ -15,10 +16,10 @@ export async function getCollectionEntriesByCollectionId(
     collectionId: string,
     offset?: number,
     limit?: number,
-    orderBy?: Record<string, any>,
+    orderBy?: FindCollectionEntriesOrderBy,
 ): Promise<CollectionEntriesPaginatedResponseDto | undefined> {
     try {
-        return await CollectionsEntriesService.collectionsEntriesControllerFindAllByCollectionId(
+        return await CollectionsEntriesService.collectionsEntriesControllerFindAllByCollectionIdV1(
             collectionId,
             {
                 offset,

@@ -20,7 +20,7 @@ const ReviewListItemRemoveModal = ({ reviewId, opened, onClose }: Props) => {
     const userId = useUserId();
     const reviewRemoveMutation = useMutation({
         mutationFn: async () => {
-            await ReviewsService.reviewsControllerDelete(reviewId);
+            await ReviewsService.reviewsControllerDeleteV1(reviewId);
         },
         onSettled: () => {
             if (userId) {

@@ -16,15 +16,13 @@ import CenteredErrorMessage from "@/components/general/CenteredErrorMessage";
 import CenteredLoading from "@/components/general/CenteredLoading";
 import GameViewPagination from "@/components/game/view/GameViewPagination";
 import CommentEditorView from "@/components/comment/editor/CommentEditorView";
+import { useRenderedComments } from "@/components/comment/hooks/useRenderedComments";
 
 interface Props extends Omit<UseCommentsProps, "limit" | "offset"> {}
 
 const COMMENTS_LIST_VIEW_DEFAULT_LIMIT = 10;
 
 const CommentsListView = ({ ...hookProps }: Props) => {
-    const [editedCommentId, setEditedCommentId] = useState<string | undefined>(
-        undefined,
-    );
     const [offset, setOffset] = useState(0);
     const offsetAsPage =
         offset >= COMMENTS_LIST_VIEW_DEFAULT_LIMIT
@@ -35,62 +33,12 @@ const CommentsListView = ({ ...hookProps }: Props) => {
         offset,
         limit: COMMENTS_LIST_VIEW_DEFAULT_LIMIT,
     });
-    const items = useMemo(() => {
-        return commentsQuery.data?.data
-            .toSorted((a, b) => {
-                const aCreateDate = new Date(a.createdAt);
-                const bCreateDate = new Date(b.createdAt);
-                return aCreateDate.getTime() - bCreateDate.getTime();
-            })
-            .map((comment) => {
-                if (comment.id === editedCommentId) {
-                    return (
-                        <Group
-                            key={`editing-${comment.id}`}
-                            className={"w-full h-full"}
-                            wrap={"nowrap"}
-                        >
-                            <Divider
-                                orientation={"vertical"}
-                                color={"brand"}
-                                size={"sm"}
-                            />
-                            <CommentEditorView
-                                sourceType={hookProps.sourceType}
-                                sourceId={hookProps.sourceId}
-                                commentId={editedCommentId}
-                                onEditEnd={() => {
-                                    setEditedCommentId(undefined);
-                                }}
-                            />
-                        </Group>
-                    );
-                }
 
-                return (
-                    <Group
-                        className={"w-full h-full"}
-                        wrap={"nowrap"}
-                        key={comment.id}
-                    >
-                        <Divider orientation={"vertical"} size={"sm"} />
-                        <CommentsListItem
-                            key={comment.id}
-                            comment={comment}
-                            onEditStart={(commentId) =>
-                                setEditedCommentId(commentId)
-                            }
-                            editedCommentId={editedCommentId}
-                        />
-                    </Group>
-                );
-            });
-    }, [
-        commentsQuery.data?.data,
-        editedCommentId,
-        hookProps.sourceId,
-        hookProps.sourceType,
-    ]);
+    const items = useRenderedComments({
+        data: commentsQuery.data?.data || [],
+        sourceId: hookProps.sourceId,
+        sourceType: hookProps.sourceType,
+    });
 
     const hasNextPage =
         commentsQuery.data != undefined &&
@@ -115,7 +63,6 @@ const CommentsListView = ({ ...hookProps }: Props) => {
                         const pageAsOffset =
                             COMMENTS_LIST_VIEW_DEFAULT_LIMIT * (page - 1);
                         setOffset(pageAsOffset);
-                        setEditedCommentId(undefined);
                     }}
                 />
             )}

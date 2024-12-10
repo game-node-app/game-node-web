@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
     ActionIcon,
+    Box,
     Button,
     Group,
     LoadingOverlay,
@@ -31,6 +32,7 @@ interface Props {
     onEditEnd?: () => void;
     sourceType: CreateCommentDto.sourceType;
     sourceId: string;
+    childOf?: string;
 }
 
 const CommentEditorView = ({
@@ -38,6 +40,7 @@ const CommentEditorView = ({
     sourceType,
     sourceId,
     onEditEnd,
+    childOf,
 }: Props) => {
     const queryClient = useQueryClient();
     const editorRef = useRef<Editor>();
@@ -56,16 +59,17 @@ const CommentEditorView = ({
 
             const content = editorRef.current?.getHTML();
             if (commentId) {
-                return CommentService.commentControllerUpdate(commentId, {
+                return CommentService.commentControllerUpdateV1(commentId, {
                     sourceType,
                     content: content,
                 });
             }
 
-            return CommentService.commentControllerCreate({
+            return CommentService.commentControllerCreateV1({
                 sourceId,
                 sourceType,
                 content: content,
+                childOf,
             });
         },
         onSettled: () => {
@@ -121,14 +125,17 @@ const CommentEditorView = ({
     }, [commentId, commentQuery.data, previousContent]);
 
     return (
-        <Stack className={"w-full h-full relative"}>
+        <Stack className={"w-full relative"}>
             <LoadingOverlay visible={commentQuery.isLoading} />
-            <CommentEditor
-                content={previousContent}
-                onCreate={(props) => {
-                    editorRef.current = props.editor;
-                }}
-            />
+            <Box className={"w-full"}>
+                <CommentEditor
+                    content={previousContent}
+                    onCreate={(props) => {
+                        editorRef.current = props.editor;
+                    }}
+                />
+            </Box>
+
             <Group className={"w-full justify-end"}>
                 <ActionIcon
                     size={"lg"}

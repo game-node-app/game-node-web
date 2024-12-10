@@ -23,7 +23,8 @@ export async function getServerSideProps(
     await queryClient.prefetchQuery({
         queryKey: ["userProfile", userId],
         queryFn: () => {
-            const profile = ProfileService.profileControllerFindOneById(userId);
+            const profile =
+                ProfileService.profileControllerFindOneByIdV1(userId);
             if (!profile) {
                 return null;
             }

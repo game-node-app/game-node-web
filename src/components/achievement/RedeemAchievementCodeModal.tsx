@@ -17,7 +17,7 @@ const RedeemAchievementCodeModal = ({ opened, onClose }: Props) => {
             if (!achievementCode) {
                 throw new Error("An achievement code must be provided!");
             }
-            await AchievementsCodeService.achievementsCodeControllerConsume(
+            await AchievementsCodeService.achievementsCodeControllerConsumeV1(
                 achievementCode,
             );
         },

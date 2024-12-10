@@ -43,10 +43,12 @@ export function useInfiniteTrendingGames(
         ...useInfiniteQuery({
             queryKey,
             queryFn: async ({ pageParam = 0 }) => {
-                return StatisticsService.statisticsControllerFindTrendingGames({
-                    ...dto,
-                    offset: pageParam,
-                });
+                return StatisticsService.statisticsControllerFindTrendingGamesV1(
+                    {
+                        ...dto,
+                        offset: pageParam,
+                    },
+                );
             },
             getNextPageParam: (previousData, allData, lastPageParam) => {
                 return lastPageParam + limitToUse;

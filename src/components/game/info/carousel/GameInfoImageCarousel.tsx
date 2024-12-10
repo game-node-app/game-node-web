@@ -11,12 +11,12 @@ import GameInfoImageCarouselSlide from "@/components/game/info/carousel/GameInfo
 import { useGame } from "@/components/game/hooks/useGame";
 import { Game } from "@/wrapper/server";
 import { DetailsBox } from "@/components/general/DetailsBox";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
 
 interface IGameInfoImageCarouselProps {
     gameId: number | undefined;
     imageSize: ImageSize;
     carouselProps?: CarouselProps;
-    slideProps?: CarouselSlideProps;
 }
 
 const getCombinedImages = (game: Game) => {
@@ -40,15 +40,9 @@ const GameInfoImageCarousel = ({
     gameId,
     carouselProps,
     imageSize,
-    slideProps,
 }: IGameInfoImageCarouselProps) => {
     const onMobile = useOnMobile();
-    const gameQuery = useGame(gameId, {
-        relations: {
-            artworks: true,
-            screenshots: true,
-        },
-    });
+    const gameQuery = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
 
     const game = gameQuery.data;
 

@@ -38,7 +38,7 @@ const ProfileEditUsernameUpdate = ({
     const profile = useUserProfile(userId);
     const profileMutation = useMutation({
         mutationFn: async (username: string) => {
-            return ProfileService.profileControllerUpdate({
+            return ProfileService.profileControllerUpdateV1({
                 username,
             });
         },

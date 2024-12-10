@@ -28,7 +28,7 @@ const PreferencesConnectionSteamForm = ({ onClose }: Props) => {
     const connectionCreateMutation = useMutation({
         mutationFn: async (profileURL: string) => {
             try {
-                await ConnectionsService.connectionsControllerCreateOrUpdate({
+                await ConnectionsService.connectionsControllerCreateOrUpdateV1({
                     type: type.STEAM,
                     userIdentifier: profileURL,
                     isImporterEnabled: true,
@@ -59,7 +59,7 @@ const PreferencesConnectionSteamForm = ({ onClose }: Props) => {
                 return;
             }
 
-            return ConnectionsService.connectionsControllerDelete(
+            return ConnectionsService.connectionsControllerDeleteV1(
                 userConnection.data.id,
             );
         },

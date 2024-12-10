@@ -1,40 +1,43 @@
 import React, { useMemo } from "react";
-import {
-    CommentStatistics,
-    CreateReportRequestDto,
-    FindOneStatisticsDto,
-} from "@/wrapper/server";
-import { useItemStatistics } from "@/components/statistics/hooks/useItemStatistics";
-import { FindAllCommentsDto } from "@/wrapper/server";
+import { CreateReportRequestDto, FindOneStatisticsDto } from "@/wrapper/server";
 import { UserComment } from "@/components/comment/types";
-import { ActionIcon, Group, Text } from "@mantine/core";
-import { redirectToAuth } from "supertokens-auth-react";
-import { IconThumbUp } from "@tabler/icons-react";
-import { useUserLike } from "@/components/statistics/hooks/useUserLike";
+import { Group } from "@mantine/core";
 import useUserId from "@/components/auth/hooks/useUserId";
 import ItemDropdown from "@/components/general/input/dropdown/ItemDropdown";
 import CommentsRemoveModal from "@/components/comment/view/CommentsRemoveModal";
 import { useDisclosure } from "@mantine/hooks";
 import ReportCreateFormModal from "@/components/report/modal/ReportCreateFormModal";
+import ItemLikesButton from "@/components/statistics/input/ItemLikesButton";
+import CommentsThreadButton from "@/components/comment/input/CommentsThreadButton";
 
 interface Props {
     comment: UserComment;
     onEditStart: (commentId: string) => void;
+    onCommentThreadClick: () => void;
 }
 
-const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
+const CommentsListItemActions = ({
+    comment,
+    onEditStart,
+    onCommentThreadClick,
+}: Props) => {
     const ownUserId = useUserId();
+
     const statisticsType = useMemo(() => {
-        if (comment.reviewId != undefined) {
+        if (Object.hasOwn(comment, "reviewId")) {
             return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
+        } else if (Object.hasOwn(comment, "activityId")) {
+            return FindOneStatisticsDto.sourceType.ACTIVITY_COMMENT;
         }
 
         return FindOneStatisticsDto.sourceType.REVIEW_COMMENT;
     }, [comment]);
 
     const reportType = useMemo(() => {
-        if (comment.reviewId != undefined) {
+        if (Object.hasOwn(comment, "reviewId")) {
             return CreateReportRequestDto.sourceType.REVIEW_COMMENT;
+        } else if (Object.hasOwn(comment, "activityId")) {
+            return CreateReportRequestDto.sourceType.ACTIVITY_COMMENT;
         }
 
         return CreateReportRequestDto.sourceType.REVIEW_COMMENT;
@@ -42,12 +45,6 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
 
     const [removeModalOpened, removeModalUtils] = useDisclosure();
     const [reportModalOpened, reportModalUtils] = useDisclosure();
-
-    const [likesCount, isLiked, toggleUserLike] = useUserLike({
-        sourceId: comment.id,
-        sourceType: statisticsType,
-        targetUserId: comment.profileUserId,
-    });
 
     const isOwnComment =
         ownUserId != undefined && comment.profileUserId === ownUserId;
@@ -65,22 +62,17 @@ const CommentsListItemActions = ({ comment, onEditStart }: Props) => {
                 sourceId={comment.id}
                 sourceType={reportType}
             />
-            <ActionIcon
-                onClick={async () => {
-                    if (!ownUserId) {
-                        redirectToAuth();
-                        return;
-                    }
-                    toggleUserLike();
-                }}
-                variant={isLiked ? "filled" : "subtle"}
-                size={"xl"}
-                color={isLiked ? "brand" : "white"}
-                data-disabled={!ownUserId}
-            >
-                <IconThumbUp />
-                <Text>{likesCount}</Text>
-            </ActionIcon>
+
+            <CommentsThreadButton
+                comment={comment}
+                onClick={onCommentThreadClick}
+            />
+
+            <ItemLikesButton
+                sourceId={comment.id}
+                sourceType={statisticsType}
+                targetUserId={comment.profileUserId}
+            />
 
             <ItemDropdown>
                 {isOwnComment ? (

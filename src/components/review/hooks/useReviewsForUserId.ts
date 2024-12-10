@@ -9,7 +9,7 @@ export default function useReviewsForUserId(
     return useQuery({
         queryKey: ["reviews", "all", userId, offset, limit],
         queryFn: async () => {
-            return await ReviewsService.reviewsControllerFindAllByUserId(
+            return await ReviewsService.reviewsControllerFindAllByUserIdV1(
                 userId,
                 offset,
                 limit,

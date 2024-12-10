@@ -69,7 +69,7 @@ const ProfileEditAvatarUploader = ({ onClose }: Props) => {
                 throw new Error("Invalid image source");
             }
 
-            await ProfileService.profileControllerUpdateImage({
+            await ProfileService.profileControllerUpdateImageV1({
                 file: await base64ToBlob(finalImageSrc!),
                 type: type.AVATAR,
             });

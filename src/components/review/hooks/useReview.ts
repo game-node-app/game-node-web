@@ -8,7 +8,7 @@ export function useReview(reviewId: string | undefined) {
             if (!reviewId) {
                 return null;
             }
-            return ReviewsService.reviewsControllerFindOneById(reviewId);
+            return ReviewsService.reviewsControllerFindOneByIdV1(reviewId);
         },
         enabled: reviewId != undefined,
     });

@@ -3,19 +3,14 @@ import { useGame } from "@/components/game/hooks/useGame";
 import { DetailsBox } from "@/components/general/DetailsBox";
 import { Skeleton, Text } from "@mantine/core";
 import CenteredLoading from "@/components/general/CenteredLoading";
+import { DEFAULT_GAME_INFO_VIEW_DTO } from "@/components/game/info/GameInfoView";
 
 interface IProps {
     gameId: number;
 }
 
 const GameInfoDetailsDeveloperInfo = ({ gameId }: IProps) => {
-    const game = useGame(gameId, {
-        relations: {
-            involvedCompanies: {
-                company: true,
-            },
-        },
-    });
+    const game = useGame(gameId, DEFAULT_GAME_INFO_VIEW_DTO);
     const involvedCompanies = game.data?.involvedCompanies;
     const developers = useMemo(() => {
         const hasDevelopers =

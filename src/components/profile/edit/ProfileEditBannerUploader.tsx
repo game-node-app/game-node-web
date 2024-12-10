@@ -60,7 +60,7 @@ const ProfileEditBannerUploader = ({ onClose }: BaseModalChildrenProps) => {
                 throw new Error("Invalid image source");
             }
 
-            await ProfileService.profileControllerUpdateImage({
+            await ProfileService.profileControllerUpdateImageV1({
                 file: await base64ToBlob(finalImageSrc),
                 type: type.BANNER,
             });

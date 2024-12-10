@@ -1,18 +1,13 @@
 import React, { useMemo } from "react";
-import {
-    AggregatedNotificationContentProps,
-    AggregatedNotificationProps,
-} from "@/components/notifications/AggregatedNotification";
-import { Group, Notification, Text } from "@mantine/core";
+import { AggregatedNotificationContentProps } from "@/components/notifications/AggregatedNotification";
+import { Group, Text } from "@mantine/core";
 import { UserAvatar } from "@/components/general/avatar/UserAvatar";
 import Link from "next/link";
-import useUserId from "@/components/auth/hooks/useUserId";
 
 const FollowerAggregatedNotification = ({
     aggregatedNotification,
 }: AggregatedNotificationContentProps) => {
-    const ownUserId = useUserId();
-    const content = useMemo(() => {
+    return useMemo(() => {
         if (
             !aggregatedNotification ||
             aggregatedNotification.notifications.length === 0
@@ -23,7 +18,7 @@ const FollowerAggregatedNotification = ({
         const followerUserId =
             aggregatedNotification.notifications[0].profileUserId;
         return (
-            <Link href={`/profile/${ownUserId}`} className={"w-full"}>
+            <Link href={`/profile/${followerUserId}`} className={"w-full"}>
                 <Group>
                     {followerUserId && <UserAvatar userId={followerUserId} />}
                     <Text>
@@ -33,9 +28,7 @@ const FollowerAggregatedNotification = ({
                 </Group>
             </Link>
         );
-    }, [aggregatedNotification, ownUserId]);
-
-    return content;
+    }, [aggregatedNotification]);
 };
 
 export default FollowerAggregatedNotification;

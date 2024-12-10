@@ -41,7 +41,6 @@ const ReviewListItem = ({
 }: IReviewListViewProps) => {
     const onMobile = useOnMobile();
     const [isReadMore, setIsReadMore] = useState<boolean>(false);
-    const [commentsModalOpened, commentsModalUtils] = useDisclosure();
 
     const nonEditableEditor = useEditor(
         {
@@ -139,15 +138,7 @@ const ReviewListItem = ({
                             </Box>
                         )}
                         <Group>
-                            <ItemCommentsButton
-                                onClick={() => {
-                                    commentsModalUtils.open();
-                                }}
-                                sourceId={review.id}
-                                sourceType={
-                                    FindAllCommentsDto.sourceType.REVIEW
-                                }
-                            />
+                            <ReviewListItemComments review={review} />
                             <ItemLikesButton
                                 targetUserId={review.profileUserId}
                                 sourceId={review.id}
@@ -163,15 +154,6 @@ const ReviewListItem = ({
                         </Group>
                     </Group>
                 </Stack>
-            </Group>
-            <Group className={"w-full mb-4 "} wrap={"nowrap"}>
-                <Group className={"w-full lg:ms-6"}>
-                    <ReviewListItemComments
-                        opened={commentsModalOpened}
-                        onClose={commentsModalUtils.close}
-                        review={review}
-                    />
-                </Group>
             </Group>
         </Stack>
     );

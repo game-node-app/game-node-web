@@ -14,7 +14,7 @@ export function useProfileMetricsDistributionByYear(
         queryKey: ["profile", "metrics", "distribution", userId, by],
         queryFn: async () => {
             if (!userId) return null;
-            return ProfileMetricsService.profileMetricsControllerGetYearDistribution(
+            return ProfileMetricsService.profileMetricsControllerGetYearDistributionV1(
                 userId,
                 by,
             );

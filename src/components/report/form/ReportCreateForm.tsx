@@ -62,7 +62,7 @@ const ReportCreateForm = ({
 
     const reportCreateMutation = useMutation({
         mutationFn: async (data: ReportCreateFormValues) => {
-            await ReportService.reportControllerCreate({
+            await ReportService.reportControllerCreateV1({
                 sourceId,
                 sourceType,
                 category: data.category,

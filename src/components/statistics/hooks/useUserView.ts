@@ -26,7 +26,7 @@ export function useUserView(
             ) {
                 return;
             }
-            await StatisticsQueueService.statisticsQueueControllerAddView({
+            await StatisticsQueueService.statisticsQueueControllerAddViewV1({
                 sourceId: sourceId,
                 sourceType: sourceType as StatisticsActionDto.sourceType,
             });

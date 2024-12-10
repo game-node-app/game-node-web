@@ -17,7 +17,7 @@ const UseReviewForUserIdAndGameId = (
                 if (!userId || userId === "" || !gameId) return null;
                 try {
                     const review =
-                        await ReviewsService.reviewsControllerFindOneByUserIdAndGameId(
+                        await ReviewsService.reviewsControllerFindOneByUserIdAndGameIdV1(
                             userId,
                             gameId,
                         );

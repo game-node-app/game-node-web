@@ -30,7 +30,7 @@ export function useInfiniteFollowInfo(
         ...useInfiniteQuery({
             queryKey,
             queryFn: async ({ pageParam }) => {
-                return FollowService.followControllerGetFollowInfo({
+                return FollowService.followControllerGetFollowInfoV1({
                     ...dto,
                     offset: pageParam,
                 }) as CancelablePromise<FollowInfoResponseDto>;

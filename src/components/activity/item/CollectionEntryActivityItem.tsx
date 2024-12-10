@@ -14,6 +14,7 @@ import { useCollection } from "@/components/collection/hooks/useCollection";
 import Link from "next/link";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
+import ActivityItemComments from "@/components/activity/input/ActivityItemComments";
 
 interface Props {
     activity: Activity;
@@ -105,6 +106,7 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                             </Title>
                         </Link>
                         <Group>
+                            <ActivityItemComments activity={activity} />
                             <ActivityItemLikes activity={activity} />
                         </Group>
                     </Stack>

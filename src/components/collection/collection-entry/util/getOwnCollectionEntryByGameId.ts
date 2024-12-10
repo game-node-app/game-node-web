@@ -8,7 +8,7 @@ export async function getOwnCollectionEntryByGameId(
     gameId: number,
 ): Promise<CollectionEntry | undefined> {
     try {
-        return await CollectionsEntriesService.collectionsEntriesControllerFindOwnEntryByGameId(
+        return await CollectionsEntriesService.collectionsEntriesControllerFindOwnEntryByGameIdV1(
             gameId,
         );
     } catch (e) {

@@ -5,7 +5,7 @@ export function useReport(reportId: number) {
     return useQuery({
         queryKey: ["report", reportId],
         queryFn: async () => {
-            return ReportService.reportControllerFindOneById(reportId);
+            return ReportService.reportControllerFindOneByIdV1(reportId);
         },
     });
 }

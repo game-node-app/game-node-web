@@ -66,13 +66,13 @@ const CollectionCreateOrUpdateForm = ({
     const collectionMutation = useMutation({
         mutationFn: async (data: CreateCollectionFormValues) => {
             if (existingCollection != undefined) {
-                await CollectionsService.collectionsControllerUpdate(
+                await CollectionsService.collectionsControllerUpdateV1(
                     existingCollection.id,
                     data,
                 );
                 return;
             }
-            await CollectionsService.collectionsControllerCreate(data);
+            await CollectionsService.collectionsControllerCreateV1(data);
         },
         onSuccess: () => {
             if (onClose) {

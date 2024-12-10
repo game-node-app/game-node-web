@@ -29,7 +29,9 @@ const CollectionRemoveModal = ({ collectionId, opened, onClose }: Props) => {
     });
     const collectionRemoveMutation = useMutation({
         mutationFn: (collectionId: string) => {
-            return CollectionsService.collectionsControllerDelete(collectionId);
+            return CollectionsService.collectionsControllerDeleteV1(
+                collectionId,
+            );
         },
         onSettled: () => {
             libraryQuery.invalidate();
