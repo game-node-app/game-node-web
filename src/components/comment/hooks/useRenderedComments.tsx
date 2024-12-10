@@ -66,7 +66,6 @@ export function useRenderedComments({
                             onEditStart={(commentId) =>
                                 setEditedCommentId(commentId)
                             }
-                            editedCommentId={editedCommentId}
                         />
                     </Group>
                 );
