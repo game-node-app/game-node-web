@@ -4,7 +4,7 @@ import {
     isGameSearchObject,
 } from "@/components/game/util/isGameObject";
 
-export function getCoverUrl(game: TGameOrSearchGame | undefined) {
+export function getCoverUrl(game: TGameOrSearchGame | undefined | null) {
     if (!game) return undefined;
     if (isGameSearchObject(game) && game.coverUrl) {
         return game.coverUrl;

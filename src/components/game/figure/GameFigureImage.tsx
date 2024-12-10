@@ -15,7 +15,7 @@ import { TGameOrSearchGame } from "@/components/game/util/types";
 import { getCoverUrl } from "@/components/game/util/getCoverUrl";
 
 export interface IGameFigureProps extends PropsWithChildren {
-    game: TGameOrSearchGame | undefined;
+    game: TGameOrSearchGame | undefined | null;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
     imageProps?: ImageProps;
     linkProps?: React.HTMLProps<HTMLAnchorElement>;
