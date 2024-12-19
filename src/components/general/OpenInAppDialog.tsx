@@ -1,18 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { useRouter } from "next/router";
-import {
-    Anchor,
-    Button,
-    Dialog,
-    Divider,
-    Drawer,
-    Group,
-    Image,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Anchor, Button, Divider, Drawer, Image, Stack } from "@mantine/core";
 import { useDisclosure, useSessionStorage } from "@mantine/hooks";
 
 /**
@@ -34,14 +23,16 @@ const OpenInAppDialog = () => {
     useEffect(() => {
         if (onMobile && router.pathname !== "/" && !hasBeenClosed) {
             open();
-            setHasBeenClosed(true);
         }
     }, [hasBeenClosed, onMobile, open, router.pathname, setHasBeenClosed]);
 
     return (
         <Drawer
             opened={opened}
-            onClose={close}
+            onClose={() => {
+                close();
+                setHasBeenClosed(true);
+            }}
             withCloseButton
             size="30vh"
             radius="md"
@@ -49,7 +40,15 @@ const OpenInAppDialog = () => {
             title={"GameNode is (even) better in the app!"}
         >
             <Stack className={"w-full items-center"}>
-                <Button size={"md"}>Open in app</Button>
+                <Anchor
+                    href={
+                        typeof window != "undefined"
+                            ? window.location.href
+                            : process.env.NEXT_PUBLIC_DOMAIN_WEBSITE
+                    }
+                >
+                    <Button size={"md"}>Open in app</Button>
+                </Anchor>
                 <Divider
                     label={"OR"}
                     orientation={"horizontal"}
