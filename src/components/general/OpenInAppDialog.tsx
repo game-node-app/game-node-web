@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from "react";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import { useRouter } from "next/router";
 import { Anchor, Button, Divider, Drawer, Image, Stack } from "@mantine/core";
-import { useDisclosure, useSessionStorage } from "@mantine/hooks";
+import {
+    useDisclosure,
+    useIsFirstRender,
+    useSessionStorage,
+} from "@mantine/hooks";
 
 /**
  * Component that shows an 'open in app' dialog for mobile users.
@@ -11,6 +15,11 @@ import { useDisclosure, useSessionStorage } from "@mantine/hooks";
 const OpenInAppDialog = () => {
     const router = useRouter();
     const onMobile = useOnMobile();
+
+    /**
+     * Necessary because 'useOnMobile' returns true by default for SSR
+     */
+    const isFirstRender = useIsFirstRender();
 
     const [hasBeenClosed, setHasBeenClosed] = useSessionStorage({
         key: "open-in-app-dialog-closed",
@@ -21,10 +30,22 @@ const OpenInAppDialog = () => {
     const [opened, { close, open }] = useDisclosure();
 
     useEffect(() => {
-        if (onMobile && router.pathname !== "/" && !hasBeenClosed) {
+        if (
+            !isFirstRender &&
+            onMobile &&
+            router.pathname !== "/" &&
+            !hasBeenClosed
+        ) {
             open();
         }
-    }, [hasBeenClosed, onMobile, open, router.pathname, setHasBeenClosed]);
+    }, [
+        hasBeenClosed,
+        isFirstRender,
+        onMobile,
+        open,
+        router.pathname,
+        setHasBeenClosed,
+    ]);
 
     return (
         <Drawer
@@ -46,6 +67,9 @@ const OpenInAppDialog = () => {
                             ? window.location.href
                             : process.env.NEXT_PUBLIC_DOMAIN_WEBSITE
                     }
+                    onClick={() => {
+                        setHasBeenClosed(true);
+                    }}
                 >
                     <Button size={"md"}>Open in app</Button>
                 </Anchor>
