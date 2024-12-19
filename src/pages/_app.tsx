@@ -33,6 +33,7 @@ import { theme } from "@/util/theme";
 import NotificationsManager from "@/components/general/NotificationsManager";
 import { useMatomoTracker } from "@/components/general/hooks/useMatomoTracker";
 import MatomoWrapper from "@/components/general/MatomoWrapper";
+import OpenInAppDialog from "@/components/general/OpenInAppDialog";
 
 /**
  * Basic configuration for wrapper services
@@ -78,6 +79,7 @@ export default function App({
             <SuperTokensProvider>
                 <QueryClientProvider client={queryClient}>
                     <NotificationsManager />
+                    <OpenInAppDialog />
                     <MatomoWrapper>
                         <GlobalAppShell>
                             <HydrationBoundary
