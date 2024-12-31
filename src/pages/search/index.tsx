@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Container, Flex, Space, Stack } from "@mantine/core";
+import { Box, Container, Flex, Space, Stack, Text } from "@mantine/core";
 import SearchBar from "@/components/general/input/SearchBar/SearchBar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -138,7 +138,14 @@ const Index = () => {
                             }}
                         />
                     </form>
-                    <GameSearchTips className={"w-full mt-2"} />
+                    <Box className={"w-full mt-2"}>
+                        <Text className={"text-start text-xs text-dimmed"}>
+                            The GameNode team wishes you a happy new year!
+                            Thanks for staying with us through 2024.
+                        </Text>
+                    </Box>
+
+                    {/*<GameSearchTips className={"w-full mt-2"} />*/}
                 </Box>
                 <Box
                     className={
