@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { UserConnection } from "@/wrapper/server";
-import type = UserConnection.type;
+import { UserConnectionDto } from "@/wrapper/server";
+import type = UserConnectionDto.type;
 import { useOwnUserConnectionByType } from "@/components/connections/hooks/useOwnUserConnectionByType";
 import { useDisclosure } from "@mantine/hooks";
 import { Group, Image, Paper, Stack, Switch, Text, Title } from "@mantine/core";
@@ -31,7 +31,7 @@ const PreferencesConnectionItem = ({ type }: Props) => {
                     onClose={modalUtils.close}
                 />
                 <Image
-                    alt={"Steam icon"}
+                    alt={"Connection icon"}
                     src={getServerStoredIcon(type.valueOf())}
                     w={38}
                     h={38}

@@ -48,7 +48,7 @@ const GameFigureImage = ({
             onClick={onClick}
             {...linkProps}
         >
-            <AspectRatio ratio={264 / 354} pos="relative" h={"100%"} w={"auto"}>
+            <AspectRatio ratio={264 / 354} pos="relative" w={"auto"}>
                 <Image
                     radius={"sm"}
                     src={sizedCoverUrl ?? "/img/game_placeholder.jpeg"}

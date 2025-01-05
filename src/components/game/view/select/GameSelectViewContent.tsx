@@ -24,6 +24,7 @@ interface Props extends PropsWithChildren<SimpleGridProps & SelectedProps> {
  * @param checkIsSelected
  * @param onSelected
  * @param excludeItemsInLibrary
+ * @param onExcludedItemClick
  * @param others
  * @constructor
  */
