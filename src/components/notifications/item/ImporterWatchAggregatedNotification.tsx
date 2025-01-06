@@ -41,8 +41,9 @@ const ImporterWatchAggregatedNotification = ({
                     h={38}
                 />
                 <Text>
-                    We've found {notificationQuery.data.games.length} new games
-                    ready to be imported from your {sourceName} connection.
+                    We've found {notificationQuery.data?.games?.length} new
+                    games ready to be imported from your {sourceName}{" "}
+                    connection.
                 </Text>
             </Group>
         </Link>
