@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import GameFigureImage, {
     IGameFigureProps,
 } from "@/components/game/figure/GameFigureImage";
-import { Overlay, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Box, Center, Overlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCircleCheck, IconCircleCheckFilled } from "@tabler/icons-react";
 import { useOwnCollectionEntryForGameId } from "@/components/collection/collection-entry/hooks/useOwnCollectionEntryForGameId";
@@ -77,11 +77,13 @@ const GameSelectViewFigure = ({
                         backgroundOpacity={0.85}
                         className={"z-10"}
                     />
-                    <IconCircleCheckFilled
+                    <Center
                         className={
-                            "absolute left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bottom-1/2 w-8 h-8 z-20 text-brand-5"
+                            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
                         }
-                    />
+                    >
+                        <IconCircleCheckFilled className={"text-brand-5"} />
+                    </Center>
                 </>
             )}
             {isExcluded && (
@@ -91,16 +93,20 @@ const GameSelectViewFigure = ({
                         backgroundOpacity={0.85}
                         className={"z-10"}
                     />
-                    <div
+                    <Center
                         className={
-                            "absolute flex flex-col left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 bottom-1/2 z-20"
+                            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 items-center"
                         }
                     >
-                        <IconCircleCheckFilled
-                            className={"relative w-8 h-8 z-20 text-brand-5"}
-                        />
-                        <Text className={"mt-2"}>In your library</Text>
-                    </div>
+                        <Stack className={"items-center gap-0.5"}>
+                            <IconCircleCheckFilled
+                                className={"w-8 h-8 z-20 text-brand-5"}
+                            />
+                            <Text className={"text-center"}>
+                                In your library
+                            </Text>
+                        </Stack>
+                    </Center>
                 </>
             )}
         </GameFigureImage>

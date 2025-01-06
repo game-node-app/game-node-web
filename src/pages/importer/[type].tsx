@@ -57,15 +57,6 @@ type ImporterFormValues = z.infer<typeof ImporterFormSchema>;
 
 const DEFAULT_LIMIT = 20;
 
-const getPlatformIdForType = (type: string) => {
-    switch (type) {
-        case "steam":
-            return 6;
-        default:
-            return undefined;
-    }
-};
-
 function TypePage() {
     const router = useRouter();
     const { type } = router.query;
@@ -189,20 +180,13 @@ function TypePage() {
         }: ImporterFormValues) => {
             const importedGameIds: number[] = [];
             for (const selectedGameId of selectedGameIds) {
-                const platformId = getPlatformIdForType(type as string);
-                if (platformId == undefined) {
-                    throw new Error(
-                        "Invalid source type. Please contact support",
-                    );
-                }
-
-                const externalGame = importerEntriesQuery.data?.data.find(
+                const importerItem = importerEntriesQuery.data?.data.find(
                     (externalGame) => {
                         return externalGame.gameId === selectedGameId;
                     },
                 );
 
-                if (!externalGame) {
+                if (!importerItem) {
                     throw new Error(
                         "Error while inserting game. Invalid external game ID. Please contact support.",
                     );
@@ -212,12 +196,12 @@ function TypePage() {
                     {
                         gameId: selectedGameId,
                         collectionIds: selectedCollectionIds,
-                        platformIds: [platformId],
+                        platformIds: [importerItem.preferredPlatformId],
                         isFavorite: false,
                     },
                 );
                 await ImporterService.importerControllerChangeStatusV1({
-                    externalGameId: externalGame.id,
+                    externalGameId: importerItem.id,
                     status: "processed",
                 });
                 importedGameIds.push(selectedGameId);
@@ -276,7 +260,7 @@ function TypePage() {
         <Flex justify={"center"} mih={"100vh"} p={0} wrap={"wrap"}>
             <Paper className={"w-full lg:w-10/12 p-4"}>
                 <form
-                    className={"w-full h-full"}
+                    className={"w-full h-full flex flex-col"}
                     onSubmit={handleSubmit((data) => {
                         importMutation.mutate(data);
                     })}
@@ -340,7 +324,7 @@ function TypePage() {
                             />
                         )}
                     </Group>
-                    <Stack w={"100%"} className={"mt-4"}>
+                    <Stack className={"mt-4 w-full grow"}>
                         {isError && error && (
                             <CenteredErrorMessage message={error.message} />
                         )}
@@ -380,18 +364,20 @@ function TypePage() {
                             >
                                 {isLoading && buildLoadingSkeletons()}
                             </GameSelectView.Content>
-                            <Space h={"1.5rem"} />
                             {!isEmpty && (
-                                <GameSelectView.Pagination
-                                    paginationInfo={
-                                        importerEntriesQuery.data?.pagination
-                                    }
-                                    page={page}
-                                    onPaginationChange={(selectedPage) => {
-                                        setValue("page", selectedPage);
-                                        resetSelectedGames();
-                                    }}
-                                />
+                                <Box className={"mt-auto"}>
+                                    <GameSelectView.Pagination
+                                        paginationInfo={
+                                            importerEntriesQuery.data
+                                                ?.pagination
+                                        }
+                                        page={page}
+                                        onPaginationChange={(selectedPage) => {
+                                            setValue("page", selectedPage);
+                                            resetSelectedGames();
+                                        }}
+                                    />
+                                </Box>
                             )}
                         </GameSelectView>
                     </Stack>

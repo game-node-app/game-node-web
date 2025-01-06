@@ -12,8 +12,7 @@ const Index = () => {
     const { data, isLoading, isError, error } = useOwnUserConnections();
 
     const importerUsableConnections = data?.filter(
-        (connection) =>
-            connection.isImporterViable && connection.isImporterEnabled,
+        (connection) => connection.isImporterEnabled,
     );
 
     const isImportingAvailable =
