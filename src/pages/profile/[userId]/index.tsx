@@ -62,7 +62,11 @@ const Index = () => {
                         className={"w-full mt-6 mb-2"}
                         label={"Recent activity"}
                     />
-                    <RecentActivityList userId={userIdString} limit={7} />
+                    <RecentActivityList
+                        userId={userIdString}
+                        withUserAvatar={false}
+                        limit={7}
+                    />
                 </ProfileUserInfoWithBanner>
             </Box>
         </Box>

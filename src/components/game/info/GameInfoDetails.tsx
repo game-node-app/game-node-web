@@ -7,7 +7,6 @@ import GameInfoPlatforms from "@/components/game/info/GameInfoPlatforms";
 import GameInfoDetailsDeveloperInfo from "@/components/game/info/GameInfoDetailsDeveloperInfo";
 import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
 import GameInfoScore from "@/components/game/info/GameInfoScore";
-import GameInfoPlaytime from "@/components/game/info/playtime/GameInfoPlaytime";
 import GameInfoExternalStores from "@/components/game/info/GameInfoExternalStores";
 import GameInfoProgressTimeline from "@/components/game/info/GameInfoProgressTimeline";
 
@@ -48,7 +47,6 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                     <GameInfoProgressTimeline gameId={game.id} />
                 </DetailsBox>
                 <GameInfoScore gameId={game.id} />
-                <GameInfoPlaytime gameId={game.id} />
             </SimpleGrid>
         </Stack>
     );

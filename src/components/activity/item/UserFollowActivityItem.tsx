@@ -6,10 +6,9 @@ import { Box, Group, Paper, Text, Title } from "@mantine/core";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
 import TextLink from "@/components/general/TextLink";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
+import { ActivityItemProps } from "@/components/activity/types";
 
-interface Props {
-    activity: Activity;
-}
+interface Props extends ActivityItemProps {}
 
 const UserFollowActivityItem = ({ activity }: Props) => {
     const onMobile = useOnMobile();

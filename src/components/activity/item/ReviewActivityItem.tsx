@@ -14,10 +14,9 @@ import Link from "next/link";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import ActivityItemComments from "@/components/activity/input/ActivityItemComments";
+import { ActivityItemProps } from "@/components/activity/types";
 
-interface Props {
-    activity: Activity;
-}
+interface Props extends ActivityItemProps {}
 
 const ReviewActivityItem = ({ activity }: Props) => {
     const onMobile = useOnMobile();
