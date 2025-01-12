@@ -16,6 +16,7 @@ import { useAvailableConnections } from "@/components/connections/hooks/useAvail
 const ConnectionSetupFormSchema = z.object({
     userIdentifier: z.string().min(1, "A username must be provided."),
     isImporterEnabled: z.boolean().default(true),
+    isPlaytimeImportEnabled: z.boolean().default(true),
 });
 
 type ConnectionSetupFormValues = z.infer<typeof ConnectionSetupFormSchema>;
@@ -35,6 +36,7 @@ const PreferencesConnectionSetup = ({ type, onClose }: Props) => {
         mode: "onBlur",
         defaultValues: {
             isImporterEnabled: true,
+            isPlaytimeImportEnabled: true,
         },
         resolver: zodResolver(ConnectionSetupFormSchema),
     });
@@ -51,6 +53,7 @@ const PreferencesConnectionSetup = ({ type, onClose }: Props) => {
                 type: type,
                 userIdentifier: data.userIdentifier,
                 isImporterEnabled: data.isImporterEnabled,
+                isPlaytimeImportEnabled: data.isPlaytimeImportEnabled,
             });
         },
         onSuccess: () => {
@@ -105,6 +108,19 @@ const PreferencesConnectionSetup = ({ type, onClose }: Props) => {
         if (availableConnections.data != undefined) {
             return availableConnections.data.some((connection) => {
                 return connection.type === type && connection.isImporterViable;
+            });
+        }
+
+        return false;
+    }, [availableConnections.data, type]);
+
+    const isPlaytimeImportViable = useMemo(() => {
+        if (availableConnections.data != undefined) {
+            return availableConnections.data.some((connection) => {
+                return (
+                    connection.type === type &&
+                    connection.isPlaytimeImportViable
+                );
             });
         }
 
@@ -186,6 +202,25 @@ const PreferencesConnectionSetup = ({ type, onClose }: Props) => {
                                 "If this connection can be used by the Importer system to import games."
                             }
                             {...register("isImporterEnabled")}
+                        />
+                    </Stack>
+                )}
+                {isPlaytimeImportViable && (
+                    <Stack>
+                        <Switch
+                            error={errors.isPlaytimeImportEnabled?.message}
+                            label={"Allow playtime importing"}
+                            labelPosition={"left"}
+                            defaultChecked={
+                                userConnection.data
+                                    ? userConnection.data
+                                          .isPlaytimeImportEnabled
+                                    : true
+                            }
+                            description={
+                                "If playtime data can be imported from this collection, even for games not in your collection."
+                            }
+                            {...register("isPlaytimeImportEnabled")}
                         />
                     </Stack>
                 )}

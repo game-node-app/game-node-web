@@ -10,7 +10,7 @@ import { ActivityItemProps } from "@/components/activity/types";
 
 interface Props extends ActivityItemProps {}
 
-const UserFollowActivityItem = ({ activity }: Props) => {
+const UserFollowActivityItem = ({ activity, withUserAvatar = true }: Props) => {
     const onMobile = useOnMobile();
     const userFollowQuery = useUserFollow(activity.userFollowId!);
 
@@ -29,7 +29,7 @@ const UserFollowActivityItem = ({ activity }: Props) => {
                     "w-full h-full relative items-center flex-nowrap gap-4 my-5"
                 }
             >
-                <Box className={"w-3/12 lg:w-2/12"}>
+                <Box className={withUserAvatar ? "w-3/12 lg:w-2/12" : "hidden"}>
                     <UserAvatarGroup
                         userId={activity.profileUserId}
                         groupProps={{
@@ -44,7 +44,11 @@ const UserFollowActivityItem = ({ activity }: Props) => {
                         withHorizontalBreak
                     />
                 </Box>
-                <Box className={"w-6/12 lg:w-6/12"}>
+                <Box
+                    className={
+                        withUserAvatar ? "w-6/12" : "w-6/12 ms-4 lg:ms-8"
+                    }
+                >
                     <Text>
                         <TextLink href={`/profile/${followerUserId}`} span>
                             {followerUserProfile.data?.username}
@@ -55,7 +59,7 @@ const UserFollowActivityItem = ({ activity }: Props) => {
                         </TextLink>
                     </Text>
                 </Box>
-                <Box className={"ms-auto w-3/12 lg:w-2/12"}>
+                <Box className={"ms-auto w-3/12 lg:w-2/12 lg:me-4"}>
                     <UserAvatarGroup
                         userId={followedUserId}
                         groupProps={{

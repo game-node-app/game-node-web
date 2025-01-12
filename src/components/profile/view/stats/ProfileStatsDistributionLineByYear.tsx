@@ -125,7 +125,7 @@ const ProfileStatsDistributionLineByYear = ({ userId }: Props) => {
                                 )}
                                 dataKey={"year"}
                                 series={PLAYTIME_SERIES}
-                                xAxisLabel={"Finish year"}
+                                xAxisLabel={"Year added to collection"}
                             />
                         )}
                     </Tabs.Panel>

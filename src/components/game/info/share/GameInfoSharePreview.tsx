@@ -22,6 +22,7 @@ import GameNodeLogo from "@/components/general/GameNodeLogo";
 import { UseFormWatch } from "react-hook-form";
 import { ShareFormValues } from "@/components/game/info/share/GameInfoShare";
 import GameRating from "@/components/general/input/GameRating";
+import { ImageSize } from "@/components/game/util/getSizedImageUrl";
 
 interface SharePreviewProps {
     gameId: number;
@@ -59,8 +60,11 @@ const GameInfoSharePreview = ({
             }}
         >
             <Stack w={"100%"} align={"center"}>
-                <Stack align={"center"} className={"w-full p-16 pb-2"}>
-                    <GameFigureImage game={game} />
+                <Stack align={"center"} className={"w-full p-10 pb-2"}>
+                    <GameFigureImage
+                        game={game}
+                        imageSize={ImageSize.COVER_BIG_2X}
+                    />
                     <Title size={"h4"} className={"text-center mt-4"}>
                         {game?.name}
                     </Title>

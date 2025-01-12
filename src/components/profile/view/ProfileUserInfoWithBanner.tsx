@@ -23,6 +23,7 @@ import { IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditForm from "@/components/profile/edit/ProfileEditForm";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
+import UserRecentGames from "@/components/playtime/UserRecentGames";
 
 interface ProfileUserInfoWithBannerProps extends PropsWithChildren {
     userId: string;
