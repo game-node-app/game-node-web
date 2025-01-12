@@ -20,6 +20,7 @@ export interface IGameFigureProps extends PropsWithChildren {
     imageProps?: ImageProps;
     linkProps?: React.HTMLProps<HTMLAnchorElement>;
     href?: string;
+    imageSize?: ImageSize;
 }
 
 /**
@@ -36,10 +37,14 @@ const GameFigureImage = ({
     linkProps,
     href,
     onClick,
+    imageSize,
     children,
 }: IGameFigureProps) => {
     const coverUrl = getCoverUrl(game);
-    const sizedCoverUrl = getSizedImageUrl(coverUrl, ImageSize.COVER_BIG);
+    const sizedCoverUrl = getSizedImageUrl(
+        coverUrl,
+        imageSize ?? ImageSize.COVER_BIG,
+    );
     const defaultHref = `/game/${game?.id}`;
     return (
         <Link

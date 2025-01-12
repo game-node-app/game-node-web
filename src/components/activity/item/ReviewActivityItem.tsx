@@ -14,12 +14,11 @@ import Link from "next/link";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import ActivityItemComments from "@/components/activity/input/ActivityItemComments";
+import { ActivityItemProps } from "@/components/activity/types";
 
-interface Props {
-    activity: Activity;
-}
+interface Props extends ActivityItemProps {}
 
-const ReviewActivityItem = ({ activity }: Props) => {
+const ReviewActivityItem = ({ activity, withUserAvatar = true }: Props) => {
     const onMobile = useOnMobile();
     const reviewQuery = useReview(activity.reviewId!);
     const gameId = reviewQuery.data?.gameId;
@@ -48,7 +47,7 @@ const ReviewActivityItem = ({ activity }: Props) => {
                     "w-full h-full relative z-20 items-center flex-nowrap"
                 }
             >
-                <Box className={"w-3/12 lg:w-2/12"}>
+                <Box className={withUserAvatar ? "w-3/12 lg:w-2/12" : "hidden"}>
                     <UserAvatarGroup
                         userId={activity.profileUserId}
                         groupProps={{
@@ -63,7 +62,13 @@ const ReviewActivityItem = ({ activity }: Props) => {
                         withHorizontalBreak
                     />
                 </Box>
-                <Box className={"w-3/12"}>
+                <Box
+                    className={
+                        withUserAvatar
+                            ? "w-3/12"
+                            : "w-5/12 lg:w-4/12 ms-4 lg:ms-8"
+                    }
+                >
                     <Stack gap={5}>
                         <Link
                             href={`/game/${gameQuery.data?.id}?reviewId=${activity.reviewId}`}

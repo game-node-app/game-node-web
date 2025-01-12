@@ -73,7 +73,10 @@ const GameInfoView = ({ id }: IGameInfoViewProps) => {
                             h={"inherit"}
                         >
                             <Box className="w-full lg:w-96">
-                                <GameFigureImage game={game} />
+                                <GameFigureImage
+                                    game={game}
+                                    imageSize={ImageSize.COVER_BIG_2X}
+                                />
                             </Box>
 
                             <Break />

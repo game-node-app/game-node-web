@@ -57,11 +57,6 @@ const ProfileViewNavbar = ({ userId, ...groupProps }: Props) => {
                 targetUserId={userId}
                 criteria={criteria.FOLLOWING}
             />
-            <ProfileViewNavbarLink
-                title={"Stats"}
-                showItemCount={false}
-                href={`/profile/${userId}/stats`}
-            />
         </SimpleGrid>
     );
 };

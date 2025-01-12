@@ -75,8 +75,8 @@ const ProfileStatsSimpleOverview = ({ userId }: Props) => {
                         </Popover.Target>
                         <Popover.Dropdown>
                             <Text className={"break-keep text-sm"}>
-                                Based on available data for average storyline
-                                completion time.
+                                Based on data from available connections (e.g.
+                                Steam, PSN).
                             </Text>
                             <Text className={"break-keep text-sm"}>
                                 Actual playtime may be much greater.

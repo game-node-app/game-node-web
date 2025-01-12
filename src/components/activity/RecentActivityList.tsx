@@ -14,9 +14,15 @@ interface Props {
     userId?: string;
     limit?: number;
     offset?: number;
+    withUserAvatar?: boolean;
 }
 
-const RecentActivityList = ({ userId, offset = 0, limit = 5 }: Props) => {
+const RecentActivityList = ({
+    userId,
+    withUserAvatar = true,
+    offset = 0,
+    limit = 5,
+}: Props) => {
     const activitiesQuery = useLatestActivities(userId, offset, limit);
     const isEmpty =
         !activitiesQuery.isLoading &&
@@ -33,6 +39,7 @@ const RecentActivityList = ({ userId, offset = 0, limit = 5 }: Props) => {
                         <ReviewActivityItem
                             key={activity.id}
                             activity={activity}
+                            withUserAvatar={withUserAvatar}
                         />
                     );
                 case type.COLLECTION_ENTRY:
@@ -40,6 +47,7 @@ const RecentActivityList = ({ userId, offset = 0, limit = 5 }: Props) => {
                         <CollectionEntryActivityItem
                             key={activity.id}
                             activity={activity}
+                            withUserAvatar={withUserAvatar}
                         />
                     );
                 case type.FOLLOW:
@@ -47,11 +55,12 @@ const RecentActivityList = ({ userId, offset = 0, limit = 5 }: Props) => {
                         <UserFollowActivityItem
                             key={activity.id}
                             activity={activity}
+                            withUserAvatar={withUserAvatar}
                         />
                     );
             }
         });
-    }, [activitiesQuery.data]);
+    }, [activitiesQuery.data, withUserAvatar]);
 
     return (
         <Stack className={"w-full h-full"}>

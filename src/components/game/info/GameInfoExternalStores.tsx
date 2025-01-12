@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
+import { useGameExternalStores } from "@/components/game/hooks/useGameExternalStores";
 
 interface Props extends GroupProps {
     gameId: number;
@@ -19,15 +20,7 @@ interface Props extends GroupProps {
 
 const GameInfoExternalStores = ({ gameId, iconsProps, ...others }: Props) => {
     const onMobile = useOnMobile();
-    const externalStoresQuery = useQuery({
-        queryKey: ["game", "external-stores", gameId],
-        queryFn: async () => {
-            return GameRepositoryService.gameRepositoryControllerGetExternalStoresForGameIdV1(
-                gameId,
-            );
-        },
-        retry: false,
-    });
+    const externalStoresQuery = useGameExternalStores(gameId);
 
     const buildIconsSkeletons = useCallback(() => {
         return new Array(4).fill(0).map((_, i) => {

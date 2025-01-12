@@ -1,7 +1,5 @@
 import React from "react";
-import { Activity } from "@/wrapper/server";
 import useOnMobile from "@/components/general/hooks/useOnMobile";
-import { useReview } from "@/components/review/hooks/useReview";
 import { useGame } from "@/components/game/hooks/useGame";
 import {
     getSizedImageUrl,
@@ -15,12 +13,14 @@ import Link from "next/link";
 import { UserAvatarGroup } from "@/components/general/avatar/UserAvatarGroup";
 import ActivityCreateDate from "@/components/activity/item/ActivityCreateDate";
 import ActivityItemComments from "@/components/activity/input/ActivityItemComments";
+import { ActivityItemProps } from "@/components/activity/types";
 
-interface Props {
-    activity: Activity;
-}
+interface Props extends ActivityItemProps {}
 
-const CollectionEntryActivityItem = ({ activity }: Props) => {
+const CollectionEntryActivityItem = ({
+    activity,
+    withUserAvatar = true,
+}: Props) => {
     const onMobile = useOnMobile();
     const collectionEntryQuery = useCollectionEntry(
         activity.collectionEntryId!,
@@ -56,7 +56,7 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                     "w-full h-full relative z-20 items-center flex-nowrap"
                 }
             >
-                <Box className={"w-3/12 lg:w-2/12"}>
+                <Box className={withUserAvatar ? "w-3/12 lg:w-2/12" : "hidden"}>
                     <UserAvatarGroup
                         userId={activity.profileUserId}
                         groupProps={{
@@ -71,7 +71,13 @@ const CollectionEntryActivityItem = ({ activity }: Props) => {
                         withHorizontalBreak
                     />
                 </Box>
-                <Box className={"w-3/12"}>
+                <Box
+                    className={
+                        withUserAvatar
+                            ? "w-3/12"
+                            : "w-5/12 lg:w-4/12 ms-4 lg:ms-8"
+                    }
+                >
                     <Stack gap={5}>
                         <Link href={`/game/${gameQuery.data?.id}`}>
                             <Title className={"text-sm lg:text-md"}>
