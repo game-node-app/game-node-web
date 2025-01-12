@@ -10,12 +10,19 @@ import { Box, Group, Image, Overlay, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import { useGameExternalStores } from "@/components/game/hooks/useGameExternalStores";
 import { getServerStoredIcon } from "@/util/getServerStoredImages";
+import { getCapitalizedText } from "@/util/getCapitalizedText";
 
 interface Props {
     playtime: UserPlaytimeDto;
+    withTitle?: boolean;
+    withBackground?: boolean;
 }
 
-const UserPlaytimeItem = ({ playtime }: Props) => {
+const UserPlaytimeItem = ({
+    playtime,
+    withTitle = true,
+    withBackground = true,
+}: Props) => {
     const onMobile = useOnMobile();
 
     const gameId = playtime.gameId;
@@ -25,21 +32,6 @@ const UserPlaytimeItem = ({ playtime }: Props) => {
         },
     });
 
-    const externalStoresQuery = useGameExternalStores(gameId);
-
-    const externalStore = useMemo(() => {
-        const externalGameCategory = playtime.externalGame?.category;
-        if (
-            externalStoresQuery.data == undefined ||
-            externalGameCategory == undefined
-        )
-            return undefined;
-
-        return externalStoresQuery.data.find(
-            (item) => item.category === externalGameCategory,
-        );
-    }, [externalStoresQuery.data, playtime.externalGame?.category]);
-
     const imageUrl = getSizedImageUrl(
         gameQuery.data?.cover?.url,
         onMobile ? ImageSize.SCREENSHOT_MED : ImageSize.SCREENSHOT_BIG,
@@ -47,39 +39,58 @@ const UserPlaytimeItem = ({ playtime }: Props) => {
 
     return (
         <Box
-            style={{
-                backgroundImage: `url(${imageUrl})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-            }}
-            className={"relative w-full h-28 rounded-md"}
+            style={
+                withBackground
+                    ? {
+                          backgroundImage: `url(${imageUrl})`,
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                      }
+                    : undefined
+            }
+            className={
+                withTitle && withBackground
+                    ? "relative w-full h-28 rounded-md"
+                    : "relative w-full"
+            }
         >
-            <Overlay backgroundOpacity={0.8} className={"z-0"}></Overlay>
+            {withBackground && (
+                <Overlay
+                    backgroundOpacity={0.8}
+                    className={"z-0 rounded-md"}
+                ></Overlay>
+            )}
             <Group
                 className={
                     "w-full h-full relative z-20 items-center flex-nowrap"
                 }
             >
-                <Stack
-                    className={
-                        "w-fit max-w-32 items-start justify-center h-full"
-                    }
-                >
-                    <Link
-                        href={`/game/${gameQuery.data?.id}`}
-                        className={"flex flex-nowrap ms-4 max-w-28"}
+                {withTitle && (
+                    <Stack
+                        className={
+                            "w-fit max-w-32 items-start justify-center h-full"
+                        }
                     >
-                        <Title className={"text-sm lg:text-md text-center"}>
-                            {gameQuery.data?.name}
-                        </Title>
-                    </Link>
-                </Stack>
+                        <Link
+                            href={`/game/${gameQuery.data?.id}`}
+                            className={"flex flex-nowrap ms-4 max-w-28"}
+                        >
+                            <Title className={"text-sm lg:text-md text-center"}>
+                                {gameQuery.data?.name}
+                            </Title>
+                        </Link>
+                    </Stack>
+                )}
                 <Group
                     className={
-                        "ms-auto w-5/12 justify-end items-center flex-nowrap gap-8 me-4"
+                        withTitle
+                            ? "ms-auto w-5/12 justify-end items-center flex-nowrap gap-8 me-4"
+                            : withBackground
+                              ? "w-full flex-nowrap mx-4"
+                              : "w-full flex-nowrap"
                     }
                 >
-                    <Group className={"w-full flex-nowrap justify-end"}>
+                    <Group className={"w-full flex-nowrap"}>
                         <Text className={"text-sm lg:text-md"}>
                             Recent
                             <br />
@@ -100,13 +111,12 @@ const UserPlaytimeItem = ({ playtime }: Props) => {
                             </Text>
                         </Text>
                     </Group>
-                    {externalStore && (
-                        <Image
-                            w={32}
-                            alt={externalStore.storeName!}
-                            src={getServerStoredIcon(externalStore.icon!)}
-                        />
-                    )}
+
+                    <Image
+                        w={32}
+                        alt={getCapitalizedText(playtime.source)}
+                        src={getServerStoredIcon(playtime.source)}
+                    />
                 </Group>
             </Group>
         </Box>

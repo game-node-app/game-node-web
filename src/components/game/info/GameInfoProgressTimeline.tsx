@@ -3,7 +3,7 @@ import { useOwnCollectionEntryForGameId } from "@/components/collection/collecti
 import useReviewForUserIdAndGameId from "@/components/review/hooks/useReviewForUserIdAndGameId";
 import useUserId from "@/components/auth/hooks/useUserId";
 import { DetailsBox } from "@/components/general/DetailsBox";
-import { Stack, Text, Timeline } from "@mantine/core";
+import { Group, Stack, Text, Timeline } from "@mantine/core";
 import {
     IconCheck,
     IconCircleCheck,
@@ -11,6 +11,7 @@ import {
     IconLibrary,
     IconMessage,
 } from "@tabler/icons-react";
+import { useAccumulatedPlaytimeForGame } from "@/components/playtime/hooks/useAccumulatedPlaytimeForGame";
 
 interface Props {
     gameId: number;
@@ -22,12 +23,16 @@ const GameInfoProgressTimeline = ({ gameId }: Props) => {
 
     const collectionEntryQuery = useOwnCollectionEntryForGameId(gameId);
     const reviewQuery = useReviewForUserIdAndGameId(userId, gameId);
+    const playtimeQuery = useAccumulatedPlaytimeForGame(userId, gameId);
 
     const isInCollection = collectionEntryQuery.data != undefined;
     const isFinished =
         collectionEntryQuery.data != undefined &&
         collectionEntryQuery.data.finishedAt != undefined;
     const isReviewed = reviewQuery.data != undefined;
+    const hasPlaytimeInfo =
+        playtimeQuery.data != undefined &&
+        playtimeQuery.data.totalPlaytimeSeconds > 0;
 
     useEffect(() => {
         if (isInCollection && isReviewed && isFinished) {

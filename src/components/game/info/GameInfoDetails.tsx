@@ -9,6 +9,7 @@ import GameInfoDetailsTags from "@/components/game/info/GameInfoDetailsTags";
 import GameInfoScore from "@/components/game/info/GameInfoScore";
 import GameInfoExternalStores from "@/components/game/info/GameInfoExternalStores";
 import GameInfoProgressTimeline from "@/components/game/info/GameInfoProgressTimeline";
+import GameInfoPlaytimeTracker from "@/components/game/info/GameInfoPlaytimeTracker";
 
 interface IGameInfoDetailsProps {
     game: Game | undefined;
@@ -40,12 +41,21 @@ const GameInfoDetails = ({ game }: IGameInfoDetailsProps) => {
                         className={"my-4 gap-5"}
                     />
                 </DetailsBox>
+
                 <DetailsBox withBorder withDimmedTitle title={"Summary"}>
                     {game.summary ?? "Not available"}
                 </DetailsBox>
-                <DetailsBox withBorder withDimmedTitle title={"Your progress"}>
-                    <GameInfoProgressTimeline gameId={game.id} />
-                </DetailsBox>
+                <Stack>
+                    <DetailsBox
+                        withBorder
+                        withDimmedTitle
+                        title={"Your progress"}
+                    >
+                        <GameInfoProgressTimeline gameId={game.id} />
+                    </DetailsBox>
+                    <GameInfoPlaytimeTracker gameId={game.id} />
+                </Stack>
+
                 <GameInfoScore gameId={game.id} />
             </SimpleGrid>
         </Stack>

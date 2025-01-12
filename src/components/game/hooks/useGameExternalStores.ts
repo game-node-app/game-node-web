@@ -10,5 +10,6 @@ export function useGameExternalStores(gameId: number) {
             );
         },
         retry: 1,
+        staleTime: Infinity,
     });
 }
